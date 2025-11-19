@@ -25,54 +25,63 @@ class MusicSynth {
         this.nextNoteTime = 0;
         this.timerID = null;
 
-        // Define multiple tracks
+        // Define multiple tracks – darker, cinematic synthwave-style chiptune themes
+        // Each track is a 16-step pattern in a minor key with a driving bass and melodic ostinato.
         this.tracks = [
             {
-                name: 'Neon Dreams',
-                bpm: 130,
+                name: 'Event Horizon',
+                bpm: 100,
+                // A minor, pulsing low bass for an ominous orbit feel
                 bass: [
-                    'C2', 'C2', 'C2', 'C2', 'D#2', 'D#2', 'G2', 'G2',
-                    'F2', 'F2', 'F2', 'F2', 'G#2', 'G#2', 'A#2', 'A#2'
+                    'A1', 'A1', 'A1', 'A1', 'E2', 'E2', 'E2', 'E2',
+                    'F2', 'F2', 'F2', 'F2', 'D2', 'D2', 'D2', 'D2'
                 ],
+                // Zimmer-ish repeating motif that slowly climbs
                 melody: [
-                    null, null, 'C4', null, 'D#4', null, 'G4', null,
-                    'F4', null, 'D#4', null, 'C4', null, 'A#3', 'G3'
+                    'A3', null, 'C4', null, 'E4', null, 'A4', null,
+                    'G4', null, 'E4', null, 'C4', null, 'A3', null
                 ]
             },
             {
-                name: 'Cyber Sunset',
-                bpm: 120,
+                name: 'Neon Cathedral',
+                bpm: 108,
+                // D minor, more insistent bass with a synthwave gallop
                 bass: [
-                    'A1', 'A1', 'A1', 'A1', 'A1', 'A1', 'A1', 'A1',
-                    'F2', 'F2', 'F2', 'F2', 'C2', 'C2', 'C2', 'C2'
+                    'D2', 'D2', 'A1', 'D2', 'F2', 'F2', 'C2', 'F2',
+                    'G2', 'G2', 'D2', 'G2', 'A2', 'A2', 'E2', 'A2'
                 ],
-                melody: [
-                    'A4', null, 'C5', null, 'E5', null, 'A4', null,
-                    'G4', null, 'F4', null, 'E4', null, 'C4', 'A3'
-                ]
-            },
-            {
-                name: 'Retro Wave',
-                bpm: 140,
-                bass: [
-                    'D2', 'D2', 'D2', 'D2', 'A2', 'A2', 'A2', 'A2',
-                    'G2', 'G2', 'G2', 'G2', 'F2', 'F2', 'F2', 'F2'
-                ],
+                // Wide intervals to feel bigger and more “score-like”
                 melody: [
                     'D4', null, 'F4', null, 'A4', null, 'D5', null,
                     'C5', null, 'A4', null, 'F4', null, 'D4', null
                 ]
             },
             {
-                name: 'Electric Dreams',
-                bpm: 125,
+                name: 'Midnight Relay',
+                bpm: 112,
+                // G# minor, steady synthwave bass-line
                 bass: [
-                    'E2', 'E2', 'E2', 'E2', 'B2', 'B2', 'B2', 'B2',
-                    'C#3', 'C#3', 'C#3', 'C#3', 'A2', 'A2', 'A2', 'A2'
+                    'G#1', 'G#1', 'G#1', 'G#1', 'E2', 'E2', 'E2', 'E2',
+                    'B1', 'B1', 'B1', 'B1', 'F#2', 'F#2', 'F#2', 'F#2'
                 ],
+                // Arp-style top line with occasional octave jumps
                 melody: [
-                    null, 'E4', null, 'G#4', null, 'B4', null, 'E5',
-                    null, 'D#5', null, 'B4', null, 'G#4', 'E4', null
+                    'G#3', null, 'B3', null, 'D#4', null, 'G#4', null,
+                    'F#4', null, 'D#4', null, 'B3', null, 'G#3', 'G#4'
+                ]
+            },
+            {
+                name: 'Signal to Nowhere',
+                bpm: 96,
+                // Slow-burning, heavy low end in C minor
+                bass: [
+                    'C2', 'C2', 'G1', 'C2', 'G#1', 'G#1', 'D#2', 'D#2',
+                    'F2', 'F2', 'C2', 'F2', 'D#2', 'D#2', 'G1', 'G1'
+                ],
+                // Sparse, high-register motif to float over the drones
+                melody: [
+                    null, 'G4', null, 'C5', null, 'D#5', null, 'G5',
+                    null, 'F5', null, 'D#5', null, 'C5', 'G4', null
                 ]
             }
         ];
@@ -327,6 +336,26 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => typewriter.start(), 1500);
     }
 
+    // Subtitle lifecycle messaging
+    const subtitleEl = document.querySelector('.subtitle');
+    const fadeSubtitleTo = (text, delay) => {
+        if (!subtitleEl) return;
+        setTimeout(() => {
+            subtitleEl.classList.add('subtitle-hidden');
+            setTimeout(() => {
+                subtitleEl.textContent = text;
+                subtitleEl.classList.remove('subtitle-hidden');
+            }, 250);
+        }, delay);
+    };
+
+    if (subtitleEl) {
+        window.addEventListener('load', () => {
+            fadeSubtitleTo('System Initialization Complete...', 150);
+            fadeSubtitleTo('Cognitive Core Re-indexed. Hello, operator.', 3350);
+        }, { once: true });
+    }
+
     // 3D Skull Setup (Shader)
     try {
         initThreeJS();
@@ -337,6 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Audio Setup
     const synth = new MusicSynth();
     const musicBtn = document.getElementById('music-btn');
+    const terminalToggleButtons = Array.from(document.querySelectorAll('[data-terminal-toggle]'));
+    const terminalCloseBtn = document.getElementById('terminal-close-btn');
 
     window.initAudio = () => {
         if (synth.ctx.state === 'suspended') synth.ctx.resume();
@@ -373,12 +404,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const bindTerminalToggle = (btn) => {
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            window.toggleTerminal();
+        });
+    };
+
+    terminalToggleButtons.forEach(bindTerminalToggle);
+    bindTerminalToggle(terminalCloseBtn);
+
     // Terminal Interaction
     document.addEventListener('keydown', (e) => {
-        if (e.key === 't' || e.key === 'T') {
-            if (document.activeElement.tagName !== 'INPUT') {
-                window.toggleTerminal();
-            }
+        const key = e.key.toLowerCase();
+        if (key === 't' && document.activeElement !== terminalInput) {
+            e.preventDefault();
+            window.toggleTerminal();
+        }
+        if (key === 'escape' && terminalOverlay && terminalOverlay.style.display === 'flex') {
+            e.preventDefault();
+            window.toggleTerminal();
         }
     });
 });
@@ -717,13 +762,46 @@ function initThreeJS() {
 const terminalOverlay = document.getElementById('terminal-overlay');
 const terminalInput = document.getElementById('cmd-input');
 const terminalOutput = document.getElementById('cmd-output');
+const commandHistory = [];
+let historyIndex = -1;
+
+function focusTerminalInputEnd() {
+    if (!terminalInput) return;
+    terminalInput.focus();
+    const len = terminalInput.value.length;
+    try {
+        terminalInput.setSelectionRange(len, len);
+    } catch (_err) {
+        // Some browsers might not support setSelectionRange on certain inputs.
+    }
+}
+
+function ensureMusicPlaying() {
+    if (typeof window.getMusicSynth !== 'function' || typeof window.toggleMusic !== 'function') {
+        return false;
+    }
+    const synthInstance = window.getMusicSynth();
+    if (!synthInstance || synthInstance.isPlaying) {
+        return false;
+    }
+    window.toggleMusic();
+    return true;
+}
 
 window.toggleTerminal = () => {
-    if (terminalOverlay.style.display === 'flex') {
+    if (!terminalOverlay) return;
+    const isOpen = terminalOverlay.style.display === 'flex';
+
+    if (isOpen) {
         terminalOverlay.style.display = 'none';
-        if (terminalInput) terminalInput.blur(); // Close mobile keyboard
+        terminalOverlay.classList.add('hidden');
+        if (terminalInput) {
+            terminalInput.value = '';
+            terminalInput.blur(); // Close mobile keyboard
+        }
     } else {
         terminalOverlay.style.display = 'flex';
+        terminalOverlay.classList.remove('hidden');
         // Delay focus to ensure terminal is visible
         setTimeout(() => {
             if (terminalInput) {
@@ -752,13 +830,57 @@ function playTone(freq, duration) {
 }
 
 if (terminalInput) {
-    terminalInput.addEventListener('keypress', (e) => {
+    terminalInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             const command = terminalInput.value.toLowerCase().trim();
+            if (!command) return;
             handleCommand(command);
+            commandHistory.push(command);
+            historyIndex = commandHistory.length;
             terminalInput.value = '';
             playTone(1200, 0.05);
+            return;
         }
+
+        if (e.key === 'ArrowUp') {
+            if (!commandHistory.length) return;
+            e.preventDefault();
+            if (historyIndex > 0) {
+                historyIndex--;
+            } else {
+                historyIndex = 0;
+            }
+            terminalInput.value = commandHistory[historyIndex] || '';
+            setTimeout(() => {
+                focusTerminalInputEnd();
+            }, 0);
+        } else if (e.key === 'ArrowDown') {
+            if (!commandHistory.length) return;
+            e.preventDefault();
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                terminalInput.value = commandHistory[historyIndex];
+            } else {
+                historyIndex = commandHistory.length;
+                terminalInput.value = '';
+            }
+        }
+    });
+}
+
+if (terminalOverlay && terminalInput) {
+    terminalOverlay.addEventListener('click', (e) => {
+        if (terminalOverlay.style.display !== 'flex') return;
+        const interactiveTarget = e.target.closest('button, a, input, textarea');
+        if (interactiveTarget && interactiveTarget !== terminalInput) {
+            return;
+        }
+        const selection = window.getSelection ? window.getSelection() : null;
+        if (selection && selection.toString().length > 0) {
+            return;
+        }
+        focusTerminalInputEnd();
     });
 }
 
@@ -785,10 +907,12 @@ function handleCommand(cmd) {
             window.toggleMusic();
             break;
         case 'shuffle':
+            ensureMusicPlaying();
             const trackName = window.shuffleMusic();
             response = `SWITCHED TO TRACK: ${trackName}`;
             break;
         case 'track':
+            ensureMusicPlaying();
             const currentTrack = window.getMusicSynth().getCurrentTrackName();
             response = `NOW PLAYING: ${currentTrack}`;
             break;

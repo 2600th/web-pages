@@ -16,6 +16,14 @@
             }
         }
     </script>
+    <script type="importmap-shim">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+            }
+        }
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XR0S4Q293G"></script>
     <script>
@@ -33,7 +41,7 @@
     <div class="container">
         <header>
             <h1 class="glitch" data-text="2600th">2600th</h1>
-            <p class="subtitle">System Initialization Complete...</p>
+            <p class="subtitle">System Initializing...</p>
         </header>
 
         <div class="main-grid">
@@ -101,24 +109,28 @@
 
         <!-- Footer Controls -->
         <footer class="controls">
-            <div class="control-item" onclick="window.toggleTerminal()">
+            <button type="button" class="control-item" id="terminal-toggle-btn" data-terminal-toggle>
                 <span class="key">↔</span> toggle terminal
-            </div>
+            </button>
             <span class="separator">•</span>
-            <div class="control-item">
+            <button type="button" class="control-item" id="terminal-key-btn" data-terminal-toggle>
                 <span class="key">t</span> terminal
-            </div>
+            </button>
             <span class="separator">•</span>
-            <div class="control-item" id="music-btn">
+            <button type="button" class="control-item" id="music-btn">
                 <span class="key">click</span> play music
-            </div>
+            </button>
         </footer>
     </div>
 
     <!-- Terminal Overlay (Toggled by ↔) -->
     <div id="terminal-overlay" class="terminal-overlay hidden">
         <div class="terminal-content">
-            <div id="cmd-output" class="cmd-output">2600th SYSTEM TERMINAL v1.0 - READY</div>
+            <div class="terminal-header">
+                <div class="terminal-title">2600th SYSTEM TERMINAL v1.0</div>
+                <button type="button" class="terminal-close" id="terminal-close-btn">[ close ]</button>
+            </div>
+            <div id="cmd-output" class="cmd-output">BOOT SEQUENCE COMPLETE - AWAITING INPUT</div>
             <div class="input-line">
                 <span class="prompt">></span>
                 <input type="text" id="cmd-input" spellcheck="false" autocomplete="off" autocapitalize="off"
@@ -127,7 +139,39 @@
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" id="app-module" data-entry src="script.js"></script>
+    <script>
+        (function () {
+            const supportsImportMaps = typeof HTMLScriptElement !== 'undefined'
+                && typeof HTMLScriptElement.supports === 'function'
+                && HTMLScriptElement.supports('importmap');
+
+            if (supportsImportMaps) {
+                return;
+            }
+
+            const entryScript = document.getElementById('app-module');
+            if (entryScript && entryScript.parentNode) {
+                entryScript.parentNode.removeChild(entryScript);
+            }
+
+            const loadWithShim = () => {
+                if (window.importShim) {
+                    window.importShim('script.js').catch((err) => {
+                        console.error('Failed to load script.js via importShim', err);
+                    });
+                } else {
+                    console.error('es-module-shims is not available; script.js could not be loaded.');
+                }
+            };
+
+            if (document.readyState === 'complete') {
+                loadWithShim();
+            } else {
+                window.addEventListener('load', loadWithShim, { once: true });
+            }
+        })();
+    </script>
 </body>
 
 </html>
