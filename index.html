@@ -1,295 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>2600th</title>
-  <meta name="description" content="Pranshul Chandhok - Technology enthusiast exploring 3D, AR, VR, and AI. Skilled in computer vision, machine learning, graphics programming, and game development." />
-  <meta name="keywords" content="Pranshul Chandhok, Technology Enthusiast, Gaming, Hacking, Programming, Audiophile, Movie Critic" />
-  <meta name="author" content="Pranshul Chandhok" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/",
-        "three/examples/jsm/": "https://unpkg.com/three@0.157.0/examples/jsm/"
-      }
-    }
-  </script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XR0S4Q293G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-XR0S4Q293G');
-  </script>
-  <script type="module">
-    import * as THREE from 'three';
-    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-    // Theme setup
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.body.classList.toggle('dark-mode', prefersDark);
-
-    // Text scrambling setup
-    function scrambleText(text) {
-      let scrambledText = '';
-      // Use a more compact character set without wide characters
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (let i = 0; i < text.length; i++) {
-        // If original character is a space, keep it
-        if (text[i] === ' ') {
-          scrambledText += ' ';
-        } else {
-          scrambledText += characters.charAt(Math.floor(Math.random() * characters.length));
+    <meta charset="UTF-8">
+    <title>2600th // SYSTEM_ROOT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- Import Map for Three.js -->
+    <script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+            }
         }
-      }
-      return scrambledText;
-    }
-
-    function unscrambleText(element) {
-      const originalText = element.textContent;
-      const scrambled = document.createElement('span');
-      scrambled.className = 'scrambled-text';
-      
-      // Set initial scrambled text
-      scrambled.textContent = scrambleText(originalText);
-      element.textContent = '';
-      element.appendChild(scrambled);
-
-      // Start with fully scrambled text
-      let currentIndex = 0;
-      const revealInterval = setInterval(() => {
-        if (currentIndex <= originalText.length) {
-          // Keep the revealed part and scramble the rest
-          const revealedPart = originalText.substring(0, currentIndex);
-          const scrambledPart = scrambleText(originalText.substring(currentIndex));
-          scrambled.textContent = revealedPart + scrambledPart;
-          currentIndex++;
-        } else {
-          clearInterval(revealInterval);
-          scrambled.textContent = originalText;
-        }
-      }, 2); // Animation speed
-    }
-
-    // Apply scrambling after skull model is loaded
-    function initializeTextScramble() {
-      const textElements = document.querySelectorAll('p, a');
-      textElements.forEach(element => {
-        if (element.textContent.trim() && !(element.tagName === 'A' && element.querySelector('img'))) {
-          unscrambleText(element);
-        }
-      });
-    }
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas: document.querySelector('#canvas'),
-      alpha: true,
-      antialias: true,
-      powerPreference: "high-performance"
-    });
-    
-    // Set canvas size
-    const canvasSize = Math.min(window.innerWidth * 0.6, 400);
-    renderer.setSize(canvasSize, canvasSize);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    
-    // Camera position
-    camera.position.z = 3;
-    
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(0, 1, 1);
-    scene.add(directionalLight);
-    
-    // Loading manager for better error handling and loading state
-    const manager = new THREE.LoadingManager();
-    const loadingText = document.createElement('div');
-    loadingText.className = 'loading-text';
-    loadingText.textContent = 'Loading 3D Model...';
-    document.querySelector('#panel').appendChild(loadingText);
-    
-    manager.onProgress = function(url, itemsLoaded, itemsTotal) {
-      const progress = Math.round((itemsLoaded / itemsTotal) * 100);
-      loadingText.textContent = `Loading 3D Model... ${progress}%`;
-    };
-    
-    manager.onLoad = function() {
-      loadingText.style.display = 'none';
-      // Initialize text scramble after model is loaded
-      initializeTextScramble();
-    };
-    
-    manager.onError = function(url) {
-      console.error('Error loading:', url);
-      loadingText.textContent = 'Error loading 3D model';
-      loadingText.style.color = 'red';
-    };
-
-    // Load skull model
-    const loader = new GLTFLoader(manager);
-    let skull;
-    
-    loader.load(
-      'low-poly_skull/scene.gltf',
-      function (gltf) {
-        skull = gltf.scene;
-        
-        // Apply wireframe material to all meshes
-        skull.traverse((child) => {
-          if (child.isMesh) {
-            const wireframeMaterial = new THREE.MeshBasicMaterial({
-              color: document.body.classList.contains('dark-mode') ? 0xffffff : 0x333333,
-              wireframe: true,
-              transparent: true,
-              opacity: 0.9,
-              wireframeLinewidth: 1
-            });
-            child.material = wireframeMaterial;
-          }
-        });
-        
-        // Center and scale the model
-        const box = new THREE.Box3().setFromObject(skull);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 1.337 / maxDim;
-        
-        skull.position.sub(center);
-        skull.scale.multiplyScalar(scale);
-        
-        // Initial rotation
-        skull.rotation.x = 0.1;
-        skull.rotation.y = -0.3;
-        
-        scene.add(skull);
-      },
-      // Progress callback
-      function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-      },
-      // Error callback
-      function (error) {
-        console.error('Error loading model:', error);
-      }
-    );
-    
-    // Mouse movement tracking for rotation
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetRotationX = 0;
-    let targetRotationY = 0;
-    
-    document.addEventListener('mousemove', (event) => {
-      // Get mouse position relative to canvas center
-      const rect = renderer.domElement.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      mouseX = (event.clientX - centerX) / (rect.width / 2);
-      mouseY = (event.clientY - centerY) / (rect.height / 2);
-      
-      // Set target rotation (inverted on both axes)
-      targetRotationY = mouseX * 0.3;
-      targetRotationX = mouseY * 0.2;
-    });
-    
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-      
-      if (skull) {
-        // Smooth rotation towards target
-        skull.rotation.y += (targetRotationY - skull.rotation.y) * 0.05;
-        skull.rotation.x += (targetRotationX - skull.rotation.x) * 0.05;
-        
-        // Add slight continuous rotation
-        skull.rotation.y += 0.001;
-        
-        // Gentle floating motion
-        skull.position.y = Math.sin(Date.now() * 0.001) * 0.03;
-      }
-      
-      renderer.render(scene, camera);
-    }
-    
-    animate();
-    
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      const newSize = Math.min(window.innerWidth * 0.6, 400);
-      camera.aspect = 1;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newSize, newSize);
-    });
-
-    // Make toggleTheme available globally
-    window.toggleTheme = function() {
-      document.body.classList.toggle('dark-mode');
-      if (skull) {
-        skull.traverse((child) => {
-          if (child.isMesh) {
-            child.material.color.set(document.body.classList.contains('dark-mode') ? 0xffffff : 0x333333);
-          }
-        });
-      }
-    };
-  </script>
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XR0S4Q293G"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XR0S4Q293G');
+    </script>
 </head>
+
 <body>
-  <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <circle cx="12" cy="12" r="5"/>
-      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-    </svg>
-    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  </button>
-  <div id="main" class="container">
-    <div id="content" class="content">
-      <div id="panel" class="panel"></div>
-      <canvas id="canvas" width="200" height="200" aria-label="Interactive 3D skull model"></canvas>
-      <br>
-      <p class="hello"><strong>Hey there, curious mind!</strong></p> 
-      <div class="hr" role="separator"></div>
-      <br>
-      <p>I'm <strong><a href="#" aria-label="Pranshul Chandhok">Pranshul Chandhok</a></strong> — a passionate explorer of 3D, XR, Web3 and AI technologies. With expertise in computer vision, machine learning, graphics programming, and game development, I thrive on pushing the boundaries of what's possible. Beyond my technical pursuits, I'm an avid gamer, tech enthusiast, and lover of all things creative. Collaborating with talented teams to build innovative products is my driving force. Whether you're interested in discussing the latest tech trends or exploring opportunities for collaboration, feel free to connect with me through the networks below. Let's create something extraordinary together!</p>
-      <br>
-      <div class="hr" role="separator"></div> 
-      <br>
-      <div class="social-links" role="navigation" aria-label="Social media links">
-        <a href="http://steamcommunity.com/id/2600th" target="_blank" rel="noopener" aria-label="Visit my Steam profile">
-          <img src="ico/steam128.png" alt="Steam" height="32" width="32">
-        </a>
-        <a href="https://in.linkedin.com/in/pranshulchandhok" target="_blank" rel="noopener" aria-label="Connect with me on LinkedIn">
-          <img src="ico/linkedin32.png" alt="LinkedIn" height="32" width="32">
-        </a>
-        <a href="https://x.com/2600th" target="_blank" rel="noopener" aria-label="Follow me on X">
-          <img src="ico/x128.png" alt="X" height="32" width="32">
-        </a>
-        <a href="https://2600th.itch.io/" target="_blank" rel="noopener" aria-label="Check out my games on Itch.io">
-          <img src="ico/itch128.png" alt="Itch.io" height="32" width="32">
-        </a>
-        <a href="https://2600th.substack.com/" target="_blank" rel="noopener" aria-label="Read my blog on Substack">
-          <img src="ico/substack128.png" alt="Substack" height="32" width="32">
-        </a>
-      </div>
+    <div class="scanline"></div>
+    <div class="crt-overlay"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="glitch" data-text="2600th">2600th</h1>
+            <p class="subtitle">System Initialization Complete...</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- Visual Feed / Skull -->
+            <div class="visual-module">
+                <div class="panel-header">VISUAL_FEED</div>
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <!-- Data Module -->
+            <div class="data-module">
+                <div class="table-container">
+                    <div class="corner-marker top-left">+</div>
+                    <div class="corner-marker top-right">+</div>
+                    <div class="corner-marker bottom-left">+</div>
+                    <div class="corner-marker bottom-right">+</div>
+
+                    <table class="retro-table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Username</td>
+                                <td>2600th</td>
+                            </tr>
+                            <tr>
+                                <td>Full Name</td>
+                                <td>Pranshul Chandhok</td>
+                            </tr>
+                            <tr>
+                                <td>Role</td>
+                                <td>Technomancer / XR / AI</td>
+                            </tr>
+                            <tr>
+                                <td>Location</td>
+                                <td>Earth in Orion Spur</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>ONLINE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="prompt-section">
+                    <p class="prompt-text">Connect with user?</p>
+                    <div class="actions">
+                        <a href="http://steamcommunity.com/id/2600th" target="_blank" class="choice-btn">[STEAM]</a>
+                        <a href="https://in.linkedin.com/in/pranshulchandhok" target="_blank"
+                            class="choice-btn">[LINKEDIN]</a>
+                        <a href="https://x.com/2600th" target="_blank" class="choice-btn">[X]</a>
+                        <a href="https://2600th.itch.io/" target="_blank" class="choice-btn">[ITCH.IO]</a>
+                        <a href="https://2600th.substack.com/" target="_blank" class="choice-btn">[SUBSTACK]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Controls -->
+        <footer class="controls">
+            <div class="control-item" onclick="window.toggleTerminal()">
+                <span class="key">↔</span> toggle terminal
+            </div>
+            <span class="separator">•</span>
+            <div class="control-item">
+                <span class="key">t</span> terminal
+            </div>
+            <span class="separator">•</span>
+            <div class="control-item" id="music-btn">
+                <span class="key">click</span> play music
+            </div>
+        </footer>
     </div>
-  </div>
+
+    <!-- Terminal Overlay (Toggled by ↔) -->
+    <div id="terminal-overlay" class="terminal-overlay hidden">
+        <div class="terminal-content">
+            <div id="cmd-output" class="cmd-output">2600th SYSTEM TERMINAL v1.0 - READY</div>
+            <div class="input-line">
+                <span class="prompt">></span>
+                <input type="text" id="cmd-input" spellcheck="false" autocomplete="off" autocapitalize="off"
+                    inputmode="text">
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
 </body>
+
 </html>
