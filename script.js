@@ -11,6 +11,7 @@ import {
     Mesh,
     PlaneGeometry
 } from 'three';
+import { PingPongGame } from './pingpong.js';
 
 // 8-bit Retro Console System
 // Author: Pranshul
@@ -309,8 +310,74 @@ class ScrambleText {
     }
 }
 
+// --- Global State ---
+let visualModuleControl = { pause: () => { }, resume: () => { } };
+let pingPongGame = null;
+
+// Expose launch function globally
+window.launchPingPong = function () {
+    console.log("Launching PingPong...");
+    const gameOverlay = document.getElementById('game-overlay');
+    if (!gameOverlay) {
+        console.error("Game overlay not found");
+        return;
+    }
+
+    // Initialize game if needed
+    if (!pingPongGame) {
+        pingPongGame = new PingPongGame('game-overlay');
+    }
+
+    // Show overlay
+    gameOverlay.classList.remove('hidden');
+
+    // Ensure correct size now that it's visible
+    if (pingPongGame) {
+        pingPongGame.resize();
+    }
+
+    // Pause Skull
+    if (visualModuleControl && visualModuleControl.pause) {
+        visualModuleControl.pause();
+    }
+
+    // Start Game
+    pingPongGame.start();
+
+    // Handle Game Over
+    pingPongGame.onGameOver = (winner) => {
+        const resultOverlay = document.getElementById('game-result');
+        const title = document.getElementById('result-title');
+        const subtitle = document.getElementById('result-subtitle');
+
+        if (resultOverlay && title && subtitle) {
+            if (winner === 'player') {
+                title.textContent = 'SYSTEM VICTORY';
+                subtitle.textContent = 'NEURAL LINK ESTABLISHED';
+                title.style.color = '#99C278'; // Green
+            } else {
+                title.textContent = 'SYSTEM FAILURE';
+                subtitle.textContent = 'CONNECTION TERMINATED';
+                title.style.color = '#E06C75'; // Red
+            }
+            resultOverlay.classList.remove('hidden');
+        }
+    };
+
+    // Restart Button
+    const restartBtn = document.getElementById('restart-btn');
+    if (restartBtn) {
+        restartBtn.onclick = () => {
+            const resultOverlay = document.getElementById('game-result');
+            if (resultOverlay) resultOverlay.classList.add('hidden');
+            pingPongGame.start();
+        };
+    }
+};
+
 // --- Main Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Loaded, initializing systems...');
     // Scramble Text for Header
     const el = document.querySelector('.glitch');
     if (el) {
@@ -358,9 +425,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3D Skull Setup (Shader)
     try {
-        initThreeJS();
+        visualModuleControl = initThreeJS() || visualModuleControl;
     } catch (e) {
         console.error("ThreeJS Init Failed:", e);
+    }
+
+    // Game Setup
+    const gameOverlay = document.getElementById('game-overlay');
+    const gameCloseBtn = document.getElementById('game-close-btn');
+
+    if (gameCloseBtn && gameOverlay) {
+        gameCloseBtn.addEventListener('click', () => {
+            gameOverlay.classList.add('hidden');
+            if (pingPongGame) pingPongGame.stop();
+            visualModuleControl.resume();
+        });
     }
 
     // Audio Setup
@@ -421,9 +500,20 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             window.toggleTerminal();
         }
-        if (key === 'escape' && terminalOverlay && terminalOverlay.style.display === 'flex') {
-            e.preventDefault();
-            window.toggleTerminal();
+        if (key === 'escape') {
+            const gameOverlay = document.getElementById('game-overlay');
+            if (gameOverlay && !gameOverlay.classList.contains('hidden')) {
+                e.preventDefault();
+                gameOverlay.classList.add('hidden');
+                if (pingPongGame) pingPongGame.stop();
+                visualModuleControl.resume();
+                return;
+            }
+
+            if (terminalOverlay && terminalOverlay.style.display === 'flex') {
+                e.preventDefault();
+                window.toggleTerminal();
+            }
         }
     });
 });
@@ -740,8 +830,12 @@ function initThreeJS() {
     resizeRenderer();
     window.addEventListener('resize', resizeRenderer);
 
+    let animationId;
+    let isPaused = false;
+
     function animate(time) {
-        requestAnimationFrame(animate);
+        if (isPaused) return;
+        animationId = requestAnimationFrame(animate);
 
         const t = time * 0.001;
 
@@ -756,6 +850,19 @@ function initThreeJS() {
         renderer.render(scene, camera);
     }
     animate(0);
+
+    return {
+        pause: () => {
+            isPaused = true;
+            cancelAnimationFrame(animationId);
+        },
+        resume: () => {
+            if (isPaused) {
+                isPaused = false;
+                animate(performance.now());
+            }
+        }
+    };
 }
 
 // --- Terminal System ---
@@ -816,7 +923,7 @@ window.toggleTerminal = () => {
     playTone(800, 0.05);
 };
 
-function playTone(freq, duration) {
+window.playTone = function (freq, duration) {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -891,7 +998,7 @@ function handleCommand(cmd) {
     let response = '';
     switch (cmd) {
         case 'help':
-            response = 'COMMANDS: HELP, ABOUT, SKILLS, CONTACT, MUSIC, SHUFFLE, TRACK, DATE, WHOAMI, SUDO, ECHO, CLEAR, EXIT';
+            response = 'COMMANDS: HELP, ABOUT, SKILLS, CONTACT, MUSIC, PINGPONG, SHUFFLE, TRACK, DATE, WHOAMI, SUDO, ECHO, CLEAR, EXIT';
             break;
         case 'about':
             response = 'USER: PRANSHUL | CLASS: DEVELOPER | LVL: 2600';
@@ -905,6 +1012,14 @@ function handleCommand(cmd) {
         case 'music':
             response = 'TOGGLING AUDIO SYSTEM...';
             window.toggleMusic();
+            break;
+        case 'pingpong':
+            response = 'INITIALIZING PING PONG PROTOCOL...';
+            if (window.launchPingPong) {
+                setTimeout(() => window.launchPingPong(), 500);
+            } else {
+                response = 'ERROR: GAME MODULE NOT FOUND.';
+            }
             break;
         case 'shuffle':
             ensureMusicPlaying();

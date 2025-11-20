@@ -139,6 +139,24 @@
         </div>
     </div>
 
+    <!-- Game Overlay -->
+    <div id="game-overlay" class="game-overlay hidden">
+        <div class="game-container">
+            <button type="button" class="game-close" id="game-close-btn">[ CLOSE GAME ]</button>
+            <canvas id="game-canvas"></canvas>
+            <div class="game-instructions">USE MOUSE/TOUCH TO MOVE PADDLE</div>
+
+            <!-- Win/Loss Overlay -->
+            <div id="game-result" class="game-result hidden">
+                <div class="result-content">
+                    <div class="result-title" id="result-title">SYSTEM VICTORY</div>
+                    <div class="result-subtitle" id="result-subtitle">NEURAL LINK SEVERED</div>
+                    <button type="button" class="restart-btn" id="restart-btn">[ REINITIALIZE ]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" id="app-module" data-entry src="script.js"></script>
     <script>
         (function () {
