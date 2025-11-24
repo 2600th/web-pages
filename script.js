@@ -1001,10 +1001,10 @@ function handleCommand(cmd) {
             response = 'COMMANDS: HELP, ABOUT, SKILLS, CONTACT, MUSIC, PINGPONG, SHUFFLE, TRACK, DATE, WHOAMI, SUDO, ECHO, CLEAR, EXIT';
             break;
         case 'about':
-            response = 'USER: PRANSHUL | CLASS: DEVELOPER | LVL: 2600';
+            response = 'USER: PRANSHUL | CLASS: SYSTEMS ARCH-MAGE | LVL: 26XX | STATUS: QUANTUM-UNLOCKED';
             break;
         case 'skills':
-            response = 'JavaScript, Python, C++, WebGL, GLSL, React, Node.js';
+            response = 'Unity3D, Unreal Engine, C#, C++, Python, WebGL, XR Ops, AI Pipelines';
             break;
         case 'contact':
             response = 'TRANSMITTING ON ALL FREQUENCIES...';
