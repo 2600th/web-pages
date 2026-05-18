@@ -18,15 +18,169 @@ import { PingPongGame } from './pingpong.js';
 // 2600th System
 
 // --- Audio System ---
-class MusicSynth {
+class SystemAudio {
     constructor() {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.ctx = null;
+        this.masterGain = null;
+        this.sfxGain = null;
+        this.isMuted = false;
+        this.isUnlocked = false;
+        this.hasPlayedBoot = false;
+    }
+
+    ensureContext() {
+        this.isUnlocked = true;
+        if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.masterGain = this.ctx.createGain();
+            this.sfxGain = this.ctx.createGain();
+            this.masterGain.gain.value = this.isMuted ? 0 : 0.68;
+            this.sfxGain.gain.value = 0.18;
+            this.sfxGain.connect(this.masterGain);
+            this.masterGain.connect(this.ctx.destination);
+        }
+
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+
+        return this.ctx;
+    }
+
+    getDestination() {
+        this.ensureContext();
+        return this.masterGain || this.ctx.destination;
+    }
+
+    setMuted(isMuted) {
+        this.isMuted = isMuted;
+        if (this.masterGain && this.ctx) {
+            this.masterGain.gain.setTargetAtTime(isMuted ? 0 : 0.68, this.ctx.currentTime, 0.015);
+        }
+    }
+
+    playSfx(type = 'hover') {
+        if (this.isMuted) return;
+        if (!this.isUnlocked && !this.ctx) return;
+        const ctx = this.ensureContext();
+        const now = ctx.currentTime;
+        const destination = this.sfxGain || this.getDestination();
+
+        const profiles = {
+            boot: [
+                { freq: 154, end: 246, delay: 0, duration: 0.07, type: 'triangle', volume: 0.01 },
+                { freq: 493, end: 739, delay: 0.045, duration: 0.055, type: 'square', volume: 0.006 },
+                { type: 'noise', filter: 'bandpass', freq: 1800, end: 980, delay: 0.08, duration: 0.05, volume: 0.004 }
+            ],
+            hover: [
+                { freq: 820, end: 1040, delay: 0, duration: 0.022, type: 'triangle', volume: 0.0028, jitter: 0.035 }
+            ],
+            click: [
+                { freq: 420, end: 710, delay: 0, duration: 0.038, type: 'triangle', volume: 0.0055 },
+                { freq: 1850, end: 1180, delay: 0.006, duration: 0.022, type: 'square', volume: 0.0024 },
+                { type: 'noise', filter: 'highpass', freq: 3600, delay: 0, duration: 0.018, volume: 0.0018 }
+            ],
+            powerDown: [
+                { freq: 164, end: 46, delay: 0, duration: 0.18, type: 'triangle', volume: 0.0044 },
+                { type: 'noise', filter: 'lowpass', freq: 680, end: 120, delay: 0.025, duration: 0.16, volume: 0.0028 }
+            ],
+            powerUp: [
+                { freq: 82, end: 246, delay: 0, duration: 0.16, type: 'sine', volume: 0.004 },
+                { freq: 370, end: 740, delay: 0.08, duration: 0.08, type: 'triangle', volume: 0.0034 },
+                { type: 'noise', filter: 'bandpass', freq: 1120, end: 1880, delay: 0.04, duration: 0.12, volume: 0.0018 }
+            ],
+            terminal: [
+                { freq: 196, end: 123, delay: 0, duration: 0.07, type: 'triangle', volume: 0.006 },
+                { freq: 932, end: 622, delay: 0.018, duration: 0.04, type: 'square', volume: 0.0026 },
+                { type: 'noise', filter: 'bandpass', freq: 1150, end: 560, delay: 0.02, duration: 0.058, volume: 0.0025 }
+            ],
+            command: [
+                { freq: 740, end: 1110, delay: 0, duration: 0.026, type: 'triangle', volume: 0.0042 },
+                { freq: 1480, end: 1660, delay: 0.018, duration: 0.02, type: 'sine', volume: 0.002 }
+            ],
+            shake: [
+                { freq: 148, end: 118, delay: 0, duration: 0.052, type: 'triangle', volume: 0.004 },
+                { freq: 740, end: 520, delay: 0.012, duration: 0.028, type: 'square', volume: 0.0018 },
+                { type: 'noise', filter: 'bandpass', freq: 620, end: 380, delay: 0.006, duration: 0.05, volume: 0.0022 }
+            ],
+            denied: [
+                { freq: 196, end: 98, delay: 0, duration: 0.085, type: 'sawtooth', volume: 0.006 },
+                { freq: 147, end: 73, delay: 0.025, duration: 0.075, type: 'triangle', volume: 0.004 }
+            ],
+            ambient: [
+                { freq: 247, end: 494, delay: 0, duration: 0.06, type: 'sine', volume: 0.0048 },
+                { freq: 739, end: 987, delay: 0.05, duration: 0.07, type: 'triangle', volume: 0.0034 }
+            ]
+        };
+
+        (profiles[type] || profiles.hover).forEach((event) => {
+            const gain = ctx.createGain();
+            const start = now + event.delay;
+            const jitter = 1 + (Math.random() - 0.5) * (event.jitter ?? 0.018);
+            const source = event.type === 'noise' ? ctx.createBufferSource() : ctx.createOscillator();
+            let node = source;
+
+            if (event.type === 'noise') {
+                const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * (event.duration + 0.02)));
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+                }
+                source.buffer = buffer;
+            } else {
+                source.type = event.type;
+                source.frequency.setValueAtTime(Math.max(20, event.freq * jitter), start);
+                source.frequency.exponentialRampToValueAtTime(Math.max(20, (event.end || event.freq) * jitter), start + event.duration);
+            }
+
+            if (event.filter) {
+                const filter = ctx.createBiquadFilter();
+                filter.type = event.filter;
+                filter.frequency.setValueAtTime(Math.max(20, (event.freq || 1000) * jitter), start);
+                if (event.end) {
+                    filter.frequency.exponentialRampToValueAtTime(Math.max(20, event.end * jitter), start + event.duration);
+                }
+                node.connect(filter);
+                node = filter;
+            }
+
+            gain.gain.setValueAtTime(Math.max(0.0001, event.volume), start);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + event.duration);
+            node.connect(gain);
+            gain.connect(destination);
+            source.start(start);
+            source.stop(start + event.duration + 0.025);
+        });
+    }
+
+    unlock() {
+        const wasUnlocked = this.isUnlocked;
+        const ctx = this.ensureContext();
+        if (!wasUnlocked && !this.hasPlayedBoot) {
+            this.hasPlayedBoot = true;
+            setTimeout(() => this.playSfx('boot'), 0);
+        }
+        return ctx;
+    }
+}
+
+class MusicSynth {
+    constructor(audioSystem) {
+        this.audioSystem = audioSystem;
+        this.ctx = null;
         this.isPlaying = false;
         this.currentNote = 0;
         this.nextNoteTime = 0;
         this.timerID = null;
         this.sequencePad = [];
         this.sequenceStabs = [];
+        this.musicBus = null;
+        this.musicDry = null;
+        this.delayNode = null;
+        this.delayFeedback = null;
+        this.delayWet = null;
+        this.delayFilter = null;
 
         // Scale definitions for synthwave keys
         this.scales = {
@@ -36,49 +190,231 @@ class MusicSynth {
             'Cm': { root: 'C', notes: ['C', 'D', 'D#', 'F', 'G', 'G#', 'A#'], chords: ['Cm', 'Fm', 'Gm', 'G#', 'A#'] }
         };
 
-        // Define multiple tracks – epic, upbeat synthwave masterpieces
-        // Each track is 512 steps (~64 seconds at 120 BPM) with multiple sections
+        // Original procedural retrowave cues: pulsing bass, neon arps, warm pads,
+        // gated drum energy, and short cinematic lead hooks.
         this.tracks = [
-            {
-                name: 'SINGULARITY PROTOCOL',
-                bpm: 126,
-                // Cinematic hacker incursion – D minor with escalating tension
-                bass: this.generateSingularityBass(512),
-                melody: this.generateSingularityMelody(512),
-                lead: this.generateSingularityLead(512),
-                pad: this.generateSingularityPads(512),
-                stabs: this.generateSingularityStabs(512)
-            },
-            {
-                name: 'STARFORGE ASCENT',
-                bpm: 120,
-                // Deep-space escape sequence – B minor with heroic lifts
-                bass: this.generateStarforgeBass(512),
-                melody: this.generateStarforgeMelody(512),
-                lead: this.generateStarforgeLead(512),
-                pad: this.generateStarforgePads(512),
-                stabs: this.generateStarforgeStabs(512)
-            },
-            {
-                name: 'LASER VELOCITY',
-                bpm: 135,
-                // High-energy arcade synthwave - F# minor
-                bass: this.generateEpicBass('F#m', 512, 'pulse'),
-                melody: this.generateEpicMelody('F#m', 512, 'retro'),
-                lead: this.generateLead('F#m', 512, 'arcade')
-            },
-            {
-                name: 'MIDNIGHT RUNNER',
+            this.createRetrowaveTrack({
+                name: 'NEON GRID PILOT',
+                bpm: 112,
+                bassMode: 'pulse',
+                arpRate: 2,
+                chords: this.retroChordSet('Em')
+            }),
+            this.createRetrowaveTrack({
+                name: 'ORION NIGHT DRIVE',
+                bpm: 104,
+                bassMode: 'outrun',
+                arpRate: 4,
+                chords: this.retroChordSet('Am')
+            }),
+            this.createRetrowaveTrack({
+                name: 'VHS AFTERIMAGE',
+                bpm: 96,
+                bassMode: 'night',
+                arpRate: 4,
+                chords: this.retroChordSet('Dm')
+            }),
+            this.createRetrowaveTrack({
+                name: 'MAINFRAME SUNSET',
+                bpm: 118,
+                bassMode: 'gallop',
+                arpRate: 2,
+                chords: this.retroChordSet('Cm')
+            }),
+            this.createRetrowaveTrack({
+                name: 'STARLINER RUN',
                 bpm: 124,
-                // Dark, mysterious outrun vibes - C minor
-                bass: this.generateEpicBass('Cm', 512, 'outrun'),
-                melody: this.generateEpicMelody('Cm', 512, 'mysterious'),
-                lead: this.generateLead('Cm', 512, 'dark')
-            }
+                bassMode: 'pulse',
+                arpRate: 2,
+                chords: this.retroChordSet('F#m')
+            })
         ];
 
         this.currentTrackIndex = 0;
         this.updateTrack();
+    }
+
+    ensureContext() {
+        const ctx = this.audioSystem.ensureContext();
+        if (this.ctx !== ctx || !this.musicBus) {
+            this.ctx = ctx;
+            this.musicBus = ctx.createGain();
+            this.musicDry = ctx.createGain();
+            this.delayNode = ctx.createDelay(1);
+            this.delayFeedback = ctx.createGain();
+            this.delayWet = ctx.createGain();
+            this.delayFilter = ctx.createBiquadFilter();
+
+            this.musicBus.gain.value = 0.34;
+            this.musicDry.gain.value = 0.68;
+            this.delayNode.delayTime.value = 0.28;
+            this.delayFeedback.gain.value = 0.2;
+            this.delayWet.gain.value = 0.16;
+            this.delayFilter.type = 'lowpass';
+            this.delayFilter.frequency.value = 3600;
+
+            const destination = this.audioSystem.getDestination();
+            this.musicBus.connect(this.musicDry);
+            this.musicDry.connect(destination);
+            this.musicBus.connect(this.delayNode);
+            this.delayNode.connect(this.delayFeedback);
+            this.delayFeedback.connect(this.delayNode);
+            this.delayNode.connect(this.delayFilter);
+            this.delayFilter.connect(this.delayWet);
+            this.delayWet.connect(destination);
+        }
+        return this.ctx;
+    }
+
+    getDestination() {
+        this.ensureContext();
+        return this.musicBus;
+    }
+
+    retroChordSet(key) {
+        const sets = {
+            Em: [
+                this.makeRetroChord('E1', 'E2', 'B1', ['E3', 'G3', 'B3', 'D4'], ['E3', 'G3', 'B3', 'D4', 'B3', 'G3', 'E3', 'D3'], ['B4', null, 'D5', null, 'E5', null, 'G5', null, 'E5', null, 'D5', null, 'B4', null, 'G4', null]),
+                this.makeRetroChord('C1', 'C2', 'G1', ['C3', 'E3', 'G3', 'B3'], ['C3', 'E3', 'G3', 'B3', 'G3', 'E3', 'C3', 'B2'], ['G4', null, 'B4', null, 'C5', null, 'E5', null, 'C5', null, 'B4', null, 'G4', null, 'E4', null]),
+                this.makeRetroChord('G1', 'G2', 'D1', ['G2', 'B2', 'D3', 'A3'], ['G2', 'B2', 'D3', 'A3', 'D3', 'B2', 'G2', 'D2'], ['D5', null, 'E5', null, 'G5', null, 'A5', null, 'G5', null, 'E5', null, 'D5', null, 'B4', null]),
+                this.makeRetroChord('D1', 'D2', 'A1', ['D3', 'F#3', 'A3', 'C4'], ['D3', 'F#3', 'A3', 'C4', 'A3', 'F#3', 'D3', 'A2'], ['A4', null, 'C5', null, 'D5', null, 'F#5', null, 'D5', null, 'C5', null, 'A4', null, 'F#4', null])
+            ],
+            Am: [
+                this.makeRetroChord('A1', 'A2', 'E1', ['A2', 'C3', 'E3', 'G3'], ['A2', 'C3', 'E3', 'G3', 'E3', 'C3', 'A2', 'E2'], ['E4', null, 'G4', null, 'A4', null, 'C5', null, 'A4', null, 'G4', null, 'E4', null, 'C4', null]),
+                this.makeRetroChord('F1', 'F2', 'C1', ['F2', 'A2', 'C3', 'E3'], ['F2', 'A2', 'C3', 'E3', 'C3', 'A2', 'F2', 'C2'], ['C5', null, 'E5', null, 'F5', null, 'A5', null, 'F5', null, 'E5', null, 'C5', null, 'A4', null]),
+                this.makeRetroChord('G1', 'G2', 'D1', ['G2', 'B2', 'D3', 'F3'], ['G2', 'B2', 'D3', 'F3', 'D3', 'B2', 'G2', 'D2'], ['D5', null, 'F5', null, 'G5', null, 'B5', null, 'G5', null, 'F5', null, 'D5', null, 'B4', null]),
+                this.makeRetroChord('E1', 'E2', 'B0', ['E2', 'G#2', 'B2', 'D3'], ['E2', 'G#2', 'B2', 'D3', 'B2', 'G#2', 'E2', 'B1'], ['B4', null, 'D5', null, 'E5', null, 'G#5', null, 'E5', null, 'D5', null, 'B4', null, 'G#4', null])
+            ],
+            Dm: [
+                this.makeRetroChord('D1', 'D2', 'A0', ['D3', 'F3', 'A3', 'C4'], ['D3', 'F3', 'A3', 'C4', 'A3', 'F3', 'D3', 'A2'], ['A4', null, 'C5', null, 'D5', null, 'F5', null, 'D5', null, 'C5', null, 'A4', null, 'F4', null]),
+                this.makeRetroChord('A#0', 'A#1', 'F0', ['A#2', 'D3', 'F3', 'A3'], ['A#2', 'D3', 'F3', 'A3', 'F3', 'D3', 'A#2', 'F2'], ['F4', null, 'A4', null, 'A#4', null, 'D5', null, 'A#4', null, 'A4', null, 'F4', null, 'D4', null]),
+                this.makeRetroChord('F1', 'F2', 'C1', ['F2', 'A2', 'C3', 'E3'], ['F2', 'A2', 'C3', 'E3', 'C3', 'A2', 'F2', 'C2'], ['C5', null, 'E5', null, 'F5', null, 'A5', null, 'F5', null, 'E5', null, 'C5', null, 'A4', null]),
+                this.makeRetroChord('C1', 'C2', 'G0', ['C3', 'E3', 'G3', 'A#3'], ['C3', 'E3', 'G3', 'A#3', 'G3', 'E3', 'C3', 'G2'], ['G4', null, 'A#4', null, 'C5', null, 'E5', null, 'C5', null, 'A#4', null, 'G4', null, 'E4', null])
+            ],
+            Cm: [
+                this.makeRetroChord('C1', 'C2', 'G0', ['C3', 'D#3', 'G3', 'A#3'], ['C3', 'D#3', 'G3', 'A#3', 'G3', 'D#3', 'C3', 'G2'], ['G4', null, 'A#4', null, 'C5', null, 'D#5', null, 'C5', null, 'A#4', null, 'G4', null, 'D#4', null]),
+                this.makeRetroChord('G#0', 'G#1', 'D#1', ['G#2', 'C3', 'D#3', 'G3'], ['G#2', 'C3', 'D#3', 'G3', 'D#3', 'C3', 'G#2', 'D#2'], ['D#5', null, 'G5', null, 'G#5', null, 'C6', null, 'G#5', null, 'G5', null, 'D#5', null, 'C5', null]),
+                this.makeRetroChord('A#0', 'A#1', 'F0', ['A#2', 'D3', 'F3', 'G#3'], ['A#2', 'D3', 'F3', 'G#3', 'F3', 'D3', 'A#2', 'F2'], ['F5', null, 'G#5', null, 'A#5', null, 'D6', null, 'A#5', null, 'G#5', null, 'F5', null, 'D5', null]),
+                this.makeRetroChord('G0', 'G1', 'D1', ['G2', 'A#2', 'D3', 'F3'], ['G2', 'A#2', 'D3', 'F3', 'D3', 'A#2', 'G2', 'D2'], ['D5', null, 'F5', null, 'G5', null, 'A#5', null, 'G5', null, 'F5', null, 'D5', null, 'A#4', null])
+            ],
+            'F#m': [
+                this.makeRetroChord('F#1', 'F#2', 'C#1', ['F#2', 'A2', 'C#3', 'E3'], ['F#2', 'A2', 'C#3', 'E3', 'C#3', 'A2', 'F#2', 'C#2'], ['C#5', null, 'E5', null, 'F#5', null, 'A5', null, 'F#5', null, 'E5', null, 'C#5', null, 'A4', null]),
+                this.makeRetroChord('D1', 'D2', 'A0', ['D3', 'F#3', 'A3', 'C#4'], ['D3', 'F#3', 'A3', 'C#4', 'A3', 'F#3', 'D3', 'A2'], ['A4', null, 'C#5', null, 'D5', null, 'F#5', null, 'D5', null, 'C#5', null, 'A4', null, 'F#4', null]),
+                this.makeRetroChord('A1', 'A2', 'E1', ['A2', 'C#3', 'E3', 'G#3'], ['A2', 'C#3', 'E3', 'G#3', 'E3', 'C#3', 'A2', 'E2'], ['E5', null, 'G#5', null, 'A5', null, 'C#6', null, 'A5', null, 'G#5', null, 'E5', null, 'C#5', null]),
+                this.makeRetroChord('E1', 'E2', 'B0', ['E3', 'G#3', 'B3', 'D4'], ['E3', 'G#3', 'B3', 'D4', 'B3', 'G#3', 'E3', 'B2'], ['B4', null, 'D5', null, 'E5', null, 'G#5', null, 'E5', null, 'D5', null, 'B4', null, 'G#4', null])
+            ]
+        };
+        return [...sets[key], ...sets[key]];
+    }
+
+    makeRetroChord(root, octave, fifth, pad, arp, lead) {
+        return { root, octave, fifth, pad, arp, lead };
+    }
+
+    createRetrowaveTrack(config) {
+        const length = 512;
+        return {
+            name: config.name,
+            bpm: config.bpm,
+            bass: this.generateRetrowaveBass(config.chords, length, config.bassMode),
+            melody: this.generateRetrowaveArp(config.chords, length, config.arpRate),
+            lead: this.generateRetrowaveLead(config.chords, length),
+            pad: this.generateRetrowavePads(config.chords, length),
+            stabs: this.generateRetrowaveStabs(config.chords, length)
+        };
+    }
+
+    generateRetrowaveBass(chords, length, mode = 'pulse') {
+        const pattern = [];
+        for (let section = 0; section < 8; section++) {
+            const chord = chords[section % chords.length];
+            const intensity = Math.floor(section / 2);
+            for (let i = 0; i < 64; i++) {
+                const beat = i % 16;
+                if (mode === 'night') {
+                    pattern.push(beat === 0 ? chord.root : beat === 8 ? chord.fifth : beat === 14 && section >= 3 ? chord.octave : null);
+                } else if (mode === 'gallop') {
+                    const gallop = [chord.root, null, chord.octave, chord.fifth, chord.root, null, chord.octave, null];
+                    pattern.push(section < 2 && i % 4 !== 0 ? null : gallop[i % gallop.length]);
+                } else if (mode === 'outrun') {
+                    const drive = [chord.root, null, chord.root, chord.octave, chord.fifth, null, chord.octave, null];
+                    pattern.push(drive[i % drive.length]);
+                } else {
+                    if (i % 2 === 0) {
+                        pattern.push(i % 8 === 6 && intensity >= 2 ? chord.fifth : chord.root);
+                    } else if (intensity >= 3 && i % 8 === 3) {
+                        pattern.push(chord.octave);
+                    } else {
+                        pattern.push(null);
+                    }
+                }
+            }
+        }
+        return pattern.slice(0, length);
+    }
+
+    generateRetrowaveArp(chords, length, arpRate = 2) {
+        const pattern = [];
+        for (let section = 0; section < 8; section++) {
+            const chord = chords[section % chords.length];
+            const rate = section >= 4 ? Math.max(1, arpRate / 2) : arpRate;
+            for (let i = 0; i < 64; i++) {
+                if (section === 0 && i < 16 && i % 4 !== 0) {
+                    pattern.push(null);
+                } else if (i % rate === 0) {
+                    pattern.push(chord.arp[Math.floor(i / rate) % chord.arp.length]);
+                } else {
+                    pattern.push(null);
+                }
+            }
+        }
+        return pattern.slice(0, length);
+    }
+
+    generateRetrowaveLead(chords, length) {
+        const pattern = [];
+        for (let section = 0; section < 8; section++) {
+            const chord = chords[section % chords.length];
+            const phrase = chord.lead;
+            for (let i = 0; i < 64; i++) {
+                if ((section === 1 || section === 3 || section === 5) && i >= 32 && i < 48) {
+                    pattern.push(phrase[i - 32]);
+                } else if (section === 7 && i < 32) {
+                    pattern.push(phrase[i % phrase.length]);
+                } else {
+                    pattern.push(null);
+                }
+            }
+        }
+        return pattern.slice(0, length);
+    }
+
+    generateRetrowavePads(chords, length) {
+        const pattern = new Array(length).fill(null);
+        for (let section = 0; section < 8; section++) {
+            const base = section * 64;
+            const chord = chords[section % chords.length];
+            pattern[base] = { chord: chord.pad, duration: 30, type: 'triangle', volume: 0.03 };
+            if (section >= 2 && base + 32 < length) {
+                pattern[base + 32] = { chord: chord.pad.map(note => this.transposeNote(note, 1)), duration: 18, type: 'sine', volume: 0.018 };
+            }
+        }
+        return pattern;
+    }
+
+    generateRetrowaveStabs(chords, length) {
+        const pattern = new Array(length).fill(null);
+        for (let section = 1; section < 8; section++) {
+            const base = section * 64;
+            const chord = chords[section % chords.length].pad.slice(1);
+            if (base + 12 < length) {
+                pattern[base + 12] = { chord, duration: 4, type: 'sawtooth', volume: 0.035 };
+            }
+            if (section >= 4 && base + 44 < length) {
+                pattern[base + 44] = { chord: chord.map(note => this.transposeNote(note, 1)), duration: 3, type: 'square', volume: 0.026 };
+            }
+        }
+        return pattern;
     }
 
     // Generate epic bass patterns with different styles
@@ -913,7 +1249,7 @@ class MusicSynth {
         gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
 
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.getDestination());
 
         osc.start(startTime);
         osc.stop(startTime + duration);
@@ -936,7 +1272,7 @@ class MusicSynth {
             gain.gain.linearRampToValueAtTime(vol * 0.6, startTime + duration * 0.4);
             gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
             osc.connect(gain);
-            gain.connect(this.ctx.destination);
+            gain.connect(this.getDestination());
             osc.start(startTime);
             osc.stop(startTime + duration);
         });
@@ -959,12 +1295,12 @@ class MusicSynth {
         highpass.frequency.value = 8000;
         
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.08, time);
+        gain.gain.setValueAtTime(0.035, time);
         gain.gain.exponentialRampToValueAtTime(0.01, time + 0.08);
         
         noise.connect(highpass);
         highpass.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.getDestination());
         noise.start(time);
     }
 
@@ -978,10 +1314,10 @@ class MusicSynth {
         // Main kick
         osc.frequency.setValueAtTime(180, time);
         osc.frequency.exponentialRampToValueAtTime(35, time + 0.08);
-        gain.gain.setValueAtTime(0.5, time);
+        gain.gain.setValueAtTime(0.3, time);
         gain.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.getDestination());
         osc.start(time);
         osc.stop(time + 0.2);
         
@@ -989,10 +1325,10 @@ class MusicSynth {
         osc2.type = 'square';
         osc2.frequency.setValueAtTime(800, time);
         osc2.frequency.exponentialRampToValueAtTime(100, time + 0.02);
-        gain2.gain.setValueAtTime(0.15, time);
+        gain2.gain.setValueAtTime(0.045, time);
         gain2.gain.exponentialRampToValueAtTime(0.01, time + 0.03);
         osc2.connect(gain2);
-        gain2.connect(this.ctx.destination);
+        gain2.connect(this.getDestination());
         osc2.start(time);
         osc2.stop(time + 0.05);
     }
@@ -1012,20 +1348,20 @@ class MusicSynth {
         
         // Noise part
         const noiseGain = this.ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.25, time);
+        noiseGain.gain.setValueAtTime(0.13, time);
         noiseGain.gain.exponentialRampToValueAtTime(0.01, time + 0.12);
         noise.connect(noiseGain);
-        noiseGain.connect(this.ctx.destination);
+        noiseGain.connect(this.getDestination());
         noise.start(time);
         
         // Tonal body
         const oscGain = this.ctx.createGain();
         osc.frequency.setValueAtTime(200, time);
         osc.frequency.exponentialRampToValueAtTime(120, time + 0.05);
-        oscGain.gain.setValueAtTime(0.2, time);
+        oscGain.gain.setValueAtTime(0.11, time);
         oscGain.gain.exponentialRampToValueAtTime(0.01, time + 0.08);
         osc.connect(oscGain);
-        oscGain.connect(this.ctx.destination);
+        oscGain.connect(this.getDestination());
         osc.start(time);
         osc.stop(time + 0.1);
     }
@@ -1048,12 +1384,12 @@ class MusicSynth {
         highpass.frequency.value = 6000;
         
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.15, time);
+        gain.gain.setValueAtTime(0.07, time);
         gain.gain.exponentialRampToValueAtTime(0.01, time + 0.6);
         
         noise.connect(highpass);
         highpass.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.getDestination());
         noise.start(time);
     }
 
@@ -1063,26 +1399,26 @@ class MusicSynth {
         // Bass - punchy synthwave bass
         const bassNote = this.sequenceBass[this.currentNote % this.sequenceBass.length];
         if (bassNote) {
-            this.playTone(this.noteToFreq(bassNote), 'sawtooth', time, 0.15, 0.18);
+            this.playTone(this.noteToFreq(bassNote), 'sawtooth', time, 0.13, 0.11);
             // Add sub-bass layer
-            this.playTone(this.noteToFreq(bassNote) * 0.5, 'sine', time, 0.2, 0.12);
+            this.playTone(this.noteToFreq(bassNote) * 0.5, 'sine', time, 0.18, 0.065);
         }
 
         // Melody - shimmering arpeggios
         const melodyNote = this.sequenceMelody[this.currentNote % this.sequenceMelody.length];
         if (melodyNote) {
-            this.playTone(this.noteToFreq(melodyNote), 'square', time, 0.08, 0.06);
+            this.playTone(this.noteToFreq(melodyNote), 'square', time, 0.07, 0.034);
             // Add slight detuned layer for thickness
-            this.playTone(this.noteToFreq(melodyNote) * 1.005, 'triangle', time, 0.1, 0.04);
+            this.playTone(this.noteToFreq(melodyNote) * 1.005, 'triangle', time, 0.09, 0.022);
         }
 
         // Lead synth - soaring leads with longer sustain
         if (this.sequenceLead && this.sequenceLead.length > 0) {
             const leadNote = this.sequenceLead[this.currentNote % this.sequenceLead.length];
             if (leadNote) {
-                this.playTone(this.noteToFreq(leadNote), 'sawtooth', time, 0.25, 0.1);
+                this.playTone(this.noteToFreq(leadNote), 'sawtooth', time, 0.22, 0.058);
                 // Add octave layer for epic feel
-                this.playTone(this.noteToFreq(leadNote) * 2, 'sine', time, 0.2, 0.05);
+                this.playTone(this.noteToFreq(leadNote) * 2, 'sine', time, 0.16, 0.024);
             }
         }
 
@@ -1136,10 +1472,10 @@ class MusicSynth {
         // Closed hi-hat - driving 8th or 16th notes depending on section
         if (section >= 4) {
             // Fast 16th note hats for energy
-            this.playTone(10000, 'square', time, 0.015, 0.015);
+            this.playTone(10000, 'square', time, 0.015, 0.008);
         } else if (this.currentNote % 2 === 0) {
             // 8th note hats
-            this.playTone(8000, 'square', time, 0.02, 0.02);
+            this.playTone(8000, 'square', time, 0.02, 0.01);
         }
 
         // Crash on section changes
@@ -1152,6 +1488,7 @@ class MusicSynth {
     }
 
     scheduler() {
+        if (!this.ctx) return;
         while (this.nextNoteTime < this.ctx.currentTime + 0.1) {
             this.scheduleNote();
         }
@@ -1162,15 +1499,18 @@ class MusicSynth {
 
     start() {
         if (this.isPlaying) return;
-        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const ctx = this.ensureContext();
+        if (ctx.state === 'suspended') ctx.resume();
         this.isPlaying = true;
-        this.nextNoteTime = this.ctx.currentTime + 0.1;
+        this.nextNoteTime = ctx.currentTime + 0.1;
         this.scheduler();
     }
 
     stop() {
         this.isPlaying = false;
-        cancelAnimationFrame(this.timerID);
+        if (this.timerID) {
+            cancelAnimationFrame(this.timerID);
+        }
     }
 }
 
@@ -1208,7 +1548,7 @@ class Typewriter {
 class ScrambleText {
     constructor(el) {
         this.el = el;
-        this.chars = '!<>-_\\/[]{}—=+*^?#________';
+        this.chars = '!<>-_\\/[]{}-=+*^?#________';
         this.update = this.update.bind(this);
     }
 
@@ -1221,8 +1561,8 @@ class ScrambleText {
         for (let i = 0; i < length; i++) {
             const from = oldText[i] || '';
             const to = newText[i] || '';
-            const start = Math.floor(Math.random() * 40);
-            const end = start + Math.floor(Math.random() * 40);
+            const start = Math.floor(Math.random() * 8);
+            const end = start + Math.floor(Math.random() * 12);
             this.queue.push({ from, to, start, end });
         }
 
@@ -1271,6 +1611,60 @@ class ScrambleText {
 // --- Global State ---
 let visualModuleControl = { pause: () => { }, resume: () => { } };
 let pingPongGame = null;
+const systemAudio = new SystemAudio();
+let effectsEnabled = true;
+
+const dailyQuotes = [
+    {
+        day: 'SUNDAY',
+        quote: 'Any sufficiently advanced technology is indistinguishable from magic.',
+        author: 'ARTHUR C. CLARKE',
+        work: "CLARKE'S THIRD LAW // PROFILES OF THE FUTURE",
+        sourceUrl: 'https://en.wikipedia.org/wiki/Clarke%27s_three_laws'
+    },
+    {
+        day: 'MONDAY',
+        quote: 'The hope is that, in not too many years, human brains and computing machines will be coupled together very tightly.',
+        author: 'J.C.R. LICKLIDER',
+        work: 'MAN-COMPUTER SYMBIOSIS // 1960',
+        sourceUrl: 'https://www.columbia.edu/~jrh29/licklider/man-computer_symbiosis.html'
+    },
+    {
+        day: 'TUESDAY',
+        quote: 'The most profound technologies are those that disappear.',
+        author: 'MARK WEISER',
+        work: 'THE COMPUTER FOR THE 21ST CENTURY // 1991',
+        sourceUrl: 'https://webpages.charlotte.edu/richter/classes/2006/6010/readings/WeiserSciAm.htm'
+    },
+    {
+        day: 'WEDNESDAY',
+        quote: 'We shape our tools and thereafter they shape us.',
+        author: 'JOHN CULKIN',
+        work: "A SCHOOLMAN'S GUIDE TO MARSHALL MCLUHAN // 1967",
+        sourceUrl: 'https://www.media-ecology.org/Gender-and-Media-Ecology-CFP'
+    },
+    {
+        day: 'THURSDAY',
+        quote: 'The best way to predict the future is to invent it.',
+        author: 'ALAN KAY',
+        work: 'XEROX PARC MEETING // 1971',
+        sourceUrl: 'https://quotepark.com/quotes/1893243-alan-kay-the-best-way-to-predict-the-future-is-to-invent-it/'
+    },
+    {
+        day: 'FRIDAY',
+        quote: 'The street finds its own uses for things.',
+        author: 'WILLIAM GIBSON',
+        work: 'BURNING CHROME // 1982',
+        sourceUrl: 'https://www.escapestudios.ac.uk/news-and-blog/the-street-finds-its-own-use-for-things/'
+    },
+    {
+        day: 'SATURDAY',
+        quote: "What a computer is to me is it's the most remarkable tool that we've ever come up with.",
+        author: 'STEVE JOBS',
+        work: 'MEMORY & IMAGINATION // 1990',
+        sourceUrl: 'https://www.themarginalian.org/2011/12/21/steve-jobs-bicycle-for-the-mind-1990/'
+    }
+];
 
 // Expose launch function globally
 window.launchPingPong = function () {
@@ -1336,6 +1730,404 @@ window.launchPingPong = function () {
 // --- Main Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Loaded, initializing systems...');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    effectsEnabled = !reducedMotion;
+    document.body.classList.toggle('fx-muted', !effectsEnabled);
+    document.body.classList.toggle('fx-enabled', effectsEnabled);
+
+    const statusChip = document.getElementById('status-chip');
+    const uptimeValue = document.getElementById('uptime-value');
+    const quotePanel = document.getElementById('daily-quote');
+    const quoteState = document.getElementById('quote-state');
+    const quoteMode = document.getElementById('quote-mode');
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+    const quoteWork = document.getElementById('quote-work');
+    const quoteSource = document.getElementById('quote-source');
+    const retroCursor = document.querySelector('.retro-cursor');
+    const visualFeed = document.getElementById('visual-feed');
+    const visualCanvas = document.getElementById('canvas');
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const statusLabel = statusChip?.querySelector('.status-label');
+    const matrixStatusValue = document.getElementById('matrix-status-value');
+    let systemOnline = true;
+    let powerTransitionTimer = null;
+    let powerTransitionActive = false;
+
+    window.toggleEffects = () => {
+        effectsEnabled = !effectsEnabled;
+        document.body.classList.toggle('fx-muted', !effectsEnabled);
+        document.body.classList.toggle('fx-enabled', effectsEnabled);
+        systemAudio.playSfx('click');
+        return effectsEnabled;
+    };
+
+    const setStatusChipState = (state, isTransitioning = false) => {
+        if (!statusChip) return;
+
+        const labels = {
+            online: 'ONLINE',
+            offline: 'OFFLINE',
+            booting: 'BOOTING'
+        };
+        const label = labels[state] || labels.online;
+        const isOffline = state === 'offline';
+        const isBooting = state === 'booting';
+
+        statusChip.classList.toggle('is-offline', isOffline);
+        statusChip.classList.toggle('is-booting', isBooting);
+        statusChip.classList.toggle('is-transitioning', isTransitioning);
+        statusChip.setAttribute('aria-label', `System status ${label.toLowerCase()}`);
+        statusChip.setAttribute('aria-pressed', state === 'online' ? 'true' : 'false');
+        statusChip.toggleAttribute('aria-busy', isTransitioning);
+        statusChip.dataset.powerState = state;
+        if (statusLabel) {
+            statusLabel.textContent = label;
+        } else {
+            statusChip.lastChild.textContent = label;
+        }
+
+        if (matrixStatusValue) {
+            matrixStatusValue.textContent = isBooting ? 'BOOTING' : label;
+        }
+    };
+
+    const getPowerTransitionDuration = (type) => {
+        if (reducedMotionQuery.matches) return 80;
+        if (!effectsEnabled) return type === 'down' ? 260 : 420;
+        return type === 'down' ? 960 : 1280;
+    };
+
+    const setSystemPower = (nextOnline) => {
+        if (!statusChip || powerTransitionActive || nextOnline === systemOnline) return;
+
+        window.clearTimeout(powerTransitionTimer);
+        powerTransitionActive = true;
+        systemOnline = nextOnline;
+        systemAudio.unlock();
+
+        if (!nextOnline) {
+            const duration = getPowerTransitionDuration('down');
+            document.body.classList.remove('is-booting');
+            document.body.classList.add('is-powering-down');
+            setStatusChipState('offline', true);
+            systemAudio.playSfx('powerDown');
+
+            powerTransitionTimer = window.setTimeout(() => {
+                document.body.classList.add('is-offline');
+                document.body.classList.remove('is-powering-down');
+                setStatusChipState('offline', false);
+                powerTransitionActive = false;
+                powerTransitionTimer = null;
+            }, duration);
+            return;
+        }
+
+        const duration = getPowerTransitionDuration('up');
+        document.body.classList.remove('is-offline', 'is-powering-down');
+        document.body.classList.add('is-booting');
+        setStatusChipState('booting', true);
+        systemAudio.playSfx('powerUp');
+
+        powerTransitionTimer = window.setTimeout(() => {
+            document.body.classList.remove('is-booting');
+            setStatusChipState('online', false);
+            powerTransitionActive = false;
+            powerTransitionTimer = null;
+        }, duration);
+    };
+
+    setStatusChipState('online', false);
+
+    const activateTarget = (target) => {
+        if (!target) return;
+        target.classList.add('is-targeted');
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: effectsEnabled ? 'smooth' : 'auto', block: 'center' });
+        window.setTimeout(() => {
+            target.classList.remove('is-targeted');
+        }, 1150);
+    };
+
+    const updateUptime = () => {
+        if (!uptimeValue) return;
+        const baseDays = 26;
+        const elapsed = Math.floor(performance.now() / 1000);
+        const hours = Math.floor(elapsed / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
+        const seconds = Math.floor(elapsed % 60).toString().padStart(2, '0');
+        uptimeValue.textContent = `${baseDays}D ${hours}:${minutes}:${seconds}`;
+    };
+
+    updateUptime();
+    window.setInterval(updateUptime, 1000);
+
+    const contactButtons = [...document.querySelectorAll('#contact-panel .choice-btn')];
+    let activeContactGlitchButton = null;
+
+    const clearContactGlitch = () => {
+        if (!activeContactGlitchButton) return;
+        activeContactGlitchButton.classList.remove('is-glitching');
+        activeContactGlitchButton = null;
+    };
+
+    const playContactGlitch = (button) => {
+        if (!effectsEnabled || !button) {
+            clearContactGlitch();
+            return;
+        }
+
+        if (button === activeContactGlitchButton) return;
+        clearContactGlitch();
+        activeContactGlitchButton = button;
+        button.classList.remove('is-glitching');
+        void button.offsetWidth;
+        button.classList.add('is-glitching');
+    };
+
+    if (contactButtons.length) {
+        document.addEventListener('pointermove', (event) => {
+            const target = document.elementFromPoint(event.clientX, event.clientY);
+            playContactGlitch(target?.closest?.('#contact-panel .choice-btn'));
+        }, { passive: true });
+        document.addEventListener('pointerleave', clearContactGlitch);
+        contactButtons.forEach((button) => {
+            button.addEventListener('focus', () => playContactGlitch(button));
+            button.addEventListener('blur', clearContactGlitch);
+        });
+    }
+
+    const supportsRetroCursor = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (retroCursor && supportsRetroCursor) {
+        document.documentElement.classList.add('has-retro-cursor');
+
+        const isCursorTarget = (target) => Boolean(target?.closest?.('button, a, input, textarea, select, label, [tabindex], [role="button"], .panel, .quote-panel'));
+
+        const setCursorPosition = (event) => {
+            retroCursor.style.setProperty('--cursor-x', `${event.clientX}px`);
+            retroCursor.style.setProperty('--cursor-y', `${event.clientY}px`);
+            retroCursor.classList.add('is-visible');
+            retroCursor.classList.toggle('is-active', isCursorTarget(document.elementFromPoint(event.clientX, event.clientY)));
+        };
+
+        document.addEventListener('pointermove', setCursorPosition, { passive: true });
+        document.addEventListener('pointerleave', () => {
+            retroCursor.classList.remove('is-visible', 'is-active');
+        });
+        document.addEventListener('pointerover', (event) => {
+            retroCursor.classList.toggle('is-active', isCursorTarget(event.target));
+        });
+        document.addEventListener('pointerout', (event) => {
+            retroCursor.classList.toggle('is-active', isCursorTarget(event.relatedTarget));
+        });
+        document.addEventListener('pointerdown', () => {
+            retroCursor.classList.add('is-active');
+        });
+        document.addEventListener('pointerup', (event) => {
+            retroCursor.classList.toggle('is-active', isCursorTarget(event.target));
+        });
+    }
+
+    const cipherGlyphs = '01#%+=?<>[]{}\\/:-_*';
+    let quoteCipherFrame = null;
+    let quoteCipherFields = [];
+    let quoteIsRevealed = false;
+    let quoteCipherIntent = 'encrypted';
+
+    const randomCipherGlyph = () => cipherGlyphs[Math.floor(Math.random() * cipherGlyphs.length)];
+
+    const toCipherText = (text) => {
+        return text.replace(/[^\s]/g, (char) => {
+            if (char === '"' || char === "'" || char === '/' || char === '-') return char;
+            return randomCipherGlyph();
+        });
+    };
+
+    const applyQuoteStateClasses = (state) => {
+        if (!quotePanel) return;
+        quotePanel.classList.toggle('is-encrypted', state === 'encrypted');
+        quotePanel.classList.toggle('is-revealed', state === 'revealed');
+        quotePanel.classList.toggle('is-decrypting', state === 'decrypting');
+        quotePanel.classList.toggle('is-encrypting', state === 'encrypting');
+    };
+
+    const updateQuoteAria = (reveal) => {
+        if (!quotePanel) return;
+        if (!reveal) {
+            quotePanel.setAttribute('aria-label', 'Encrypted quote transmission');
+            return;
+        }
+
+        const quoteField = quoteCipherFields.find(({ el }) => el === quoteText);
+        const authorField = quoteCipherFields.find(({ el }) => el === quoteAuthor);
+        quotePanel.setAttribute('aria-label', `${quoteField?.text || ''} ${authorField?.text || ''}`.trim());
+    };
+
+    const animateQuoteCipher = (reveal) => {
+        if (!quotePanel || quoteCipherFields.length === 0) return;
+        if (quoteCipherFrame) cancelAnimationFrame(quoteCipherFrame);
+        quoteCipherIntent = reveal ? 'revealed' : 'encrypted';
+
+        const fromValues = quoteCipherFields.map(({ el }) => el.textContent || '');
+        const toValues = quoteCipherFields.map(({ text, encrypted }) => reveal ? text : encrypted());
+        const duration = effectsEnabled ? 620 : 0;
+        const startedAt = performance.now();
+
+        applyQuoteStateClasses(reveal ? 'decrypting' : 'encrypting');
+
+        if (duration === 0) {
+            quoteCipherFields.forEach(({ el }, index) => {
+                el.textContent = toValues[index];
+            });
+            quoteIsRevealed = reveal;
+            applyQuoteStateClasses(reveal ? 'revealed' : 'encrypted');
+            updateQuoteAria(reveal);
+            return;
+        }
+
+        const tick = (now) => {
+            const progress = Math.min(1, (now - startedAt) / duration);
+
+            quoteCipherFields.forEach(({ el }, fieldIndex) => {
+                const from = fromValues[fieldIndex];
+                const to = toValues[fieldIndex];
+                const length = Math.max(from.length, to.length);
+                let next = '';
+
+                for (let i = 0; i < length; i++) {
+                    const target = to[i] || '';
+                    const source = from[i] || '';
+                    const threshold = (i / Math.max(1, length)) * 0.48;
+                    const settled = progress >= threshold + 0.42;
+
+                    if (target === ' ') {
+                        next += ' ';
+                    } else if (settled) {
+                        next += target;
+                    } else if (progress < threshold) {
+                        next += source || randomCipherGlyph();
+                    } else {
+                        next += randomCipherGlyph();
+                    }
+                }
+
+                el.textContent = next;
+            });
+
+            if (progress < 1) {
+                quoteCipherFrame = requestAnimationFrame(tick);
+            } else {
+                quoteCipherFields.forEach(({ el }, index) => {
+                    el.textContent = toValues[index];
+                });
+                quoteCipherFrame = null;
+                quoteIsRevealed = reveal;
+                applyQuoteStateClasses(reveal ? 'revealed' : 'encrypted');
+                updateQuoteAria(reveal);
+            }
+        };
+
+        quoteCipherFrame = requestAnimationFrame(tick);
+    };
+
+    const revealQuote = () => {
+        if (quoteCipherIntent === 'revealed') return;
+        animateQuoteCipher(true);
+    };
+
+    const encryptQuote = () => {
+        if (quoteCipherIntent === 'encrypted') return;
+        animateQuoteCipher(false);
+    };
+
+    const syncDailyQuote = () => {
+        const quote = dailyQuotes[new Date().getDay()];
+        if (!quote || !quotePanel || !quoteText) return;
+        quotePanel.setAttribute('cite', quote.sourceUrl);
+        quotePanel.dataset.quoteIndex = String(new Date().getDay());
+        quotePanel.setAttribute('aria-label', 'Encrypted quote transmission');
+
+        quoteCipherFields = [
+            { el: quoteState, text: 'TRANSMISSION_CLEAR', encrypted: () => 'CIPHER_LOCKED' },
+            { el: quoteMode, text: 'SOURCE AUTHENTICATED', encrypted: () => 'ENCRYPTED TRANSMISSION' },
+            { el: quoteText, text: `"${quote.quote}"`, encrypted: () => toCipherText(`"${quote.quote}"`) },
+            { el: quoteAuthor, text: quote.author, encrypted: () => toCipherText(quote.author) },
+            { el: quoteWork, text: quote.work, encrypted: () => toCipherText(quote.work) },
+            { el: quoteSource, text: 'SOURCE', encrypted: () => toCipherText('SOURCE') }
+        ].filter(({ el }) => Boolean(el));
+
+        quoteCipherFields.forEach(({ el, encrypted }) => {
+            el.textContent = encrypted();
+        });
+        quoteIsRevealed = false;
+        quoteCipherIntent = 'encrypted';
+        applyQuoteStateClasses('encrypted');
+        updateQuoteAria(false);
+
+        if (quoteSource) {
+            quoteSource.href = quote.sourceUrl;
+            quoteSource.setAttribute('aria-label', `Source for ${quote.author} quote`);
+        }
+    };
+
+    syncDailyQuote();
+
+    if (quotePanel) {
+        quotePanel.addEventListener('pointerenter', revealQuote);
+        quotePanel.addEventListener('pointerleave', encryptQuote);
+        quotePanel.addEventListener('pointerover', revealQuote);
+        quotePanel.addEventListener('pointerout', (event) => {
+            if (!quotePanel.contains(event.relatedTarget)) encryptQuote();
+        });
+        quotePanel.addEventListener('mouseenter', revealQuote);
+        quotePanel.addEventListener('mouseleave', encryptQuote);
+        quotePanel.addEventListener('focusin', revealQuote);
+        quotePanel.addEventListener('focusout', (event) => {
+            if (!quotePanel.contains(event.relatedTarget)) encryptQuote();
+        });
+    }
+
+    if (statusChip) {
+        statusChip.addEventListener('click', () => {
+            setSystemPower(!systemOnline);
+        });
+    }
+
+    document.querySelectorAll('[data-tilt]').forEach((panel) => {
+        panel.addEventListener('pointermove', (event) => {
+            if (!effectsEnabled) return;
+            const rect = panel.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / rect.width - 0.5) * 8;
+            const y = ((event.clientY - rect.top) / rect.height - 0.5) * 8;
+            panel.style.setProperty('--tilt-x', x.toFixed(2));
+            panel.style.setProperty('--tilt-y', y.toFixed(2));
+        });
+        panel.addEventListener('pointerleave', () => {
+            panel.style.setProperty('--tilt-x', '0');
+            panel.style.setProperty('--tilt-y', '0');
+        });
+    });
+
+    document.querySelectorAll('button, a, .panel, .quote-panel').forEach((node) => {
+        node.addEventListener('pointerenter', () => {
+            if (!effectsEnabled) return;
+            systemAudio.playSfx('hover');
+        });
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+        const actionable = event.target.closest('button, a');
+        if (actionable) {
+            systemAudio.unlock();
+            systemAudio.playSfx('click');
+        }
+    }, { capture: true });
+
+    window.setTimeout(() => {
+        if (effectsEnabled) {
+            systemAudio.playSfx('boot');
+        }
+    }, 180);
     // Scramble Text for Header
     const el = document.querySelector('.glitch');
     if (el) {
@@ -1346,10 +2138,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Periodic scramble
         setInterval(() => {
-            if (Math.random() > 0.9) {
+            if (effectsEnabled) {
                 scrambler.setText(originalText);
             }
-        }, 5000);
+        }, 3200);
     }
 
     // Typewriter for Bio
@@ -1368,7 +2160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             subtitleEl.classList.add('subtitle-hidden');
             setTimeout(() => {
-                subtitleEl.textContent = text;
+                subtitleEl.innerHTML = `<span aria-hidden="true">&gt;</span> ${text}`;
                 subtitleEl.classList.remove('subtitle-hidden');
             }, 250);
         }, delay);
@@ -1376,8 +2168,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (subtitleEl) {
         window.addEventListener('load', () => {
-            fadeSubtitleTo('System Initialization Complete...', 150);
-            fadeSubtitleTo('Cognitive Core Re-indexed. Hello, operator.', 3350);
+            fadeSubtitleTo('SYSTEM INITIALIZATION COMPLETE...', 150);
+            fadeSubtitleTo('COGNITIVE CORE RE-INDEXED. HELLO, OPERATOR.', 900);
         }, { once: true });
     }
 
@@ -1386,6 +2178,91 @@ document.addEventListener('DOMContentLoaded', () => {
         visualModuleControl = initThreeJS() || visualModuleControl;
     } catch (e) {
         console.error("ThreeJS Init Failed:", e);
+    }
+
+    if (visualFeed && visualCanvas) {
+        let skullClickTimes = [];
+        let skullChargeTimer = null;
+        let skullShakeTimer = null;
+        let skullShakeCount = 0;
+        const shakeClickWindow = 820;
+        const clicksToShake = 3;
+
+        const resetSkullClickCharge = () => {
+            skullClickTimes = [];
+            visualFeed.dataset.skullCharge = '0';
+            visualFeed.classList.remove('is-skull-armed');
+        };
+
+        const triggerSkullShake = (clickCount) => {
+            if (!effectsEnabled || reducedMotionQuery.matches) {
+                resetSkullClickCharge();
+                return;
+            }
+
+            const intensity = Math.min(1 + Math.max(0, clickCount - clicksToShake) * 0.22, 1.65);
+            const travel = 7 * intensity;
+            const roll = 1.35 * intensity;
+            const duration = Math.round(260 + intensity * 58);
+
+            window.clearTimeout(skullShakeTimer);
+            visualFeed.classList.remove('is-skull-shaking');
+            void visualFeed.offsetWidth;
+            visualFeed.style.setProperty('--skull-shake-duration', `${duration}ms`);
+            visualFeed.style.setProperty('--skull-shake-x-neg', `${(-travel).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-x-pos', `${(travel * 0.85).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-x-soft-neg', `${(-travel * 0.55).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-x-soft-pos', `${(travel * 0.36).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-x-end-neg', `${(-travel * 0.18).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-y-pos', `${(travel * 0.18).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-y-neg', `${(-travel * 0.22).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-y-soft-pos', `${(travel * 0.08).toFixed(2)}px`);
+            visualFeed.style.setProperty('--skull-shake-roll-neg', `${(-roll).toFixed(2)}deg`);
+            visualFeed.style.setProperty('--skull-shake-roll-pos', `${roll.toFixed(2)}deg`);
+            visualFeed.style.setProperty('--skull-shake-roll-soft-neg', `${(-roll * 0.72).toFixed(2)}deg`);
+            visualFeed.style.setProperty('--skull-shake-roll-soft-pos', `${(roll * 0.42).toFixed(2)}deg`);
+            visualFeed.style.setProperty('--skull-shake-roll-end-neg', `${(-roll * 0.22).toFixed(2)}deg`);
+            visualFeed.classList.add('is-skull-shaking');
+            skullShakeCount += 1;
+            visualFeed.dataset.skullShakeCount = String(skullShakeCount);
+            visualFeed.dataset.skullCharge = '0';
+
+            skullShakeTimer = window.setTimeout(() => {
+                visualFeed.classList.remove('is-skull-shaking');
+                skullShakeTimer = null;
+            }, duration + 40);
+
+            systemAudio.unlock();
+            systemAudio.playSfx('shake');
+            resetSkullClickCharge();
+        };
+
+        visualCanvas.addEventListener('pointerup', (event) => {
+            if (!event.isPrimary || (typeof event.button === 'number' && event.button !== 0)) return;
+            if (!effectsEnabled || reducedMotionQuery.matches) {
+                resetSkullClickCharge();
+                return;
+            }
+
+            systemAudio.unlock();
+            const now = performance.now();
+            skullClickTimes = skullClickTimes.filter((time) => now - time < shakeClickWindow);
+            skullClickTimes.push(now);
+
+            const charge = Math.min(skullClickTimes.length, clicksToShake);
+            visualFeed.dataset.skullCharge = String(charge);
+            visualFeed.classList.toggle('is-skull-armed', charge > 1);
+            if (charge < clicksToShake) {
+                systemAudio.playSfx('hover');
+            }
+
+            window.clearTimeout(skullChargeTimer);
+            skullChargeTimer = window.setTimeout(resetSkullClickCharge, shakeClickWindow);
+
+            if (skullClickTimes.length >= clicksToShake) {
+                triggerSkullShake(skullClickTimes.length);
+            }
+        }, { passive: true });
     }
 
     // Game Setup
@@ -1401,24 +2278,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Audio Setup
-    const synth = new MusicSynth();
+    const synth = new MusicSynth(systemAudio);
     const musicBtn = document.getElementById('music-btn');
     const terminalToggleButtons = Array.from(document.querySelectorAll('[data-terminal-toggle]'));
     const terminalCloseBtn = document.getElementById('terminal-close-btn');
 
     window.initAudio = () => {
-        if (synth.ctx.state === 'suspended') synth.ctx.resume();
-        toggleMusic();
+        systemAudio.ensureContext();
+        window.toggleMusic();
     };
 
     window.toggleMusic = () => {
         if (synth.isPlaying) {
             synth.stop();
-            if (musicBtn) musicBtn.innerHTML = '<span class="key">click</span> play music';
+            systemAudio.playSfx('ambient');
+            if (musicBtn) musicBtn.innerHTML = '&gt; PLAY AMBIENT <span class="key">CTRL+M</span>';
         } else {
-            if (synth.ctx.state === 'suspended') synth.ctx.resume();
             synth.start();
-            if (musicBtn) musicBtn.innerHTML = `<span class="key">click</span> stop music • ${synth.getCurrentTrackName()}`;
+            systemAudio.playSfx('ambient');
+            if (musicBtn) musicBtn.innerHTML = `&gt; STOP AMBIENT <span class="key">${synth.getCurrentTrackName()}</span>`;
+            queueMicrotask(() => {
+                if (musicBtn) musicBtn.innerHTML = `&gt; STOP AMBIENT <span class="key">${synth.getCurrentTrackName()}</span>`;
+            });
         }
     };
 
@@ -1428,7 +2309,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const trackName = synth.shuffleTrack();
         if (wasPlaying) {
             synth.start();
-            if (musicBtn) musicBtn.innerHTML = `<span class="key">click</span> stop music • ${trackName}`;
+            queueMicrotask(() => {
+                if (musicBtn) musicBtn.innerHTML = `&gt; STOP AMBIENT <span class="key">${trackName}</span>`;
+            });
         }
         return trackName;
     };
@@ -1454,8 +2337,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Terminal Interaction
     document.addEventListener('keydown', (e) => {
         const key = e.key.toLowerCase();
+        if ((e.ctrlKey || e.metaKey) && key === 'k') {
+            e.preventDefault();
+            systemAudio.unlock();
+            window.toggleTerminal();
+            return;
+        }
+        if ((e.ctrlKey || e.metaKey) && key === 'm') {
+            e.preventDefault();
+            systemAudio.unlock();
+            window.toggleMusic();
+            return;
+        }
         if (key === 't' && document.activeElement !== terminalInput) {
             e.preventDefault();
+            systemAudio.unlock();
             window.toggleTerminal();
         }
         if (key === 'escape') {
@@ -1468,7 +2364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (terminalOverlay && terminalOverlay.style.display === 'flex') {
+            if (terminalOverlay && !terminalOverlay.classList.contains('hidden')) {
                 e.preventDefault();
                 window.toggleTerminal();
             }
@@ -1678,7 +2574,8 @@ function initThreeJS() {
 
             void main() {
                 vec2 p = (-iResolution.xy + 2.0 * gl_FragCoord.xy) / iResolution.y;
-                vec3 ro = vec3(1.6 * cos(iTime * .6), 0., 1.6 * sin(iTime * .6));
+                float orbit = iTime * .58;
+                vec3 ro = vec3(1.6 * cos(orbit), 0., 1.6 * sin(orbit));
                 mat3 ca = setCamera(ro);
                 vec3 rd = ca * normalize(vec3(p.xy, 2.));
                 vec3 col = render(p, ro, rd);
@@ -1739,7 +2636,7 @@ function initThreeJS() {
 
                 // Glitch / Post
                 vec2 V = 1. - 2. * U / R;
-                vec2 off = vec2(S(.0, 0.0, cos(T + U.y / R.y * 5.0)), .0) - vec2(.5, .0);
+                vec2 off = vec2(S(.0, 0.01, cos(T + U.y / R.y * 5.0)), .0) - vec2(.5, .0);
                 
                 // Colorize (Green tint)
                 float r = texture2D(iChannel0, .03 * off + U / R).x;
@@ -1760,7 +2657,7 @@ function initThreeJS() {
 
                 // Tint to match our theme (Green/Retro)
                 float gray = dot(C.rgb, vec3(0.299, 0.587, 0.114));
-                vec3 themeColor = vec3(0.6, 0.76, 0.47); // #99C278
+                vec3 themeColor = vec3(0.20, 1.0, 0.42);
                 // Mix original slightly with theme to keep some depth, but mostly theme
                 vec3 final = mix(vec3(gray), themeColor * gray * 1.8, 0.8);
                 gl_FragColor = vec4(final, 1.0);
@@ -1827,8 +2724,116 @@ function initThreeJS() {
 const terminalOverlay = document.getElementById('terminal-overlay');
 const terminalInput = document.getElementById('cmd-input');
 const terminalOutput = document.getElementById('cmd-output');
+const terminalClock = document.getElementById('terminal-clock');
+const terminalQuickButtons = Array.from(document.querySelectorAll('[data-terminal-command]'));
 const commandHistory = [];
 let historyIndex = -1;
+const terminalToneSequence = [
+    { key: 'green', label: 'GREEN' },
+    { key: 'red', label: 'RED' },
+    { key: 'blue', label: 'BLUE' }
+];
+let terminalToneIndex = 0;
+
+const signal2600Response = [
+    'SIGNAL_2600 // ORIGIN TRACE',
+    '',
+    'ORIGIN > 2600 HZ WAS AN IN-BAND CONTROL TONE IN OLD LONG-DISTANCE TELEPHONE SWITCHING. TO THE NETWORK, THAT TONE MEANT A TRUNK HAD CLEARED; TO CURIOUS OPERATORS, IT REVEALED THAT GLOBAL INFRASTRUCTURE COULD BE UNDERSTOOD AS SIGNALS, STATES, AND PROTOCOLS.',
+    '',
+    'CULTURE > PHONE PHREAKS TURNED THAT DISCOVERY INTO A PRACTICE: LISTEN CLOSELY, MAP THE SYSTEM, TEST ASSUMPTIONS, SHARE NOTES. THE 1971 BLUE BOX STORY PUSHED THE SUBCULTURE INTO PUBLIC VIEW, AND THE SAME SYSTEM-CURIOSITY LATER FED COMPUTER HACKING AS MODEMS AND PCS ARRIVED. 2600 MAGAZINE THEN MADE THE NUMBER A BADGE FOR TECHNICAL EXPLORATION, RIGHTS, AND DISSENT.',
+    '',
+    'HANDLE > 2600TH IS OUR CALLSIGN BECAUSE IT POINTS TO THAT LINEAGE: FIND THE HIDDEN PROTOCOL, UNDERSTAND THE SYSTEM DEEPLY, THEN BUILD WITH STYLE, RESTRAINT, AND A LITTLE DEFY-THE-DEFAULT ENERGY.',
+    '',
+    'SOURCES: BRITANNICA / 2600 MAGAZINE / ESQUIRE-SLATE ARCHIVE'
+].join('\n');
+
+function setTerminalTone(index) {
+    terminalToneIndex = (index + terminalToneSequence.length) % terminalToneSequence.length;
+    const tone = terminalToneSequence[terminalToneIndex];
+
+    if (terminalOverlay) {
+        terminalOverlay.dataset.terminalTone = tone.key;
+        terminalOverlay.dataset.terminalToneLabel = tone.label;
+    }
+
+    const chromaButton = terminalQuickButtons.find((button) => button.dataset.terminalCommand === 'chroma');
+    if (chromaButton) {
+        chromaButton.dataset.activeTone = tone.key;
+        chromaButton.setAttribute('aria-label', `Cycle terminal chroma. Current tone ${tone.label}.`);
+    }
+
+    return tone;
+}
+
+function cycleTerminalTone() {
+    return setTerminalTone(terminalToneIndex + 1);
+}
+
+const terminalBootEntries = [
+    {
+        command: 'SYS_BOOT',
+        status: 'OK',
+        response: 'CRT SHELL ONLINE // COGNITIVE CORE RE-INDEXED'
+    },
+    {
+        command: 'LINK',
+        status: 'SECURE',
+        response: 'HANDSHAKE ACCEPTED // ENCRYPTED CHANNEL STABLE'
+    },
+    {
+        command: 'HINT',
+        status: 'READY',
+        response: 'COMMAND INDEX AWAITING OPERATOR INPUT // TRY: 2600'
+    }
+];
+
+function updateTerminalClock() {
+    if (!terminalClock) return;
+    terminalClock.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
+}
+
+updateTerminalClock();
+window.setInterval(updateTerminalClock, 1000);
+
+function appendTerminalOutput(command, response, options = {}) {
+    if (!terminalOutput) return null;
+    const { status = 'OK', tone = 'success' } = options;
+    const output = document.createElement('div');
+    output.className = `output-line is-${tone}`;
+
+    const head = document.createElement('div');
+    head.className = 'output-line-head';
+
+    const commandNode = document.createElement('span');
+    commandNode.className = 'output-command';
+    commandNode.textContent = `> ${command}`;
+
+    const statusNode = document.createElement('span');
+    statusNode.className = 'output-status';
+    statusNode.textContent = `[ ${status} ]`;
+
+    const body = document.createElement('div');
+    body.className = 'output-body';
+    body.textContent = response;
+
+    head.append(commandNode, statusNode);
+    output.append(head, body);
+    terminalOutput.appendChild(output);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    return output;
+}
+
+function renderTerminalBoot() {
+    if (!terminalOutput) return;
+    terminalOutput.innerHTML = '';
+    terminalBootEntries.forEach((entry) => appendTerminalOutput(entry.command, entry.response, {
+        status: entry.status,
+        tone: 'success'
+    }));
+}
+
+renderTerminalBoot();
+setTerminalTone(0);
 
 function focusTerminalInputEnd() {
     if (!terminalInput) return;
@@ -1853,58 +2858,57 @@ function ensureMusicPlaying() {
     return true;
 }
 
-window.toggleTerminal = () => {
+window.toggleTerminal = (forceOpen) => {
     if (!terminalOverlay) return;
-    const isOpen = terminalOverlay.style.display === 'flex';
+    const isOpen = !terminalOverlay.classList.contains('hidden');
+    const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !isOpen;
 
-    if (isOpen) {
-        terminalOverlay.style.display = 'none';
+    if (!shouldOpen) {
         terminalOverlay.classList.add('hidden');
         if (terminalInput) {
             terminalInput.value = '';
-            terminalInput.blur(); // Close mobile keyboard
+            terminalInput.blur();
         }
     } else {
-        terminalOverlay.style.display = 'flex';
         terminalOverlay.classList.remove('hidden');
-        // Delay focus to ensure terminal is visible
         setTimeout(() => {
             if (terminalInput) {
                 terminalInput.focus();
-                // Trigger mobile keyboard
                 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                     terminalInput.click();
                 }
             }
         }, 100);
     }
-    playTone(800, 0.05);
+    systemAudio.playSfx('terminal');
 };
 
-window.playTone = function (freq, duration) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.frequency.value = freq;
-    osc.type = 'square';
-    gain.gain.value = 0.1;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
+window.openTerminalWithMessage = (message) => {
+    window.toggleTerminal(true);
+    if (message && terminalOutput) {
+        appendTerminalOutput('SYSTEM', message, { status: 'RX', tone: 'success' });
+    }
+};
+
+window.playTone = function () {
+    systemAudio.playSfx('command');
+};
+
+function submitTerminalCommand(rawCommand) {
+    const command = rawCommand.toLowerCase().trim();
+    if (!command) return;
+    systemAudio.unlock();
+    handleCommand(command);
+    commandHistory.push(command);
+    historyIndex = commandHistory.length;
 }
 
 if (terminalInput) {
     terminalInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            const command = terminalInput.value.toLowerCase().trim();
-            if (!command) return;
-            handleCommand(command);
-            commandHistory.push(command);
-            historyIndex = commandHistory.length;
+            submitTerminalCommand(terminalInput.value);
             terminalInput.value = '';
-            playTone(1200, 0.05);
             return;
         }
 
@@ -1936,7 +2940,7 @@ if (terminalInput) {
 
 if (terminalOverlay && terminalInput) {
     terminalOverlay.addEventListener('click', (e) => {
-        if (terminalOverlay.style.display !== 'flex') return;
+        if (terminalOverlay.classList.contains('hidden')) return;
         const interactiveTarget = e.target.closest('button, a, input, textarea');
         if (interactiveTarget && interactiveTarget !== terminalInput) {
             return;
@@ -1949,57 +2953,144 @@ if (terminalOverlay && terminalInput) {
     });
 }
 
-function handleCommand(cmd) {
-    const output = document.createElement('div');
-    output.className = 'output-line';
+terminalQuickButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const command = button.dataset.terminalCommand;
+        if (!command) return;
+        window.toggleTerminal(true);
+        if (terminalInput) {
+            terminalInput.value = command;
+        }
+        submitTerminalCommand(command);
+        if (terminalInput) {
+            terminalInput.value = '';
+            focusTerminalInputEnd();
+        }
+    });
+});
 
+function handleCommand(cmd) {
     let response = '';
+    let status = 'OK';
+    let tone = 'success';
+
     switch (cmd) {
         case 'help':
-            response = 'COMMANDS: HELP, ABOUT, SKILLS, CONTACT, MUSIC, PINGPONG, SHUFFLE, TRACK, DATE, WHOAMI, SUDO, ECHO, CLEAR, EXIT';
+            response = [
+                'AVAILABLE COMMANDS',
+                'HELP      COMMAND INDEX',
+                'ABOUT     IDENTITY MATRIX SUMMARY',
+                'SKILLS    STACK VECTORS',
+                'PROJECTS  PROJECT PROTOCOLS',
+                '2600      CALLSIGN ORIGIN',
+                'CHROMA    CYCLE TERMINAL HUE',
+                'MUSIC     TOGGLE AMBIENT AUDIO',
+                'FX        TOGGLE VISUAL EFFECTS',
+                'PINGPONG  LAUNCH WEBGL SIMULATION',
+                'SHUFFLE   ROTATE AMBIENT TRACK',
+                'TRACK     REPORT CURRENT TRACK',
+                'DATE      LOCAL CLOCK',
+                'WHOAMI    CURRENT SESSION',
+                'CLEAR     PURGE BUFFER',
+                'EXIT      CLOSE SHELL'
+            ].join('\n');
+            break;
+        case '2600':
+        case '2600hz':
+        case 'signal':
+        case 'origin':
+            response = signal2600Response;
+            status = 'SIGNAL';
             break;
         case 'about':
-            response = 'USER: PRANSHUL | CLASS: SYSTEMS ARCH-MAGE | LVL: 26XX | STATUS: QUANTUM-UNLOCKED';
+            response = [
+                'USERNAME   2600TH',
+                'FULL NAME  PRANSHUL CHANDHOK',
+                'ROLE       TECHNOMANCER / XR / AI',
+                'LOCATION   EARTH // ORION SPUR',
+                'CLEARANCE  LEVEL 7',
+                'STATUS     ONLINE'
+            ].join('\n');
             break;
         case 'skills':
-            response = 'Unity3D, Unreal Engine, C#, C++, Python, WebGL, XR Ops, AI Pipelines';
+            response = [
+                'REALTIME ENGINES  UNITY3D / UNREAL ENGINE / WEBGL',
+                'LANGUAGES         C# / C++ / PYTHON / JAVASCRIPT',
+                'SYSTEMS           XR OPS / AI PIPELINES / INTERACTIVE SIMS'
+            ].join('\n');
+            break;
+        case 'projects':
+            response = [
+                'PROJECT_PROTOCOL',
+                'PINGPONG WEBGL SIMULATION AVAILABLE',
+                'STATUS: READY FOR LAUNCH'
+            ].join('\n');
             break;
         case 'contact':
-            response = 'TRANSMITTING ON ALL FREQUENCIES...';
+            response = [
+                'CONNECT_PROTOCOL ONLINE',
+                'EMAIL / LINKEDIN / X / GITHUB / SUBSTACK',
+                'CONTACT ROW TARGETED IN PRIMARY VIEW'
+            ].join('\n');
+            document.getElementById('contact-panel')?.classList.add('is-targeted');
+            setTimeout(() => document.getElementById('contact-panel')?.classList.remove('is-targeted'), 1150);
             break;
         case 'music':
-            response = 'TOGGLING AUDIO SYSTEM...';
+            response = 'AMBIENT AUDIO BUS TOGGLED';
             window.toggleMusic();
             break;
+        case 'chroma':
+        case 'color':
+        case 'palette': {
+            const toneState = cycleTerminalTone();
+            response = `TERMINAL CHROMA SHIFT\n${toneState.label} CHANNEL ACTIVE`;
+            status = 'HUE';
+            break;
+        }
+        case 'fx':
+            response = `VISUAL EFFECTS ${window.toggleEffects() ? 'ENABLED' : 'REDUCED'}`;
+            break;
         case 'pingpong':
-            response = 'INITIALIZING PING PONG PROTOCOL...';
+            response = 'INITIALIZING PING PONG PROTOCOL';
             if (window.launchPingPong) {
                 setTimeout(() => window.launchPingPong(), 500);
             } else {
-                response = 'ERROR: GAME MODULE NOT FOUND.';
+                response = 'ERROR: GAME MODULE NOT FOUND';
+                status = 'ERROR';
+                tone = 'danger';
             }
             break;
-        case 'shuffle':
+        case 'shuffle': {
             ensureMusicPlaying();
             const trackName = window.shuffleMusic();
-            response = `SWITCHED TO TRACK: ${trackName}`;
+            response = `AMBIENT TRACK ROTATED\nNOW PLAYING: ${trackName}`;
             break;
-        case 'track':
+        }
+        case 'track': {
             ensureMusicPlaying();
             const currentTrack = window.getMusicSynth().getCurrentTrackName();
             response = `NOW PLAYING: ${currentTrack}`;
             break;
+        }
         case 'date':
-            response = new Date().toString();
+            response = new Date().toString().toUpperCase();
             break;
         case 'whoami':
-            response = 'GUEST USER (UNAUTHORIZED)';
+            response = 'OPERATOR_GUEST // AUTHENTICATION LIMITED';
+            status = 'LIMITED';
+            tone = 'warning';
             break;
         case 'sudo':
-            response = 'ACCESS DENIED. INCIDENT REPORTED.';
+            response = 'ACCESS DENIED // INCIDENT BUFFER WRITTEN';
+            status = 'DENIED';
+            tone = 'danger';
+            systemAudio.playSfx('denied');
             break;
         case 'clear':
-            terminalOutput.innerHTML = '';
+            if (terminalOutput) {
+                terminalOutput.innerHTML = '';
+                appendTerminalOutput('CLEAR', 'BUFFER PURGED // SHELL READY', { status: 'OK', tone: 'success' });
+            }
             return;
         case 'exit':
             window.toggleTerminal();
@@ -2008,11 +3099,13 @@ function handleCommand(cmd) {
             if (cmd.startsWith('echo ')) {
                 response = cmd.substring(5);
             } else {
-                response = `UNKNOWN COMMAND: ${cmd}`;
+                response = `UNKNOWN COMMAND: ${cmd}\nCOMMAND INDEX AVAILABLE: HELP`;
+                status = 'ERROR';
+                tone = 'danger';
+                systemAudio.playSfx('denied');
             }
     }
 
-    output.innerText = `> ${cmd}\n${response}`;
-    terminalOutput.appendChild(output);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    appendTerminalOutput(cmd, response, { status, tone });
+    systemAudio.playSfx('command');
 }
