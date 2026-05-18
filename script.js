@@ -2054,6 +2054,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const formatQuoteTransmission = ({ quote, author }) => `"${quote}" :: ${author}`;
+
     const applyQuoteStateClasses = (state) => {
         if (!quotePanel) return;
         quotePanel.classList.toggle('is-encrypted', state === 'encrypted');
@@ -2070,8 +2072,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const quoteField = quoteCipherFields.find(({ el }) => el === quoteText);
-        const authorField = quoteCipherFields.find(({ el }) => el === quoteAuthor);
-        quotePanel.setAttribute('aria-label', `${quoteField?.text || ''} ${authorField?.text || ''}`.trim());
+        quotePanel.setAttribute('aria-label', quoteField?.text || '');
     };
 
     const animateQuoteCipher = (reveal) => {
@@ -2160,10 +2161,12 @@ document.addEventListener('DOMContentLoaded', () => {
         quotePanel.dataset.quoteIndex = String(new Date().getDay());
         quotePanel.setAttribute('aria-label', 'Encrypted quote transmission');
 
+        const quoteTransmission = formatQuoteTransmission(quote);
+
         quoteCipherFields = [
             { el: quoteState, text: 'TRANSMISSION_CLEAR', encrypted: () => 'CIPHER_LOCKED' },
             { el: quoteMode, text: 'SOURCE AUTHENTICATED', encrypted: () => 'ENCRYPTED TRANSMISSION' },
-            { el: quoteText, text: `"${quote.quote}"`, encrypted: () => toCipherText(`"${quote.quote}"`) },
+            { el: quoteText, text: quoteTransmission, encrypted: () => toCipherText(quoteTransmission) },
             { el: quoteAuthor, text: quote.author, encrypted: () => toCipherText(quote.author) },
             { el: quoteWork, text: quote.work, encrypted: () => toCipherText(quote.work) },
             { el: quoteSource, text: 'SOURCE', encrypted: () => toCipherText('SOURCE') }
