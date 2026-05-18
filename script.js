@@ -80,6 +80,22 @@ class SystemAudio {
                 { freq: 1850, end: 1180, delay: 0.006, duration: 0.022, type: 'square', volume: 0.0024 },
                 { type: 'noise', filter: 'highpass', freq: 3600, delay: 0, duration: 0.018, volume: 0.0018 }
             ],
+            link: [
+                { freq: 620, end: 930, delay: 0, duration: 0.034, type: 'triangle', volume: 0.0042 },
+                { freq: 1240, end: 1560, delay: 0.018, duration: 0.022, type: 'sine', volume: 0.0018 }
+            ],
+            confirm: [
+                { freq: 440, end: 660, delay: 0, duration: 0.042, type: 'triangle', volume: 0.0048 },
+                { freq: 880, end: 1320, delay: 0.034, duration: 0.038, type: 'sine', volume: 0.0022 }
+            ],
+            terminalOpen: [
+                { freq: 174, end: 246, delay: 0, duration: 0.06, type: 'triangle', volume: 0.0052 },
+                { type: 'noise', filter: 'bandpass', freq: 1050, end: 1650, delay: 0.018, duration: 0.048, volume: 0.0022 }
+            ],
+            terminalClose: [
+                { freq: 246, end: 130, delay: 0, duration: 0.064, type: 'triangle', volume: 0.0048 },
+                { type: 'noise', filter: 'lowpass', freq: 720, end: 260, delay: 0.015, duration: 0.052, volume: 0.002 }
+            ],
             powerDown: [
                 { freq: 164, end: 46, delay: 0, duration: 0.18, type: 'triangle', volume: 0.0044 },
                 { type: 'noise', filter: 'lowpass', freq: 680, end: 120, delay: 0.025, duration: 0.16, volume: 0.0028 }
@@ -97,6 +113,28 @@ class SystemAudio {
             command: [
                 { freq: 740, end: 1110, delay: 0, duration: 0.026, type: 'triangle', volume: 0.0042 },
                 { freq: 1480, end: 1660, delay: 0.018, duration: 0.02, type: 'sine', volume: 0.002 }
+            ],
+            decrypt: [
+                { freq: 980, end: 1480, delay: 0, duration: 0.044, type: 'square', volume: 0.0024, jitter: 0.04 },
+                { type: 'noise', filter: 'bandpass', freq: 2100, end: 3400, delay: 0.006, duration: 0.036, volume: 0.0017 }
+            ],
+            encrypt: [
+                { freq: 1360, end: 760, delay: 0, duration: 0.046, type: 'square', volume: 0.0022, jitter: 0.04 },
+                { type: 'noise', filter: 'bandpass', freq: 3200, end: 1500, delay: 0.005, duration: 0.034, volume: 0.0015 }
+            ],
+            glitch: [
+                { freq: 1240, end: 860, delay: 0, duration: 0.018, type: 'square', volume: 0.0018, jitter: 0.08 },
+                { freq: 680, end: 1040, delay: 0.014, duration: 0.018, type: 'triangle', volume: 0.0015, jitter: 0.08 }
+            ],
+            launch: [
+                { freq: 98, end: 196, delay: 0, duration: 0.09, type: 'sine', volume: 0.004 },
+                { freq: 392, end: 784, delay: 0.045, duration: 0.06, type: 'triangle', volume: 0.003 },
+                { type: 'noise', filter: 'highpass', freq: 1600, end: 2600, delay: 0.02, duration: 0.07, volume: 0.0018 }
+            ],
+            shuffle: [
+                { freq: 520, end: 390, delay: 0, duration: 0.026, type: 'triangle', volume: 0.0032 },
+                { freq: 780, end: 1170, delay: 0.026, duration: 0.032, type: 'triangle', volume: 0.003 },
+                { type: 'noise', filter: 'bandpass', freq: 1800, end: 2200, delay: 0.012, duration: 0.04, volume: 0.0012 }
             ],
             shake: [
                 { freq: 148, end: 118, delay: 0, duration: 0.052, type: 'triangle', volume: 0.004 },
@@ -190,42 +228,41 @@ class MusicSynth {
             'Cm': { root: 'C', notes: ['C', 'D', 'D#', 'F', 'G', 'G#', 'A#'], chords: ['Cm', 'Fm', 'Gm', 'G#', 'A#'] }
         };
 
-        // Original procedural retrowave cues: pulsing bass, neon arps, warm pads,
-        // gated drum energy, and short cinematic lead hooks.
+        // Original procedural sci-fi retrowave cues. These use genre vocabulary
+        // like arps, gated hits, pads, and drum-machine drive without copying
+        // melodies from reference tracks.
         this.tracks = [
             this.createRetrowaveTrack({
-                name: 'NEON GRID PILOT',
-                bpm: 112,
-                bassMode: 'pulse',
+                name: 'NEON INTERCEPT',
+                bpm: 128,
+                bassMode: 'outrun',
                 arpRate: 2,
+                leadMode: 'chase',
+                padMode: 'wide',
+                stabMode: 'syncopated',
+                drumMode: 'outrun',
                 chords: this.retroChordSet('Em')
             }),
             this.createRetrowaveTrack({
-                name: 'ORION NIGHT DRIVE',
-                bpm: 104,
-                bassMode: 'outrun',
-                arpRate: 4,
-                chords: this.retroChordSet('Am')
-            }),
-            this.createRetrowaveTrack({
-                name: 'VHS AFTERIMAGE',
-                bpm: 96,
-                bassMode: 'night',
-                arpRate: 4,
-                chords: this.retroChordSet('Dm')
-            }),
-            this.createRetrowaveTrack({
-                name: 'MAINFRAME SUNSET',
-                bpm: 118,
+                name: 'BLACK ICE BREACH',
+                bpm: 138,
                 bassMode: 'gallop',
-                arpRate: 2,
+                arpRate: 1,
+                leadMode: 'breach',
+                padMode: 'dark',
+                stabMode: 'impact',
+                drumMode: 'breach',
                 chords: this.retroChordSet('Cm')
             }),
             this.createRetrowaveTrack({
-                name: 'STARLINER RUN',
+                name: 'ORBITAL AFTERBURN',
                 bpm: 124,
                 bassMode: 'pulse',
                 arpRate: 2,
+                leadMode: 'launch',
+                padMode: 'lift',
+                stabMode: 'bright',
+                drumMode: 'launch',
                 chords: this.retroChordSet('F#m')
             })
         ];
@@ -318,9 +355,10 @@ class MusicSynth {
             bpm: config.bpm,
             bass: this.generateRetrowaveBass(config.chords, length, config.bassMode),
             melody: this.generateRetrowaveArp(config.chords, length, config.arpRate),
-            lead: this.generateRetrowaveLead(config.chords, length),
-            pad: this.generateRetrowavePads(config.chords, length),
-            stabs: this.generateRetrowaveStabs(config.chords, length)
+            lead: this.generateRetrowaveLead(config.chords, length, config.leadMode),
+            pad: this.generateRetrowavePads(config.chords, length, config.padMode),
+            stabs: this.generateRetrowaveStabs(config.chords, length, config.stabMode),
+            drums: config.drumMode || 'outrun'
         };
     }
 
@@ -371,13 +409,31 @@ class MusicSynth {
         return pattern.slice(0, length);
     }
 
-    generateRetrowaveLead(chords, length) {
+    generateRetrowaveLead(chords, length, mode = 'chase') {
         const pattern = [];
         for (let section = 0; section < 8; section++) {
             const chord = chords[section % chords.length];
             const phrase = chord.lead;
             for (let i = 0; i < 64; i++) {
-                if ((section === 1 || section === 3 || section === 5) && i >= 32 && i < 48) {
+                if (mode === 'breach') {
+                    if (section >= 2 && i >= 24 && i < 56 && i % 2 === 0) {
+                        const note = phrase[Math.floor((i - 24) / 2) % phrase.length];
+                        pattern.push(i % 8 === 0 ? this.transposeNote(note, -1) : note);
+                    } else if (section === 7 && i % 4 === 0) {
+                        pattern.push(this.transposeNote(phrase[i % phrase.length], -1));
+                    } else {
+                        pattern.push(null);
+                    }
+                } else if (mode === 'launch') {
+                    if ((section === 2 || section === 4 || section === 6) && i >= 16 && i < 56) {
+                        const note = phrase[(i - 16) % phrase.length];
+                        pattern.push(i >= 40 ? this.transposeNote(note, 1) : note);
+                    } else if (section === 7 && i < 48 && i % 2 === 0) {
+                        pattern.push(this.transposeNote(phrase[Math.floor(i / 2) % phrase.length], 1));
+                    } else {
+                        pattern.push(null);
+                    }
+                } else if ((section === 1 || section === 3 || section === 5) && i >= 32 && i < 48) {
                     pattern.push(phrase[i - 32]);
                 } else if (section === 7 && i < 32) {
                     pattern.push(phrase[i % phrase.length]);
@@ -389,29 +445,61 @@ class MusicSynth {
         return pattern.slice(0, length);
     }
 
-    generateRetrowavePads(chords, length) {
+    generateRetrowavePads(chords, length, mode = 'wide') {
         const pattern = new Array(length).fill(null);
         for (let section = 0; section < 8; section++) {
             const base = section * 64;
             const chord = chords[section % chords.length];
-            pattern[base] = { chord: chord.pad, duration: 30, type: 'triangle', volume: 0.03 };
-            if (section >= 2 && base + 32 < length) {
-                pattern[base + 32] = { chord: chord.pad.map(note => this.transposeNote(note, 1)), duration: 18, type: 'sine', volume: 0.018 };
+            if (mode === 'dark') {
+                pattern[base] = { chord: chord.pad.slice(0, 3), duration: 22, type: 'sawtooth', volume: 0.022 };
+                if (section >= 3 && base + 32 < length) {
+                    pattern[base + 32] = { chord: chord.pad.map(note => this.transposeNote(note, -1)), duration: 10, type: 'square', volume: 0.014 };
+                }
+            } else if (mode === 'lift') {
+                pattern[base] = { chord: chord.pad.map(note => this.transposeNote(note, 1)), duration: 34, type: 'triangle', volume: 0.026 };
+                if (base + 24 < length) {
+                    pattern[base + 24] = { chord: chord.pad, duration: 22, type: 'sine', volume: 0.018 };
+                }
+            } else {
+                pattern[base] = { chord: chord.pad, duration: 30, type: 'triangle', volume: 0.03 };
+                if (section >= 2 && base + 32 < length) {
+                    pattern[base + 32] = { chord: chord.pad.map(note => this.transposeNote(note, 1)), duration: 18, type: 'sine', volume: 0.018 };
+                }
             }
         }
         return pattern;
     }
 
-    generateRetrowaveStabs(chords, length) {
+    generateRetrowaveStabs(chords, length, mode = 'syncopated') {
         const pattern = new Array(length).fill(null);
         for (let section = 1; section < 8; section++) {
             const base = section * 64;
             const chord = chords[section % chords.length].pad.slice(1);
-            if (base + 12 < length) {
-                pattern[base + 12] = { chord, duration: 4, type: 'sawtooth', volume: 0.035 };
-            }
-            if (section >= 4 && base + 44 < length) {
-                pattern[base + 44] = { chord: chord.map(note => this.transposeNote(note, 1)), duration: 3, type: 'square', volume: 0.026 };
+            if (mode === 'impact') {
+                [8, 28, 44].forEach((offset, index) => {
+                    if (base + offset < length) {
+                        pattern[base + offset] = {
+                            chord: index === 1 ? chord.map(note => this.transposeNote(note, -1)) : chord,
+                            duration: index === 1 ? 6 : 3,
+                            type: 'sawtooth',
+                            volume: index === 1 ? 0.046 : 0.034
+                        };
+                    }
+                });
+            } else if (mode === 'bright') {
+                if (base + 16 < length) {
+                    pattern[base + 16] = { chord: chord.map(note => this.transposeNote(note, 1)), duration: 5, type: 'square', volume: 0.026 };
+                }
+                if (section >= 3 && base + 48 < length) {
+                    pattern[base + 48] = { chord: chord.map(note => this.transposeNote(note, 2)), duration: 4, type: 'triangle', volume: 0.019 };
+                }
+            } else {
+                if (base + 12 < length) {
+                    pattern[base + 12] = { chord, duration: 4, type: 'sawtooth', volume: 0.035 };
+                }
+                if (section >= 4 && base + 44 < length) {
+                    pattern[base + 44] = { chord: chord.map(note => this.transposeNote(note, 1)), duration: 3, type: 'square', volume: 0.026 };
+                }
             }
         }
         return pattern;
@@ -1208,6 +1296,7 @@ class MusicSynth {
         this.sequenceLead = track.lead || [];
         this.sequencePad = track.pad || [];
         this.sequenceStabs = track.stabs || [];
+        this.drumMode = track.drums || 'outrun';
     }
 
     shuffleTrack() {
@@ -1446,16 +1535,21 @@ class MusicSynth {
             }
         }
 
-        // Drums - punchy synthwave drums
+        // Drums - punchy synthwave drums with per-track energy profiles
         const section = Math.floor(this.currentNote / 64) % 8;
         const inSection = this.currentNote % 64;
+        const drumMode = this.drumMode || 'outrun';
+        const step16 = this.currentNote % 16;
         
-        // Kick drum pattern - four on the floor with variations
+        // Kick drum pattern - four on the floor with track-specific drive
         if (this.currentNote % 4 === 0) {
             this.playKick(time);
         }
-        // Additional kick hits for drive
-        if ((this.currentNote % 16 === 14 || this.currentNote % 32 === 30) && section >= 2) {
+        if (
+            (drumMode === 'breach' && section >= 1 && [3, 10, 14].includes(step16)) ||
+            (drumMode === 'launch' && section >= 2 && [6, 14].includes(step16)) ||
+            (drumMode === 'outrun' && section >= 2 && (step16 === 14 || this.currentNote % 32 === 30))
+        ) {
             this.playKick(time);
         }
         
@@ -1463,16 +1557,20 @@ class MusicSynth {
         if (this.currentNote % 8 === 4) {
             this.playSnare(time);
         }
+        if (drumMode === 'breach' && section >= 4 && step16 === 15) {
+            this.playSnare(time);
+        }
         
         // Open hi-hat
-        if (this.currentNote % 4 === 2) {
+        if (this.currentNote % 4 === 2 || (drumMode === 'launch' && section >= 4 && step16 === 10)) {
             this.playNoise(time);
         }
         
         // Closed hi-hat - driving 8th or 16th notes depending on section
-        if (section >= 4) {
+        if (section >= 4 || (drumMode === 'breach' && section >= 2) || (drumMode === 'launch' && section >= 3)) {
             // Fast 16th note hats for energy
-            this.playTone(10000, 'square', time, 0.015, 0.008);
+            const hatPitch = drumMode === 'breach' ? 9200 : drumMode === 'launch' ? 10800 : 10000;
+            this.playTone(hatPitch, 'square', time, 0.015, 0.008);
         } else if (this.currentNote % 2 === 0) {
             // 8th note hats
             this.playTone(8000, 'square', time, 0.02, 0.01);
@@ -1480,6 +1578,9 @@ class MusicSynth {
 
         // Crash on section changes
         if (inSection === 0 && section > 0) {
+            this.playCrash(time);
+        }
+        if (drumMode === 'launch' && section >= 5 && inSection === 32) {
             this.playCrash(time);
         }
 
@@ -1674,6 +1775,7 @@ window.launchPingPong = function () {
         console.error("Game overlay not found");
         return;
     }
+    systemAudio.playSfx('launch');
 
     // Initialize game if needed
     if (!pingPongGame) {
@@ -1707,10 +1809,12 @@ window.launchPingPong = function () {
                 title.textContent = 'SYSTEM VICTORY';
                 subtitle.textContent = 'NEURAL LINK ESTABLISHED';
                 title.style.color = '#99C278'; // Green
+                systemAudio.playSfx('confirm');
             } else {
                 title.textContent = 'SYSTEM FAILURE';
                 subtitle.textContent = 'CONNECTION TERMINATED';
                 title.style.color = '#E06C75'; // Red
+                systemAudio.playSfx('denied');
             }
             resultOverlay.classList.remove('hidden');
         }
@@ -1720,8 +1824,10 @@ window.launchPingPong = function () {
     const restartBtn = document.getElementById('restart-btn');
     if (restartBtn) {
         restartBtn.onclick = () => {
+            systemAudio.unlock();
             const resultOverlay = document.getElementById('game-result');
             if (resultOverlay) resultOverlay.classList.add('hidden');
+            systemAudio.playSfx('confirm');
             pingPongGame.start();
         };
     }
@@ -1883,6 +1989,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.classList.remove('is-glitching');
         void button.offsetWidth;
         button.classList.add('is-glitching');
+        systemAudio.playSfx('glitch');
     };
 
     if (contactButtons.length) {
@@ -1894,6 +2001,10 @@ document.addEventListener('DOMContentLoaded', () => {
         contactButtons.forEach((button) => {
             button.addEventListener('focus', () => playContactGlitch(button));
             button.addEventListener('blur', clearContactGlitch);
+            button.addEventListener('click', () => {
+                systemAudio.unlock();
+                systemAudio.playSfx('link');
+            });
         });
     }
 
@@ -2032,11 +2143,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const revealQuote = () => {
         if (quoteCipherIntent === 'revealed') return;
+        systemAudio.playSfx('decrypt');
         animateQuoteCipher(true);
     };
 
     const encryptQuote = () => {
         if (quoteCipherIntent === 'encrypted') return;
+        systemAudio.playSfx('encrypt');
         animateQuoteCipher(false);
     };
 
@@ -2074,13 +2187,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (quotePanel) {
         quotePanel.addEventListener('pointerenter', revealQuote);
+        quotePanel.addEventListener('pointermove', revealQuote);
         quotePanel.addEventListener('pointerleave', encryptQuote);
         quotePanel.addEventListener('pointerover', revealQuote);
         quotePanel.addEventListener('pointerout', (event) => {
             if (!quotePanel.contains(event.relatedTarget)) encryptQuote();
         });
         quotePanel.addEventListener('mouseenter', revealQuote);
+        quotePanel.addEventListener('mousemove', revealQuote);
         quotePanel.addEventListener('mouseleave', encryptQuote);
+        quotePanel.addEventListener('click', revealQuote);
+        quotePanel.addEventListener('focus', revealQuote);
         quotePanel.addEventListener('focusin', revealQuote);
         quotePanel.addEventListener('focusout', (event) => {
             if (!quotePanel.contains(event.relatedTarget)) encryptQuote();
@@ -2111,15 +2228,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('button, a, .panel, .quote-panel').forEach((node) => {
         node.addEventListener('pointerenter', () => {
             if (!effectsEnabled) return;
+            if (node.matches('#contact-panel .choice-btn, #daily-quote')) return;
             systemAudio.playSfx('hover');
         });
     });
+
+    const specializedClickSelector = [
+        '#status-chip',
+        '#music-btn',
+        '[data-terminal-toggle]',
+        '#terminal-close-btn',
+        '[data-terminal-command]',
+        '#game-close-btn',
+        '#restart-btn',
+        '#contact-panel .choice-btn'
+    ].join(', ');
 
     document.addEventListener('pointerdown', (event) => {
         const actionable = event.target.closest('button, a');
         if (actionable) {
             systemAudio.unlock();
-            systemAudio.playSfx('click');
+            if (!actionable.matches(specializedClickSelector)) {
+                systemAudio.playSfx('click');
+            }
         }
     }, { capture: true });
 
@@ -2271,9 +2402,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (gameCloseBtn && gameOverlay) {
         gameCloseBtn.addEventListener('click', () => {
+            systemAudio.unlock();
             gameOverlay.classList.add('hidden');
             if (pingPongGame) pingPongGame.stop();
             visualModuleControl.resume();
+            systemAudio.playSfx('terminalClose');
         });
     }
 
@@ -2327,6 +2460,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bindTerminalToggle = (btn) => {
         if (!btn) return;
         btn.addEventListener('click', () => {
+            systemAudio.unlock();
             window.toggleTerminal();
         });
     };
@@ -2361,6 +2495,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameOverlay.classList.add('hidden');
                 if (pingPongGame) pingPongGame.stop();
                 visualModuleControl.resume();
+                systemAudio.playSfx('terminalClose');
                 return;
             }
 
@@ -2862,6 +2997,7 @@ window.toggleTerminal = (forceOpen) => {
     if (!terminalOverlay) return;
     const isOpen = !terminalOverlay.classList.contains('hidden');
     const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !isOpen;
+    const didChangeState = shouldOpen !== isOpen;
 
     if (!shouldOpen) {
         terminalOverlay.classList.add('hidden');
@@ -2880,7 +3016,9 @@ window.toggleTerminal = (forceOpen) => {
             }
         }, 100);
     }
-    systemAudio.playSfx('terminal');
+    if (didChangeState) {
+        systemAudio.playSfx(shouldOpen ? 'terminalOpen' : 'terminalClose');
+    }
 };
 
 window.openTerminalWithMessage = (message) => {
@@ -2973,6 +3111,7 @@ function handleCommand(cmd) {
     let response = '';
     let status = 'OK';
     let tone = 'success';
+    let sfx = 'command';
 
     switch (cmd) {
         case 'help':
@@ -3038,6 +3177,7 @@ function handleCommand(cmd) {
         case 'music':
             response = 'AMBIENT AUDIO BUS TOGGLED';
             window.toggleMusic();
+            sfx = null;
             break;
         case 'chroma':
         case 'color':
@@ -3045,25 +3185,30 @@ function handleCommand(cmd) {
             const toneState = cycleTerminalTone();
             response = `TERMINAL CHROMA SHIFT\n${toneState.label} CHANNEL ACTIVE`;
             status = 'HUE';
+            sfx = 'shuffle';
             break;
         }
         case 'fx':
             response = `VISUAL EFFECTS ${window.toggleEffects() ? 'ENABLED' : 'REDUCED'}`;
+            sfx = null;
             break;
         case 'pingpong':
             response = 'INITIALIZING PING PONG PROTOCOL';
             if (window.launchPingPong) {
                 setTimeout(() => window.launchPingPong(), 500);
+                sfx = 'command';
             } else {
                 response = 'ERROR: GAME MODULE NOT FOUND';
                 status = 'ERROR';
                 tone = 'danger';
+                sfx = 'denied';
             }
             break;
         case 'shuffle': {
             ensureMusicPlaying();
             const trackName = window.shuffleMusic();
             response = `AMBIENT TRACK ROTATED\nNOW PLAYING: ${trackName}`;
+            sfx = 'shuffle';
             break;
         }
         case 'track': {
@@ -3084,13 +3229,14 @@ function handleCommand(cmd) {
             response = 'ACCESS DENIED // INCIDENT BUFFER WRITTEN';
             status = 'DENIED';
             tone = 'danger';
-            systemAudio.playSfx('denied');
+            sfx = 'denied';
             break;
         case 'clear':
             if (terminalOutput) {
                 terminalOutput.innerHTML = '';
                 appendTerminalOutput('CLEAR', 'BUFFER PURGED // SHELL READY', { status: 'OK', tone: 'success' });
             }
+            systemAudio.playSfx('confirm');
             return;
         case 'exit':
             window.toggleTerminal();
@@ -3102,10 +3248,12 @@ function handleCommand(cmd) {
                 response = `UNKNOWN COMMAND: ${cmd}\nCOMMAND INDEX AVAILABLE: HELP`;
                 status = 'ERROR';
                 tone = 'danger';
-                systemAudio.playSfx('denied');
+                sfx = 'denied';
             }
     }
 
     appendTerminalOutput(cmd, response, { status, tone });
-    systemAudio.playSfx('command');
+    if (sfx) {
+        systemAudio.playSfx(sfx);
+    }
 }

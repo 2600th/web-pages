@@ -504,6 +504,19 @@ body.is-booting .system-bar {
     mask-image: radial-gradient(circle at 44% 48%, black 0%, transparent 67%);
 }
 
+@media (min-width: 1101px) {
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .terminal-screen {
+        height: calc(100vh - 138px);
+        min-height: 0;
+    }
+}
+
 .left-telemetry {
     position: fixed;
     left: clamp(26px, 2.6vw, 50px);
@@ -2292,6 +2305,12 @@ body.fx-muted .quote-panel {
 
     .controls {
         min-height: 52px;
+    }
+}
+
+@media (min-width: 1101px) and (max-height: 800px) {
+    .terminal-screen {
+        height: calc(100vh - 108px);
     }
 }
 
