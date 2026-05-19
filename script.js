@@ -2054,7 +2054,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const formatQuoteTransmission = ({ quote, author }) => `"${quote}" :: ${author}`;
+    const formatQuoteTransmission = ({ quote }) => `"${quote}"`;
 
     const applyQuoteStateClasses = (state) => {
         if (!quotePanel) return;

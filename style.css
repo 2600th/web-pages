@@ -992,8 +992,8 @@ body.fx-enabled .choice-btn.is-glitching::after {
 
 .quote-panel {
     position: relative;
-    min-height: clamp(126px, 13.4vh, 150px);
-    height: clamp(126px, 13.4vh, 150px);
+    min-height: clamp(156px, 14.6vh, 174px);
+    height: auto;
     display: flex;
     align-items: stretch;
     padding: 0;
@@ -1040,13 +1040,13 @@ body.fx-enabled .choice-btn.is-glitching::after {
     position: relative;
     z-index: 1;
     width: 100%;
-    height: 100%;
-    min-height: 0;
+    height: auto;
+    min-height: inherit;
     display: grid;
-    grid-template-rows: minmax(16px, auto) minmax(calc(1.48em * 3), 1fr) minmax(27px, auto);
+    grid-template-rows: auto minmax(0, 1fr) auto;
     gap: 8px;
     padding: clamp(14px, 1.55vw, 18px) clamp(20px, 2.2vw, 28px);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .quote-meta,
@@ -1065,9 +1065,9 @@ body.fx-enabled .choice-btn.is-glitching::after {
 .quote-text {
     align-self: center;
     max-width: 100%;
-    min-height: calc(1.48em * 3);
-    max-height: calc(1.48em * 3);
-    overflow: hidden;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
     color: rgba(50, 240, 103, 0.88);
     font-size: clamp(0.82rem, 1.05vw, 1.08rem);
     line-height: 1.48;
@@ -1077,8 +1077,8 @@ body.fx-enabled .choice-btn.is-glitching::after {
 }
 
 .quote-citation {
-    min-height: 27px;
-    padding-top: 7px;
+    min-height: 0;
+    padding-top: 8px;
     border-top: 1px solid rgba(50, 240, 103, 0.12);
 }
 
@@ -2287,20 +2287,20 @@ body.fx-muted .quote-panel {
     }
 
     .quote-panel {
-        min-height: 104px;
-        height: 104px;
+        min-height: 124px;
+        height: auto;
         padding: 0;
     }
 
     .quote-shell {
-        grid-template-rows: minmax(14px, auto) minmax(calc(1.42em * 2), 1fr) minmax(24px, auto);
+        grid-template-rows: auto minmax(0, 1fr) auto;
         gap: 6px;
         padding: 12px 24px;
     }
 
     .quote-text {
-        min-height: calc(1.42em * 2);
-        max-height: calc(1.42em * 2);
+        min-height: 0;
+        max-height: none;
         line-height: 1.42;
     }
 
@@ -2376,16 +2376,16 @@ body.fx-muted .quote-panel {
 
     .quote-panel {
         min-height: 170px;
-        height: 170px;
+        height: auto;
     }
 
     .quote-shell {
-        grid-template-rows: minmax(44px, auto) minmax(calc(1.48em * 4), 1fr) minmax(58px, auto);
+        grid-template-rows: auto minmax(0, 1fr) auto;
     }
 
     .quote-text {
-        min-height: calc(1.48em * 4);
-        max-height: calc(1.48em * 4);
+        min-height: 0;
+        max-height: none;
     }
 
     .quote-meta,
