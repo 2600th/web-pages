@@ -4,7 +4,7 @@ slug: enterprise-immersive-systems
 summary: GreyKernel applied immersive technology to learning, industrial safety, medical simulation, collaboration, real estate, and defence-related training under real operating constraints.
 yearStart: 2016
 yearEnd: 2021
-status: Grouped public work record
+status: Full public work record
 role: Co-founder and CTO
 disciplines: [Enterprise XR, Training simulation, Industrial systems]
 visibility: public
@@ -14,10 +14,11 @@ era: founder
 domains: [xr, simulation]
 careerOrder: 55
 relationships: [greykernel, defense-simulation-systems, ira-vr, humanoid-robot-control-system]
-evidenceStatus: public-corroborated
+evidenceStatus: public-approved
 publicClaims:
   - Pranshul's public career narrative describes work for enterprise learning, industrial safety, medical, real-estate, and defence simulation contexts.
   - The public record names JPMorgan, Anglian Water, TheMathCompany, Swissotel, United Ocean, Myntra, and HomeLane among the broader client and product context.
+  - The wider portfolio also includes Sight Savers, Voxel, maritime simulation, accessibility, analytics, collaborative learning, production-facility visualization, and interactive real estate.
 engagementPath: operator-advisory
 sources:
   - label: From Pixels to Metaverse
@@ -29,6 +30,8 @@ seo:
   socialImage: /media/career/ira-vr/poster-1280.webp
 ---
 
-This record is deliberately grouped. The public story is the repeated product move: taking immersive technology into environments where offline operation, facilitation, safety, reporting, or domain constraints mattered more than novelty. The public work spans enterprise learning, medical and industrial contexts, collaborative workflows, analytics, and interactive real estate.
+This record is deliberately grouped because the through-line matters more than a gallery of isolated demos: taking immersive technology into environments where offline operation, facilitation, safety, reporting, or domain constraints mattered more than novelty.
 
-Specific internal architectures, participant information, sensitive operational detail, and unpublished client outcomes remain excluded.
+The portfolio spans medical and industrial training, radio and maritime simulation, accessibility work with Sight Savers, collaborative learning, analytics and visualization with TheMathCompany, production-facility showcases, hospitality and 360-degree experiences, and interactive real estate with Voxel and HomeLane. Other named client and product contexts include JPMorgan, Anglian Water, Swissotel, United Ocean, and Myntra.
+
+Across these engagements, Pranshul's role connected product definition, real-time 3D and XR architecture, engineering delivery, domain constraints, and the operating workflows required to make an immersive system useful beyond a demonstration.

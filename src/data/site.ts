@@ -86,7 +86,7 @@ export const TIMELINE: readonly TimelineEntry[] = [
   {
     year: 2020,
     label: 'Defense technology and simulation',
-    summary: 'A public-safe record of defense-technology and real-time simulation work from the GreyKernel founder chapter.',
+    summary: 'Eight named training systems joined custom hardware, IMU tracking, sensor pipelines, real-time 3D, instructor controls, and evaluation.',
     href: '/work/defense-simulation-systems/',
     image: '/media/career/defense-simulation-systems/poster-1280.webp',
   },

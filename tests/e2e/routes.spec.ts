@@ -42,17 +42,24 @@ test('evidence notes render without empty case-study sections', async ({ page })
   await expect(page.getByRole('heading', { name: 'Inside' })).toHaveCount(0);
 });
 
-test('defense work stays public-safe and category-level', async ({ page }) => {
+test('defense work names the full program and systems contribution', async ({ page }) => {
   await page.goto('/work/defense-simulation-systems/');
 
-  await expect(page.getByText(/defense-technology.*real-time simulation/i).first()).toBeVisible();
-  await expect(page.getByText(/restricted operational detail remains excluded/i)).toBeVisible();
-  await expect(page.getByText(/named programs/i)).toBeVisible();
+  const defenseRecord = await page.locator('main').textContent();
+  for (const program of ['BLT T-72', 'Tunguska', 'LLLR', 'M777', 'T-90', 'Advanced Mannequin System', 'Radio Telephony', 'Tata Safari']) {
+    expect(defenseRecord).toContain(program);
+  }
+  expect(defenseRecord).toMatch(/custom hardware[\s\S]*IMU[\s\S]*sensor[\s\S]*instructor[\s\S]*evaluation/i);
   await expect(page.locator('.project-media figcaption')).toHaveText('Editorial illustration');
-  await expect(page.getByRole('link', { name: /Google Drive/i })).toHaveCount(0);
   await expect(page.locator('a[href*="drive.google.com"], a[href*="docs.google.com"]')).toHaveCount(0);
-  await expect(page.getByText(/M777|T-90|Tunguska|LLLR|\bIMU\b/i)).toHaveCount(0);
-  await expect(page.getByText(/software requirements specification/i)).toHaveCount(0);
+});
+
+test('enterprise immersive work includes the wider client and domain record', async ({ page }) => {
+  await page.goto('/work/enterprise-immersive-systems/');
+
+  const enterpriseRecord = await page.locator('main').textContent();
+  expect(enterpriseRecord).toMatch(/Sight Savers[\s\S]*Voxel/i);
+  expect(enterpriseRecord).toMatch(/maritime[\s\S]*accessibility[\s\S]*analytics[\s\S]*production-facility/i);
 });
 
 test('work detail exposes evidence and CreativeWork structured data', async ({ page }) => {

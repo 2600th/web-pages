@@ -27,7 +27,7 @@ test('Proof in motion leads with authentic media and responsible video', async (
   await expect(proof.locator('figure > a')).toHaveCount(7);
   await expect(proof.locator('img')).toHaveCount(5);
   await expect(proof.locator('video')).toHaveCount(2);
-  await expect(proof.getByText(/Editorial illustration · Simulation systems/i)).toBeVisible();
+  await expect(proof.getByText(/Editorial illustration · 8 named systems/i)).toBeVisible();
   await expect(proof.getByRole('link', { name: /View Defense technology case study/i })).toHaveAttribute(
     'href',
     '/work/defense-simulation-systems/',
