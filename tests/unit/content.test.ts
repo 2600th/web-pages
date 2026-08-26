@@ -34,7 +34,7 @@ describe('portfolio content', () => {
 
   it('keeps notes dated, attributable, and non-draft for launch', () => {
     const entries = readFrontmatter(join(process.cwd(), 'src/content/notes'));
-    expect(entries).toHaveLength(3);
+    expect(entries.length).toBeGreaterThanOrEqual(6);
 
     for (const { filename, data } of entries) {
       const note = noteSchema.parse(data);

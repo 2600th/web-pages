@@ -1,19 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { CONTACT_EMAIL, TIMELINE } from '../data/site';
+import { CONTACT_EMAIL } from '../data/site';
 import '../styles/content-pages.css';
 ---
 
 <BaseLayout
-  title="Operator, advisor, builder"
-  description="Pranshul Chandhok is a hands-on product and technology leader with 15+ years across production AI, real-time 3D, XR, games, robotics, and browser-native systems."
+  title="Three acts, one operating instinct"
+  description="Pranshul Chandhok is a hands-on product and technology operator whose work spans games, immersive systems, robotics, design technology, and production AI."
   canonical="/about/"
 >
-  <div class="page-shell">
+  <div class="page-shell about-page">
     <header class="page-hero">
       <div>
         <p class="section-kicker">About · Pranshul Chandhok / 2600th</p>
-        <h1>Operator, advisor, builder</h1>
+        <h1>Three acts. One operating instinct.</h1>
       </div>
       <div class="page-hero__aside">
         <p>I work where product strategy and implementation are still close enough to change each other.</p>
@@ -21,17 +21,41 @@ import '../styles/content-pages.css';
       </div>
     </header>
 
-    <section class="about-grid" aria-labelledby="compound-practice">
-      <div><p class="section-kicker">A compound practice</p><h2 id="compound-practice">The medium changes. The operating pattern does not.</h2></div>
+    <section class="career-acts" aria-labelledby="career-acts-title">
+      <header><p class="section-kicker">The long arc</p><h2 id="career-acts-title">The medium changed. The questions compounded.</h2></header>
+      <ol>
+        <li>
+          <span>Act I · Programmer</span>
+          <h3>Make the idea playable.</h3>
+          <p>The career began in games: turning design intent into responsive systems, learning the discipline of real-time performance, and shipping work across changing platforms.</p>
+          <p><a href="/work/the-brutal-spy/">The Brutal Spy</a> · <a href="/work/alphaman/">Alphaman</a> · <a href="/work/merkur-magie/">Merkur Magie</a></p>
+        </li>
+        <li>
+          <span>Act II · Founder</span>
+          <h3>Make the new medium useful.</h3>
+          <p>GreyKernel widened the frame from games to company-building, immersive learning, collaborative experiences, simulation, robotics, and systems for organizations—not one-off headset demonstrations.</p>
+          <p><a href="/work/greykernel/">GreyKernel</a> · <a href="/work/ira-vr/">IRA VR</a> · <a href="/work/mysticmojo/">MysticMojo</a></p>
+        </li>
+        <li>
+          <span>Act III · Operator</span>
+          <h3>Make emerging technology survive production.</h3>
+          <p>Design software, real-time visualization, and production AI brought the earlier instincts together: connect the technical possibility to a real workflow, a team, and a system that can be operated.</p>
+          <p><a href="/work/homelane-spacecraft-pro/">SpaceCraft Pro</a> · <a href="/work/blocks-inco-ai/">Blocks + INCO-AI</a> · <a href="/work/kinema/">Kinema</a></p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="about-grid" aria-labelledby="patent-title">
+      <div><p class="section-kicker">Public credential</p><h2 id="patent-title">Humanoid Robot Control System</h2></div>
       <div class="prose">
-        <p>My work began in games and real-time systems, moved through simulation, XR, robotics, design technology, and now production AI. That path matters because emerging products rarely respect the boundaries between product, engineering, interaction, and delivery.</p>
-        <p>I am most useful when a problem needs someone who can frame the opportunity, interrogate the system, lead the team, and still get close enough to the implementation to find out what is actually true.</p>
-        <p>The current practice spans generative AI, agentic systems, retrieval and evaluation, multimodal products, browser-native 3D, and product platforms that must survive real organizational constraints.</p>
+        <p>Indian Patent No. 395331 was granted on 25 April 2022 for work filed on 14 February 2019. The invention concerns translating tracked human motion into humanoid robot control.</p>
+        <p>The patent is held by GreyKernel Technologies India Pvt Ltd and names Pranshul Chandhok with Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh as inventors.</p>
+        <p><a href="/work/humanoid-robot-control-system/">Open the public patent record ↗</a></p>
       </div>
     </section>
 
     <section class="about-grid" aria-labelledby="principles-title">
-      <div><p class="section-kicker">How I work</p><h2 id="principles-title">A few durable preferences.</h2></div>
+      <div><p class="section-kicker">How I work</p><h2 id="principles-title">Four durable preferences.</h2></div>
       <ol class="principles">
         <li><span><strong>Make the claim testable.</strong><br />A product story gets stronger when the evidence is easy to inspect.</span></li>
         <li><span><strong>Keep strategy close to implementation.</strong><br />The fastest way to improve a plan is often to encounter the system it depends on.</span></li>
@@ -40,21 +64,29 @@ import '../styles/content-pages.css';
       </ol>
     </section>
 
-    <section class="about-grid" aria-labelledby="trajectory-title">
-      <div><p class="section-kicker">Trajectory · 2011—now</p><h2 id="trajectory-title">Fifteen-plus years in motion.</h2></div>
-      <ol class="principles">
-        {TIMELINE.map((entry) => (
-          <li><span><strong>{entry.year} · {entry.label}</strong><br />{entry.summary}</span></li>
-        ))}
-      </ol>
-    </section>
-
     <section class="about-grid" aria-labelledby="conversation-title">
       <div><p class="section-kicker">Conversation</p><h2 id="conversation-title">Bring the awkward problem.</h2></div>
       <div class="prose">
-        <p>Advisory, product and technology leadership, difficult 0-to-1 work, speaking, or a serious technical conversation.</p>
-        <p><a class="button-link button-link--primary" href={`mailto:${CONTACT_EMAIL}`}>Start with {CONTACT_EMAIL} ↗</a></p>
+        <p>Operator and advisory work, product collaboration, selective leadership opportunities, speaking, writing, or a serious technical conversation.</p>
+        <p><a class="button-link button-link--primary" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Opportunity for Pranshul Chandhok')}`}>Discuss an opportunity ↗</a></p>
       </div>
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  .career-acts { padding-block: clamp(4rem, 9vw, 8rem); border-top: 1px solid var(--line); }
+  .career-acts > header { display: grid; grid-template-columns: 0.4fr 1fr; gap: clamp(2rem, 6vw, 7rem); margin-bottom: clamp(3rem, 7vw, 6rem); }
+  .career-acts h2 { max-width: 13ch; font-size: clamp(2.8rem, 6vw, 5.5rem); }
+  .career-acts ol { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+  .career-acts li { display: grid; padding: clamp(2rem, 5vw, 4rem) 0; grid-template-columns: 0.32fr 0.75fr 1fr; gap: clamp(1.5rem, 4vw, 5rem); border-bottom: 1px solid var(--line); }
+  .career-acts li > span { color: var(--cobalt); font-size: 0.72rem; font-weight: 720; }
+  .career-acts h3 { margin: 0; font-size: clamp(1.7rem, 3.5vw, 3.3rem); }
+  .career-acts li p { max-width: 55ch; color: var(--text-muted); font-size: 0.9rem; }
+  .career-acts li p:last-child { grid-column: 3; margin: 0; }
+  @media (max-width: 50rem) {
+    .career-acts > header,
+    .career-acts li { grid-template-columns: 1fr; }
+    .career-acts li p:last-child { grid-column: 1; }
+  }
+</style>

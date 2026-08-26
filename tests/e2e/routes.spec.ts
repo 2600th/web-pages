@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
 const routeCases = [
-  ['/work/', 'Selected work'],
+  ['/work/', 'Career work'],
   ['/work/kinema/', 'Kinema'],
   ['/notes/', 'Notes from the workbench'],
   ['/notes/ai-video-control/', 'In AI video, control is becoming the moat'],
-  ['/about/', 'Operator, advisor, builder'],
+  ['/about/', 'Three acts. One operating instinct.'],
   ['/lab/', 'Experiments with a public edge'],
 ] as const;
 
@@ -24,6 +24,22 @@ for (const [path, heading] of routeCases) {
     await expect(page).toHaveTitle(/Pranshul Chandhok/);
   });
 }
+
+test('work archive groups records by domain and supports link filters', async ({ page }) => {
+  await page.goto('/work/');
+  await expect(page.getByRole('heading', { name: 'Games', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Applied AI', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'XR and spatial computing', exact: true }).first().click();
+  await expect(page).toHaveURL(/domain=xr/);
+  await expect(page.getByRole('link', { name: /IRA VR/ })).toBeVisible();
+});
+
+test('evidence notes render without empty case-study sections', async ({ page }) => {
+  await page.goto('/work/the-brutal-spy/');
+  await expect(page.getByRole('heading', { name: 'The Brutal Spy', level: 1 })).toBeVisible();
+  await expect(page.getByText(/public career narrative/i)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Inside' })).toHaveCount(0);
+});
 
 test('work detail exposes evidence and CreativeWork structured data', async ({ page }) => {
   await page.goto('/work/kinema/');
