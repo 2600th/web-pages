@@ -13,7 +13,7 @@ recordType: evidence-note
 era: founder
 domains: [xr, simulation]
 careerOrder: 55
-relationships: [greykernel, ira-vr, humanoid-robot-control-system]
+relationships: [greykernel, defense-simulation-systems, ira-vr, humanoid-robot-control-system]
 evidenceStatus: public-corroborated
 publicClaims:
   - Pranshul's public career narrative describes work for enterprise learning, industrial safety, medical, real-estate, and defence simulation contexts.
@@ -29,6 +29,6 @@ seo:
   socialImage: /media/career/ira-vr/poster-1280.webp
 ---
 
-This record is deliberately grouped. The public story is the repeated product move: taking immersive technology into environments where offline operation, facilitation, safety, reporting, or domain constraints mattered more than novelty.
+This record is deliberately grouped. The public story is the repeated product move: taking immersive technology into environments where offline operation, facilitation, safety, reporting, or domain constraints mattered more than novelty. The public work spans enterprise learning, medical and industrial contexts, collaborative workflows, analytics, and interactive real estate.
 
 Specific internal architectures, participant information, sensitive operational detail, and unpublished client outcomes remain excluded.

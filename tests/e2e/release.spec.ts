@@ -38,7 +38,7 @@ test('Career Atlas remains keyboard-operable and link-complete without JavaScrip
   const noJs = await browser.newContext({ javaScriptEnabled: false });
   const fallback = await noJs.newPage();
   await fallback.goto('/#career-atlas');
-  await expect(fallback.locator('.career-atlas__index a')).toHaveCount(15);
+  await expect(fallback.locator('.career-atlas__index a')).toHaveCount(16);
   await noJs.close();
 });
 
@@ -70,7 +70,15 @@ test('reduced motion removes authored Atlas transitions', async ({ page }) => {
   expect(Number.parseFloat(duration)).toBeLessThanOrEqual(0.01);
 });
 
-for (const path of ['/', '/work/', '/work/kinema/', '/notes/', '/about/', '/lab/']) {
+for (const path of [
+  '/',
+  '/work/',
+  '/work/kinema/',
+  '/work/defense-simulation-systems/',
+  '/notes/',
+  '/about/',
+  '/lab/',
+]) {
   test(`${path} has no serious or critical automated accessibility violations`, async ({ page }) => {
     await page.goto(path);
     await page.addScriptTag({ content: axe.source });

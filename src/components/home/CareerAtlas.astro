@@ -107,7 +107,7 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
                   <small>{period}</small>
                 </div>
               )}
-              <p><span>{primaryDomain.label}</span><span>{entry.data.evidenceStatus.replaceAll('-', ' ')}</span></p>
+              <p><span>{entry.data.heroLabel ? `${primaryDomain.label} · ${entry.data.heroLabel}` : primaryDomain.label}</span><span>{entry.data.evidenceStatus.replaceAll('-', ' ')}</span></p>
             </div>
             <div class="career-atlas__panel-copy">
               <p class="career-atlas__period">{period} · {entry.data.role}</p>

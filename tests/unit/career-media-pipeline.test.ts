@@ -6,6 +6,14 @@ import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 describe('career media pipeline', () => {
+  it('publishes only original public-safe artwork for defense simulation', () => {
+    const media = CAREER_MEDIA['defense-simulation-systems'];
+
+    expect(media?.status).toBe('public-approved');
+    expect(media?.sourceLabel).toMatch(/original abstract simulation artwork/i);
+    expect(media?.sourceUrl).toBe('https://www.2600th.com/work/defense-simulation-systems/');
+  });
+
   it('never assigns public outputs to excluded source media', () => {
     const unsafe = config.recipes.filter((recipe) =>
       ['internal-reference-only', 'excluded'].includes(recipe.status),
@@ -84,7 +92,7 @@ describe('career media pipeline', () => {
   it('publishes only traceable derivatives inside the media budget', () => {
     for (const media of Object.values(CAREER_MEDIA)) {
       expect(['public-approved', 'public-corroborated', 'approval-enhanced']).toContain(media.status);
-      expect(media.sourceUrl).toMatch(/^https:\/\/drive\.google\.com\//);
+      expect(media.sourceUrl).toMatch(/^https:\/\//);
       for (const derivative of Object.values(media.derivatives)) {
         if (!derivative) continue;
         const path = join(process.cwd(), 'public', derivative);

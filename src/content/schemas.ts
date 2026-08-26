@@ -38,6 +38,7 @@ const workBaseSchema = z.object({
   publicClaims: z.array(z.string().min(20)).min(1),
   engagementPath: z.enum(ENGAGEMENT_PATHS),
   sources: z.array(sourceSchema).min(1),
+  heroLabel: z.string().min(2).optional(),
   seo: z.object({
     title: z.string().min(20),
     description: z.string().min(60).max(180),

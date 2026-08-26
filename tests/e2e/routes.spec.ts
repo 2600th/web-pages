@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 const routeCases = [
   ['/work/', 'Career work'],
   ['/work/kinema/', 'Kinema'],
+  ['/work/defense-simulation-systems/', 'Defense technology and simulation'],
   ['/notes/', 'Notes from the workbench'],
   ['/notes/ai-video-control/', 'In AI video, control is becoming the moat'],
   ['/about/', 'Three acts. One operating instinct.'],
@@ -39,6 +40,19 @@ test('evidence notes render without empty case-study sections', async ({ page })
   await expect(page.getByRole('heading', { name: 'The Brutal Spy', level: 1 })).toBeVisible();
   await expect(page.getByText(/public career narrative/i)).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Inside' })).toHaveCount(0);
+});
+
+test('defense work stays public-safe and category-level', async ({ page }) => {
+  await page.goto('/work/defense-simulation-systems/');
+
+  await expect(page.getByText(/defense-technology.*real-time simulation/i).first()).toBeVisible();
+  await expect(page.getByText(/restricted operational detail remains excluded/i)).toBeVisible();
+  await expect(page.getByText(/named programs/i)).toBeVisible();
+  await expect(page.locator('.project-media figcaption')).toHaveText('Editorial illustration');
+  await expect(page.getByRole('link', { name: /Google Drive/i })).toHaveCount(0);
+  await expect(page.locator('a[href*="drive.google.com"], a[href*="docs.google.com"]')).toHaveCount(0);
+  await expect(page.getByText(/M777|T-90|Tunguska|LLLR|\bIMU\b/i)).toHaveCount(0);
+  await expect(page.getByText(/software requirements specification/i)).toHaveCount(0);
 });
 
 test('work detail exposes evidence and CreativeWork structured data', async ({ page }) => {

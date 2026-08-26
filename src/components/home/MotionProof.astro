@@ -45,6 +45,17 @@ const media = [
     alt: 'A fighter aircraft flying over a broad snow-covered mountain range',
   },
   {
+    key: 'defense-simulation',
+    type: 'image',
+    title: 'Defense technology',
+    meta: 'Editorial illustration · Simulation systems',
+    href: '/work/defense-simulation-systems/',
+    src: '/media/career/defense-simulation-systems/poster-1280.webp',
+    width: 1280,
+    height: 720,
+    alt: 'Abstract point-cloud simulation space with a person inside a luminous calibration volume',
+  },
+  {
     key: 'oye-tippa',
     type: 'video',
     title: 'Oye Tippa Run',
@@ -73,7 +84,7 @@ const media = [
     <p class="motion-proof__kicker">Proof in motion · Selected field notes</p>
     <h2 id="motion-proof-title">Systems you can see moving.</h2>
     <div class="motion-proof__intro">
-      <p>Games, simulation, immersive learning, and browser-native graphics—shown as the work itself, not a category label.</p>
+      <p>Games, simulation, immersive learning, and browser-native graphics—shown through authentic work and clearly disclosed editorial context.</p>
       <button type="button" data-proof-motion-toggle aria-label="Motion playback" aria-pressed="false" hidden>
         <span>Motion</span>
         <span aria-hidden="true" data-proof-motion-status>Off</span>
@@ -199,7 +210,7 @@ const media = [
 
   .motion-proof__reel {
     display: grid;
-    min-height: min(122vw, 112rem);
+    min-height: min(120vw, 110rem);
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: repeat(14, minmax(4rem, 1fr));
     gap: clamp(0.7rem, 1.4vw, 1.35rem);
@@ -260,9 +271,10 @@ const media = [
   .motion-proof__frame--machine-hunter { grid-area: 1 / 1 / 5 / 9; }
   .motion-proof__frame--web-ocean { grid-area: 1 / 9 / 4 / 13; }
   .motion-proof__frame--kinema { grid-area: 5 / 3 / 9 / 13; }
-  .motion-proof__frame--safed-sagar { grid-area: 9 / 1 / 12 / 8; }
-  .motion-proof__frame--ira-vr { grid-area: 9 / 8 / 12 / 13; }
-  .motion-proof__frame--oye-tippa { grid-area: 12 / 1 / 15 / 13; }
+  .motion-proof__frame--defense-simulation { grid-area: 9 / 1 / 12 / 7; }
+  .motion-proof__frame--safed-sagar { grid-area: 9 / 7 / 12 / 13; }
+  .motion-proof__frame--ira-vr { grid-area: 12 / 1 / 15 / 6; }
+  .motion-proof__frame--oye-tippa { grid-area: 12 / 6 / 15 / 13; }
 
   .motion-proof__footer {
     display: flex;
@@ -280,13 +292,14 @@ const media = [
   @media (max-width: 64rem) {
     .motion-proof__header { grid-template-columns: 1fr 2fr; }
     .motion-proof__intro { grid-column: 2; }
-    .motion-proof__reel { min-height: 110rem; }
+    .motion-proof__reel { min-height: 120rem; }
     .motion-proof__frame--machine-hunter { grid-area: 1 / 1 / 4 / 13; }
     .motion-proof__frame--web-ocean { grid-area: 4 / 1 / 7 / 7; }
     .motion-proof__frame--kinema { grid-area: 4 / 7 / 8 / 13; }
-    .motion-proof__frame--safed-sagar { grid-area: 7 / 1 / 10 / 7; }
-    .motion-proof__frame--ira-vr { grid-area: 8 / 7 / 10 / 13; }
-    .motion-proof__frame--oye-tippa { grid-area: 10 / 1 / 13 / 13; }
+    .motion-proof__frame--defense-simulation { grid-area: 8 / 1 / 11 / 7; }
+    .motion-proof__frame--safed-sagar { grid-area: 8 / 7 / 11 / 13; }
+    .motion-proof__frame--ira-vr { grid-area: 11 / 1 / 14 / 6; }
+    .motion-proof__frame--oye-tippa { grid-area: 11 / 6 / 14 / 13; }
   }
 
   @media (max-width: 42rem) {

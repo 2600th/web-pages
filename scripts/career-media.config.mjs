@@ -3,6 +3,17 @@ export default {
   outputRoot: 'public/media/career',
   recipes: [
     {
+      key: 'defense-simulation-systems',
+      sourceFile: 'defense-simulation/abstract-simulation.png',
+      sourceId: 'imagegen-original-defense-simulation',
+      sourceUrl: 'https://www.2600th.com/work/defense-simulation-systems/',
+      sourceLabel: 'Original abstract simulation artwork generated for this public record',
+      status: 'public-approved',
+      kind: 'image',
+      alt: 'Abstract point-cloud simulation space with a human figure inside a luminous calibration volume',
+      outputs: ['poster-640.webp', 'poster-1280.webp', 'poster-1280.avif'],
+    },
+    {
       key: 'ira-vr',
       sourceFile: 'ira-vr/ira-vr.png',
       sourceId: '1bVfXRmZW6vDuHdsoSqEZOcM1gyOl4fI-',

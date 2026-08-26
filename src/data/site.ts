@@ -84,6 +84,13 @@ export const TIMELINE: readonly TimelineEntry[] = [
     href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
   },
   {
+    year: 2020,
+    label: 'Defense technology and simulation',
+    summary: 'A public-safe record of defense-technology and real-time simulation work from the GreyKernel founder chapter.',
+    href: '/work/defense-simulation-systems/',
+    image: '/media/career/defense-simulation-systems/poster-1280.webp',
+  },
+  {
     year: 2021,
     label: 'Principal software architect · HomeLane',
     summary: 'Real-time interior-design and quote tooling brought graphics, CAD/CAM integration, and production workflows together.',

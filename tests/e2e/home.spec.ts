@@ -23,10 +23,15 @@ test('Proof in motion leads with authentic media and responsible video', async (
   const proof = page.locator('#proof-in-motion');
 
   await expect(proof.getByRole('heading', { level: 2, name: /Systems you can see moving/i })).toBeVisible();
-  await expect(proof.locator('figure')).toHaveCount(6);
-  await expect(proof.locator('figure > a')).toHaveCount(6);
-  await expect(proof.locator('img')).toHaveCount(4);
+  await expect(proof.locator('figure')).toHaveCount(7);
+  await expect(proof.locator('figure > a')).toHaveCount(7);
+  await expect(proof.locator('img')).toHaveCount(5);
   await expect(proof.locator('video')).toHaveCount(2);
+  await expect(proof.getByText(/Editorial illustration · Simulation systems/i)).toBeVisible();
+  await expect(proof.getByRole('link', { name: /View Defense technology case study/i })).toHaveAttribute(
+    'href',
+    '/work/defense-simulation-systems/',
+  );
 
   for (const video of await proof.locator('video').all()) {
     await expect(video).toHaveAttribute('muted', '');

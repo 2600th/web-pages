@@ -64,7 +64,7 @@ const jsonLd = [{
         </dl>
       </div>
     </div>
-    {data.heroMedia && <ProjectMedia media={data.heroMedia} label={`${data.title} · public result`} priority />}
+    {data.heroMedia && <ProjectMedia media={data.heroMedia} label={data.heroLabel ?? `${data.title} · public result`} priority />}
   </header>
 
   {data.recordType !== 'evidence-note' ? (

@@ -17,6 +17,19 @@ export type CareerMediaRecord = {
 };
 
 export const CAREER_MEDIA: Record<string, CareerMediaRecord> = {
+  'defense-simulation-systems': {
+    sourceUrl: 'https://www.2600th.com/work/defense-simulation-systems/',
+    sourceLabel: 'Original abstract simulation artwork generated for this public record',
+    status: 'public-approved',
+    alt: 'Abstract point-cloud simulation space with a human figure inside a luminous calibration volume',
+    width: 1280,
+    height: 720,
+    derivatives: {
+      poster640: '/media/career/defense-simulation-systems/poster-640.webp',
+      poster1280: '/media/career/defense-simulation-systems/poster-1280.webp',
+      posterAvif: '/media/career/defense-simulation-systems/poster-1280.avif',
+    },
+  },
   'ira-vr': {
     sourceUrl: 'https://drive.google.com/file/d/1bVfXRmZW6vDuHdsoSqEZOcM1gyOl4fI-/view',
     sourceLabel: 'IRA VR client learning view',
