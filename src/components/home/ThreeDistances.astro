@@ -6,7 +6,12 @@ interface Props {
 }
 
 const { work } = Astro.props;
-const projects = [...work].sort((a, b) => a.data.featuredOrder - b.data.featuredOrder);
+type FullCaseEntry = CollectionEntry<'work'> & {
+  data: Exclude<CollectionEntry<'work'>['data'], { recordType: 'evidence-note' }>;
+};
+const projects = work
+  .filter((entry): entry is FullCaseEntry => entry.data.recordType !== 'evidence-note')
+  .sort((a, b) => a.data.featuredOrder - b.data.featuredOrder);
 const distances = [
   { id: 'out', label: 'OUT', detail: 'Thesis' },
   { id: 'near', label: 'NEAR', detail: 'Experience' },

@@ -56,48 +56,61 @@ const jsonLd = {
         </dl>
       </div>
     </div>
-    <ProjectMedia media={data.heroMedia} label={`${data.title} · public result`} priority />
+    {data.heroMedia && <ProjectMedia media={data.heroMedia} label={`${data.title} · public result`} priority />}
   </header>
 
-  <div class="project-story">
-    <section class="project-story__frame" aria-labelledby="out-title">
-      <div class="project-story__marker"><span>Distance 01</span><strong>OUT</strong></div>
-      <div class="project-story__body">
-        <div><p class="section-kicker">Thesis</p><h2 id="out-title">{data.out.thesis}</h2></div>
-        <dl class="fact-grid">
-          <div><dt>For</dt><dd>{data.out.audience}</dd></div>
-          <div><dt>Public result</dt><dd>{data.out.outcome}</dd></div>
-        </dl>
-        <ProjectMedia media={data.out.media} label="Out · result" />
-      </div>
-    </section>
+  {data.recordType !== 'evidence-note' ? (
+    <div class="project-story">
+      <section class="project-story__frame" aria-labelledby="out-title">
+        <div class="project-story__marker"><span>Distance 01</span><strong>OUT</strong></div>
+        <div class="project-story__body">
+          <div><p class="section-kicker">Thesis</p><h2 id="out-title">{data.out.thesis}</h2></div>
+          <dl class="fact-grid">
+            <div><dt>For</dt><dd>{data.out.audience}</dd></div>
+            <div><dt>Public result</dt><dd>{data.out.outcome}</dd></div>
+          </dl>
+          <ProjectMedia media={data.out.media} label="Out · result" />
+        </div>
+      </section>
 
-    <section class="project-story__frame" aria-labelledby="near-title">
-      <div class="project-story__marker"><span>Distance 02</span><strong>NEAR</strong></div>
-      <div class="project-story__body">
-        <div><p class="section-kicker">Experience</p><h2 id="near-title">{data.near.experience}</h2></div>
-        <dl class="fact-grid">
-          <div><dt>Contribution</dt><dd>{data.near.contribution}</dd></div>
-          <div><dt>System</dt><dd>{data.near.system}</dd></div>
-        </dl>
-        <ProjectMedia media={data.near.media} label="Near · experience" />
-      </div>
-    </section>
+      <section class="project-story__frame" aria-labelledby="near-title">
+        <div class="project-story__marker"><span>Distance 02</span><strong>NEAR</strong></div>
+        <div class="project-story__body">
+          <div><p class="section-kicker">Experience</p><h2 id="near-title">{data.near.experience}</h2></div>
+          <dl class="fact-grid">
+            <div><dt>Contribution</dt><dd>{data.near.contribution}</dd></div>
+            <div><dt>System</dt><dd>{data.near.system}</dd></div>
+          </dl>
+          <ProjectMedia media={data.near.media} label="Near · experience" />
+        </div>
+      </section>
 
-    <section class="project-story__frame" aria-labelledby="inside-title">
-      <div class="project-story__marker"><span>Distance 03</span><strong>IN</strong></div>
-      <div class="project-story__body">
-        <div><p class="section-kicker">Decisions</p><h2 id="inside-title">What had to be true underneath.</h2></div>
-        <dl class="fact-grid">
-          <div><dt>Key decisions</dt><dd><ul>{data.inside.decisions.map((item) => <li>{item}</li>)}</ul></dd></div>
-          <div><dt>Constraints</dt><dd><ul>{data.inside.constraints.map((item) => <li>{item}</li>)}</ul></dd></div>
-        </dl>
-        <ProjectMedia media={data.inside.media} label="Inside · system" />
-        <div><p class="section-kicker">Evidence record</p><ul>{data.inside.evidence.map((item) => <li>{item}</li>)}</ul></div>
-        <div class="prose"><Content /></div>
-      </div>
-    </section>
+      <section class="project-story__frame" aria-labelledby="inside-title">
+        <div class="project-story__marker"><span>Distance 03</span><strong>IN</strong></div>
+        <div class="project-story__body">
+          <div><p class="section-kicker">Decisions</p><h2 id="inside-title">What had to be true underneath.</h2></div>
+          <dl class="fact-grid">
+            <div><dt>Key decisions</dt><dd><ul>{data.inside.decisions.map((item) => <li>{item}</li>)}</ul></dd></div>
+            <div><dt>Constraints</dt><dd><ul>{data.inside.constraints.map((item) => <li>{item}</li>)}</ul></dd></div>
+          </dl>
+          <ProjectMedia media={data.inside.media} label="Inside · system" />
+          <div><p class="section-kicker">Evidence record</p><ul>{data.inside.evidence.map((item) => <li>{item}</li>)}</ul></div>
+          <div class="prose"><Content /></div>
+        </div>
+      </section>
 
-    <EvidenceSources sources={data.sources} />
-  </div>
+      <EvidenceSources sources={data.sources} />
+    </div>
+  ) : (
+    <div class="project-story">
+      <section class="project-story__frame" aria-labelledby="evidence-note-title">
+        <div class="project-story__marker"><span>Evidence</span><strong>{data.yearStart}</strong></div>
+        <div class="project-story__body">
+          <div><p class="section-kicker">Career record</p><h2 id="evidence-note-title">A sourced point in the wider arc.</h2></div>
+          <div class="prose"><Content /></div>
+        </div>
+      </section>
+      <EvidenceSources sources={data.sources} />
+    </div>
+  )}
 </BaseLayout>

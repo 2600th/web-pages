@@ -23,10 +23,12 @@ describe('portfolio content', () => {
     for (const { filename, data } of entries) {
       const work = workSchema.parse(data);
       expect(work.slug).toBe(basename(filename, '.md'));
-      expect(work.out.thesis.length).toBeGreaterThan(30);
       expect(work.sources[0]?.url).toMatch(/^https:\/\//);
-      expect(work.heroMedia.alt.length).toBeGreaterThan(20);
       expect(work.seo.description.length).toBeGreaterThan(60);
+      if (work.recordType !== 'evidence-note') {
+        expect(work.out.thesis.length).toBeGreaterThan(30);
+        expect(work.heroMedia.alt.length).toBeGreaterThan(20);
+      }
     }
   });
 

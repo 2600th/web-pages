@@ -12,6 +12,15 @@ disciplines:
   - Performance engineering
 visibility: public
 featuredOrder: 2
+recordType: case
+era: operator
+domains: [simulation]
+careerOrder: 170
+relationships: [kinema, safed-sagar]
+evidenceStatus: public-approved
+publicClaims:
+  - The public repository and live build support the visible rendering, interaction, and compatibility description.
+engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/work/web-ocean-3d/hero.webp
   alt: Web Ocean 3D boat moving across a spectral ocean toward a tropical island

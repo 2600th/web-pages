@@ -13,6 +13,15 @@ disciplines:
   - Product leadership
 visibility: approval-enhanced
 featuredOrder: 4
+recordType: feature
+era: operator
+domains: [design-tech, applied-ai]
+careerOrder: 160
+relationships: [homelane-spacecraft-pro]
+evidenceStatus: approval-enhanced
+publicClaims:
+  - Authored public posts support the visible product behaviors and leadership context while confidential implementation details remain excluded.
+engagementPath: operator-advisory
 heroMedia: &hero
   src: /media/work/blocks-inco-ai/hero.webp
   alt: Public Blocks interior-design platform demonstration shared by Pranshul Chandhok

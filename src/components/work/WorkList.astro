@@ -13,15 +13,21 @@ const { work } = Astro.props;
     <li>
       <a href={`/work/${entry.data.slug}/`}>
         <span class="work-list__number">{String(index + 1).padStart(2, '0')}</span>
-        <span class="work-list__image">
-          <img
-            src={entry.data.heroMedia.src}
-            alt={entry.data.heroMedia.alt}
-            width={entry.data.heroMedia.width}
-            height={entry.data.heroMedia.height}
-            loading={index === 0 ? 'eager' : 'lazy'}
-          />
-        </span>
+        {entry.data.heroMedia ? (
+          <span class="work-list__image">
+            <img
+              src={entry.data.heroMedia.src}
+              alt={entry.data.heroMedia.alt}
+              width={entry.data.heroMedia.width}
+              height={entry.data.heroMedia.height}
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
+          </span>
+        ) : (
+          <span class="work-list__image work-list__image--type" aria-hidden="true">
+            <span>{entry.data.yearStart}</span>
+          </span>
+        )}
         <span class="work-list__body">
           <span class="work-list__meta">{entry.data.yearStart} · {entry.data.status}</span>
           <strong>{entry.data.title}</strong>
@@ -77,6 +83,16 @@ const { work } = Astro.props;
     filter: saturate(0.76);
     transform: scale(1.01);
     transition: filter 420ms var(--ease-out), transform 720ms var(--ease-out);
+  }
+
+  .work-list__image--type {
+    display: grid;
+    place-items: end start;
+    padding: 0.8rem;
+    background: var(--text);
+    color: var(--surface);
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 780;
   }
 
   .work-list__body {

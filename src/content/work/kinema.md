@@ -12,6 +12,15 @@ disciplines:
   - Level-editing tools
 visibility: public
 featuredOrder: 1
+recordType: case
+era: operator
+domains: [games]
+careerOrder: 180
+relationships: [web-ocean-3d, safed-sagar]
+evidenceStatus: public-approved
+publicClaims:
+  - The public repository and live build support the visible product and technical description.
+engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/work/kinema/hero.webp
   alt: Kinema browser gameplay scene inside its procedural showcase corridor

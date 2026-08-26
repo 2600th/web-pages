@@ -12,6 +12,15 @@ disciplines:
   - AI-assisted engineering
 visibility: public
 featuredOrder: 3
+recordType: case
+era: operator
+domains: [games, simulation]
+careerOrder: 175
+relationships: [kinema, web-ocean-3d]
+evidenceStatus: public-approved
+publicClaims:
+  - The public repository and authored launch material support the visible product and technical description.
+engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/work/safed-sagar/hero.webp
   alt: Safed Sagar MiG-21 flying through a snowy high-altitude mountain environment
