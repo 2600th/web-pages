@@ -18,7 +18,7 @@ function readFrontmatter(directory: string) {
 describe('portfolio content', () => {
   it('keeps every featured case attributable, descriptive, and search-ready', () => {
     const entries = readFrontmatter(join(process.cwd(), 'src/content/work'));
-    expect(entries).toHaveLength(4);
+    expect(entries.length).toBeGreaterThanOrEqual(15);
 
     for (const { filename, data } of entries) {
       const work = workSchema.parse(data);

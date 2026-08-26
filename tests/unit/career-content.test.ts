@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { workSchema } from '../../src/content/schemas';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { parse } from 'yaml';
 
 const evidenceNote = {
   title: 'The Brutal Spy',
@@ -35,6 +38,18 @@ const evidenceNote = {
   },
 };
 
+function readWorkRecords() {
+  const directory = join(process.cwd(), 'src/content/work');
+  return readdirSync(directory)
+    .filter((filename) => filename.endsWith('.md'))
+    .map((filename) => {
+      const source = readFileSync(join(directory, filename), 'utf8');
+      const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+      if (!match) throw new Error(`${filename} has no YAML frontmatter`);
+      return workSchema.parse(parse(match[1]));
+    });
+}
+
 describe('career work model', () => {
   it('accepts a sourced evidence note without invented case-study depth', () => {
     const entry = workSchema.parse(evidenceNote);
@@ -49,5 +64,29 @@ describe('career work model', () => {
     const result = workSchema.safeParse({ ...evidenceNote, visibility: 'private-excluded' });
 
     expect(result.success).toBe(false);
+  });
+
+  it('contains the approved factual career spine in chronological order', () => {
+    const records = readWorkRecords().sort((a, b) => a.careerOrder - b.careerOrder);
+
+    expect(records.length).toBeGreaterThanOrEqual(15);
+    expect(records.map((entry) => entry.slug)).toEqual(
+      expect.arrayContaining([
+        'the-brutal-spy',
+        'alphaman',
+        'merkur-magie',
+        'greykernel',
+        'ira-vr',
+        'machine-hunter',
+        'mysticmojo',
+        'enterprise-immersive-systems',
+        'humanoid-robot-control-system',
+        'homelane-spacecraft-pro',
+        'ai-native-game-thesis',
+        'blocks-inco-ai',
+      ]),
+    );
+    expect(new Set(records.map((entry) => entry.careerOrder)).size).toBe(records.length);
+    expect(records.every((entry) => entry.sources.length > 0)).toBe(true);
   });
 });
