@@ -84,11 +84,23 @@ export function initCareerAtlas() {
     const records = readRecords(root);
     const nodes = [...root.querySelectorAll<HTMLButtonElement>('[data-atlas-node]')];
     const panels = [...root.querySelectorAll<HTMLElement>('[data-atlas-panel]')];
+    const stage = root.querySelector<HTMLElement>('.career-atlas__stage');
     const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-atlas-filter]')];
     const previous = root.querySelector<HTMLButtonElement>('[data-atlas-previous]');
     const next = root.querySelector<HTMLButtonElement>('[data-atlas-next]');
     const count = root.querySelector<HTMLElement>('[data-atlas-count]');
-    let state = parseAtlasState(window.location.search, records);
+    const defaultCareer = root.dataset.defaultCareer;
+    const stateFromLocation = () => {
+      let parsed = parseAtlasState(window.location.search, records);
+      if (!new URLSearchParams(window.location.search).has('career') && defaultCareer) {
+        const defaultRecord = records.find((record) => record.slug === defaultCareer);
+        if (defaultRecord && (parsed.domain === 'all' || defaultRecord.domains.includes(parsed.domain))) {
+          parsed = { ...parsed, selected: defaultCareer };
+        }
+      }
+      return parsed;
+    };
+    let state = stateFromLocation();
 
     const visibleRecords = () => state.domain === 'all'
       ? records
@@ -149,6 +161,12 @@ export function initCareerAtlas() {
       node.addEventListener('click', () => {
         state = { ...state, selected: node.dataset.slug ?? state.selected };
         render('push', true);
+        if (window.matchMedia('(max-width: 64rem)').matches) {
+          stage?.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }
       });
       node.addEventListener('keydown', (event) => {
         if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
@@ -181,7 +199,7 @@ export function initCareerAtlas() {
       render('push', true);
     });
     window.addEventListener('popstate', () => {
-      state = parseAtlasState(window.location.search, records);
+      state = stateFromLocation();
       render();
     });
 

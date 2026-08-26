@@ -16,6 +16,7 @@ const { media, label, priority = false } = Astro.props;
     height={media.height}
     loading={priority ? 'eager' : 'lazy'}
     fetchpriority={priority ? 'high' : 'auto'}
+    decoding="async"
   />
   <figcaption>{label}</figcaption>
 </figure>
@@ -28,7 +29,8 @@ const { media, label, priority = false } = Astro.props;
     background: var(--ink);
   }
 
-  .project-media img {
+  .project-media img,
+  .project-media video {
     width: 100%;
     height: auto;
   }

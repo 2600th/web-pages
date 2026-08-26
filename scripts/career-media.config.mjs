@@ -71,10 +71,10 @@ export default {
       sourceId: '15-9jurEjE4RfVD8Lnh7x3rpR9FRlvGe7',
       sourceUrl: 'https://drive.google.com/file/d/15-9jurEjE4RfVD8Lnh7x3rpR9FRlvGe7/view',
       sourceLabel: 'Kave collaboration-space still',
-      status: 'approval-enhanced',
+      status: 'internal-reference-only',
       kind: 'image',
       alt: 'Collaborative virtual workspace from the Kave platform exploration',
-      outputs: ['poster-640.webp', 'poster-1280.webp', 'poster-1280.avif'],
+      outputs: [],
     },
   ],
 };

@@ -19,7 +19,7 @@ interface Props {
 const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
-const jsonLd = {
+const jsonLd = [{
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
   name: data.title,
@@ -30,7 +30,15 @@ const jsonLd = {
   dateCreated: String(data.yearStart),
   keywords: data.disciplines.join(', '),
   sameAs: data.sources.map((source) => source.url),
-};
+}, {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+    { '@type': 'ListItem', position: 2, name: 'Work', item: `${SITE.url}/work/` },
+    { '@type': 'ListItem', position: 3, name: data.title, item: `${SITE.url}/work/${data.slug}/` },
+  ],
+}];
 ---
 
 <BaseLayout

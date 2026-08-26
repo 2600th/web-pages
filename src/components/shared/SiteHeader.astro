@@ -14,6 +14,6 @@ const pathname = Astro.url.pathname;
     {NAVIGATION.map((item) => (
       <a href={item.href} aria-current={pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
     ))}
-    <ThemeControl />
+    {pathname !== '/' && <ThemeControl />}
   </nav>
 </header>

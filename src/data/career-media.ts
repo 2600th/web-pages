@@ -70,17 +70,4 @@ export const CAREER_MEDIA: Record<string, CareerMediaRecord> = {
       posterAvif: '/media/career/celeste-ar/poster-1280.avif',
     },
   },
-  kave: {
-    sourceUrl: 'https://drive.google.com/file/d/15-9jurEjE4RfVD8Lnh7x3rpR9FRlvGe7/view',
-    sourceLabel: 'Kave collaboration-space still',
-    status: 'approval-enhanced',
-    alt: 'Rendered classroom environment from the Kave collaborative-space exploration',
-    width: 1280,
-    height: 720,
-    derivatives: {
-      poster640: '/media/career/kave/poster-640.webp',
-      poster1280: '/media/career/kave/poster-1280.webp',
-      posterAvif: '/media/career/kave/poster-1280.avif',
-    },
-  },
 };

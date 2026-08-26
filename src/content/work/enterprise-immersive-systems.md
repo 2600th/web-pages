@@ -12,7 +12,7 @@ featuredOrder: 0
 recordType: evidence-note
 era: founder
 domains: [xr, simulation]
-careerOrder: 80
+careerOrder: 55
 relationships: [greykernel, ira-vr, humanoid-robot-control-system]
 evidenceStatus: public-corroborated
 publicClaims:

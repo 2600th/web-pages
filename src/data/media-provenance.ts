@@ -1,9 +1,25 @@
+import { CAREER_MEDIA } from './career-media';
+import type { EvidenceStatus } from '../content/evidence';
+
 export type MediaProvenance = {
   sourceUrl: string;
-  status: 'public-repository' | 'authored-public-post';
+  status: 'public-repository' | 'authored-public-post' | EvidenceStatus;
 };
 
+const CAREER_MEDIA_PROVENANCE = Object.fromEntries(
+  Object.values(CAREER_MEDIA).flatMap((media) =>
+    Object.values(media.derivatives)
+      .filter((path): path is string => Boolean(path))
+      .map((path) => [path, { sourceUrl: media.sourceUrl, status: media.status }]),
+  ),
+) as Record<string, MediaProvenance>;
+
 export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
+  ...CAREER_MEDIA_PROVENANCE,
+  '/media/social/career-atlas.webp': {
+    sourceUrl: 'https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild',
+    status: 'public-approved',
+  },
   '/media/work/kinema/hero.webp': {
     sourceUrl: 'https://github.com/2600th/Kinema/blob/main/docs/readme/main-menu.png',
     status: 'public-repository',

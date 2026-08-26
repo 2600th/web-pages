@@ -38,6 +38,9 @@ const globalJsonLd = [
     alternateName: PERSON.alternateName,
     url: SITE.url,
     jobTitle: PERSON.jobTitle,
+    description: PERSON.summary,
+    homeLocation: { '@type': 'Place', name: PERSON.location },
+    knowsAbout: ['Applied AI', 'Real-time 3D', 'XR', 'Game development', 'Robotics', 'Design technology'],
     sameAs: SOCIAL_LINKS.map((link) => link.href),
   },
   {
