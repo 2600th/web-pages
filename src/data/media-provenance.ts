@@ -1,0 +1,55 @@
+export type MediaProvenance = {
+  sourceUrl: string;
+  status: 'public-repository' | 'authored-public-post';
+};
+
+export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
+  '/media/work/kinema/hero.webp': {
+    sourceUrl: 'https://github.com/2600th/Kinema/blob/main/docs/readme/main-menu.png',
+    status: 'public-repository',
+  },
+  '/media/work/kinema/editor.webp': {
+    sourceUrl: 'https://github.com/2600th/Kinema/blob/main/docs/readme/use-cases.png',
+    status: 'public-repository',
+  },
+  '/media/work/kinema/inside.webp': {
+    sourceUrl: 'https://github.com/2600th/Kinema/blob/main/docs/readme/station-target-arena.png',
+    status: 'public-repository',
+  },
+  '/media/work/web-ocean-3d/hero.webp': {
+    sourceUrl: 'https://github.com/2600th/web-ocean-3d/blob/main/docs/images/hero.png',
+    status: 'public-repository',
+  },
+  '/media/work/web-ocean-3d/near.webp': {
+    sourceUrl: 'https://github.com/2600th/web-ocean-3d/blob/main/docs/images/underwater.png',
+    status: 'public-repository',
+  },
+  '/media/work/web-ocean-3d/inside.webp': {
+    sourceUrl: 'https://github.com/2600th/web-ocean-3d/blob/main/docs/images/interface.png',
+    status: 'public-repository',
+  },
+  '/media/work/safed-sagar/hero.webp': {
+    sourceUrl: 'https://github.com/2600th/oss-web-3d/blob/main/docs/screenshots/04-cruise.jpg',
+    status: 'public-repository',
+  },
+  '/media/work/safed-sagar/near.webp': {
+    sourceUrl: 'https://github.com/2600th/oss-web-3d/blob/main/docs/screenshots/06-recon.jpg',
+    status: 'public-repository',
+  },
+  '/media/work/safed-sagar/inside.webp': {
+    sourceUrl: 'https://github.com/2600th/oss-web-3d/blob/main/docs/screenshots/12-settings.jpg',
+    status: 'public-repository',
+  },
+  '/media/work/blocks-inco-ai/hero.webp': {
+    sourceUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7347844333657628673/',
+    status: 'authored-public-post',
+  },
+  '/media/work/blocks-inco-ai/near.webp': {
+    sourceUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7339171151543209984/',
+    status: 'authored-public-post',
+  },
+  '/media/work/blocks-inco-ai/inside.webp': {
+    sourceUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7401160661000708096/',
+    status: 'authored-public-post',
+  },
+};

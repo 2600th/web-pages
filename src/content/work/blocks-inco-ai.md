@@ -42,7 +42,7 @@ inside:
     - Authored LinkedIn posts publicly describe Blocks, the INCO-AI update, product behaviors, and a team Speed and Execution Award.
   media:
     src: /media/work/blocks-inco-ai/inside.webp
-    alt: Public interior-design workflow showing the connection between AI visualization and Blocks
+    alt: Public Virtual Experience Center entrance showing an interactive interior environment
     width: 1600
     height: 900
 sources:
