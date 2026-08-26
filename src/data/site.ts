@@ -41,24 +41,52 @@ export type TimelineEntry = {
   label: string;
   summary: string;
   href?: string;
+  image?: string;
 };
 
 export const TIMELINE: readonly TimelineEntry[] = [
   {
-    year: 2019,
-    label: 'Humanoid robot control patent',
-    summary: 'A past-life robotics milestone: translating human arm motion into robot movement.',
+    year: 2011,
+    label: 'Game programmer · Trine Games and Zen Technologies',
+    summary: 'Early Unreal and mobile game work established a bias toward turning design ideas into playable systems quickly.',
+    href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
   },
   {
-    year: 2025,
-    label: 'Blocks and INCO-AI',
-    summary: 'Publicly shared interior-design systems joining generative AI, workflow automation, and real-time 3D.',
+    year: 2013,
+    label: 'Senior developer · Merkur Gaming India',
+    summary: 'Cross-platform Unity systems, performance work, and disciplined release engineering across regulated game products.',
+    href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
+  },
+  {
+    year: 2015,
+    label: 'Co-founder and CTO · GreyKernel',
+    summary: 'Six years building and leading XR, simulation, robotics, education, gaming, and real-estate systems.',
+    href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
+  },
+  {
+    year: 2019,
+    label: 'Humanoid Robot Control System',
+    summary: 'Patented work translated IMU body tracking into on-device humanoid robot control.',
+    href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
+  },
+  {
+    year: 2021,
+    label: 'Principal software architect · HomeLane',
+    summary: 'Real-time interior-design and quote tooling brought graphics, CAD/CAM integration, and production workflows together.',
+    href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
+  },
+  {
+    year: 2023,
+    label: 'VP Product & Technology · Square Yards',
+    summary: 'Leading AI and real-time 3D product and engineering, including the publicly shared Blocks and INCO-AI systems.',
     href: '/work/blocks-inco-ai/',
+    image: '/media/work/blocks-inco-ai/near.webp',
   },
   {
     year: 2026,
     label: 'Browser-native spatial experiments',
     summary: 'Kinema, Web Ocean 3D, and Safed Sagar explore how much serious interactive work now fits in a browser.',
     href: '/work/',
+    image: '/media/work/web-ocean-3d/hero.webp',
   },
 ] as const;
