@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>2600th v1 — Console Archive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,follow">
+    <meta name="theme-color" content="#020704">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=quote-layout-20260519">
+    <!-- Import Map for Three.js -->
+    <script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="importmap-shim">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+            }
+        }
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XR0S4Q293G"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XR0S4Q293G');
+    </script>
+</head>
+
+<body class="fx-enabled">
+    <a class="archive-return" href="/" aria-label="Return to Pranshul Chandhok">
+        <span aria-hidden="true">←</span> Return to Pranshul Chandhok
+    </a>
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="crt-overlay" aria-hidden="true"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
+    <div class="retro-cursor" aria-hidden="true">
+        <span class="retro-cursor-glow"></span>
+        <span class="retro-cursor-mark"></span>
+    </div>
+    <div class="power-transition" aria-hidden="true">
+        <div class="power-collapse"></div>
+        <div class="power-dot"></div>
+        <div class="hal-boot-lens"></div>
+        <div class="hal-boot-readout">SYSTEM WAKE</div>
+    </div>
+
+    <header class="system-bar" aria-label="System status">
+        <a class="system-brand" href="#top" aria-label="2600TH systems home">// 2600TH.SYSTEMS</a>
+        <button type="button" class="status-chip" id="status-chip" aria-label="System status online" aria-pressed="true">
+            <span class="status-led" aria-hidden="true"></span>
+            <span class="status-label">ONLINE</span>
+        </button>
+    </header>
+
+    <main class="terminal-screen" id="top">
+        <div class="left-telemetry" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <section class="intro-stack" aria-labelledby="site-title">
+            <p class="operator-line">&gt; GREETINGS, OPERATOR<span class="terminal-cursor">_</span></p>
+            <h1 class="glitch mega-title" id="site-title" data-text="2600TH">2600TH</h1>
+            <p class="subtitle system-callout">
+                <span aria-hidden="true">&gt;</span>
+                COGNITIVE CORE RE-INDEXED. HELLO, OPERATOR.
+            </p>
+        </section>
+
+        <section class="interface-grid" aria-label="2600TH system interface">
+            <section class="panel visual-module" id="visual-feed" tabindex="-1" aria-labelledby="visual-title" data-tilt>
+                <div class="corner corner-tl" aria-hidden="true"></div>
+                <div class="corner corner-tr" aria-hidden="true"></div>
+                <div class="corner corner-bl" aria-hidden="true"></div>
+                <div class="corner corner-br" aria-hidden="true"></div>
+                <div class="panel-header" id="visual-title">VISUAL_FEED.EXE <span class="mini-led" aria-hidden="true"></span></div>
+                <canvas id="canvas" aria-label="Animated green CRT skull visual feed"></canvas>
+                <div class="visual-footer" aria-label="Visual feed status">
+                    <span>FEED_STATUS: STABLE</span>
+                    <span>RESOLUTION: ADAPTIVE</span>
+                </div>
+            </section>
+
+            <section class="data-module" aria-label="Identity and contact modules">
+                <section class="panel matrix-panel" id="identity-panel" tabindex="-1" aria-labelledby="identity-title" data-tilt>
+                    <div class="corner corner-tl" aria-hidden="true"></div>
+                    <div class="corner corner-tr" aria-hidden="true"></div>
+                    <div class="corner corner-bl" aria-hidden="true"></div>
+                    <div class="corner corner-br" aria-hidden="true"></div>
+                    <h2 class="section-command" id="identity-title">&gt; IDENTITY_MATRIX</h2>
+                    <table class="retro-table">
+                        <tbody>
+                            <tr style="--row-index: 0">
+                                <th scope="row">USERNAME</th>
+                                <td>2600TH</td>
+                            </tr>
+                            <tr style="--row-index: 1">
+                                <th scope="row">FULL NAME</th>
+                                <td>PRANSHUL CHANDHOK</td>
+                            </tr>
+                            <tr style="--row-index: 2">
+                                <th scope="row">ROLE</th>
+                                <td>TECHNOMANCER / XR / AI</td>
+                            </tr>
+                            <tr style="--row-index: 3">
+                                <th scope="row">LOCATION</th>
+                                <td>EARTH // ORION SPUR</td>
+                            </tr>
+                            <tr style="--row-index: 4">
+                                <th scope="row">STATUS</th>
+                                <td id="matrix-status-value">ONLINE</td>
+                            </tr>
+                            <tr style="--row-index: 5">
+                                <th scope="row">SYSTEM</th>
+                                <td>LINUX_64</td>
+                            </tr>
+                            <tr style="--row-index: 6">
+                                <th scope="row">CLEARANCE</th>
+                                <td>LEVEL 7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="connect-protocol" id="contact-panel" tabindex="-1" aria-labelledby="connect-title">
+                    <h2 class="section-command" id="connect-title">&gt; CONNECT_PROTOCOL</h2>
+                    <div class="actions" aria-label="Contact links">
+                        <a href="mailto:2600th@gmail.com" class="choice-btn choice-btn-primary" data-glitch="[ EMAIL ]">[ EMAIL ]</a>
+                        <a href="https://in.linkedin.com/in/pranshulchandhok" target="_blank" rel="noopener noreferrer" class="choice-btn" data-glitch="[ LINKEDIN ]">[ LINKEDIN ]</a>
+                        <a href="https://x.com/2600th" target="_blank" rel="noopener noreferrer" class="choice-btn" data-glitch="[ X ]">[ X ]</a>
+                        <a href="https://github.com/2600th" target="_blank" rel="noopener noreferrer" class="choice-btn" data-glitch="[ GITHUB ]">[ GITHUB ]</a>
+                        <a href="https://2600th.substack.com/" target="_blank" rel="noopener noreferrer" class="choice-btn" data-glitch="[ SUBSTACK ]">[ SUBSTACK ]</a>
+                    </div>
+                </section>
+
+                <blockquote class="quote-panel is-encrypted" id="daily-quote" data-tilt tabindex="0" cite="https://www.columbia.edu/~jrh29/licklider/man-computer_symbiosis.html" aria-live="polite" aria-label="Encrypted quote transmission">
+                    <div class="quote-shell">
+                        <div class="quote-meta" aria-label="Quote signal">
+                            <span id="quote-state">CIPHER_LOCKED</span>
+                            <span id="quote-mode">ENCRYPTED TRANSMISSION</span>
+                        </div>
+                        <p class="quote-text" id="quote-text">"▓▓▓ ▒▓▒▓ ▓▓ ▓▓▒▓, ▒▓ ▓▓▓ ▒▓▓ ▓▓▒▒ ▓▓▒▓▓, ▓▓▒▒▓ ▒▒▓▓▓▓ ▒▓▒ ▒▓▓▓▓▓▓▓▓ ▓▒▓▓▓▓▓ ▓▓▓▓ ▒▓ ▒▓▓▓▓▓▓ ▓▓▓▓▓▓▓▓ ▓▓▒▓ ▒▓▒▓▓▓."</p>
+                        <footer class="quote-citation">
+                            <span>
+                                <cite id="quote-author">▒.▓.▒. ▓▓▓▒▓▒▓▓▓</cite>
+                                <span id="quote-work">▓▓▓-▓▓▓▓▓▓▓▓ ▓▓▓▓▓▓▓▓ // ▓▓▓▓</span>
+                            </span>
+                            <a id="quote-source" href="https://www.columbia.edu/~jrh29/licklider/man-computer_symbiosis.html" target="_blank" rel="noopener noreferrer">▓▓▓▓▓▓</a>
+                        </footer>
+                    </div>
+                </blockquote>
+            </section>
+        </section>
+    </main>
+
+    <footer class="controls" aria-label="System controls">
+        <div class="footer-mark">&copy; 2600TH.SYSTEMS // ALL RIGHTS RESERVED</div>
+        <div class="control-cluster">
+            <button type="button" class="control-item" id="terminal-toggle-btn" data-terminal-toggle>
+                &gt; TOGGLE TERMINAL <span class="key">CTRL+K</span>
+            </button>
+            <button type="button" class="control-item" id="music-btn">
+                &gt; PLAY AMBIENT <span class="key">CTRL+M</span>
+            </button>
+        </div>
+        <div class="system-uptime">
+            <span>SYSTEM UPTIME: <span id="uptime-value">26D 00:00:00</span></span>
+        </div>
+    </footer>
+
+    <div id="terminal-overlay" class="terminal-overlay hidden" data-terminal-tone="green" role="dialog" aria-modal="true" aria-labelledby="terminal-title">
+        <div class="terminal-content">
+            <div class="terminal-corner terminal-corner-tl" aria-hidden="true"></div>
+            <div class="terminal-corner terminal-corner-tr" aria-hidden="true"></div>
+            <div class="terminal-corner terminal-corner-bl" aria-hidden="true"></div>
+            <div class="terminal-corner terminal-corner-br" aria-hidden="true"></div>
+            <div class="terminal-header">
+                <div class="terminal-title-block">
+                    <span class="terminal-kicker">// SECURE SHELL</span>
+                    <div class="terminal-title" id="terminal-title">2600TH SYSTEM TERMINAL</div>
+                </div>
+                <div class="terminal-status-strip" aria-label="Terminal link status">
+                    <span><i aria-hidden="true"></i>LINK STABLE</span>
+                    <span>TTY_2600</span>
+                    <span id="terminal-clock">00:00:00</span>
+                </div>
+                <button type="button" class="terminal-close" id="terminal-close-btn">[ CLOSE ]</button>
+            </div>
+
+            <div class="terminal-body">
+                <aside class="terminal-sidecar" aria-label="Terminal telemetry">
+                    <div class="sidecar-section">
+                        <span class="sidecar-label">SESSION</span>
+                        <strong>OPERATOR_GUEST</strong>
+                    </div>
+                    <div class="sidecar-section">
+                        <span class="sidecar-label">CLEARANCE</span>
+                        <strong>LIMITED / LVL 0</strong>
+                    </div>
+                    <div class="sidecar-section">
+                        <span class="sidecar-label">ROUTE</span>
+                        <strong>EARTH // ORION SPUR</strong>
+                    </div>
+                    <div class="terminal-command-grid" aria-label="Quick terminal commands">
+                        <button type="button" data-terminal-command="help">HELP</button>
+                        <button type="button" data-terminal-command="2600" aria-label="Explain the significance of 2600">2600</button>
+                        <button type="button" data-terminal-command="chroma" aria-label="Cycle terminal chroma">CHROMA</button>
+                        <button type="button" data-terminal-command="track">TRACK</button>
+                        <button type="button" data-terminal-command="shuffle">SHUFFLE</button>
+                        <button type="button" data-terminal-command="pingpong">PINGPONG</button>
+                        <button type="button" data-terminal-command="fx">FX</button>
+                    </div>
+                </aside>
+
+                <section class="terminal-main" aria-label="Command terminal">
+                    <div class="terminal-stream-header" aria-hidden="true">
+                        <span>RX BUFFER</span>
+                        <span>COMMAND LINE ACTIVE</span>
+                    </div>
+                    <div id="cmd-output" class="cmd-output" aria-live="polite"></div>
+                    <div class="input-line">
+                        <span class="prompt">ROOT@2600TH:~$</span>
+                        <input type="text" id="cmd-input" aria-label="Terminal command input" spellcheck="false" autocomplete="off" autocapitalize="off" inputmode="text">
+                        <span class="input-caret" aria-hidden="true"></span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-overlay" class="game-overlay hidden">
+        <div class="game-container">
+            <button type="button" class="game-close" id="game-close-btn">[ CLOSE GAME ]</button>
+            <canvas id="game-canvas"></canvas>
+            <div class="game-instructions">USE MOUSE/TOUCH TO MOVE PADDLE</div>
+
+            <div id="game-result" class="game-result hidden">
+                <div class="result-content">
+                    <div class="result-title" id="result-title">SYSTEM VICTORY</div>
+                    <div class="result-subtitle" id="result-subtitle">NEURAL LINK SEVERED</div>
+                    <button type="button" class="restart-btn" id="restart-btn">[ REINITIALIZE ]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" id="app-module" data-entry src="script.js?v=quote-layout-20260519"></script>
+    <script>
+        (function () {
+            const supportsImportMaps = typeof HTMLScriptElement !== 'undefined'
+                && typeof HTMLScriptElement.supports === 'function'
+                && HTMLScriptElement.supports('importmap');
+
+            if (supportsImportMaps) {
+                return;
+            }
+
+            const entryScript = document.getElementById('app-module');
+            if (entryScript && entryScript.parentNode) {
+                entryScript.parentNode.removeChild(entryScript);
+            }
+
+            const loadWithShim = () => {
+                if (window.importShim) {
+                    window.importShim('script.js?v=quote-layout-20260519').catch((err) => {
+                        console.error('Failed to load script.js via importShim', err);
+                    });
+                } else {
+                    console.error('es-module-shims is not available; script.js could not be loaded.');
+                }
+            };
+
+            if (document.readyState === 'complete') {
+                loadWithShim();
+            } else {
+                window.addEventListener('load', loadWithShim, { once: true });
+            }
+        })();
+    </script>
+</body>
+
+</html>
