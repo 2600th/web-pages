@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/content-pages.css';
+
+const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
+---
+
+<BaseLayout
+  title="Notes from the workbench"
+  description="Notes by Pranshul Chandhok on production AI, creative control, browser-native 3D, product reliability, and building emerging technologies into useful systems."
+  canonical="/notes/"
+>
+  <div class="page-shell">
+    <header class="page-hero">
+      <div>
+        <p class="section-kicker">Notes · field observations</p>
+        <h1>Notes from the workbench</h1>
+      </div>
+      <div class="page-hero__aside">
+        <p>Short observations from building, breaking, and improving AI and spatial products in public.</p>
+        <p><a href="/rss.xml">Follow via RSS ↗</a></p>
+      </div>
+    </header>
+    <ol class="notes-list">
+      {notes.map((note) => (
+        <li>
+          <a href={`/notes/${note.data.slug}/`}>
+            <time datetime={note.data.publishedAt.toISOString()}>{formatDate(note.data.publishedAt)}</time>
+            <span>
+              <strong>{note.data.title}</strong>
+              <p>{note.data.summary}</p>
+              <span class="notes-list__topics">{note.data.topics.join(' · ')}</span>
+            </span>
+            <span class="notes-list__arrow" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</BaseLayout>

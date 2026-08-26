@@ -1,0 +1,61 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Breadcrumbs from '../../components/shared/Breadcrumbs.astro';
+import ProjectMedia from '../../components/work/ProjectMedia.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import '../../styles/content-pages.css';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes', ({ data }) => !data.draft);
+  return notes.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'notes'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(date);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.summary,
+  datePublished: data.publishedAt.toISOString(),
+  dateModified: (data.updatedAt ?? data.publishedAt).toISOString(),
+  mainEntityOfPage: `${SITE.url}/notes/${data.slug}/`,
+  author: { '@id': `${SITE.url}/#person` },
+  keywords: data.topics.join(', '),
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  canonical={`/notes/${data.slug}/`}
+  image={data.heroMedia?.src}
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={[{ label: 'Notes', href: '/notes/' }, { label: data.title }]} />
+  <article class="article-shell">
+    <aside class="article-shell__meta">
+      <p><time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time></p>
+      <p>{data.topics.join(' · ')}</p>
+      <p>About {Math.max(1, Math.round((entry.body ?? '').split(/\s+/).length / 220))} min read</p>
+    </aside>
+    <div class="article-shell__content">
+      <p class="section-kicker">Field note</p>
+      <h1>{data.title}</h1>
+      <p class="article-shell__summary">{data.summary}</p>
+      {data.heroMedia && <ProjectMedia media={data.heroMedia} label="Article image" priority />}
+      <div class="prose"><Content /></div>
+      <footer class="article-shell__source">
+        <strong>{data.sourceAttribution}</strong>
+        <p><a href={data.canonicalUrl} target="_blank" rel="noreferrer">Read the original post ↗</a></p>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>

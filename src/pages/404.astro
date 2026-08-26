@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/content-pages.css';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="This page does not exist. Return to the portfolio of Pranshul Chandhok."
+  canonical="/404.html"
+  robots="noindex,follow"
+>
+  <div class="page-shell">
+    <header class="page-hero">
+      <div>
+        <p class="section-kicker">404 · Coordinate drift</p>
+        <h1>Page not found</h1>
+      </div>
+      <div class="page-hero__aside">
+        <p>This route left the map. The work, notes, and lab are still where they should be.</p>
+        <p><a class="button-link button-link--primary" href="/">Return home ↗</a></p>
+      </div>
+    </header>
+  </div>
+</BaseLayout>

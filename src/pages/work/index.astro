@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import WorkList from '../../components/work/WorkList.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/content-pages.css';
+
+const work = (await getCollection('work')).sort((a, b) => a.data.featuredOrder - b.data.featuredOrder);
+---
+
+<BaseLayout
+  title="Selected work"
+  description="Selected AI, real-time 3D, browser game, and spatial product work by Pranshul Chandhok, with public evidence and technical context."
+  canonical="/work/"
+>
+  <div class="page-shell">
+    <header class="page-hero">
+      <div>
+        <p class="section-kicker">Work · public-first evidence</p>
+        <h1>Selected work</h1>
+      </div>
+      <div class="page-hero__aside">
+        <p>Products and experiments at the point where AI, real-time systems, and useful interaction meet.</p>
+        <p>Each case separates the public result, the experience, and the decisions underneath it.</p>
+      </div>
+    </header>
+    <WorkList work={work} />
+  </div>
+</BaseLayout>

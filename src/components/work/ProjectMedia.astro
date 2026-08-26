@@ -1,0 +1,48 @@
+---
+interface Props {
+  media: { src: string; alt: string; width: number; height: number };
+  label: string;
+  priority?: boolean;
+}
+
+const { media, label, priority = false } = Astro.props;
+---
+
+<figure class="project-media">
+  <img
+    src={media.src}
+    alt={media.alt}
+    width={media.width}
+    height={media.height}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+  />
+  <figcaption>{label}</figcaption>
+</figure>
+
+<style>
+  .project-media {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .project-media img {
+    width: 100%;
+    height: auto;
+  }
+
+  .project-media figcaption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0.6rem 0.85rem;
+    background: var(--cobalt);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 720;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+</style>

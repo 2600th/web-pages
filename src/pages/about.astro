@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CONTACT_EMAIL, TIMELINE } from '../data/site';
+import '../styles/content-pages.css';
+---
+
+<BaseLayout
+  title="Operator, advisor, builder"
+  description="Pranshul Chandhok is a hands-on product and technology leader with 15+ years across production AI, real-time 3D, XR, games, robotics, and browser-native systems."
+  canonical="/about/"
+>
+  <div class="page-shell">
+    <header class="page-hero">
+      <div>
+        <p class="section-kicker">About · Pranshul Chandhok / 2600th</p>
+        <h1>Operator, advisor, builder</h1>
+      </div>
+      <div class="page-hero__aside">
+        <p>I work where product strategy and implementation are still close enough to change each other.</p>
+        <p>Currently VP Product & Technology at Square Yards, based in Gurugram.</p>
+      </div>
+    </header>
+
+    <section class="about-grid" aria-labelledby="compound-practice">
+      <div><p class="section-kicker">A compound practice</p><h2 id="compound-practice">The medium changes. The operating pattern does not.</h2></div>
+      <div class="prose">
+        <p>My work began in games and real-time systems, moved through simulation, XR, robotics, design technology, and now production AI. That path matters because emerging products rarely respect the boundaries between product, engineering, interaction, and delivery.</p>
+        <p>I am most useful when a problem needs someone who can frame the opportunity, interrogate the system, lead the team, and still get close enough to the implementation to find out what is actually true.</p>
+        <p>The current practice spans generative AI, agentic systems, retrieval and evaluation, multimodal products, browser-native 3D, and product platforms that must survive real organizational constraints.</p>
+      </div>
+    </section>
+
+    <section class="about-grid" aria-labelledby="principles-title">
+      <div><p class="section-kicker">How I work</p><h2 id="principles-title">A few durable preferences.</h2></div>
+      <ol class="principles">
+        <li><span><strong>Make the claim testable.</strong><br />A product story gets stronger when the evidence is easy to inspect.</span></li>
+        <li><span><strong>Keep strategy close to implementation.</strong><br />The fastest way to improve a plan is often to encounter the system it depends on.</span></li>
+        <li><span><strong>Treat reliability as product design.</strong><br />Performance, evaluation, fallbacks, and operational clarity shape the experience.</span></li>
+        <li><span><strong>Use the new medium on its own terms.</strong><br />AI and spatial systems need native interaction models, not an old interface with new vocabulary.</span></li>
+      </ol>
+    </section>
+
+    <section class="about-grid" aria-labelledby="trajectory-title">
+      <div><p class="section-kicker">Trajectory · 2011—now</p><h2 id="trajectory-title">Fifteen-plus years in motion.</h2></div>
+      <ol class="principles">
+        {TIMELINE.map((entry) => (
+          <li><span><strong>{entry.year} · {entry.label}</strong><br />{entry.summary}</span></li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="about-grid" aria-labelledby="conversation-title">
+      <div><p class="section-kicker">Conversation</p><h2 id="conversation-title">Bring the awkward problem.</h2></div>
+      <div class="prose">
+        <p>Advisory, product and technology leadership, difficult 0-to-1 work, speaking, or a serious technical conversation.</p>
+        <p><a class="button-link button-link--primary" href={`mailto:${CONTACT_EMAIL}`}>Start with {CONTACT_EMAIL} ↗</a></p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

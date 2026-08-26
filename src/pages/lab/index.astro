@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/content-pages.css';
+---
+
+<BaseLayout
+  title="Experiments with a public edge"
+  description="The 2600th lab: public browser-native game, graphics, AI, and interaction experiments by Pranshul Chandhok, plus the archived original console portfolio."
+  canonical="/lab/"
+>
+  <div class="page-shell">
+    <header class="page-hero">
+      <div>
+        <p class="section-kicker">Lab · 2600th</p>
+        <h1>Experiments with a public edge</h1>
+      </div>
+      <div class="page-hero__aside">
+        <p>Small worlds, useful probes, and unfinished questions that are concrete enough to enter.</p>
+        <p>The lab keeps experiments discoverable without asking every one of them to behave like a polished case study.</p>
+      </div>
+    </header>
+
+    <section class="lab-grid" aria-label="Public experiments">
+      <article>
+        <p class="section-kicker">Archive · 2600th v1</p>
+        <h2>The console still lives.</h2>
+        <p>The original command-line portfolio is preserved as an interactive artifact: same character, new address.</p>
+        <a class="button-link button-link--primary" href="/lab/terminal/">Enter the console ↗</a>
+      </article>
+      <article>
+        <p class="section-kicker">Gameplay systems</p>
+        <h2>Kinema</h2>
+        <p>A browser-native third-person gameplay lab, playable runtime, WebGPU-first renderer, physics, and level editor.</p>
+        <a class="button-link" href="/work/kinema/">Open the case ↗</a>
+      </article>
+      <article>
+        <p class="section-kicker">Graphics and reliability</p>
+        <h2>Web Ocean 3D</h2>
+        <p>A public ocean-rendering experiment whose most useful chapter began when real devices exposed its limits.</p>
+        <a class="button-link" href="/work/web-ocean-3d/">Open the case ↗</a>
+      </article>
+      <article>
+        <p class="section-kicker">Browser flight experiment</p>
+        <h2>Safed Sagar</h2>
+        <p>A compact fictional reconnaissance experience made in response to a documentary and released in days.</p>
+        <a class="button-link" href="/work/safed-sagar/">Open the case ↗</a>
+      </article>
+      <article>
+        <p class="section-kicker">Public code</p>
+        <h2>More on GitHub</h2>
+        <p>Source repositories, prototypes, 3D experiments, AI workflows, and the work behind this site.</p>
+        <a class="button-link" href="https://github.com/2600th" target="_blank" rel="noreferrer">Browse GitHub ↗</a>
+      </article>
+    </section>
+  </div>
+</BaseLayout>

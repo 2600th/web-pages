@@ -1,0 +1,74 @@
+---
+import type { WorkEntry } from '../../content/schemas';
+
+interface Props {
+  sources: WorkEntry['sources'];
+}
+
+const { sources } = Astro.props;
+---
+
+<section class="evidence-sources" aria-labelledby="evidence-title">
+  <p class="section-kicker">Trace the claims</p>
+  <h2 id="evidence-title">Public evidence</h2>
+  <ul>
+    {sources.map((source, index) => (
+      <li>
+        <a href={source.url} target="_blank" rel="noreferrer">
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <strong>{source.label}</strong>
+          <small>{source.type.replaceAll('-', ' ')}</small>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .evidence-sources {
+    margin-top: clamp(5rem, 10vw, 9rem);
+    padding: clamp(2rem, 5vw, 4.5rem);
+    background: var(--cobalt);
+    color: white;
+  }
+
+  .evidence-sources h2 {
+    max-width: none;
+  }
+
+  .evidence-sources ul {
+    padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.36);
+    list-style: none;
+  }
+
+  .evidence-sources li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.36);
+  }
+
+  .evidence-sources a {
+    display: grid;
+    grid-template-columns: 2rem minmax(12rem, 1fr) auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.2rem 0;
+    text-decoration: none;
+  }
+
+  .evidence-sources small,
+  .evidence-sources a > span:first-child {
+    opacity: 0.72;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 40rem) {
+    .evidence-sources a {
+      grid-template-columns: 2rem 1fr auto;
+    }
+
+    .evidence-sources small {
+      grid-column: 2;
+    }
+  }
+</style>
