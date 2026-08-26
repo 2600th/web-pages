@@ -1,7 +1,7 @@
 ---
-title: GreyKernel
+title: GreyKernel — founder and CTO
 slug: greykernel
-summary: Co-founding GreyKernel created the operating environment for six years of work across games, XR, enterprise learning, industrial simulation, robotics, and real estate.
+summary: Co-founding GreyKernel created six years of shipped games, XR, enterprise production, defense, robotics, and simulation—including work with JPMorgan Chase, Anglian Water, Voxel, and Nazara.
 yearStart: 2015
 yearEnd: 2021
 status: Founder-era company building
@@ -16,7 +16,7 @@ careerOrder: 40
 relationships: [ira-vr, machine-hunter, mysticmojo, enterprise-immersive-systems]
 evidenceStatus: public-corroborated
 publicClaims:
-  - The founding relationship, broad practice areas, and public project examples are described in Pranshul's first-person career narrative.
+  - The founding relationship, broad practice areas, leadership scope, and named client and product examples are described in Pranshul's first-person career narrative and career archive.
 engagementPath: operator-advisory
 sources:
   - label: From Pixels to Metaverse
@@ -28,6 +28,6 @@ seo:
   socialImage: /media/career/ira-vr/poster-1280.webp
 ---
 
-GreyKernel was where an engineering practice became an operating practice. The work expanded from individual game systems into teams, products, clients, delivery constraints, and unfamiliar problem domains.
+GreyKernel was where an engineering practice became an operating practice. The work expanded from individual game systems into teams, products, a direct JPMorgan Chase VR/360 engagement, paid Anglian Water training software, Voxel's Apple release pipeline, defense programs, robotics, and a Nazara-distributed Chhota Bheem game.
 
 The archive treats GreyKernel as an era and connective tissue. Individual systems carry the detailed evidence.

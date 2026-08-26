@@ -107,18 +107,18 @@ const jsonLd = [{
         </div>
       </section>
 
-      <EvidenceSources sources={data.sources} />
+      <EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} />
     </div>
   ) : (
     <div class="project-story">
       <section class="project-story__frame" aria-labelledby="evidence-note-title">
         <div class="project-story__marker"><span>Evidence</span><strong>{data.yearStart}</strong></div>
         <div class="project-story__body">
-          <div><p class="section-kicker">Career record</p><h2 id="evidence-note-title">A sourced point in the wider arc.</h2></div>
+          <div><p class="section-kicker">Career record</p><h2 id="evidence-note-title">{data.title}, in the public record.</h2></div>
           <div class="prose"><Content /></div>
         </div>
       </section>
-      <EvidenceSources sources={data.sources} />
+      <EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} />
     </div>
   )}
 </BaseLayout>

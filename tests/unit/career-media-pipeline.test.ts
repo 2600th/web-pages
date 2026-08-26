@@ -6,12 +6,12 @@ import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 describe('career media pipeline', () => {
-  it('publishes only original public-safe artwork for defense simulation', () => {
+  it('publishes an authored systems map for defense simulation', () => {
     const media = CAREER_MEDIA['defense-simulation-systems'];
 
     expect(media?.status).toBe('public-approved');
-    expect(media?.sourceLabel).toMatch(/original abstract simulation artwork/i);
-    expect(media?.sourceUrl).toBe('https://www.2600th.com/work/defense-simulation-systems/');
+    expect(media?.sourceLabel).toMatch(/authored systems map/i);
+    expect(media?.sourceUrl).toBe('https://www.linkedin.com/in/pranshulchandhok/details/experience/');
   });
 
   it('never assigns public outputs to excluded source media', () => {

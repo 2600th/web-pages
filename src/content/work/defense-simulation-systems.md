@@ -27,16 +27,16 @@ sources:
   - label: From Pixels to Metaverse
     url: https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild
     type: authored-post
-heroLabel: Editorial illustration
+heroLabel: Author's reconstruction from public career records · not client documentation
 heroMedia:
-  src: /media/career/defense-simulation-systems/poster-1280.webp
-  alt: Abstract point-cloud simulation space with a human figure inside a luminous calibration volume
-  width: 1280
-  height: 720
+  src: /media/career/defense-simulation-systems/system-map.svg
+  alt: Author's visual reconstruction grouping eight defense programs around the recurring simulation and sensing capabilities described in public career records
+  width: 1600
+  height: 900
 seo:
   title: Defense technology and simulation — GreyKernel work
   description: Pranshul Chandhok's defense simulation work across T-72, T-90, M777, Tunguska, custom hardware, IMU tracking, sensors, XR, and instructor systems.
-  socialImage: /media/career/defense-simulation-systems/poster-1280.webp
+  socialImage: /media/career/defense-simulation-systems/system-map.webp
 ---
 
 At GreyKernel, defense technology became a serious systems practice rather than a sequence of headset demos. The work connected real-time simulation, physical controls, tracking and sensor input, instructor operations, and trainee assessment into complete training platforms.
@@ -54,5 +54,3 @@ The technical layer joined custom hardware and physical interfaces with IMU-driv
 ### Leadership scope
 
 As co-founder and CTO, Pranshul worked across product definition, systems architecture, technical direction, hardware-software integration, real-time 3D delivery, and coordination with domain stakeholders. The recurring challenge was translating specialist training requirements into software and physical interfaces that instructors and trainees could operate coherently.
-
-The hero image is original editorial artwork created for this record, not client material or a representation of a specific platform.

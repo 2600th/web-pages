@@ -176,7 +176,7 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
 
   .career-atlas__kicker {
     align-self: start;
-    color: var(--cobalt);
+    color: var(--signal);
     font-size: 0.76rem;
     font-weight: 760;
   }
@@ -256,7 +256,7 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
   }
 
   .career-era > header > span {
-    color: var(--cobalt);
+    color: var(--signal);
     font-size: 0.7rem;
     font-variant-numeric: tabular-nums;
     font-weight: 760;
@@ -342,7 +342,7 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
     transform: scale(1.65);
   }
 
-  .career-node[aria-pressed='true'] .career-node__title { color: var(--cobalt); }
+  .career-node[aria-pressed='true'] .career-node__title { color: var(--signal); }
 
   .career-atlas__stage {
     position: sticky;
@@ -395,6 +395,12 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
   .career-atlas__media img,
   .career-atlas__media video { width: 100%; height: 100%; object-fit: cover; }
 
+  .career-atlas__panel[data-slug='defense-simulation-systems'] .career-atlas__media img {
+    object-fit: contain;
+    padding: clamp(0.4rem, 1vw, 0.85rem);
+    background: #080a10;
+  }
+
   .career-atlas__media > p {
     position: absolute;
     right: 0;
@@ -435,7 +441,7 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
   .career-atlas__monogram small { justify-self: end; font-size: 0.7rem; }
 
   .career-atlas__panel-copy { padding: 1.65rem 0 0; }
-  .career-atlas__period { margin-bottom: 0.65rem; color: var(--cobalt); font-size: 0.67rem; font-weight: 720; }
+  .career-atlas__period { margin-bottom: 0.65rem; color: var(--signal); font-size: 0.67rem; font-weight: 720; }
   .career-atlas__panel-copy h3 { margin-bottom: 0.8rem; font-size: clamp(2rem, 3.8vw, 3.6rem); }
   .career-atlas__panel-copy > p:not(.career-atlas__period) { max-width: 48ch; color: var(--text-muted); font-size: 0.82rem; }
 
@@ -446,10 +452,10 @@ const featuredIndex = Math.max(0, records.findIndex((entry) => entry.data.slug =
   .career-atlas__index > p { color: var(--text-muted); font-size: 0.72rem; }
   .career-atlas__index ol { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
   .career-atlas__index li { display: grid; padding: 0.9rem 0; grid-template-columns: 5rem 1fr 0.8fr; gap: 1rem; border-bottom: 1px solid var(--line); font-size: 0.76rem; }
-  .career-atlas__index li > span { color: var(--cobalt); font-variant-numeric: tabular-nums; }
+  .career-atlas__index li > span { color: var(--signal); font-variant-numeric: tabular-nums; }
   .career-atlas__index li > a { font-weight: 720; }
   .career-atlas__index li > small { color: var(--text-muted); }
-  .career-atlas--enhanced .career-atlas__index { margin-top: 2rem; }
+  .career-atlas--enhanced .career-atlas__index { display: none; }
 
   @keyframes atlas-reveal {
     from { opacity: 0.5; filter: blur(0.45rem); clip-path: inset(0 0 11% 0); transform: translateY(1rem); }

@@ -74,7 +74,7 @@ export const TIMELINE: readonly TimelineEntry[] = [
   {
     year: 2015,
     label: 'Co-founder and CTO · GreyKernel',
-    summary: 'Six years building and leading XR, simulation, robotics, education, gaming, and real-estate systems.',
+    summary: 'Six years building XR, simulation, robotics, and games—including JPMorgan Chase VR/360 production, Anglian Water training software, and a Nazara-distributed Chhota Bheem release.',
     href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
   },
   {
@@ -84,11 +84,11 @@ export const TIMELINE: readonly TimelineEntry[] = [
     href: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
   },
   {
-    year: 2020,
+    year: 2019,
     label: 'Defense technology and simulation',
     summary: 'Eight named training systems joined custom hardware, IMU tracking, sensor pipelines, real-time 3D, instructor controls, and evaluation.',
     href: '/work/defense-simulation-systems/',
-    image: '/media/career/defense-simulation-systems/poster-1280.webp',
+    image: '/media/career/defense-simulation-systems/system-map.webp',
   },
   {
     year: 2021,
@@ -99,7 +99,7 @@ export const TIMELINE: readonly TimelineEntry[] = [
   {
     year: 2023,
     label: 'VP Product & Technology · Square Yards',
-    summary: 'Leading AI and real-time 3D product and engineering, including the publicly shared Blocks and INCO-AI systems.',
+    summary: 'Leading AI and real-time 3D product and engineering across Blocks and the current designesto.ai product line.',
     href: '/work/blocks-inco-ai/',
     image: '/media/work/blocks-inco-ai/near.webp',
   },

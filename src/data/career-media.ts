@@ -18,16 +18,15 @@ export type CareerMediaRecord = {
 
 export const CAREER_MEDIA: Record<string, CareerMediaRecord> = {
   'defense-simulation-systems': {
-    sourceUrl: 'https://www.2600th.com/work/defense-simulation-systems/',
-    sourceLabel: 'Original abstract simulation artwork generated for this public record',
+    sourceUrl: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
+    sourceLabel: 'Authored systems map of eight named defense simulation programs',
     status: 'public-approved',
-    alt: 'Abstract point-cloud simulation space with a human figure inside a luminous calibration volume',
-    width: 1280,
-    height: 720,
+    alt: 'Author\'s visual reconstruction grouping eight defense programs around recurring simulation capabilities',
+    width: 1600,
+    height: 900,
     derivatives: {
-      poster640: '/media/career/defense-simulation-systems/poster-640.webp',
-      poster1280: '/media/career/defense-simulation-systems/poster-1280.webp',
-      posterAvif: '/media/career/defense-simulation-systems/poster-1280.avif',
+      poster640: '/media/career/defense-simulation-systems/system-map.webp',
+      poster1280: '/media/career/defense-simulation-systems/system-map.webp',
     },
   },
   'ira-vr': {

@@ -15,6 +15,7 @@
   --fog: #b8b7b0;
   --cobalt: #1547ff;
   --cobalt-dark: #0c35d2;
+  --signal: var(--cobalt);
   --surface: var(--mineral);
   --surface-raised: var(--paper);
   --text: var(--ink);
@@ -35,6 +36,7 @@
   --text: #faf9f5;
   --text-muted: #b8b7b0;
   --line: color-mix(in srgb, var(--text) 22%, transparent);
+  --signal: #86a0ff;
   --selection: #86a0ff;
   --selection-text: #090909;
   --shadow-plane: 0 1.5rem 4rem rgba(0, 0, 0, 0.54);
@@ -102,7 +104,7 @@ a {
 }
 
 a:hover {
-  text-decoration-color: var(--cobalt);
+  text-decoration-color: var(--signal);
 }
 
 button {
@@ -110,7 +112,7 @@ button {
 }
 
 :focus-visible {
-  outline: 0.18rem solid var(--cobalt);
+  outline: 0.18rem solid var(--signal);
   outline-offset: 0.24rem;
 }
 
@@ -207,6 +209,8 @@ li {
   color: var(--text-muted);
   font-weight: 540;
 }
+
+.site-signature__compact { display: none; }
 
 .site-nav,
 .site-footer nav {
@@ -398,8 +402,17 @@ li {
   }
 
   .site-nav a {
-    padding-inline: 0.2rem;
+    display: grid;
+    min-width: 46px;
+    min-height: 46px;
+    padding: 0.35rem 0.3rem;
+    place-items: center;
     font-size: 0.76rem;
+  }
+
+  .site-nav .theme-control {
+    width: 46px;
+    height: 46px;
   }
 
   .site-footer {
@@ -411,6 +424,12 @@ li {
     align-items: flex-start;
     text-align: left;
   }
+}
+
+@media (max-width: 22rem) {
+  .site-header { padding-inline: 0.75rem; }
+  .site-signature__full { display: none; }
+  .site-signature__compact { display: inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -437,6 +456,7 @@ li {
     --text-muted: CanvasText;
     --line: ButtonBorder;
     --cobalt: LinkText;
+    --signal: LinkText;
   }
 
   .theme-control,

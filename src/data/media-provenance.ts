@@ -68,4 +68,20 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
     sourceUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7401160661000708096/',
     status: 'authored-public-post',
   },
+  '/media/work/blocks-inco-ai/designesto-before-after.webp': {
+    sourceUrl: 'https://www.designesto.ai/',
+    status: 'public-approved',
+  },
+  '/media/work/blocks-inco-ai/designesto-after.webp': {
+    sourceUrl: 'https://www.designesto.ai/',
+    status: 'public-approved',
+  },
+  '/media/career/chhota-bheem-jungle-rescue/concept-screens.webp': {
+    sourceUrl: 'https://docs.google.com/presentation/d/18okz-FLfTK5ft-DyyfOda2C28WzPH7ms7jYM8tBro1g/edit',
+    status: 'public-corroborated',
+  },
+  '/media/career/defense-simulation-systems/system-map.svg': {
+    sourceUrl: 'https://www.linkedin.com/in/pranshulchandhok/details/experience/',
+    status: 'public-approved',
+  },
 };

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Defense simulation systems map</title>
+  <desc id="desc">An authored diagram connecting eight named training systems to a shared simulation, sensing, instructor, and evaluation core.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#262626" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="#090909"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity=".78"/>
+  <circle cx="800" cy="450" r="250" fill="#1547ff" opacity=".12" filter="url(#soft)"/>
+
+  <g fill="none" stroke="#4f6eff" stroke-width="2" opacity=".62">
+    <path d="M252 218H560L690 350"/><path d="M615 218H660L735 342"/>
+    <path d="M985 218H940L865 342"/><path d="M1348 218H1040L910 350"/>
+    <path d="M252 682H560L690 550"/><path d="M615 682H660L735 558"/>
+    <path d="M985 682H940L865 558"/><path d="M1348 682H1040L910 550"/>
+  </g>
+
+  <g font-family="Arial, sans-serif">
+    <text x="64" y="70" fill="#86a0ff" font-size="20" font-weight="700" letter-spacing="4">DEFENSE TECHNOLOGY / 2019—2021</text>
+    <text x="64" y="122" fill="#faf9f5" font-size="46" font-weight="700">Eight programs. One systems discipline.</text>
+    <text x="64" y="158" fill="#a7a6a0" font-size="19">Hardware, sensing, simulation, instruction and evaluation designed as one training loop.</text>
+
+    <g transform="translate(520 250)">
+      <circle cx="280" cy="200" r="176" fill="#0f0f0f" stroke="#86a0ff" stroke-width="2"/>
+      <circle cx="280" cy="200" r="132" fill="none" stroke="#343434" stroke-width="24" stroke-dasharray="118 28"/>
+      <circle cx="280" cy="200" r="84" fill="#1547ff"/>
+      <text x="280" y="187" fill="#fff" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="2">SIMULATION</text>
+      <text x="280" y="216" fill="#fff" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="2">CORE</text>
+      <text x="280" y="262" fill="#b9c5ff" font-size="13" text-anchor="middle" letter-spacing="1.3">IMU · SENSOR FUSION</text>
+      <text x="280" y="283" fill="#b9c5ff" font-size="13" text-anchor="middle" letter-spacing="1.3">INSTRUCTOR · EVALUATION</text>
+    </g>
+
+    <g font-size="18" font-weight="700" fill="#faf9f5">
+      <g transform="translate(64 190)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">BLT T-72</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">ARMOUR TRAINING</text></g>
+      <g transform="translate(430 190)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">TUNGUSKA</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">AIR DEFENSE</text></g>
+      <g transform="translate(840 190)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">LLLR</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">LOGISTICS / RECOVERY</text></g>
+      <g transform="translate(1206 190)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">M777</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">ARTILLERY TRAINING</text></g>
+
+      <g transform="translate(64 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">T-90</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">ARMOURED SYSTEMS</text></g>
+      <g transform="translate(430 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">ADVANCED MANNEQUIN</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">HUMAN FACTORS</text></g>
+      <g transform="translate(840 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">RADIO TELEPHONY</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">COMMUNICATIONS</text></g>
+      <g transform="translate(1206 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">TATA SAFARI</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">VEHICLE TRAINING</text></g>
+    </g>
+
+    <g transform="translate(64 802)" font-size="13" font-weight="700" letter-spacing="1.7">
+      <text fill="#86a0ff">01</text><text x="42" fill="#b8b7b0">CUSTOM HARDWARE</text>
+      <text x="320" fill="#86a0ff">02</text><text x="362" fill="#b8b7b0">SENSOR PIPELINES</text>
+      <text x="648" fill="#86a0ff">03</text><text x="690" fill="#b8b7b0">VR / AR DEVICES</text>
+      <text x="950" fill="#86a0ff">04</text><text x="992" fill="#b8b7b0">SCENARIO CONTROL</text>
+      <text x="1272" fill="#86a0ff">05</text><text x="1314" fill="#b8b7b0">EVALUATION</text>
+    </g>
+  </g>
+</svg>

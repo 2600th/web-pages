@@ -22,45 +22,67 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         <h1>Career work</h1>
       </div>
       <div class="page-hero__aside">
-        <p>Fifteen public records across the recurring systems, products, and questions that shaped the practice.</p>
+        <p><strong>{work.length} public records</strong> across the recurring systems, products, and questions that shaped the practice.</p>
         <p>Full cases go deep. Evidence notes stay deliberately concise where the public record is lighter.</p>
       </div>
     </header>
 
     <nav class="domain-filter" aria-label="Filter work by domain">
-      <a href="/work/" data-domain-link="all" aria-current="page">All domains</a>
-      {domains.map(([key, domain]) => <a href={`/work/?domain=${key}`} data-domain-link={key}>{domain.label}</a>)}
+      <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="The complete public record." aria-current="page">All domains</a>
+      {domains.map(([key, domain]) => <a href={`/work/?domain=${key}`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description}>{domain.label}</a>)}
     </nav>
 
-    <div class="work-domain-groups">
-      {domains.map(([key, domain]) => {
-        const entries = work.filter((entry) => entry.data.domains.includes(key));
-        return (
-          <section class="work-domain" data-work-domain={key} aria-labelledby={`domain-${key}`}>
-            <header>
-              <div><h2 id={`domain-${key}`}>{domain.label}</h2><span>{String(entries.length).padStart(2, '0')}</span></div>
-              <p>{domain.description}</p>
-            </header>
-            <WorkList work={entries} />
-          </section>
-        );
-      })}
-    </div>
+    <section class="work-list-region" aria-labelledby="work-list-heading">
+      <header>
+        <div><h2 id="work-list-heading" data-work-heading>All work</h2><span data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
+        <p data-work-description>The complete public record.</p>
+      </header>
+      <WorkList work={work} />
+    </section>
   </div>
 </BaseLayout>
 
 <script>
   const initWorkArchive = () => {
     document.querySelectorAll<HTMLElement>('[data-work-archive]').forEach((root) => {
-      const requested = new URLSearchParams(location.search).get('domain');
-      const sections = [...root.querySelectorAll<HTMLElement>('[data-work-domain]')];
-      const valid = sections.some((section) => section.dataset.workDomain === requested);
-      sections.forEach((section) => { section.hidden = valid && section.dataset.workDomain !== requested; });
-      root.querySelectorAll<HTMLAnchorElement>('[data-domain-link]').forEach((link) => {
-        const active = valid ? link.dataset.domainLink === requested : link.dataset.domainLink === 'all';
-        if (active) link.setAttribute('aria-current', 'page');
-        else link.removeAttribute('aria-current');
-      });
+      if (root.dataset.bound === 'true') return;
+      root.dataset.bound = 'true';
+      const links = [...root.querySelectorAll<HTMLAnchorElement>('[data-domain-link]')];
+      const items = [...root.querySelectorAll<HTMLElement>('[data-work-item]')];
+
+      const render = () => {
+        const requested = new URLSearchParams(location.search).get('domain');
+        const activeLink = links.find((link) => link.dataset.domainLink === requested) ?? links[0];
+        const activeDomain = activeLink.dataset.domainLink ?? 'all';
+        let visible = 0;
+
+        for (const item of items) {
+          const domains = (item.dataset.workDomains ?? '').split(' ');
+          item.hidden = activeDomain !== 'all' && !domains.includes(activeDomain);
+          if (!item.hidden) visible += 1;
+        }
+
+        for (const link of links) {
+          if (link === activeLink) link.setAttribute('aria-current', 'page');
+          else link.removeAttribute('aria-current');
+        }
+        const heading = root.querySelector<HTMLElement>('[data-work-heading]');
+        const description = root.querySelector<HTMLElement>('[data-work-description]');
+        const count = root.querySelector<HTMLElement>('[data-visible-count]');
+        if (heading) heading.textContent = activeLink.dataset.domainLabel ?? 'All work';
+        if (description) description.textContent = activeLink.dataset.domainDescription ?? '';
+        if (count) count.textContent = String(visible).padStart(2, '0');
+      };
+
+      for (const link of links) {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          history.pushState({}, '', link.href);
+          render();
+        });
+      }
+      window.addEventListener('popstate', render);
+      render();
     });
   };
   initWorkArchive();
@@ -71,13 +93,12 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
   .domain-filter { display: flex; overflow-x: auto; border-block: 1px solid var(--line); }
   .domain-filter a { min-width: max-content; padding: 1rem 1.25rem; border-right: 1px solid var(--line); color: var(--text-muted); font-size: 0.76rem; font-weight: 680; text-decoration: none; }
   .domain-filter a[aria-current='page'] { background: var(--text); color: var(--surface); }
-  .work-domain { padding-block: clamp(4rem, 8vw, 8rem); }
-  .work-domain[hidden] { display: none; }
-  .work-domain + .work-domain { border-top: 1px solid var(--line); }
-  .work-domain > header { display: grid; grid-template-columns: 1fr minmax(16rem, 0.45fr); gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
-  .work-domain > header > div { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
-  .work-domain h2 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 7vw, 6rem); }
-  .work-domain header span { color: var(--cobalt); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
-  .work-domain header p { max-width: 34ch; margin: 0; color: var(--text-muted); font-size: 0.85rem; }
-  @media (max-width: 46rem) { .work-domain > header { grid-template-columns: 1fr; } }
+  .work-list-region { padding-block: clamp(4rem, 8vw, 8rem); }
+  .work-list-region > header { display: grid; grid-template-columns: 1fr minmax(16rem, 0.45fr); gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
+  .work-list-region > header > div { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+  .work-list-region h2 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 7vw, 6rem); }
+  .work-list-region header span { color: var(--signal); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+  .work-list-region header p { max-width: 34ch; margin: 0; color: var(--text-muted); font-size: 0.85rem; }
+  [data-work-item][hidden] { display: none; }
+  @media (max-width: 46rem) { .work-list-region > header { grid-template-columns: 1fr; } }
 </style>

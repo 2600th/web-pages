@@ -10,7 +10,7 @@ type FullCaseEntry = CollectionEntry<'work'> & {
   data: Exclude<CollectionEntry<'work'>['data'], { recordType: 'evidence-note' }>;
 };
 const projects = work
-  .filter((entry): entry is FullCaseEntry => entry.data.recordType !== 'evidence-note')
+  .filter((entry): entry is FullCaseEntry => entry.data.recordType !== 'evidence-note' && entry.data.featuredOrder > 0)
   .sort((a, b) => a.data.featuredOrder - b.data.featuredOrder);
 const distances = [
   { id: 'out', label: 'OUT', detail: 'Thesis' },
@@ -30,17 +30,10 @@ const distances = [
     </p>
   </header>
 
-  <nav class="practice-index" aria-label="Compound practice pillars">
-    <a href="/?work=blocks-inco-ai&distance=out#selected-work"><strong>Production AI</strong><span>Blocks + INCO-AI</span></a>
-    <a href="/?work=blocks-inco-ai&distance=inside#selected-work"><strong>Design Technology</strong><span>Workflow, catalog, visualization</span></a>
-    <a href="/work/ira-vr/"><strong>Immersive Systems</strong><span>XR, simulation, robotics</span></a>
-    <a href="/?work=kinema&distance=out#selected-work"><strong>Browser-native Lab</strong><span>Games, graphics, interaction</span></a>
-  </nav>
-
   <nav class="project-index" aria-label="Selected projects">
     {projects.map((project, index) => (
       <a
-        href={`/?work=${project.data.slug}&distance=out#selected-work`}
+        href={`/work/${project.data.slug}/`}
         data-work-link={project.data.slug}
         aria-current={index === 0 ? 'true' : undefined}
       >
@@ -164,33 +157,10 @@ const distances = [
     font-size: 0.92rem;
   }
 
-  .practice-index {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: clamp(3rem, 6vw, 5.5rem);
-    border-block: 1px solid rgba(250, 249, 245, 0.22);
-  }
-
-  .practice-index a {
-    display: grid;
-    min-height: 6.5rem;
-    padding: 1rem;
-    align-content: space-between;
-    border-right: 1px solid rgba(250, 249, 245, 0.22);
-    color: var(--work-text);
-    text-decoration: none;
-  }
-
-  .practice-index a:last-child { border-right: 0; }
-  .practice-index strong { font-size: clamp(1rem, 1.5vw, 1.35rem); }
-  .practice-index span { color: var(--work-muted); font-size: 0.68rem; }
-  .practice-index a:hover { background: var(--cobalt); }
-  .practice-index a:hover span { color: white; }
-
   .project-index {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    margin-top: 1rem;
+    margin-top: clamp(3rem, 6vw, 5.5rem);
     border-top: 1px solid rgba(250, 249, 245, 0.22);
     border-bottom: 1px solid rgba(250, 249, 245, 0.22);
   }
@@ -221,7 +191,9 @@ const distances = [
 
   .project-index a[aria-current='true'] > span { color: white; }
 
-  .project-stage { padding-top: clamp(3rem, 6vw, 5rem); }
+  .project-stage,
+  .project { min-width: 0; }
+  .project-stage { width: 100%; padding-top: clamp(3rem, 6vw, 5rem); }
   .project[hidden] { display: none; }
 
   .project__header {
@@ -267,16 +239,22 @@ const distances = [
 
   .distance-panel {
     display: grid;
+    width: 100%;
+    min-width: 0;
     grid-template-columns: minmax(0, 2.2fr) minmax(18rem, 0.72fr);
     gap: 0;
-    align-items: stretch;
+    align-items: start;
     padding-bottom: 4rem;
   }
+
+  .distance-panel > * { min-width: 0; }
 
   [data-enhanced='true'] .distance-panel[hidden] { display: none; }
 
   .distance-panel figure {
     position: relative;
+    width: 100%;
+    max-width: 100%;
     min-height: 0;
     margin: 0;
     overflow: hidden;
@@ -375,10 +353,6 @@ const distances = [
   }
 
   @media (max-width: 62rem) {
-    .practice-index { grid-template-columns: repeat(2, 1fr); }
-    .practice-index a:nth-child(-n + 2) { border-bottom: 1px solid rgba(250, 249, 245, 0.22); }
-    .practice-index a:nth-child(2) { border-right: 0; }
-
     .project-index { grid-template-columns: repeat(2, 1fr); }
     .project-index a:nth-child(2) { border-right: 0; }
     .project-index a:nth-child(-n + 2) { border-bottom: 1px solid rgba(250, 249, 245, 0.22); }
@@ -396,9 +370,6 @@ const distances = [
     .work-field__header { grid-template-columns: 1fr; }
     .work-field__intro { margin-top: 0.5rem; }
 
-    .practice-index { display: flex; overflow-x: auto; }
-    .practice-index a { min-width: 13rem; border-bottom: 0 !important; }
-
     .project-index {
       display: flex;
       overflow-x: auto;
@@ -411,7 +382,11 @@ const distances = [
       border-bottom: 0 !important;
     }
 
-    .project__header h3 { font-size: 3.2rem; }
+    .project__header h3 {
+      max-width: 100%;
+      font-size: clamp(2.25rem, 11.5vw, 3.2rem);
+      overflow-wrap: anywhere;
+    }
 
     .distance-control {
       width: 100%;

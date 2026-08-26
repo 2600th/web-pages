@@ -6,16 +6,15 @@ test('first viewport identifies Pranshul, the work, and the next action', async 
   await expect(page.getByRole('heading', { level: 1, name: 'Pranshul Chandhok' })).toBeVisible();
   await expect(page.locator('.hero__positioning').getByText(/fifteen years.*games.*AI/i)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Discuss an opportunity' }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Explore the Career Atlas' })).toHaveAttribute('href', '#career-atlas');
+  await expect(page.getByRole('link', { name: 'View selected work' })).toHaveAttribute('href', '#selected-work');
 });
 
-test('the homepage names four compound practice pillars', async ({ page }) => {
+test('selected work leads with four operator-grade cases', async ({ page }) => {
   await page.goto('/#selected-work');
-  const pillars = page.getByRole('navigation', { name: 'Compound practice pillars' });
+  const projects = page.getByRole('navigation', { name: 'Selected projects' });
 
-  for (const label of ['Production AI', 'Design Technology', 'Immersive Systems', 'Browser-native Lab']) {
-    await expect(pillars.getByRole('link', { name: new RegExp(`^${label}`, 'i') })).toBeVisible();
-  }
+  await expect(projects.getByRole('link')).toHaveCount(4);
+  await expect(projects.getByRole('link').first()).toContainText(/Blocks.*designesto\.ai/i);
 });
 
 test('Proof in motion leads with authentic media and responsible video', async ({ page }) => {
@@ -23,11 +22,12 @@ test('Proof in motion leads with authentic media and responsible video', async (
   const proof = page.locator('#proof-in-motion');
 
   await expect(proof.getByRole('heading', { level: 2, name: /Systems you can see moving/i })).toBeVisible();
-  await expect(proof.locator('figure')).toHaveCount(7);
-  await expect(proof.locator('figure > a')).toHaveCount(7);
-  await expect(proof.locator('img')).toHaveCount(5);
+  await expect(proof.locator('figure')).toHaveCount(4);
+  await expect(proof.locator('figure > a')).toHaveCount(4);
+  await expect(proof.locator('img')).toHaveCount(2);
   await expect(proof.locator('video')).toHaveCount(2);
-  await expect(proof.getByText(/Editorial illustration · 8 named systems/i)).toBeVisible();
+  await expect(proof.locator('figure').first()).toContainText(/designesto\.ai/i);
+  await expect(proof.getByText(/8 named systems/i)).toBeVisible();
   await expect(proof.getByRole('link', { name: /View Defense technology case study/i })).toHaveAttribute(
     'href',
     '/work/defense-simulation-systems/',
@@ -38,7 +38,7 @@ test('Proof in motion leads with authentic media and responsible video', async (
     await expect(video).toHaveAttribute('loop', '');
     await expect(video).toHaveAttribute('playsinline', '');
     await expect(video).toHaveAttribute('preload', 'none');
-    await expect(video).toHaveAttribute('poster', /\/media\/career\//);
+    await expect(video).toHaveAttribute('poster', /\/media\//);
   }
 
   const leadingVideo = proof.locator('video').first();
@@ -55,7 +55,7 @@ test('Proof in motion leads with authentic media and responsible video', async (
     elements.every((element) => (element as HTMLVideoElement).paused),
   )).toBe(true);
 
-  await expect(proof.getByText(/Footage is muted/i)).toBeVisible();
+  await expect(proof.getByRole('link', { name: /Open the complete work archive/i })).toBeVisible();
 });
 
 test('Proof in motion falls back to still frames when reduced motion is requested', async ({ page }) => {
@@ -80,6 +80,10 @@ test('the identity and conversion path remain complete without JavaScript', asyn
   await expect(page.getByRole('link', { name: 'Discuss an opportunity' }).first()).toHaveAttribute('href', /mailto:2600th@gmail.com/);
   await expect(page.locator('.career-atlas__index').getByRole('link', { name: 'Kinema' })).toHaveAttribute('href', '/work/kinema/');
   await expect(page.getByRole('link', { name: /The Brutal Spy/ })).toHaveAttribute('href', '/work/the-brutal-spy/');
+  await expect(page.getByRole('navigation', { name: 'Selected projects' }).getByRole('link').first()).toHaveAttribute(
+    'href',
+    '/work/blocks-inco-ai/',
+  );
   await context.close();
 });
 
@@ -95,4 +99,34 @@ test('Three Distances changes real content and keeps the state in the URL', asyn
   await work.getByRole('link', { name: /Web Ocean 3D/ }).click();
   await expect(page).toHaveURL(/work=web-ocean-3d&distance=near/);
   await expect(work.getByRole('heading', { level: 3, name: 'Web Ocean 3D' })).toBeVisible();
+});
+
+test('selected-work media stays inside the desktop viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/#selected-work');
+  const panel = page.locator('#selected-work [data-distance-panel="out"]:visible').first();
+  const figure = await panel.locator('figure').boundingBox();
+
+  expect(figure).not.toBeNull();
+  expect((figure?.x ?? 0) + (figure?.width ?? 0)).toBeLessThanOrEqual(1280);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1280);
+});
+
+test('the authored defense systems map remains fully legible instead of being cropped', async ({ page }) => {
+  await page.goto('/');
+
+  const fit = await page.locator('.motion-proof__frame--defense-simulation img').evaluate((image) =>
+    getComputedStyle(image).objectFit,
+  );
+  expect(fit).toBe('contain');
+});
+
+test('the longest selected-work title stays inside a 320px viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/#selected-work');
+
+  const title = await page.locator('[data-work-project="blocks-inco-ai"] .project__header h3').boundingBox();
+  expect(title).not.toBeNull();
+  expect((title?.x ?? 0) + (title?.width ?? 0)).toBeLessThanOrEqual(320);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
 });

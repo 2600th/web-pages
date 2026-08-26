@@ -11,7 +11,7 @@ disciplines:
   - Product prototyping
   - Level-editing tools
 visibility: public
-featuredOrder: 1
+featuredOrder: 4
 recordType: case
 era: operator
 domains: [games]

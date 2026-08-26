@@ -10,7 +10,7 @@ const { work } = Astro.props;
 
 <ol class="work-list">
   {work.map((entry, index) => (
-    <li>
+    <li data-work-item data-work-domains={entry.data.domains.join(' ')}>
       <a href={`/work/${entry.data.slug}/`}>
         <span class="work-list__number">{String(index + 1).padStart(2, '0')}</span>
         {entry.data.heroMedia ? (
@@ -113,7 +113,7 @@ const { work } = Astro.props;
   }
 
   .work-list__arrow {
-    color: var(--cobalt);
+    color: var(--signal);
     font-size: 1.5rem;
     transition: transform 240ms var(--ease-out);
   }

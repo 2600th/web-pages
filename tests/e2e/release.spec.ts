@@ -61,6 +61,40 @@ test('the eclipse is singular on the homepage and remains available on interior 
   await expect(page.locator('[data-theme-control]')).toHaveCount(1);
 });
 
+test('dark theme remains accessible and mobile primary controls meet the touch target floor', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem('2600th-theme', 'dark'));
+  await page.goto('/');
+  await page.addScriptTag({ content: axe.source });
+  const violations = await page.evaluate(async () => {
+    const result = await (window as typeof window & { axe: typeof axe }).axe.run(document, {
+      runOnly: { type: 'tag', values: ['wcag2aa'] },
+    });
+    return result.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
+  });
+  expect(violations).toEqual([]);
+
+  for (const target of await page.locator('.site-nav a, [data-theme-control]').all()) {
+    const box = await target.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test('the interior header remains usable at the 320px support floor', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/work/');
+
+  await expect(page.locator('.site-signature__compact')).toBeVisible();
+  await expect(page.locator('.site-nav a')).toHaveCount(3);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  for (const target of await page.locator('.site-nav a, .site-nav [data-theme-control]').all()) {
+    const box = await target.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
+});
+
 test('reduced motion removes authored Atlas transitions', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/#career-atlas');

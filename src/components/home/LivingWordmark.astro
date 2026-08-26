@@ -39,7 +39,7 @@ const mediaClasses: Record<string, string> = {
       <span>Discuss an opportunity</span>
       <span aria-hidden="true">↗</span>
     </a>
-    <a class="hero__work" href="#career-atlas">Explore the Career Atlas <span aria-hidden="true">↓</span></a>
+    <a class="hero__work" href="#selected-work">View selected work <span aria-hidden="true">↓</span></a>
   </div>
 
   <div class="hero__index" aria-label="Selected disciplines">
@@ -163,8 +163,8 @@ const mediaClasses: Record<string, string> = {
   }
 
   .living-letter__control :global(.theme-control) {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 46px;
+    height: 46px;
     border-color: var(--text);
     background: var(--surface);
   }
@@ -220,7 +220,7 @@ const mediaClasses: Record<string, string> = {
 
   .hero__index span + span::before {
     margin-right: 1rem;
-    color: var(--cobalt);
+    color: var(--signal);
     content: '•';
   }
 
@@ -229,7 +229,7 @@ const mediaClasses: Record<string, string> = {
     top: 1.35rem;
     left: var(--page-gutter);
     margin: 0;
-    color: var(--cobalt);
+    color: var(--signal);
     font-size: 0.85rem;
     font-weight: 780;
   }
@@ -293,7 +293,7 @@ const mediaClasses: Record<string, string> = {
       letter-spacing: -0.035em;
     }
 
-    .living-letter__control { transform: translate(-50%, -50%) scale(0.82); }
+    .living-letter__control { transform: translate(-50%, -50%); }
 
     .hero__index {
       gap: 0.55rem;

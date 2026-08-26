@@ -26,13 +26,14 @@ for (const [path, heading] of routeCases) {
   });
 }
 
-test('work archive groups records by domain and supports link filters', async ({ page }) => {
+test('work archive renders one canonical list and supports link filters', async ({ page }) => {
   await page.goto('/work/');
-  await expect(page.getByRole('heading', { name: 'Games', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Applied AI', exact: true })).toBeVisible();
+  await expect(page.getByText('16 public records')).toBeVisible();
+  await expect(page.locator('[data-work-item]')).toHaveCount(16);
   await page.getByRole('link', { name: 'XR and spatial computing', exact: true }).first().click();
   await expect(page).toHaveURL(/domain=xr/);
   await expect(page.getByRole('link', { name: /IRA VR/ })).toBeVisible();
+  await expect(page.locator('[data-work-item]:visible')).toHaveCount(6);
 });
 
 test('evidence notes render without empty case-study sections', async ({ page }) => {
@@ -50,7 +51,7 @@ test('defense work names the full program and systems contribution', async ({ pa
     expect(defenseRecord).toContain(program);
   }
   expect(defenseRecord).toMatch(/custom hardware[\s\S]*IMU[\s\S]*sensor[\s\S]*instructor[\s\S]*evaluation/i);
-  await expect(page.locator('.project-media figcaption')).toHaveText('Editorial illustration');
+  await expect(page.locator('.project-media figcaption')).toContainText('not client documentation');
   await expect(page.locator('a[href*="drive.google.com"], a[href*="docs.google.com"]')).toHaveCount(0);
 });
 
@@ -58,8 +59,25 @@ test('enterprise immersive work includes the wider client and domain record', as
   await page.goto('/work/enterprise-immersive-systems/');
 
   const enterpriseRecord = await page.locator('main').textContent();
-  expect(enterpriseRecord).toMatch(/Sight Savers[\s\S]*Voxel/i);
+  expect(enterpriseRecord).toMatch(/JPMorgan Chase[\s\S]*Anglian Water[\s\S]*Voxel Worlds VR/i);
+  expect(enterpriseRecord).toMatch(/Myntra[\s\S]*scope is not expanded/i);
+  expect(enterpriseRecord).toMatch(/Sight Savers/i);
   expect(enterpriseRecord).toMatch(/maritime[\s\S]*accessibility[\s\S]*analytics[\s\S]*production-facility/i);
+  await expect(page.getByRole('heading', { name: 'Privately reviewed evidence' })).toBeVisible();
+  await expect(page.getByText(/VR\/360 Video Production — Boston/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Public corroboration' })).toBeVisible();
+});
+
+test('MysticMojo record includes Nazara and the Chhota Bheem flying-game concept', async ({ page }) => {
+  await page.goto('/work/mysticmojo/');
+
+  const record = await page.locator('main').textContent();
+  expect(record).toMatch(/Nazara[\s\S]*Chhota Bheem Jungle Rescue[\s\S]*Google Play[\s\S]*plane[\s\S]*water/i);
+  await expect(page.getByRole('img', { name: /Chhota Bheem Jungle Rescue/ })).toHaveAttribute(
+    'src',
+    '/media/career/chhota-bheem-jungle-rescue/concept-screens.webp',
+  );
+  await expect(page.getByText('Chhota Bheem Jungle Rescue — Live')).toBeVisible();
 });
 
 test('work detail exposes evidence and CreativeWork structured data', async ({ page }) => {

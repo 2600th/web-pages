@@ -19,6 +19,14 @@ const sourceSchema = z.object({
   type: z.enum(['repository', 'live-demo', 'authored-post', 'employer-post', 'shared-archive']),
 });
 
+const reviewedEvidenceSchema = z.object({
+  title: z.string().min(3),
+  date: z.coerce.date(),
+  organization: z.string().min(2),
+  type: z.string().min(3),
+  note: z.string().min(20),
+});
+
 const workBaseSchema = z.object({
   title: z.string().min(2),
   slug: z.string().regex(/^[a-z0-9-]+$/),
@@ -38,6 +46,7 @@ const workBaseSchema = z.object({
   publicClaims: z.array(z.string().min(20)).min(1),
   engagementPath: z.enum(ENGAGEMENT_PATHS),
   sources: z.array(sourceSchema).min(1),
+  reviewedEvidence: z.array(reviewedEvidenceSchema).optional(),
   heroLabel: z.string().min(2).optional(),
   seo: z.object({
     title: z.string().min(20),

@@ -11,7 +11,7 @@ disciplines:
   - Product direction
   - AI-assisted engineering
 visibility: public
-featuredOrder: 3
+featuredOrder: 0
 recordType: case
 era: operator
 domains: [games, simulation]

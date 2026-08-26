@@ -7,7 +7,7 @@ status: Historical VR game
 role: Founder, product and technology lead
 disciplines: [Virtual reality, Games, Mixed-reality capture]
 visibility: public
-featuredOrder: 0
+featuredOrder: 2
 recordType: case
 era: founder
 domains: [games, xr]

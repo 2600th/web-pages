@@ -1,6 +1,27 @@
 ---
 const media = [
   {
+    key: 'designesto',
+    type: 'video',
+    title: 'designesto.ai',
+    meta: 'Production AI · current product',
+    href: '/work/blocks-inco-ai/',
+    poster: '/media/work/blocks-inco-ai/designesto-edit-room-poster.webp',
+    mp4: '/media/work/blocks-inco-ai/designesto-edit-room.mp4',
+    alt: 'A designesto.ai product demonstration replacing furniture in a photographed interior',
+  },
+  {
+    key: 'defense-simulation',
+    type: 'image',
+    title: 'Defense technology',
+    meta: 'Author’s reconstruction · 8 named systems',
+    href: '/work/defense-simulation-systems/',
+    src: '/media/career/defense-simulation-systems/system-map.svg',
+    width: 1600,
+    height: 900,
+    alt: 'Author\'s visual reconstruction grouping eight named defense programs around recurring simulation capabilities',
+  },
+  {
     key: 'machine-hunter',
     type: 'video',
     title: 'Machine Hunter',
@@ -22,60 +43,6 @@ const media = [
     height: 900,
     alt: 'A sailing ship crossing a real-time ocean rendered in the browser',
   },
-  {
-    key: 'kinema',
-    type: 'image',
-    title: 'Kinema',
-    meta: '2026 · Gameplay prototyping',
-    href: '/work/kinema/',
-    src: '/media/work/kinema/inside.webp',
-    width: 1600,
-    height: 900,
-    alt: 'Colorful browser-game arena showing a character, physics blocks, and collectibles',
-  },
-  {
-    key: 'safed-sagar',
-    type: 'image',
-    title: 'Safed Sagar',
-    meta: '2026 · Browser flight experiment',
-    href: '/work/safed-sagar/',
-    src: '/media/work/safed-sagar/hero.webp',
-    width: 1600,
-    height: 900,
-    alt: 'A fighter aircraft flying over a broad snow-covered mountain range',
-  },
-  {
-    key: 'defense-simulation',
-    type: 'image',
-    title: 'Defense technology',
-    meta: 'Editorial illustration · 8 named systems',
-    href: '/work/defense-simulation-systems/',
-    src: '/media/career/defense-simulation-systems/poster-1280.webp',
-    width: 1280,
-    height: 720,
-    alt: 'Abstract point-cloud simulation space with a person inside a luminous calibration volume',
-  },
-  {
-    key: 'oye-tippa',
-    type: 'video',
-    title: 'Oye Tippa Run',
-    meta: '2018 · MysticMojo mobile game',
-    href: '/work/mysticmojo/',
-    poster: '/media/career/oye-tippa-run/poster-1280.webp',
-    mp4: '/media/career/oye-tippa-run/clip.mp4',
-    alt: 'Oye Tippa Run character collecting coins across a colorful Indian city',
-  },
-  {
-    key: 'ira-vr',
-    type: 'image',
-    title: 'IRA VR',
-    meta: '2016—2020 · Immersive learning',
-    href: '/work/ira-vr/',
-    src: '/media/career/ira-vr/poster-1280.webp',
-    width: 1280,
-    height: 826,
-    alt: 'An immersive biology learning module presented inside a panoramic landscape',
-  },
 ] as const;
 ---
 
@@ -84,7 +51,7 @@ const media = [
     <p class="motion-proof__kicker">Proof in motion · Selected field notes</p>
     <h2 id="motion-proof-title">Systems you can see moving.</h2>
     <div class="motion-proof__intro">
-      <p>Games, simulation, immersive learning, and browser-native graphics—shown through authentic work and clearly disclosed editorial context.</p>
+      <p>Production AI, defense systems, mixed reality, and browser-native graphics—shown through real product media and authored system evidence.</p>
       <button type="button" data-proof-motion-toggle aria-label="Motion playback" aria-pressed="false" hidden>
         <span>Motion</span>
         <span aria-hidden="true" data-proof-motion-status>Off</span>
@@ -129,7 +96,6 @@ const media = [
   </div>
 
   <footer class="motion-proof__footer">
-    <p>Footage is muted, loops only while this section is visible, and resolves to still frames when reduced motion is requested.</p>
     <a href="/work/">Open the complete work archive <span aria-hidden="true">↗</span></a>
   </footer>
 </section>
@@ -210,9 +176,9 @@ const media = [
 
   .motion-proof__reel {
     display: grid;
-    min-height: min(120vw, 110rem);
+    min-height: min(82vw, 72rem);
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: repeat(14, minmax(4rem, 1fr));
+    grid-template-rows: repeat(8, minmax(4rem, 1fr));
     gap: clamp(0.7rem, 1.4vw, 1.35rem);
   }
 
@@ -249,6 +215,12 @@ const media = [
     transition: transform 900ms var(--ease-out), filter 600ms var(--ease-out);
   }
 
+  .motion-proof__frame--defense-simulation img {
+    object-fit: contain;
+    padding: clamp(0.35rem, 1vw, 0.8rem);
+    background: #080a10;
+  }
+
   .motion-proof__frame:hover img,
   .motion-proof__frame:hover video { transform: scale(1.025); }
 
@@ -268,38 +240,34 @@ const media = [
   .motion-proof__frame figcaption strong { font-size: clamp(1rem, 1.7vw, 1.5rem); }
   .motion-proof__frame figcaption span { max-width: 20ch; color: #d2d1cb; font-size: 0.67rem; text-align: right; }
 
-  .motion-proof__frame--machine-hunter { grid-area: 1 / 1 / 5 / 9; }
-  .motion-proof__frame--web-ocean { grid-area: 1 / 9 / 4 / 13; }
-  .motion-proof__frame--kinema { grid-area: 5 / 3 / 9 / 13; }
-  .motion-proof__frame--defense-simulation { grid-area: 9 / 1 / 12 / 7; }
-  .motion-proof__frame--safed-sagar { grid-area: 9 / 7 / 12 / 13; }
-  .motion-proof__frame--ira-vr { grid-area: 12 / 1 / 15 / 6; }
-  .motion-proof__frame--oye-tippa { grid-area: 12 / 6 / 15 / 13; }
+  .motion-proof__frame--designesto { grid-area: 1 / 1 / 5 / 9; }
+  .motion-proof__frame--defense-simulation { grid-area: 1 / 9 / 5 / 13; }
+  .motion-proof__frame--machine-hunter { grid-area: 5 / 1 / 9 / 6; }
+  .motion-proof__frame--web-ocean { grid-area: 5 / 6 / 9 / 13; }
 
   .motion-proof__footer {
     display: flex;
     padding-top: 1.2rem;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 2rem;
     border-top: 1px solid rgba(250, 249, 245, 0.22);
     color: #b8b7b0;
     font-size: 0.7rem;
   }
 
-  .motion-proof__footer p { max-width: 62ch; margin: 0; }
   .motion-proof__footer a { color: var(--proof-paper); font-weight: 720; }
 
   @media (max-width: 64rem) {
     .motion-proof__header { grid-template-columns: 1fr 2fr; }
     .motion-proof__intro { grid-column: 2; }
-    .motion-proof__reel { min-height: 120rem; }
-    .motion-proof__frame--machine-hunter { grid-area: 1 / 1 / 4 / 13; }
-    .motion-proof__frame--web-ocean { grid-area: 4 / 1 / 7 / 7; }
-    .motion-proof__frame--kinema { grid-area: 4 / 7 / 8 / 13; }
-    .motion-proof__frame--defense-simulation { grid-area: 8 / 1 / 11 / 7; }
-    .motion-proof__frame--safed-sagar { grid-area: 8 / 7 / 11 / 13; }
-    .motion-proof__frame--ira-vr { grid-area: 11 / 1 / 14 / 6; }
-    .motion-proof__frame--oye-tippa { grid-area: 11 / 6 / 14 / 13; }
+    .motion-proof__reel {
+      min-height: 72rem;
+      grid-template-rows: repeat(12, minmax(4rem, 1fr));
+    }
+    .motion-proof__frame--designesto { grid-area: 1 / 1 / 5 / 13; }
+    .motion-proof__frame--defense-simulation { grid-area: 5 / 1 / 9 / 7; }
+    .motion-proof__frame--machine-hunter { grid-area: 5 / 7 / 9 / 13; }
+    .motion-proof__frame--web-ocean { grid-area: 9 / 1 / 13 / 13; }
   }
 
   @media (max-width: 42rem) {
@@ -316,8 +284,7 @@ const media = [
       gap: 0.7rem;
     }
     .motion-proof__frame { min-height: 21rem; grid-area: auto; }
-    .motion-proof__frame--web-ocean,
-    .motion-proof__frame--ira-vr { min-height: 17rem; }
+    .motion-proof__frame--defense-simulation { min-height: 17rem; }
     .motion-proof__footer { align-items: start; flex-direction: column; }
   }
 

@@ -11,7 +11,7 @@ disciplines:
   - Simulation
   - Performance engineering
 visibility: public
-featuredOrder: 2
+featuredOrder: 3
 recordType: case
 era: operator
 domains: [simulation]

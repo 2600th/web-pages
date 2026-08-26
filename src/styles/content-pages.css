@@ -35,7 +35,7 @@
 
 .section-kicker {
   margin-bottom: 1.15rem;
-  color: var(--cobalt);
+  color: var(--signal);
   font-size: 0.78rem;
   font-weight: 760;
   letter-spacing: 0.04em;
@@ -181,7 +181,7 @@
 }
 
 .prose a {
-  color: var(--cobalt);
+  color: var(--signal);
 }
 
 .notes-list {
@@ -226,7 +226,7 @@
 }
 
 .notes-list__arrow {
-  color: var(--cobalt);
+  color: var(--signal);
   font-size: 1.4rem;
 }
 
@@ -301,7 +301,7 @@
 }
 
 .principles li::before {
-  color: var(--cobalt);
+  color: var(--signal);
   content: '0' counter(principle);
   font-size: 0.78rem;
   font-weight: 720;
