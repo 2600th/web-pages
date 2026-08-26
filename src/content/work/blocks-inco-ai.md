@@ -20,21 +20,21 @@ careerOrder: 160
 relationships: [homelane-spacecraft-pro]
 evidenceStatus: approval-enhanced
 publicClaims:
-  - Authored posts document the Blocks and InCo AI launches; the live designesto.ai product supports the current visible product behaviors and user-confirmed product continuity.
+  - Authored posts document the Blocks and InCo AI launches; designesto.ai is the next product in this line, launching in 2026.
 engagementPath: operator-advisory
-heroLabel: Authored before-and-after board assembled from live designesto.ai product assets
+heroLabel: Product-development before-and-after board for designesto.ai
 heroMedia: &hero
   src: /media/work/blocks-inco-ai/designesto-before-after.webp
-  alt: Before and after room transformation from the live designesto.ai interior design product
+  alt: Before and after room transformation from the designesto.ai product under development
   width: 1600
   height: 900
 out:
   thesis: Generative AI becomes valuable in interior design when it joins the real workflow—from a client room and design exploration to catalog products, visualization, pricing, and specifications.
   audience: Interior designers and product teams building software for real design and delivery workflows.
-  outcome: Blocks established the in-house design platform; the earlier InCo AI product line is now presented publicly as designesto.ai, with room transformation, editing, staging, rendering, and downstream design workflows.
+  outcome: Blocks established the in-house design platform; designesto.ai carries the product thesis forward, launching in 2026 with room transformation, editing, staging, rendering, and downstream design workflows.
   media: *hero
 near:
-  experience: The live product turns photos, sketches, and empty rooms into realistic interiors, with virtual staging, room editing, image-to-3D, sketch-to-render, and CAD-oriented tools.
+  experience: The product is being built to turn photos, sketches, and empty rooms into realistic interiors, with virtual staging, room editing, image-to-3D, sketch-to-render, and CAD-oriented tools.
   contribution: Led product and technology work across generative AI, real-time 3D, design tooling, and the cross-functional systems needed to move experiments into a production workflow.
   system: The system connects multimodal generation, catalog-aware design operations, interactive 3D, and downstream commercial design artifacts instead of ending at a standalone image.
   media:
@@ -49,14 +49,14 @@ inside:
   constraints:
     - Serve homeowners and working designers without making them learn a traditional 3D tool before they can test an idea.
   evidence:
-    - Authored LinkedIn posts describe the Blocks launch, the original InCo AI workflow, product behaviors, and a team Speed and Execution Award; designesto.ai now demonstrates the evolved product directly.
+    - Authored LinkedIn posts describe the Blocks launch, the original InCo AI workflow, product behaviors, and a team Speed and Execution Award; reviewed development captures show how the product direction is evolving into designesto.ai.
   media:
     src: /media/work/blocks-inco-ai/inside.webp
     alt: Public Virtual Experience Center entrance showing an interactive interior environment
     width: 1600
     height: 900
 sources:
-  - label: designesto.ai live product
+  - label: designesto.ai product preview
     url: https://www.designesto.ai/
     type: live-demo
   - label: Blocks public launch post
@@ -74,6 +74,6 @@ seo:
   socialImage: /media/work/blocks-inco-ai/designesto-before-after.webp
 ---
 
-Blocks began as the in-house platform for turning design intent into build-ready decisions. InCo AI added a faster generative layer; that product line is now presented publicly as designesto.ai, with practical tools for staging, editing, rendering, product views, 3D, and CAD-oriented outputs.
+Blocks began as the in-house platform for turning design intent into build-ready decisions. InCo AI added a faster generative layer. The next expression of that product line is designesto.ai, launching in 2026 with practical tools for staging, editing, rendering, product views, 3D, and CAD-oriented outputs.
 
 The important product decision was the connection between them: generative AI is most useful when it feeds a working design system rather than ending with a standalone image.

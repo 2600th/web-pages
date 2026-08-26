@@ -22,6 +22,7 @@ publicClaims:
 engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/career/oye-tippa-run/poster-1280.webp
+  mp4: /media/career/oye-tippa-run/clip.mp4
   alt: Oye Tippa Run character collecting coins across a colorful Indian city
   width: 1280
   height: 720
@@ -65,6 +66,9 @@ sources:
   - label: Nazara Chhota Bheem Jungle Rescue concept
     url: https://docs.google.com/presentation/d/18okz-FLfTK5ft-DyyfOda2C28WzPH7ms7jYM8tBro1g/edit
     type: shared-archive
+  - label: Chhota Bheem Jungle Rescue public gameplay
+    url: https://www.youtube.com/watch?v=0c2jPM_p5_M
+    type: live-demo
 reviewedEvidence:
   - title: Chhota Bheem Jungle Rescue alpha handoff
     date: 2020-04-17

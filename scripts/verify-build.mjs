@@ -19,6 +19,10 @@ const requiredFiles = [
   'CNAME',
   'robots.txt',
   'rss.xml',
+  'manifest.webmanifest',
+  'favicon.svg',
+  'favicon.ico',
+  'apple-touch-icon.png',
   'sitemap-index.xml',
   'work/index.html',
   'notes/index.html',
@@ -68,7 +72,7 @@ if (builtFiles.some((path) => path.includes('_media-source'))) {
   throw new Error('A private media-source path entered the production build.');
 }
 
-for (const file of builtFiles.filter((path) => path.includes(`${join('media', 'career')}`))) {
+for (const file of builtFiles.filter((path) => path.includes(`${join('media')}`))) {
   const bytes = (await stat(file)).size;
   if (bytes > 2_200_000) throw new Error(`${relative(output, file)} exceeds the 2.2 MB public media budget.`);
 }

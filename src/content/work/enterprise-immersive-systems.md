@@ -21,6 +21,12 @@ publicClaims:
   - An Apple notice confirms Voxel Worlds VR version 1.8 completed processing for the TestFlight and App Review pipeline; it does not establish a public App Store release.
   - Myntra is named in the wider GreyKernel client archive, but the available record does not support a more specific public scope claim.
 engagementPath: operator-advisory
+heroLabel: Editorial illustration informed by reviewed delivery records
+heroMedia:
+  src: /media/work/enterprise-immersive-systems/hero.webp
+  alt: Enterprise immersive workflow connecting a 360 camera, industrial water training site, and VR learner
+  width: 1600
+  height: 900
 sources:
   - label: GreyKernel experience on LinkedIn
     url: https://www.linkedin.com/in/pranshulchandhok/details/experience/
@@ -47,7 +53,7 @@ reviewedEvidence:
 seo:
   title: Enterprise immersive systems — GreyKernel work
   description: A grouped public record of Pranshul Chandhok's GreyKernel work across enterprise learning, industrial safety, medical, real-estate, and defence simulation.
-  socialImage: /media/career/ira-vr/poster-1280.webp
+  socialImage: /media/work/enterprise-immersive-systems/hero.webp
 ---
 
 For JPMorgan Chase, the surviving engagement record documents a direct 2018 scope for live-action VR/360 production in Boston, including capture and post-production. It belongs here as enterprise production work—not as a claim that GreyKernel built an unrelated banking platform.

@@ -1,6 +1,6 @@
 ---
 interface Props {
-  media: { src: string; alt: string; width: number; height: number };
+  media: { src: string; alt: string; width: number; height: number; mp4?: string; webm?: string };
   label: string;
   priority?: boolean;
 }
@@ -8,18 +8,28 @@ interface Props {
 const { media, label, priority = false } = Astro.props;
 ---
 
-<figure class="project-media">
-  <img
-    src={media.src}
-    alt={media.alt}
-    width={media.width}
-    height={media.height}
-    loading={priority ? 'eager' : 'lazy'}
-    fetchpriority={priority ? 'high' : 'auto'}
-    decoding="async"
-  />
-  <figcaption>{label}</figcaption>
+<figure class="project-media" data-evidence-media>
+  {media.mp4 ? (
+    <video muted loop playsinline preload="none" poster={media.src} width={media.width} height={media.height} aria-label={media.alt} data-evidence-video>
+      {media.webm && <source src={media.webm} type="video/webm" />}
+      <source src={media.mp4} type="video/mp4" />
+    </video>
+  ) : (
+    <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
+  )}
+  <figcaption>
+    <span>{label}</span>
+    {media.mp4 && <button type="button" data-evidence-video-toggle aria-label={`Pause ${label} clip`}>Pause</button>}
+  </figcaption>
 </figure>
+
+{media.mp4 && (
+  <script>
+    import { initEvidenceMedia } from '../../scripts/evidence-media';
+    initEvidenceMedia();
+    document.addEventListener('astro:after-swap', initEvidenceMedia);
+  </script>
+)}
 
 <style>
   .project-media {
@@ -31,8 +41,10 @@ const { media, label, priority = false } = Astro.props;
 
   .project-media img,
   .project-media video {
+    display: block;
     width: 100%;
     height: auto;
+    object-fit: cover;
   }
 
   .project-media figcaption {
@@ -46,5 +58,20 @@ const { media, label, priority = false } = Astro.props;
     font-weight: 720;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  .project-media figcaption span { display: block; }
+
+  .project-media figcaption button {
+    min-width: 3.25rem;
+    min-height: 2rem;
+    margin: 0.45rem -0.25rem -0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
   }
 </style>

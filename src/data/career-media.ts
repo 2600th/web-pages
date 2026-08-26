@@ -40,6 +40,20 @@ export const CAREER_MEDIA: Record<string, CareerMediaRecord> = {
       poster640: '/media/career/ira-vr/poster-640.webp',
       poster1280: '/media/career/ira-vr/poster-1280.webp',
       posterAvif: '/media/career/ira-vr/poster-1280.avif',
+      clipMp4: '/media/career/ira-vr/newton-loop.mp4',
+    },
+  },
+  greykernel: {
+    sourceUrl: 'https://drive.google.com/file/d/1WiamnZUOrb0QPvqhXo0OKhTil0HdBGc1/view',
+    sourceLabel: 'GreyKernel founder-era showreel',
+    status: 'public-corroborated',
+    alt: 'GreyKernel immersive-learning showreel moving through a reconstructed historical environment',
+    width: 1280,
+    height: 720,
+    derivatives: {
+      poster640: '/media/career/greykernel/showreel-poster.webp',
+      poster1280: '/media/career/greykernel/showreel-poster.webp',
+      clipMp4: '/media/career/greykernel/showreel-loop.mp4',
     },
   },
   'machine-hunter': {

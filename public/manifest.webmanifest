@@ -1,0 +1,13 @@
+{
+  "name": "Pranshul Chandhok / 2600th",
+  "short_name": "2600th",
+  "description": "Product, AI, real-time 3D, games, and immersive systems by Pranshul Chandhok.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f2ee",
+  "theme_color": "#2455ff",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "32x32", "type": "image/x-icon" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

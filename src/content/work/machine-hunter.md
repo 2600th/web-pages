@@ -20,6 +20,8 @@ publicClaims:
 engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/career/machine-hunter/poster-1280.webp
+  mp4: /media/career/machine-hunter/clip.mp4
+  webm: /media/career/machine-hunter/clip.webm
   alt: Bow-and-arrow gameplay inside the Machine Hunter virtual-reality arena
   width: 1150
   height: 720

@@ -79,6 +79,12 @@
   line-height: 0.76;
 }
 
+.case-hero--long h1 {
+  max-width: 15ch;
+  font-size: clamp(4rem, 10vw, 8.5rem);
+  line-height: 0.82;
+}
+
 .case-hero__summary {
   color: var(--text-muted);
   font-size: clamp(1.1rem, 1.7vw, 1.45rem);

@@ -11,6 +11,8 @@ const mediaSchema = z.object({
   alt: z.string().min(20),
   width: z.number().int().positive(),
   height: z.number().int().positive(),
+  mp4: z.string().startsWith('/').optional(),
+  webm: z.string().startsWith('/').optional(),
 });
 
 const sourceSchema = z.object({

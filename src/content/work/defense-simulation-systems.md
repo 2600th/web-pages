@@ -4,7 +4,7 @@ slug: defense-simulation-systems
 summary: At GreyKernel, Pranshul led defense training platforms spanning armoured vehicles, artillery, air defence, communications, and human-performance simulation.
 yearStart: 2019
 yearEnd: 2021
-status: Full public work record
+status: Selected defense-systems record
 role: Co-founder and CTO
 disciplines: [Defense technology, Training simulation, Real-time 3D, Hardware-software integration]
 visibility: public
@@ -14,7 +14,7 @@ era: founder
 domains: [simulation, xr]
 careerOrder: 58
 relationships: [greykernel, enterprise-immersive-systems, humanoid-robot-control-system]
-evidenceStatus: public-approved
+evidenceStatus: public-corroborated
 publicClaims:
   - The program portfolio included BLT T-72, Tunguska, LLLR, M777, T-90, Advanced Mannequin System, Radio Telephony, and Tata Safari simulation systems.
   - The technical contribution connected custom hardware, IMU-driven tracking, sensor fusion, real-time sensor pipelines, VR and AR devices, instructor controls, and trainee evaluation.

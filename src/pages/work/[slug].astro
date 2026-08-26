@@ -46,11 +46,14 @@ const jsonLd = [{
   description={data.seo.description}
   canonical={`/work/${data.slug}/`}
   image={data.seo.socialImage}
+  imageAlt={data.heroMedia?.alt ?? `${data.title} by Pranshul Chandhok`}
+  imageWidth={data.heroMedia?.width ?? 1600}
+  imageHeight={data.heroMedia?.height ?? 900}
   ogType="article"
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: data.title }]} />
-  <header class="case-hero">
+  <header class:list={['case-hero', { 'case-hero--long': data.title.length > 36 }]}>
     <div class="case-hero__head">
       <div>
         <p class="section-kicker">{data.yearStart} · {data.status}</p>

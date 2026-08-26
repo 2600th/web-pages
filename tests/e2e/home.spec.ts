@@ -17,20 +17,19 @@ test('selected work leads with four operator-grade cases', async ({ page }) => {
   await expect(projects.getByRole('link').first()).toContainText(/Blocks.*designesto\.ai/i);
 });
 
-test('Proof in motion leads with authentic media and responsible video', async ({ page }) => {
+test('Proof in motion leads with six authentic evidence frames and responsible video', async ({ page }) => {
   await page.goto('/#proof-in-motion');
   const proof = page.locator('#proof-in-motion');
 
   await expect(proof.getByRole('heading', { level: 2, name: /Systems you can see moving/i })).toBeVisible();
-  await expect(proof.locator('figure')).toHaveCount(4);
-  await expect(proof.locator('figure > a')).toHaveCount(4);
-  await expect(proof.locator('img')).toHaveCount(2);
-  await expect(proof.locator('video')).toHaveCount(2);
+  await expect(proof.locator('figure')).toHaveCount(6);
+  await expect(proof.locator('figure > a')).toHaveCount(6);
+  await expect(proof.locator('video')).toHaveCount(6);
   await expect(proof.locator('figure').first()).toContainText(/designesto\.ai/i);
-  await expect(proof.getByText(/8 named systems/i)).toBeVisible();
-  await expect(proof.getByRole('link', { name: /View Defense technology case study/i })).toHaveAttribute(
+  await expect(proof.getByText(/experiential learning/i)).toBeVisible();
+  await expect(proof.getByRole('link', { name: /View IRA VR.*case study/i })).toHaveAttribute(
     'href',
-    '/work/defense-simulation-systems/',
+    '/work/ira-vr/',
   );
 
   for (const video of await proof.locator('video').all()) {
@@ -64,11 +63,23 @@ test('Proof in motion falls back to still frames when reduced motion is requeste
   const videos = page.locator('#proof-in-motion video');
   const motionToggle = page.getByRole('button', { name: 'Motion playback' });
 
-  await expect(videos).toHaveCount(2);
+  await expect(videos).toHaveCount(6);
   await expect(motionToggle).toHaveAttribute('aria-pressed', 'false');
   await expect.poll(async () => videos.evaluateAll((elements) =>
     elements.every((element) => (element as HTMLVideoElement).paused),
   )).toBe(true);
+});
+
+test('motion-rich case studies expose real clips with poster fallbacks', async ({ page }) => {
+  for (const path of ['/work/ira-vr/', '/work/machine-hunter/', '/work/mysticmojo/']) {
+    await page.goto(path);
+    const video = page.locator('.project-media video').first();
+    await expect(video).toBeVisible();
+    await expect(video).toHaveAttribute('muted', '');
+    await expect(video).toHaveAttribute('playsinline', '');
+    await expect(video).toHaveAttribute('preload', 'none');
+    await expect(video).toHaveAttribute('poster', /\/media\//);
+  }
 });
 
 test('the identity and conversion path remain complete without JavaScript', async ({ browser }) => {
@@ -112,10 +123,10 @@ test('selected-work media stays inside the desktop viewport', async ({ page }) =
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1280);
 });
 
-test('the authored defense systems map remains fully legible instead of being cropped', async ({ page }) => {
-  await page.goto('/');
+test('the authored defense systems map remains fully legible in the Career Atlas', async ({ page }) => {
+  await page.goto('/?career=defense-simulation-systems#career-atlas');
 
-  const fit = await page.locator('.motion-proof__frame--defense-simulation img').evaluate((image) =>
+  const fit = await page.locator('.career-atlas__panel[data-slug="defense-simulation-systems"] img').evaluate((image) =>
     getComputedStyle(image).objectFit,
   );
   expect(fit).toBe('contain');

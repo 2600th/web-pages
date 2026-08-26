@@ -27,7 +27,10 @@ const jsonLd = [{
   datePublished: data.publishedAt.toISOString(),
   dateModified: (data.updatedAt ?? data.publishedAt).toISOString(),
   mainEntityOfPage: `${SITE.url}/notes/${data.slug}/`,
+  url: `${SITE.url}/notes/${data.slug}/`,
+  image: new URL(data.heroMedia?.src ?? '/media/social/career-atlas.webp', SITE.url).toString(),
   author: { '@id': `${SITE.url}/#person` },
+  publisher: { '@id': `${SITE.url}/#person` },
   keywords: data.topics.join(', '),
 }, {
   '@context': 'https://schema.org',
@@ -45,6 +48,9 @@ const jsonLd = [{
   description={data.summary}
   canonical={`/notes/${data.slug}/`}
   image={data.heroMedia?.src}
+  imageAlt={data.heroMedia?.alt ?? `${data.title} by Pranshul Chandhok`}
+  imageWidth={data.heroMedia?.width ?? 1600}
+  imageHeight={data.heroMedia?.height ?? 900}
   ogType="article"
   jsonLd={jsonLd}
 >

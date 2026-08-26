@@ -1,0 +1,161 @@
+---
+const signals = [
+  {
+    kind: 'Institutional recognition',
+    year: '2019',
+    title: 'GreyKernel recognised by DPIIT',
+    detail: 'Listed among entities recognised as startups by India’s Department for Promotion of Industry and Internal Trade.',
+    href: 'https://startuprecognition.dpiit.gov.in/uploads/other/click_here_to_view_entities_recognised_by_dipp_as_startups0621181122.pdf',
+  },
+  {
+    kind: 'Independent coverage',
+    year: '2015',
+    title: 'YourStory profiled GreyKernel',
+    detail: 'An early account of building immersive virtual-reality products in India, before headsets became a mainstream product category.',
+    href: 'https://yourstory.com/2015/08/greykernel',
+  },
+  {
+    kind: 'Executive acknowledgement',
+    year: '2025',
+    title: 'InCo AI team recognised publicly',
+    detail: 'Square Yards leadership highlighted the team and Pranshul’s role after the generative interior-design system shipped.',
+    href: 'https://www.linkedin.com/posts/vivagarwal_kudos-to-our-inco-tech-team-led-by-pranshul-activity-7328317450440126464-2F2v',
+  },
+  {
+    kind: 'Team recognition',
+    year: '2025',
+    title: 'Speed + Execution Award',
+    detail: 'A first-person record of the team award earned while turning difficult AI and design systems into shipped work.',
+    href: 'https://www.linkedin.com/feed/update/urn:li:activity:7315954209030320129/',
+  },
+  {
+    kind: 'Public launch',
+    year: '2025',
+    title: 'Virtual Experience Center',
+    detail: 'A first-person launch record for the physical-plus-digital immersive property experience.',
+    href: 'https://www.linkedin.com/posts/pranshulchandhok_virtualexperiencecenter-immersivetech-activity-7401160661000708096-d3PA',
+  },
+];
+---
+
+<section class="ledger" aria-labelledby="recognition-title">
+  <header class="ledger__header">
+    <p>Recognition, precisely labelled</p>
+    <h2 id="recognition-title">External signals.<br /><em>No trophy theatre.</em></h2>
+    <p class="ledger__intro">A short ledger of independent coverage, institutional recognition, and public acknowledgement. Each entry links to its evidence.</p>
+  </header>
+
+  <ol class="ledger__list">
+    {signals.map((signal, index) => (
+      <li>
+        <a href={signal.href} target="_blank" rel="noreferrer">
+          <span class="ledger__number">{String(index + 1).padStart(2, '0')}</span>
+          <span class="ledger__kind">{signal.kind}</span>
+          <span class="ledger__signal">
+            <strong>{signal.title}</strong>
+            <span>{signal.detail}</span>
+          </span>
+          <time>{signal.year}</time>
+          <span class="ledger__arrow" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .ledger {
+    --ledger-background: #070708;
+    --ledger-foreground: #faf9f5;
+    --ledger-signal: #9bb1ff;
+    padding: clamp(5rem, 10vw, 9rem) var(--page-gutter);
+    color: var(--ledger-foreground);
+    background: var(--ledger-background);
+  }
+
+  .ledger__header {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.55fr) minmax(20rem, 1.2fr) minmax(16rem, 0.75fr);
+    gap: clamp(1.5rem, 4vw, 4.5rem);
+    align-items: end;
+    margin-bottom: clamp(3rem, 7vw, 6rem);
+  }
+
+  .ledger__header > p:first-child,
+  .ledger__kind,
+  .ledger__number,
+  time {
+    color: color-mix(in srgb, var(--ledger-foreground) 58%, transparent);
+    font-size: 0.69rem;
+    font-weight: 650;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .ledger__header > p:first-child { align-self: start; color: var(--ledger-signal); }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(3rem, 6.2vw, 6.2rem);
+    line-height: 0.9;
+  }
+
+  h2 em {
+    color: var(--ledger-signal);
+    font-family: var(--font-serif);
+    font-weight: 420;
+  }
+
+  .ledger__intro {
+    max-width: 33rem;
+    margin: 0;
+    color: color-mix(in srgb, var(--ledger-foreground) 68%, transparent);
+    font-size: 0.82rem;
+  }
+
+  .ledger__list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ledger-foreground) 22%, transparent);
+    list-style: none;
+  }
+
+  .ledger__list a {
+    display: grid;
+    grid-template-columns: 3rem minmax(10rem, 0.6fr) minmax(18rem, 1.5fr) 4rem 1rem;
+    gap: 1.25rem;
+    align-items: start;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--ledger-foreground) 22%, transparent);
+    color: inherit;
+    text-decoration: none;
+    transition: color 180ms var(--ease-out), transform 260ms var(--ease-out);
+  }
+
+  .ledger__list a:hover,
+  .ledger__list a:focus-visible {
+    color: var(--ledger-signal);
+    transform: translateX(0.6rem);
+  }
+
+  .ledger__signal { display: grid; gap: 0.45rem; }
+  .ledger__signal strong { font-size: clamp(1.25rem, 2vw, 2rem); line-height: 1; }
+  .ledger__signal > span { max-width: 60ch; color: color-mix(in srgb, var(--ledger-foreground) 62%, transparent); font-size: 0.77rem; }
+  .ledger__arrow { justify-self: end; }
+
+  @media (max-width: 62rem) {
+    .ledger__header { grid-template-columns: 1fr 1.5fr; }
+    .ledger__intro { grid-column: 2; }
+    .ledger__list a { grid-template-columns: 2.5rem minmax(8rem, 0.5fr) 1.5fr 3rem 1rem; }
+  }
+
+  @media (max-width: 46rem) {
+    .ledger__header { grid-template-columns: 1fr; }
+    .ledger__intro { grid-column: auto; }
+    .ledger__list a { grid-template-columns: 2rem 1fr 2rem; gap: 0.7rem; }
+    .ledger__kind { grid-column: 2; }
+    .ledger__signal { grid-column: 2; }
+    time { grid-column: 3; grid-row: 1; }
+    .ledger__arrow { grid-column: 3; grid-row: 3; }
+  }
+</style>

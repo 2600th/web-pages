@@ -18,6 +18,12 @@ evidenceStatus: public-corroborated
 publicClaims:
   - Pranshul's first-person public career narrative describes SpaceCraft Pro as combining real-time 3D visualization with quote, CAD, and cutout generation.
 engagementPath: operator-advisory
+heroLabel: Editorial illustration of the design-to-production workflow
+heroMedia:
+  src: /media/work/homelane-spacecraft-pro/hero.webp
+  alt: Residential interior transitioning from precise joinery drawings into a finished photoreal room
+  width: 1600
+  height: 900
 sources:
   - label: From Pixels to Metaverse
     url: https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild
@@ -25,9 +31,9 @@ sources:
 seo:
   title: HomeLane SpaceCraft Pro — Design technology work
   description: Pranshul Chandhok's SpaceCraft Pro work connected real-time interior visualization with quotes, CAD, cutouts, and production-oriented design workflows.
-  socialImage: /media/work/blocks-inco-ai/hero.webp
+  socialImage: /media/work/homelane-spacecraft-pro/hero.webp
 ---
 
 SpaceCraft Pro represents a major transition in the career arc. Real-time graphics stopped being only the experience layer and became part of a commercial design and production system.
 
-The page remains concise until additional public media or employer-approved detail is available.
+The illustration is editorial rather than a product screenshot; the public first-person account remains the source for the workflow claim.

@@ -99,7 +99,7 @@ export const TIMELINE: readonly TimelineEntry[] = [
   {
     year: 2023,
     label: 'VP Product & Technology · Square Yards',
-    summary: 'Leading AI and real-time 3D product and engineering across Blocks and the current designesto.ai product line.',
+    summary: 'Leading AI and real-time 3D product and engineering across Blocks and designesto.ai, launching in 2026.',
     href: '/work/blocks-inco-ai/',
     image: '/media/work/blocks-inco-ai/near.webp',
   },

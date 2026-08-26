@@ -14,13 +14,14 @@ function workMediaPaths() {
       const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
       if (!match) throw new Error(`${filename} has no YAML frontmatter`);
       const data = parse(match[1]);
-      return [data.heroMedia?.src, data.out?.media?.src, data.near?.media?.src, data.inside?.media?.src, data.seo.socialImage]
+      const media = [data.heroMedia, data.out?.media, data.near?.media, data.inside?.media].filter(Boolean);
+      return [...media.flatMap((item) => [item.src, item.mp4, item.webm]), data.seo.socialImage]
         .filter((path): path is string => typeof path === 'string');
     });
 }
 
 describe('portfolio media', () => {
-  it('keeps every referenced work image local and traceable to public evidence', () => {
+  it('keeps every referenced work medium local and traceable to evidence', () => {
     const paths = [...new Set(workMediaPaths())];
     expect(paths.length).toBeGreaterThanOrEqual(12);
 
@@ -41,6 +42,15 @@ describe('portfolio media', () => {
         expect(existsSync(absolute)).toBe(true);
         expect(statSync(absolute).size).toBeLessThanOrEqual(2_200_000);
       }
+    }
+  });
+
+  it('gives motion-backed cases local poster and clip derivatives', () => {
+    for (const key of ['ira-vr', 'machine-hunter', 'oye-tippa-run']) {
+      const media = CAREER_MEDIA[key];
+      expect(media, key).toBeDefined();
+      expect(media.derivatives.poster1280).toMatch(/^\/media\//);
+      expect(media.derivatives.clipMp4).toMatch(/^\/media\/.+\.mp4$/);
     }
   });
 });

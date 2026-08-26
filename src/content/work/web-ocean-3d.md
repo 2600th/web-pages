@@ -36,10 +36,11 @@ near:
   contribution: Built the rendering, simulation, asset, interaction, measurement, and reproducible capture systems as a coherent browser product.
   system: Three spectral cascades drive the ocean while depth, refraction, reflection, foam persistence, buoyancy, wake deposition, atmosphere, lens behavior, and quality tiers share a measured real-time pipeline.
   media:
-    src: /media/work/web-ocean-3d/near.webp
-    alt: Web Ocean 3D underwater view beneath the boat and illuminated water surface
-    width: 1600
-    height: 900
+    src: /media/work/web-ocean-3d/clip-poster.webp
+    mp4: /media/work/web-ocean-3d/clip.mp4
+    alt: Live Web Ocean 3D browser capture showing spectral waves moving around the island environment
+    width: 1280
+    height: 720
 inside:
   decisions:
     - Regenerate the complete README gallery from the current renderer so visual evidence cannot silently drift from the code.

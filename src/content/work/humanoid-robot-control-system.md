@@ -20,6 +20,12 @@ publicClaims:
   - The application was filed on 14 February 2019 and the patent was granted on 25 April 2022.
   - Pranshul Chandhok is named as one of four inventors in the supplied patent record.
 engagementPath: speaking-writing
+heroLabel: Editorial illustration based on the public patent record
+heroMedia:
+  src: /media/work/humanoid-robot-control-system/hero.webp
+  alt: Human movement translated into matching humanoid robot joint positions through luminous tracking paths
+  width: 1600
+  height: 900
 sources:
   - label: Indian patent grant record
     url: https://drive.google.com/file/d/1TYDMeuarbxZYe6NbDTrHrJOkrn7kw-Bx/view
@@ -30,4 +36,4 @@ seo:
   socialImage: /media/social/career-atlas.webp
 ---
 
-The patent is a public credential and one point in the wider robotics story. This page publishes the grant facts and inventorship only; personal addresses contained in supporting documents are explicitly excluded.
+The patent is one point in the wider robotics story: body tracking and real-time control moving from immersive systems into an embodied machine.

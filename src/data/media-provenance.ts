@@ -15,6 +15,34 @@ const CAREER_MEDIA_PROVENANCE = Object.fromEntries(
 ) as Record<string, MediaProvenance>;
 
 export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
+  '/media/work/humanoid-robot-control-system/hero.webp': {
+    sourceUrl: 'https://drive.google.com/file/d/1TYDMeuarbxZYe6NbDTrHrJOkrn7kw-Bx/view',
+    status: 'public-corroborated',
+  },
+  '/media/work/homelane-spacecraft-pro/hero.webp': {
+    sourceUrl: 'https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild',
+    status: 'public-corroborated',
+  },
+  '/media/work/enterprise-immersive-systems/hero.webp': {
+    sourceUrl: 'https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild',
+    status: 'public-approved',
+  },
+  '/media/work/ai-native-game-thesis/hero.webp': {
+    sourceUrl: 'https://2600th.substack.com/p/revolutionizing-realms-how-ai-is',
+    status: 'public-approved',
+  },
+  '/media/work/little-wonder/hero.webp': {
+    sourceUrl: 'https://little-wonder.vercel.app/',
+    status: 'public-approved',
+  },
+  '/media/work/blocks-inco-ai/designesto-edit-room-poster.webp': {
+    sourceUrl: 'https://www.designesto.ai/',
+    status: 'approval-enhanced',
+  },
+  '/media/work/blocks-inco-ai/designesto-edit-room.mp4': {
+    sourceUrl: 'https://www.designesto.ai/',
+    status: 'approval-enhanced',
+  },
   ...CAREER_MEDIA_PROVENANCE,
   '/media/social/career-atlas.webp': {
     sourceUrl: 'https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild',
@@ -43,6 +71,34 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
   '/media/work/web-ocean-3d/inside.webp': {
     sourceUrl: 'https://github.com/2600th/web-ocean-3d/blob/main/docs/images/interface.png',
     status: 'public-repository',
+  },
+  '/media/work/web-ocean-3d/clip.mp4': {
+    sourceUrl: 'https://web-ocean-3d.vercel.app/',
+    status: 'public-repository',
+  },
+  '/media/work/web-ocean-3d/clip-poster.webp': {
+    sourceUrl: 'https://web-ocean-3d.vercel.app/',
+    status: 'public-repository',
+  },
+  '/media/career/ira-vr/classroom-loop.mp4': {
+    sourceUrl: 'https://drive.google.com/file/d/1PqYHYxrGMlTcCiCNzSWscu_0m_A5gDLR/view',
+    status: 'public-corroborated',
+  },
+  '/media/career/ira-vr/classroom-poster.webp': {
+    sourceUrl: 'https://drive.google.com/file/d/1PqYHYxrGMlTcCiCNzSWscu_0m_A5gDLR/view',
+    status: 'public-corroborated',
+  },
+  '/media/career/ira-vr/operations-poster.webp': {
+    sourceUrl: 'https://drive.google.com/file/d/1PqYHYxrGMlTcCiCNzSWscu_0m_A5gDLR/view',
+    status: 'public-corroborated',
+  },
+  '/media/career/ira-vr/newton-poster.webp': {
+    sourceUrl: 'https://www.dropbox.com/s/4rxzs9y6gxcyg6d/Newton_23sec.mp4?dl=0',
+    status: 'public-corroborated',
+  },
+  '/media/career/ira-vr/newton-loop.mp4': {
+    sourceUrl: 'https://www.dropbox.com/s/4rxzs9y6gxcyg6d/Newton_23sec.mp4?dl=0',
+    status: 'public-corroborated',
   },
   '/media/work/safed-sagar/hero.webp': {
     sourceUrl: 'https://github.com/2600th/oss-web-3d/blob/main/docs/screenshots/04-cruise.jpg',

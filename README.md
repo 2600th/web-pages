@@ -15,16 +15,23 @@ npm run dev
 
 Career records live in `src/content/work/`. Every record requires a public source, evidence status, era, domain, role, and public claim. Use `recordType: evidence-note` when the available evidence does not justify a full case study; never manufacture depth to fill the template.
 
-Reviewed Drive downloads belong only in the gitignored `_media-source/` directory. The public workflow is:
+Reviewed Drive downloads, public-video masters, browser captures, and generated-image masters belong only in the gitignored `_media-source/` directory. The repository publishes optimized poster frames and short, muted loops—not raw source files.
+
+Every published media path must have an entry in `src/data/media-provenance.ts` or be generated from a record in `src/data/career-media.ts`. Editorial illustrations are labelled as such in the work record; they must never be presented as product screenshots.
+
+The media workflow is:
 
 ```powershell
 npm run media:career:inspect
 npm run media:career:build
 npm run media:social:build
+npm run media:icons:build
 npm run verify
 ```
 
-Only optimized derivatives listed in `src/data/career-media.ts` are published. `internal-reference-only` and `excluded` sources must never enter `public/`. `approval-enhanced` media requires explicit approval before release.
+`scripts/capture-first-party-media.mjs` records a short first-party browser session for later editing. Final clips should be MP4/H.264, muted, short, and configured with `preload="none"`; poster images should be WebP. See [docs/media.md](docs/media.md) for the evidence and performance rules.
+
+The homepage now includes 17 evidence-backed career records, a six-clip motion ledger, precisely labelled recognition and coverage, and the original console preserved at `/lab/terminal/`.
 
 ## Publishing
 

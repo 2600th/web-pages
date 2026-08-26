@@ -15,6 +15,33 @@ test('robots and RSS expose the canonical public site', async ({ request }) => {
   expect((xml.match(/<item>/g) ?? []).length).toBeGreaterThanOrEqual(6);
 });
 
+test('the identity icon set and web manifest are published and linked', async ({ page, request }) => {
+  for (const asset of ['/manifest.webmanifest', '/favicon.svg', '/favicon.ico', '/apple-touch-icon.png']) {
+    const response = await request.get(asset);
+    expect(response.status(), asset).toBe(200);
+    expect((await response.body()).byteLength, asset).toBeGreaterThan(100);
+  }
+
+  await page.goto('/');
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', '/manifest.webmanifest');
+  await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute('href', '/favicon.svg');
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/apple-touch-icon.png');
+});
+
+test('social metadata includes accessible image dimensions and the creator identity', async ({ page }) => {
+  await page.goto('/work/ira-vr/');
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /IRA VR/i);
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', /^\d+$/);
+  await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', /^\d+$/);
+  await expect(page.locator('meta[name="twitter:creator"]')).toHaveAttribute('content', '@2600th');
+});
+
+test('designesto is framed as a 2026 launch, not an already-live product', async ({ page }) => {
+  await page.goto('/work/blocks-inco-ai/');
+  await expect(page.getByText(/launching in 2026/i).first()).toBeVisible();
+  await expect(page.getByText(/live product/i)).toHaveCount(0);
+});
+
 test('global Person data names the verified public identities', async ({ page }) => {
   await page.goto('/');
   const jsonLd = JSON.parse((await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '[]');
@@ -38,7 +65,7 @@ test('Career Atlas remains keyboard-operable and link-complete without JavaScrip
   const noJs = await browser.newContext({ javaScriptEnabled: false });
   const fallback = await noJs.newPage();
   await fallback.goto('/#career-atlas');
-  await expect(fallback.locator('.career-atlas__index a')).toHaveCount(16);
+  await expect(fallback.locator('.career-atlas__index a')).toHaveCount(17);
   await noJs.close();
 });
 
