@@ -30,6 +30,15 @@ describe('career media pipeline', () => {
     ).toBe(true);
   });
 
+  it('keeps the Oye Tippa excerpt inside the reviewed gameplay window', () => {
+    const excerpt = config.recipes.find((recipe) => recipe.key === 'oye-tippa-run');
+
+    expect(excerpt?.startSeconds).toBe(28);
+    expect(excerpt?.posterOffsetSeconds).toBe(3);
+    expect((excerpt?.startSeconds ?? 0) + (excerpt?.posterOffsetSeconds ?? 0)).toBe(31);
+    expect((excerpt?.startSeconds ?? 0) + (excerpt?.durationSeconds ?? 0)).toBeLessThanOrEqual(34);
+  });
+
   it('uses one stable public key per media recipe', () => {
     const keys = config.recipes.map((recipe) => recipe.key);
 

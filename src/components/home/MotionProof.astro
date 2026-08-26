@@ -1,0 +1,317 @@
+---
+const media = [
+  {
+    key: 'machine-hunter',
+    type: 'video',
+    title: 'Machine Hunter',
+    meta: '2017 · Mixed-reality game',
+    href: '/work/machine-hunter/',
+    poster: '/media/career/machine-hunter/poster-1280.webp',
+    mp4: '/media/career/machine-hunter/clip.mp4',
+    webm: '/media/career/machine-hunter/clip.webm',
+    alt: 'First-person bow-and-arrow gameplay from the Machine Hunter virtual-reality game',
+  },
+  {
+    key: 'web-ocean',
+    type: 'image',
+    title: 'Web Ocean 3D',
+    meta: '2026 · Real-time graphics',
+    href: '/work/web-ocean-3d/',
+    src: '/media/work/web-ocean-3d/hero.webp',
+    width: 1600,
+    height: 900,
+    alt: 'A sailing ship crossing a real-time ocean rendered in the browser',
+  },
+  {
+    key: 'kinema',
+    type: 'image',
+    title: 'Kinema',
+    meta: '2026 · Gameplay prototyping',
+    href: '/work/kinema/',
+    src: '/media/work/kinema/inside.webp',
+    width: 1600,
+    height: 900,
+    alt: 'Colorful browser-game arena showing a character, physics blocks, and collectibles',
+  },
+  {
+    key: 'safed-sagar',
+    type: 'image',
+    title: 'Safed Sagar',
+    meta: '2026 · Browser flight experiment',
+    href: '/work/safed-sagar/',
+    src: '/media/work/safed-sagar/hero.webp',
+    width: 1600,
+    height: 900,
+    alt: 'A fighter aircraft flying over a broad snow-covered mountain range',
+  },
+  {
+    key: 'oye-tippa',
+    type: 'video',
+    title: 'Oye Tippa Run',
+    meta: '2018 · MysticMojo mobile game',
+    href: '/work/mysticmojo/',
+    poster: '/media/career/oye-tippa-run/poster-1280.webp',
+    mp4: '/media/career/oye-tippa-run/clip.mp4',
+    alt: 'Oye Tippa Run character collecting coins across a colorful Indian city',
+  },
+  {
+    key: 'ira-vr',
+    type: 'image',
+    title: 'IRA VR',
+    meta: '2016—2020 · Immersive learning',
+    href: '/work/ira-vr/',
+    src: '/media/career/ira-vr/poster-1280.webp',
+    width: 1280,
+    height: 826,
+    alt: 'An immersive biology learning module presented inside a panoramic landscape',
+  },
+] as const;
+---
+
+<section class="motion-proof" id="proof-in-motion" aria-labelledby="motion-proof-title" data-motion-proof>
+  <header class="motion-proof__header">
+    <p class="motion-proof__kicker">Proof in motion · Selected field notes</p>
+    <h2 id="motion-proof-title">Systems you can see moving.</h2>
+    <div class="motion-proof__intro">
+      <p>Games, simulation, immersive learning, and browser-native graphics—shown as the work itself, not a category label.</p>
+      <button type="button" data-proof-motion-toggle aria-label="Motion playback" aria-pressed="false" hidden>
+        <span>Motion</span>
+        <span aria-hidden="true" data-proof-motion-status>Off</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="motion-proof__reel">
+    {media.map((item) => (
+      <figure class:list={['motion-proof__frame', `motion-proof__frame--${item.key}`]}>
+        <a href={item.href} aria-label={`View ${item.title} case study`}>
+          {item.type === 'video' ? (
+            <video
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster={item.poster}
+              data-motion-proof-video
+              aria-label={item.alt}
+            >
+              {'webm' in item && item.webm && <source src={item.webm} type="video/webm" />}
+              <source src={item.mp4} type="video/mp4" />
+            </video>
+          ) : (
+            <img
+              src={item.src}
+              alt={item.alt}
+              width={item.width}
+              height={item.height}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          <figcaption>
+            <strong>{item.title}</strong>
+            <span>{item.meta}</span>
+          </figcaption>
+        </a>
+      </figure>
+    ))}
+  </div>
+
+  <footer class="motion-proof__footer">
+    <p>Footage is muted, loops only while this section is visible, and resolves to still frames when reduced motion is requested.</p>
+    <a href="/work/">Open the complete work archive <span aria-hidden="true">↗</span></a>
+  </footer>
+</section>
+
+<script>
+  import { initMotionProof } from '../../scripts/motion-proof';
+  initMotionProof();
+  document.addEventListener('astro:after-swap', initMotionProof);
+</script>
+
+<style>
+  .motion-proof {
+    --proof-paper: #faf9f5;
+    --proof-ink: #090909;
+    position: relative;
+    padding: clamp(5.5rem, 10vw, 9rem) var(--page-gutter) clamp(4rem, 8vw, 7rem);
+    overflow: clip;
+    background: var(--proof-ink);
+    color: var(--proof-paper);
+  }
+
+  .motion-proof__header {
+    display: grid;
+    grid-template-columns: 0.55fr 1.5fr 0.72fr;
+    gap: clamp(1.5rem, 4vw, 5rem);
+    align-items: end;
+    margin-bottom: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  .motion-proof__kicker {
+    align-self: start;
+    margin: 0;
+    color: #86a0ff;
+    font-size: 0.76rem;
+    font-weight: 760;
+  }
+
+  .motion-proof h2 {
+    max-width: 10ch;
+    margin: 0;
+    font-size: clamp(3.4rem, 7.5vw, 6rem);
+  }
+
+  .motion-proof__intro {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .motion-proof__intro p {
+    max-width: 34ch;
+    margin: 0;
+    color: #b8b7b0;
+    font-size: 0.9rem;
+  }
+
+  .motion-proof__intro button {
+    width: max-content;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid rgba(250, 249, 245, 0.35);
+    background: transparent;
+    color: var(--proof-paper);
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 720;
+  }
+
+  .motion-proof__intro button[hidden] { display: none; }
+  .motion-proof__intro button:not([hidden]) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+  .motion-proof__intro button [data-proof-motion-status] { color: #aebeff; }
+
+  .motion-proof__intro button:hover { border-color: #86a0ff; color: #aebeff; }
+
+  .motion-proof__reel {
+    display: grid;
+    min-height: min(122vw, 112rem);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: repeat(14, minmax(4rem, 1fr));
+    gap: clamp(0.7rem, 1.4vw, 1.35rem);
+  }
+
+  .motion-proof__frame {
+    position: relative;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    background: #171717;
+    isolation: isolate;
+  }
+
+  .motion-proof__frame > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+  }
+
+  .motion-proof__frame::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, transparent 54%, rgba(9, 9, 9, 0.86));
+    content: '';
+    pointer-events: none;
+  }
+
+  .motion-proof__frame img,
+  .motion-proof__frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 900ms var(--ease-out), filter 600ms var(--ease-out);
+  }
+
+  .motion-proof__frame:hover img,
+  .motion-proof__frame:hover video { transform: scale(1.025); }
+
+  .motion-proof__frame figcaption {
+    position: absolute;
+    right: clamp(0.8rem, 2vw, 1.4rem);
+    bottom: clamp(0.8rem, 2vw, 1.4rem);
+    left: clamp(0.8rem, 2vw, 1.4rem);
+    z-index: 2;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--proof-paper);
+  }
+
+  .motion-proof__frame figcaption strong { font-size: clamp(1rem, 1.7vw, 1.5rem); }
+  .motion-proof__frame figcaption span { max-width: 20ch; color: #d2d1cb; font-size: 0.67rem; text-align: right; }
+
+  .motion-proof__frame--machine-hunter { grid-area: 1 / 1 / 5 / 9; }
+  .motion-proof__frame--web-ocean { grid-area: 1 / 9 / 4 / 13; }
+  .motion-proof__frame--kinema { grid-area: 5 / 3 / 9 / 13; }
+  .motion-proof__frame--safed-sagar { grid-area: 9 / 1 / 12 / 8; }
+  .motion-proof__frame--ira-vr { grid-area: 9 / 8 / 12 / 13; }
+  .motion-proof__frame--oye-tippa { grid-area: 12 / 1 / 15 / 13; }
+
+  .motion-proof__footer {
+    display: flex;
+    padding-top: 1.2rem;
+    justify-content: space-between;
+    gap: 2rem;
+    border-top: 1px solid rgba(250, 249, 245, 0.22);
+    color: #b8b7b0;
+    font-size: 0.7rem;
+  }
+
+  .motion-proof__footer p { max-width: 62ch; margin: 0; }
+  .motion-proof__footer a { color: var(--proof-paper); font-weight: 720; }
+
+  @media (max-width: 64rem) {
+    .motion-proof__header { grid-template-columns: 1fr 2fr; }
+    .motion-proof__intro { grid-column: 2; }
+    .motion-proof__reel { min-height: 110rem; }
+    .motion-proof__frame--machine-hunter { grid-area: 1 / 1 / 4 / 13; }
+    .motion-proof__frame--web-ocean { grid-area: 4 / 1 / 7 / 7; }
+    .motion-proof__frame--kinema { grid-area: 4 / 7 / 8 / 13; }
+    .motion-proof__frame--safed-sagar { grid-area: 7 / 1 / 10 / 7; }
+    .motion-proof__frame--ira-vr { grid-area: 8 / 7 / 10 / 13; }
+    .motion-proof__frame--oye-tippa { grid-area: 10 / 1 / 13 / 13; }
+  }
+
+  @media (max-width: 42rem) {
+    .motion-proof { padding-inline: 0; }
+    .motion-proof__header,
+    .motion-proof__footer { margin-inline: var(--page-gutter); }
+    .motion-proof__header { grid-template-columns: 1fr; }
+    .motion-proof__intro { grid-column: auto; }
+    .motion-proof h2 { font-size: clamp(3rem, 15vw, 4.7rem); }
+    .motion-proof__reel {
+      min-height: 0;
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      gap: 0.7rem;
+    }
+    .motion-proof__frame { min-height: 21rem; grid-area: auto; }
+    .motion-proof__frame--web-ocean,
+    .motion-proof__frame--ira-vr { min-height: 17rem; }
+    .motion-proof__footer { align-items: start; flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .motion-proof__frame img,
+    .motion-proof__frame video { transition: none; }
+    .motion-proof__frame:hover img,
+    .motion-proof__frame:hover video { transform: none; }
+  }
+</style>

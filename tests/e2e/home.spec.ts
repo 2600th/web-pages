@@ -18,6 +18,54 @@ test('the homepage names four compound practice pillars', async ({ page }) => {
   }
 });
 
+test('Proof in motion leads with authentic media and responsible video', async ({ page }) => {
+  await page.goto('/#proof-in-motion');
+  const proof = page.locator('#proof-in-motion');
+
+  await expect(proof.getByRole('heading', { level: 2, name: /Systems you can see moving/i })).toBeVisible();
+  await expect(proof.locator('figure')).toHaveCount(6);
+  await expect(proof.locator('figure > a')).toHaveCount(6);
+  await expect(proof.locator('img')).toHaveCount(4);
+  await expect(proof.locator('video')).toHaveCount(2);
+
+  for (const video of await proof.locator('video').all()) {
+    await expect(video).toHaveAttribute('muted', '');
+    await expect(video).toHaveAttribute('loop', '');
+    await expect(video).toHaveAttribute('playsinline', '');
+    await expect(video).toHaveAttribute('preload', 'none');
+    await expect(video).toHaveAttribute('poster', /\/media\/career\//);
+  }
+
+  const leadingVideo = proof.locator('video').first();
+  const trailingVideo = proof.locator('video').last();
+  await leadingVideo.scrollIntoViewIfNeeded();
+  await expect.poll(async () => leadingVideo.evaluate((video) => !(video as HTMLVideoElement).paused)).toBe(true);
+  await expect.poll(async () => trailingVideo.evaluate((video) => (video as HTMLVideoElement).paused)).toBe(true);
+
+  const motionToggle = proof.getByRole('button', { name: 'Motion playback' });
+  await expect(motionToggle).toHaveAttribute('aria-pressed', 'true');
+  await motionToggle.click();
+  await expect(motionToggle).toHaveAttribute('aria-pressed', 'false');
+  await expect.poll(async () => proof.locator('video').evaluateAll((elements) =>
+    elements.every((element) => (element as HTMLVideoElement).paused),
+  )).toBe(true);
+
+  await expect(proof.getByText(/Footage is muted/i)).toBeVisible();
+});
+
+test('Proof in motion falls back to still frames when reduced motion is requested', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#proof-in-motion');
+  const videos = page.locator('#proof-in-motion video');
+  const motionToggle = page.getByRole('button', { name: 'Motion playback' });
+
+  await expect(videos).toHaveCount(2);
+  await expect(motionToggle).toHaveAttribute('aria-pressed', 'false');
+  await expect.poll(async () => videos.evaluateAll((elements) =>
+    elements.every((element) => (element as HTMLVideoElement).paused),
+  )).toBe(true);
+});
+
 test('the identity and conversion path remain complete without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

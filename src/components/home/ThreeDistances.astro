@@ -70,7 +70,7 @@ const distances = [
         </header>
 
         <section class="distance-panel" data-distance-panel="out" aria-labelledby={`${project.data.slug}-out-title`}>
-          <figure>
+          <figure style={`--media-ratio: ${project.data.out.media.width} / ${project.data.out.media.height};`}>
             <img src={project.data.out.media.src} alt={project.data.out.media.alt} width={project.data.out.media.width} height={project.data.out.media.height} loading="lazy" />
             <figcaption>OUT · What exists and why it matters</figcaption>
           </figure>
@@ -86,7 +86,7 @@ const distances = [
         </section>
 
         <section class="distance-panel" data-distance-panel="near" aria-labelledby={`${project.data.slug}-near-title`}>
-          <figure>
+          <figure style={`--media-ratio: ${project.data.near.media.width} / ${project.data.near.media.height};`}>
             <img src={project.data.near.media.src} alt={project.data.near.media.alt} width={project.data.near.media.width} height={project.data.near.media.height} loading="lazy" />
             <figcaption>NEAR · Product experience and system boundary</figcaption>
           </figure>
@@ -102,7 +102,7 @@ const distances = [
         </section>
 
         <section class="distance-panel" data-distance-panel="inside" aria-labelledby={`${project.data.slug}-inside-title`}>
-          <figure>
+          <figure style={`--media-ratio: ${project.data.inside.media.width} / ${project.data.inside.media.height};`}>
             <img src={project.data.inside.media.src} alt={project.data.inside.media.alt} width={project.data.inside.media.width} height={project.data.inside.media.height} loading="lazy" />
             <figcaption>INSIDE · Decisions, constraints, evidence</figcaption>
           </figure>
@@ -267,30 +267,48 @@ const distances = [
 
   .distance-panel {
     display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(20rem, 0.8fr);
-    gap: clamp(2rem, 4vw, 5rem);
-    align-items: start;
+    grid-template-columns: minmax(0, 2.2fr) minmax(18rem, 0.72fr);
+    gap: 0;
+    align-items: stretch;
     padding-bottom: 4rem;
   }
 
   [data-enhanced='true'] .distance-panel[hidden] { display: none; }
 
-  .distance-panel figure { margin: 0; }
+  .distance-panel figure {
+    position: relative;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    aspect-ratio: var(--media-ratio);
+  }
 
   .distance-panel img {
     width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
     background: #171717;
   }
 
   .distance-panel figcaption {
-    margin-top: 0.7rem;
-    color: var(--work-muted);
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    margin: 0;
+    padding-top: 3rem;
+    background: linear-gradient(180deg, transparent, rgba(9, 9, 9, 0.76));
+    color: #d2d1cb;
     font-size: 0.67rem;
   }
 
-  .distance-panel__copy { padding-top: 0.15rem; }
+  .distance-panel__copy {
+    display: flex;
+    padding: clamp(1.5rem, 3vw, 2.8rem);
+    flex-direction: column;
+    justify-content: center;
+    background: #11110f;
+  }
 
   .distance-panel__marker {
     margin-bottom: 1rem;
@@ -404,5 +422,7 @@ const distances = [
       min-width: 33.333%;
       min-height: 4.4rem;
     }
+
   }
+
 </style>

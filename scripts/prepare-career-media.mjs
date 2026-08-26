@@ -109,7 +109,7 @@ async function writeImageOutputs(recipe, inputPath, outputDir) {
 async function writeVideoOutputs(recipe, inputPath, outputDir) {
   const framePath = join(outputDir, '_poster.png');
   await run(ffmpegPath, [
-    '-y', '-ss', String(recipe.startSeconds + Math.min(1.5, recipe.durationSeconds / 2)),
+    '-y', '-ss', String(recipe.startSeconds + (recipe.posterOffsetSeconds ?? Math.min(1.5, recipe.durationSeconds / 2))),
     '-i', inputPath, '-frames:v', '1', framePath,
   ]);
 
