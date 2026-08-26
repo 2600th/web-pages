@@ -22,3 +22,17 @@ test('the identity and conversion path remain complete without JavaScript', asyn
   await expect(page.getByRole('link', { name: 'Kinema' }).first()).toHaveAttribute('href', '/work/kinema/');
   await context.close();
 });
+
+test('Three Distances changes real content and keeps the state in the URL', async ({ page }) => {
+  await page.goto('/?work=kinema&distance=out#selected-work');
+  const work = page.locator('#selected-work');
+
+  await expect(work.getByRole('heading', { level: 3, name: 'Kinema' })).toBeVisible();
+  await work.getByRole('button', { name: /NEAR/ }).click();
+  await expect(page).toHaveURL(/work=kinema&distance=near/);
+  await expect(work.getByText(/Players move through a procedural showcase/)).toBeVisible();
+
+  await work.getByRole('link', { name: /Web Ocean 3D/ }).click();
+  await expect(page).toHaveURL(/work=web-ocean-3d&distance=near/);
+  await expect(work.getByRole('heading', { level: 3, name: 'Web Ocean 3D' })).toBeVisible();
+});
