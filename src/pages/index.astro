@@ -2,13 +2,14 @@
 import CredibilityStatement from '../components/home/CredibilityStatement.astro';
 import ConversationClose from '../components/home/ConversationClose.astro';
 import LivingWordmark from '../components/home/LivingWordmark.astro';
-import MotionStudy from '../components/home/MotionStudy.astro';
+import CareerAtlas from '../components/home/CareerAtlas.astro';
 import RecentThinking from '../components/home/RecentThinking.astro';
 import ThreeDistances from '../components/home/ThreeDistances.astro';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const featuredWork = await getCollection('work', ({ data }) => data.featuredOrder > 0);
+const careerWork = await getCollection('work');
 const notes = await getCollection('notes', ({ data }) => !data.draft);
 ---
 
@@ -24,7 +25,7 @@ FORM: Living Wordmark leads, Three Distances structures proof, and Motion Study 
   <LivingWordmark />
   <CredibilityStatement />
   <ThreeDistances work={featuredWork} />
-  <MotionStudy />
+  <CareerAtlas work={careerWork} />
   <RecentThinking notes={notes} />
   <ConversationClose />
 </BaseLayout>
