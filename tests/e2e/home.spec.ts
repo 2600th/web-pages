@@ -4,9 +4,18 @@ test('first viewport identifies Pranshul, the work, and the next action', async 
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Pranshul Chandhok' })).toBeVisible();
-  await expect(page.getByText(/turn emerging AI and spatial technologies into products/i)).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Start a conversation' }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: 'See the work' })).toBeVisible();
+  await expect(page.locator('.hero__positioning').getByText(/fifteen years.*games.*AI/i)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Discuss an opportunity' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Explore the Career Atlas' })).toHaveAttribute('href', '#career-atlas');
+});
+
+test('the homepage names four compound practice pillars', async ({ page }) => {
+  await page.goto('/#selected-work');
+  const pillars = page.getByRole('navigation', { name: 'Compound practice pillars' });
+
+  for (const label of ['Production AI', 'Design Technology', 'Immersive Systems', 'Browser-native Lab']) {
+    await expect(pillars.getByRole('link', { name: new RegExp(`^${label}`, 'i') })).toBeVisible();
+  }
 });
 
 test('the identity and conversion path remain complete without JavaScript', async ({ browser }) => {
@@ -15,11 +24,9 @@ test('the identity and conversion path remain complete without JavaScript', asyn
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Pranshul Chandhok' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Start a conversation' }).first()).toHaveAttribute(
-    'href',
-    'mailto:2600th@gmail.com',
-  );
-  await expect(page.getByRole('link', { name: 'Kinema' }).first()).toHaveAttribute('href', '/work/kinema/');
+  await expect(page.getByRole('link', { name: 'Discuss an opportunity' }).first()).toHaveAttribute('href', /mailto:2600th@gmail.com/);
+  await expect(page.locator('.career-atlas__index').getByRole('link', { name: 'Kinema' })).toHaveAttribute('href', '/work/kinema/');
+  await expect(page.getByRole('link', { name: /The Brutal Spy/ })).toHaveAttribute('href', '/work/the-brutal-spy/');
   await context.close();
 });
 

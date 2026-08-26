@@ -30,10 +30,24 @@ export const SOCIAL_LINKS = [
 ] as const;
 
 export const CONVERSATION_PROMPTS = [
-  'Advisory and difficult 0-to-1 product problems',
-  'Product and technology leadership',
-  'AI, 3D, spatial, and interactive systems collaboration',
-  'Speaking, writing, or a technical conversation',
+  {
+    key: 'operator-advisory',
+    label: 'Operator & advisory',
+    detail: 'A difficult 0-to-1 product, operating model, or technology decision.',
+    subject: 'Operator or advisory opportunity',
+  },
+  {
+    key: 'product-collaboration',
+    label: 'Product collaboration',
+    detail: 'AI, real-time 3D, spatial, interactive, or design-system work that needs a hands-on partner.',
+    subject: 'Product collaboration',
+  },
+  {
+    key: 'speaking-writing',
+    label: 'Speaking & writing',
+    detail: 'A talk, workshop, interview, publication, or serious technical conversation.',
+    subject: 'Speaking or writing invitation',
+  },
 ] as const;
 
 export type TimelineEntry = {

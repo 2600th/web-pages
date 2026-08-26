@@ -6,20 +6,21 @@ import { CONTACT_EMAIL, CONVERSATION_PROMPTS } from '../../data/site';
   <p class="conversation-close__kicker">A useful first message</p>
   <h2 id="conversation-title">Bring me the problem that won’t stay in one discipline.</h2>
   <div class="conversation-close__details">
-    <p>
-      Tell me what is difficult, what has already been tried, and what a useful outcome would change. I’m based in Gurugram and work across product, technology, and implementation.
-    </p>
-    <ul>
-      {CONVERSATION_PROMPTS.map((prompt) => <li>{prompt}</li>)}
-    </ul>
+    <p>Tell me what is difficult, what has already been tried, and what a useful outcome would change. I’m based in Gurugram and work across product, technology, and implementation.</p>
+    <p>Choose the closest context. Each path opens a direct email with enough signal to start well.</p>
   </div>
   <div class="conversation-close__action">
-    <a href={`mailto:${CONTACT_EMAIL}`} data-event="contact_start" data-event-context="conversation_close">
-      <span>Start a conversation</span>
-      <strong>{CONTACT_EMAIL}</strong>
-      <span aria-hidden="true">↗</span>
-    </a>
-    <a href="https://www.linkedin.com/in/pranshulchandhok/" target="_blank" rel="noopener">Or connect on LinkedIn</a>
+    <ul>
+      {CONVERSATION_PROMPTS.map((prompt) => (
+        <li>
+          <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(prompt.subject)}`} data-event="contact_start" data-event-context={prompt.key}>
+            <span><strong>{prompt.label}</strong><small>{prompt.detail}</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> · <a href="https://www.linkedin.com/in/pranshulchandhok/" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </section>
 
@@ -32,88 +33,34 @@ import { CONTACT_EMAIL, CONVERSATION_PROMPTS } from '../../data/site';
     background: var(--cobalt);
     color: white;
   }
-
-  .conversation-close__kicker {
-    font-size: 0.75rem;
-    font-weight: 720;
-  }
-
-  h2 {
-    max-width: 12ch;
-    margin: 0;
-    font-size: clamp(3.2rem, 7vw, 6rem);
-  }
-
-  .conversation-close__details {
-    padding-top: 0.35rem;
-    font-size: 0.86rem;
-  }
-
+  .conversation-close__kicker { font-size: 0.75rem; font-weight: 720; }
+  h2 { max-width: 12ch; margin: 0; font-size: clamp(3.2rem, 7vw, 6rem); }
+  .conversation-close__details { padding-top: 0.35rem; font-size: 0.86rem; }
   .conversation-close__details p { max-width: 34ch; }
-
-  .conversation-close__details ul {
-    margin: 2rem 0 0;
-    padding: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
-    list-style: none;
-  }
-
-  .conversation-close__details li {
-    padding: 0.7rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    font-size: 0.72rem;
-  }
-
-  .conversation-close__action {
-    grid-column: 2 / -1;
-    margin-top: clamp(3rem, 8vw, 7rem);
-  }
-
-  .conversation-close__action > a:first-child {
-    display: grid;
-    padding: 1.25rem 0;
-    grid-template-columns: 1fr auto auto;
-    gap: 2rem;
+  .conversation-close__action { grid-column: 2 / -1; margin-top: clamp(3rem, 8vw, 7rem); }
+  .conversation-close__action ul { margin: 0; padding: 0; list-style: none; }
+  .conversation-close__action li { border-top: 1px solid white; }
+  .conversation-close__action li:last-child { border-bottom: 1px solid white; }
+  .conversation-close__action li > a {
+    display: flex;
+    min-height: 6rem;
+    padding: 1.15rem 0;
     align-items: center;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-    font-size: clamp(1rem, 2vw, 1.5rem);
+    justify-content: space-between;
+    gap: 2rem;
     text-decoration: none;
     transition: transform 260ms var(--ease-out), background-color 180ms var(--ease-out);
   }
-
-  .conversation-close__action > a:first-child:hover {
-    background: white;
-    color: var(--cobalt);
-    transform: translateX(0.5rem);
-  }
-
-  .conversation-close__action > a:last-child {
-    display: inline-block;
-    margin-top: 1rem;
-    font-size: 0.74rem;
-  }
-
+  .conversation-close__action li > a:hover { background: white; color: var(--cobalt); transform: translateX(0.5rem); }
+  .conversation-close__action li strong,
+  .conversation-close__action li small { display: block; }
+  .conversation-close__action li strong { font-size: clamp(1rem, 2vw, 1.5rem); }
+  .conversation-close__action li small { max-width: 62ch; margin-top: 0.35rem; font-size: 0.72rem; font-weight: 520; }
+  .conversation-close__action > p { margin-top: 1rem; font-size: 0.74rem; }
   @media (max-width: 54rem) {
     .conversation-close { grid-template-columns: 1fr; }
     .conversation-close__details { max-width: 38rem; }
     .conversation-close__action { grid-column: 1; }
   }
-
-  @media (max-width: 38rem) {
-    .conversation-close__action > a:first-child {
-      grid-template-columns: 1fr auto;
-    }
-
-    .conversation-close__action strong {
-      grid-column: 1;
-      grid-row: 2;
-      font-size: 0.78rem;
-    }
-
-    .conversation-close__action > a:first-child > span:last-child {
-      grid-column: 2;
-      grid-row: 1 / 3;
-    }
-  }
+  @media (max-width: 38rem) { .conversation-close__action li > a { min-height: 7rem; } }
 </style>

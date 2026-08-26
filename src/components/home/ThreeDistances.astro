@@ -30,6 +30,13 @@ const distances = [
     </p>
   </header>
 
+  <nav class="practice-index" aria-label="Compound practice pillars">
+    <a href="/?work=blocks-inco-ai&distance=out#selected-work"><strong>Production AI</strong><span>Blocks + INCO-AI</span></a>
+    <a href="/?work=blocks-inco-ai&distance=inside#selected-work"><strong>Design Technology</strong><span>Workflow, catalog, visualization</span></a>
+    <a href="/work/ira-vr/"><strong>Immersive Systems</strong><span>XR, simulation, robotics</span></a>
+    <a href="/?work=kinema&distance=out#selected-work"><strong>Browser-native Lab</strong><span>Games, graphics, interaction</span></a>
+  </nav>
+
   <nav class="project-index" aria-label="Selected projects">
     {projects.map((project, index) => (
       <a
@@ -157,10 +164,33 @@ const distances = [
     font-size: 0.92rem;
   }
 
-  .project-index {
+  .practice-index {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     margin-top: clamp(3rem, 6vw, 5.5rem);
+    border-block: 1px solid rgba(250, 249, 245, 0.22);
+  }
+
+  .practice-index a {
+    display: grid;
+    min-height: 6.5rem;
+    padding: 1rem;
+    align-content: space-between;
+    border-right: 1px solid rgba(250, 249, 245, 0.22);
+    color: var(--work-text);
+    text-decoration: none;
+  }
+
+  .practice-index a:last-child { border-right: 0; }
+  .practice-index strong { font-size: clamp(1rem, 1.5vw, 1.35rem); }
+  .practice-index span { color: var(--work-muted); font-size: 0.68rem; }
+  .practice-index a:hover { background: var(--cobalt); }
+  .practice-index a:hover span { color: white; }
+
+  .project-index {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 1rem;
     border-top: 1px solid rgba(250, 249, 245, 0.22);
     border-bottom: 1px solid rgba(250, 249, 245, 0.22);
   }
@@ -327,6 +357,10 @@ const distances = [
   }
 
   @media (max-width: 62rem) {
+    .practice-index { grid-template-columns: repeat(2, 1fr); }
+    .practice-index a:nth-child(-n + 2) { border-bottom: 1px solid rgba(250, 249, 245, 0.22); }
+    .practice-index a:nth-child(2) { border-right: 0; }
+
     .project-index { grid-template-columns: repeat(2, 1fr); }
     .project-index a:nth-child(2) { border-right: 0; }
     .project-index a:nth-child(-n + 2) { border-bottom: 1px solid rgba(250, 249, 245, 0.22); }
@@ -343,6 +377,9 @@ const distances = [
   @media (max-width: 42rem) {
     .work-field__header { grid-template-columns: 1fr; }
     .work-field__intro { margin-top: 0.5rem; }
+
+    .practice-index { display: flex; overflow-x: auto; }
+    .practice-index a { min-width: 13rem; border-bottom: 0 !important; }
 
     .project-index {
       display: flex;
