@@ -1,0 +1,77 @@
+<section class="credibility" aria-labelledby="credibility-title">
+  <p class="credibility__kicker">A compound practice</p>
+  <h2 id="credibility-title">
+    Fifteen-plus years in real-time systems.<br />Now applied to production AI.
+  </h2>
+  <div class="credibility__body">
+    <p>
+      I work across product strategy and implementation: generative AI, agentic workflows, evaluation and reliability,
+      game systems, graphics, XR, and browser-native 3D.
+    </p>
+    <p class="credibility__sources">
+      Start with <a href="/work/kinema/">Kinema</a>, the
+      <a href="/work/web-ocean-3d/">Web Ocean</a>, or the public
+      <a href="/work/blocks-inco-ai/">Blocks + INCO-AI</a> case.
+    </p>
+  </div>
+</section>
+
+<style>
+  .credibility {
+    display: grid;
+    grid-template-columns: 0.65fr 2.15fr 1.15fr;
+    gap: clamp(1.5rem, 4vw, 4.5rem);
+    align-items: start;
+    padding: clamp(5rem, 10vw, 9rem) var(--page-gutter);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .credibility__kicker {
+    color: var(--cobalt);
+    font-size: 0.76rem;
+    font-weight: 720;
+  }
+
+  h2 {
+    max-width: 14ch;
+    margin: 0;
+    font-size: clamp(2.65rem, 5.7vw, 5.7rem);
+    font-weight: 740;
+    line-height: 0.92;
+  }
+
+  .credibility__body { padding-top: 0.35rem; }
+  .credibility__body p { max-width: 36ch; }
+
+  .credibility__sources {
+    margin-top: 2.25rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 54rem) {
+    .credibility {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
+
+    h2 { max-width: 16ch; }
+
+    .credibility__body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .credibility__sources { margin-top: 0; }
+  }
+
+  @media (max-width: 38rem) {
+    .credibility__body {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .credibility__sources { margin-top: 1rem; }
+  }
+</style>

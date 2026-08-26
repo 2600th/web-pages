@@ -1,0 +1,311 @@
+---
+import ThemeControl from '../shared/ThemeControl.astro';
+
+const firstName = 'PRANSHUL'.split('');
+const lastName = 'CHANDHOK'.split('');
+
+const mediaClasses: Record<string, string> = {
+  'first-2': 'letter--ocean',
+  'first-5': 'letter--kinema',
+  'last-0': 'letter--safed',
+  'last-4': 'letter--blocks',
+};
+---
+
+<section class="hero" aria-labelledby="hero-title" data-wordmark>
+  <div class="hero__positioning">
+    <p class="hero__role">Product & technology operator · builder · advisor</p>
+    <p>I turn emerging AI and spatial technologies into products people can actually use.</p>
+  </div>
+
+  <h1 class="living-wordmark" id="hero-title" aria-label="Pranshul Chandhok">
+    <span class="living-wordmark__line" aria-hidden="true">
+      {firstName.map((letter, index) => (
+        <span class:list={['living-letter', mediaClasses[`first-${index}`]]}>{letter}</span>
+      ))}
+    </span>
+    <span class="living-wordmark__line living-wordmark__line--last" aria-hidden="true">
+      {lastName.map((letter, index) => (
+        <span class:list={['living-letter', mediaClasses[`last-${index}`], letter === 'O' && 'living-letter--eclipse']}>
+          {letter}
+          {letter === 'O' && <span class="living-letter__control"><ThemeControl /></span>}
+        </span>
+      ))}
+    </span>
+  </h1>
+
+  <div class="hero__actions">
+    <a class="hero__contact" href="mailto:2600th@gmail.com" data-event="contact_start" data-event-context="hero">
+      <span>Start a conversation</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+    <a class="hero__work" href="#selected-work">See the work <span aria-hidden="true">↓</span></a>
+  </div>
+
+  <div class="hero__index" aria-label="Selected disciplines">
+    <span>AI products</span>
+    <span>Real-time 3D</span>
+    <span>0→1 systems</span>
+  </div>
+
+  <p class="hero__signature" aria-label="2600th experimental identity">2600<sup>th</sup></p>
+</section>
+
+<script>
+  import { initLivingWordmark } from '../../scripts/wordmark';
+  initLivingWordmark();
+  document.addEventListener('astro:after-swap', initLivingWordmark);
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: calc(100svh - var(--header-height));
+    padding: clamp(1.25rem, 3vw, 2.75rem) var(--page-gutter) 1.25rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    isolation: isolate;
+  }
+
+  .hero::before {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: linear-gradient(90deg, transparent 0 74%, color-mix(in srgb, var(--cobalt) 8%, transparent) 74% 100%);
+    content: '';
+    opacity: 0.8;
+  }
+
+  .hero__positioning {
+    position: absolute;
+    top: clamp(1.5rem, 5vw, 4.75rem);
+    right: var(--page-gutter);
+    z-index: 3;
+    width: min(23rem, 36vw);
+  }
+
+  .hero__positioning p {
+    margin-bottom: 0.7rem;
+    font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+    line-height: 1.25;
+  }
+
+  .hero__positioning .hero__role {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 680;
+  }
+
+  .living-wordmark {
+    position: absolute;
+    right: -0.018em;
+    bottom: clamp(7rem, 14vh, 10rem);
+    left: -0.018em;
+    display: flex;
+    max-width: none;
+    margin: 0;
+    flex-direction: column;
+    font-size: clamp(4.65rem, 13.5vw, 13.25rem);
+    font-stretch: 90%;
+    font-weight: 820;
+    letter-spacing: -0.038em;
+    line-height: 0.73;
+    white-space: nowrap;
+  }
+
+  .living-wordmark__line {
+    display: flex;
+    justify-content: flex-start;
+    transform: translateX(-0.014em);
+  }
+
+  .living-wordmark__line--last {
+    justify-content: flex-end;
+    transform: translateX(0.014em);
+  }
+
+  .living-letter {
+    position: relative;
+    display: inline-block;
+    color: var(--text);
+    font-variation-settings: 'wdth' var(--letter-wdth, 96), 'wght' 820, 'opsz' 72, 'ital' 0;
+    transition: font-variation-settings 420ms var(--ease-out), filter 420ms var(--ease-out);
+  }
+
+  .letter--ocean,
+  .letter--kinema,
+  .letter--safed,
+  .letter--blocks {
+    background-position: center;
+    background-size: cover;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: saturate(1.06) contrast(1.02);
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--text) 20%, transparent);
+  }
+
+  .letter--ocean { background-image: url('/media/work/web-ocean-3d/hero.webp'); }
+  .letter--kinema { background-image: url('/media/work/kinema/inside.webp'); }
+  .letter--safed { background-image: url('/media/work/safed-sagar/hero.webp'); }
+  .letter--blocks { background-image: url('/media/work/blocks-inco-ai/hero.webp'); }
+
+  .living-letter--eclipse {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text);
+  }
+
+  .living-letter__control {
+    position: absolute;
+    top: 51%;
+    left: 51%;
+    transform: translate(-50%, -50%) scale(1.25);
+  }
+
+  .living-letter__control :global(.theme-control) {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-color: var(--text);
+    background: var(--surface);
+  }
+
+  .hero__actions {
+    position: absolute;
+    bottom: 1.5rem;
+    left: var(--page-gutter);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero__contact {
+    display: inline-flex;
+    min-width: min(22rem, 58vw);
+    min-height: 3.65rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.8rem 1rem;
+    background: var(--cobalt);
+    color: white;
+    font-size: 0.92rem;
+    font-weight: 740;
+    text-decoration: none;
+    transition: background-color 180ms var(--ease-out), transform 180ms var(--ease-out);
+  }
+
+  .hero__contact:hover {
+    background: var(--cobalt-dark);
+    transform: translateY(-0.15rem);
+  }
+
+  .hero__work {
+    padding: 0.7rem 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .hero__index {
+    position: absolute;
+    right: var(--page-gutter);
+    bottom: 1.7rem;
+    display: flex;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 620;
+  }
+
+  .hero__index span + span::before {
+    margin-right: 1rem;
+    color: var(--cobalt);
+    content: '•';
+  }
+
+  .hero__signature {
+    position: absolute;
+    top: 1.35rem;
+    left: var(--page-gutter);
+    margin: 0;
+    color: var(--cobalt);
+    font-size: 0.85rem;
+    font-weight: 780;
+  }
+
+  .hero__signature sup { font-size: 0.58em; }
+
+  @media (max-width: 58rem) {
+    .hero::before {
+      background: linear-gradient(180deg, transparent 0 72%, color-mix(in srgb, var(--cobalt) 9%, transparent) 72%);
+    }
+
+    .hero__positioning {
+      top: 4.6rem;
+      right: var(--page-gutter);
+      left: var(--page-gutter);
+      width: min(29rem, calc(100% - 2 * var(--page-gutter)));
+    }
+
+    .living-wordmark {
+      right: var(--page-gutter);
+      bottom: 11.5rem;
+      left: var(--page-gutter);
+      gap: 0.1em;
+      font-size: clamp(4rem, 17.5vw, 8.5rem);
+      line-height: 0.76;
+    }
+
+    .living-wordmark__line,
+    .living-wordmark__line--last {
+      justify-content: flex-start;
+      transform: none;
+    }
+
+    .hero__actions {
+      right: var(--page-gutter);
+      bottom: 4.2rem;
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .hero__contact {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .hero__index {
+      right: auto;
+      bottom: 1.2rem;
+      left: var(--page-gutter);
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .hero { min-height: 45rem; }
+    .hero__positioning p { font-size: 1.1rem; }
+
+    .living-wordmark {
+      bottom: 12.2rem;
+      font-size: clamp(3.15rem, 16.3vw, 5.5rem);
+      letter-spacing: -0.035em;
+    }
+
+    .living-letter__control { transform: translate(-50%, -50%) scale(0.82); }
+
+    .hero__index {
+      gap: 0.55rem;
+      font-size: 0.62rem;
+    }
+
+    .hero__index span + span::before { margin-right: 0.55rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .living-letter {
+      font-variation-settings: 'wdth' 96, 'wght' 820, 'opsz' 72, 'ital' 0 !important;
+    }
+  }
+</style>
