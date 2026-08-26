@@ -1,0 +1,18 @@
+---
+import { CONTACT_EMAIL, SOCIAL_LINKS } from '../../data/site';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__identity">
+    <strong>Pranshul Chandhok</strong>
+    <span>Product, technology, AI, and spatial systems.</span>
+  </div>
+  <nav aria-label="Social links">
+    {SOCIAL_LINKS.map((item) => <a href={item.href} target="_blank" rel="me noopener">{item.label}</a>)}
+    <a href="/lab/terminal/">2600th v1</a>
+  </nav>
+  <div class="site-footer__contact">
+    <a href={`mailto:${CONTACT_EMAIL}`} data-event="contact_start" data-event-context="footer">{CONTACT_EMAIL}</a>
+    <span>© {new Date().getFullYear()}</span>
+  </div>
+</footer>

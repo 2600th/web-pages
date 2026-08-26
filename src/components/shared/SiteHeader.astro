@@ -1,0 +1,19 @@
+---
+import { NAVIGATION } from '../../data/site';
+import ThemeControl from './ThemeControl.astro';
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header" data-site-header>
+  <a class="site-signature" href="/" aria-label="Pranshul Chandhok — home">
+    <span>Pranshul Chandhok</span>
+    <span aria-hidden="true">/ 2600th</span>
+  </a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    {NAVIGATION.map((item) => (
+      <a href={item.href} aria-current={pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+    ))}
+    <ThemeControl />
+  </nav>
+</header>

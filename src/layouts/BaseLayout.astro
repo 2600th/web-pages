@@ -1,0 +1,110 @@
+---
+import SiteFooter from '../components/shared/SiteFooter.astro';
+import SiteHeader from '../components/shared/SiteHeader.astro';
+import { PERSON, SITE, SOCIAL_LINKS } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  image?: string;
+  robots?: string;
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+  bodyClass?: string;
+}
+
+const {
+  title = `${PERSON.name} — Product, AI, and real-time 3D`,
+  description = SITE.description,
+  canonical = Astro.url.pathname,
+  image = '/media/work/web-ocean-3d/hero.webp',
+  robots = 'index,follow,max-image-preview:large',
+  jsonLd = [],
+  bodyClass = '',
+} = Astro.props;
+
+const canonicalUrl = new URL(canonical, SITE.url).toString();
+const imageUrl = new URL(image, SITE.url).toString();
+const pageTitle = title.includes(PERSON.name) ? title : `${title} — ${PERSON.name}`;
+const globalJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${SITE.url}/#person`,
+    name: PERSON.name,
+    alternateName: PERSON.alternateName,
+    url: SITE.url,
+    jobTitle: PERSON.jobTitle,
+    sameAs: SOCIAL_LINKS.map((link) => link.href),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE.url}/#website`,
+    url: SITE.url,
+    name: SITE.name,
+    author: { '@id': `${SITE.url}/#person` },
+    inLanguage: 'en-IN',
+  },
+  ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd]),
+];
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f3f2ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#090909" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preload" href="/fonts/mona-sans-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="alternate" type="application/rss+xml" title="Pranshul Chandhok — Notes" href="/rss.xml" />
+    <title>{pageTitle}</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('2600th-theme');
+        const valid = stored === 'light' || stored === 'dark';
+        const theme = valid ? stored : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(globalJsonLd)} />
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-XR0S4Q293G"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-XR0S4Q293G', { anonymize_ip: true });
+    </script>
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <SiteHeader />
+    <main id="main-content">
+      <slot />
+    </main>
+    <SiteFooter />
+    <script>
+      import { initAnalyticsEvents } from '../scripts/analytics';
+      initAnalyticsEvents();
+    </script>
+  </body>
+</html>
