@@ -36,6 +36,7 @@ test('work detail exposes evidence and CreativeWork structured data', async ({ p
   const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
   expect(jsonLd).toContain('CreativeWork');
   expect(jsonLd).toContain('Kinema');
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
 });
 
 test('note detail exposes article metadata and original source attribution', async ({ page }) => {
@@ -48,6 +49,7 @@ test('note detail exposes article metadata and original source attribution', asy
   );
   const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
   expect(jsonLd).toContain('Article');
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
 });
 
 test('unknown routes provide a useful return path', async ({ page }) => {

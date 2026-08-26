@@ -37,6 +37,7 @@ const jsonLd = {
   description={data.summary}
   canonical={`/notes/${data.slug}/`}
   image={data.heroMedia?.src}
+  ogType="article"
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={[{ label: 'Notes', href: '/notes/' }, { label: data.title }]} />

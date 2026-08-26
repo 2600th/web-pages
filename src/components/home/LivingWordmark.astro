@@ -24,7 +24,7 @@ const mediaClasses: Record<string, string> = {
         <span class:list={['living-letter', mediaClasses[`first-${index}`]]}>{letter}</span>
       ))}
     </span>
-    <span class="living-wordmark__line living-wordmark__line--last" aria-hidden="true">
+    <span class="living-wordmark__line living-wordmark__line--last">
       {lastName.map((letter, index) => (
         <span class:list={['living-letter', mediaClasses[`last-${index}`], letter === 'O' && 'living-letter--eclipse']}>
           {letter}

@@ -33,7 +33,7 @@ import { TIMELINE } from '../../data/site';
   <div class="motion-study__controls">
     <button type="button" data-motion-previous aria-label="Previous career frame" disabled>←</button>
     <label>
-      <span>Career timeline</span>
+      <span class="sr-only">Career timeline</span>
       <input
         type="range"
         min="0"
@@ -184,8 +184,6 @@ import { TIMELINE } from '../../data/site';
     color: var(--fog);
     cursor: not-allowed;
   }
-
-  .motion-study__controls label span { display: none; }
 
   .motion-study__controls input {
     width: 100%;

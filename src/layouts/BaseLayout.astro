@@ -10,6 +10,7 @@ interface Props {
   canonical?: string;
   image?: string;
   robots?: string;
+  ogType?: 'website' | 'article';
   jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
   bodyClass?: string;
 }
@@ -20,6 +21,7 @@ const {
   canonical = Astro.url.pathname,
   image = '/media/work/web-ocean-3d/hero.webp',
   robots = 'index,follow,max-image-preview:large',
+  ogType = 'website',
   jsonLd = [],
   bodyClass = '',
 } = Astro.props;
@@ -66,7 +68,7 @@ const globalJsonLd = [
     <link rel="preload" href="/fonts/mona-sans-variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="alternate" type="application/rss+xml" title="Pranshul Chandhok — Notes" href="/rss.xml" />
     <title>{pageTitle}</title>
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />

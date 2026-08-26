@@ -85,13 +85,12 @@ const recent = [...notes]
     gap: 1.5rem;
     border-bottom: 1px solid var(--line);
     text-decoration: none;
-    transition: color 180ms var(--ease-out), padding 260ms var(--ease-out);
+    transition: color 180ms var(--ease-out), transform 260ms var(--ease-out);
   }
 
   li > a:hover {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
     color: var(--cobalt);
+    transform: translateX(0.5rem);
   }
 
   .note-index,

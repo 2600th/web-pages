@@ -79,14 +79,13 @@ import { CONTACT_EMAIL, CONVERSATION_PROMPTS } from '../../data/site';
     border-bottom: 1px solid white;
     font-size: clamp(1rem, 2vw, 1.5rem);
     text-decoration: none;
-    transition: padding 260ms var(--ease-out), background-color 180ms var(--ease-out);
+    transition: transform 260ms var(--ease-out), background-color 180ms var(--ease-out);
   }
 
   .conversation-close__action > a:first-child:hover {
-    padding-right: 1rem;
-    padding-left: 1rem;
     background: white;
     color: var(--cobalt);
+    transform: translateX(0.5rem);
   }
 
   .conversation-close__action > a:last-child {

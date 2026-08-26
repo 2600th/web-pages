@@ -9,7 +9,10 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:build": "node scripts/verify-build.mjs",
+    "verify": "npm run check && npm test && npm run test:e2e && npm run build && npm run test:build",
+    "deploy": "npm run verify && gh-pages -d dist -b gh-pages --dotfiles"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",
@@ -22,6 +25,7 @@
     "@playwright/test": "1.62.1",
     "@types/node": "24.13.3",
     "axe-core": "4.13.0",
+    "gh-pages": "6.3.0",
     "sharp": "0.35.4",
     "typescript": "6.0.3",
     "vitest": "4.1.11",
