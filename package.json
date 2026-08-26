@@ -11,6 +11,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:build": "node scripts/verify-build.mjs",
+    "media:career:inspect": "node scripts/prepare-career-media.mjs --inspect",
+    "media:career:build": "node scripts/prepare-career-media.mjs --build",
     "verify": "npm run check && npm test && npm run test:e2e && npm run build && npm run test:build",
     "deploy": "npm run verify && gh-pages -d dist -b gh-pages --dotfiles"
   },
@@ -25,6 +27,8 @@
     "@playwright/test": "1.62.1",
     "@types/node": "24.13.3",
     "axe-core": "4.13.0",
+    "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
     "gh-pages": "6.3.0",
     "sharp": "0.35.4",
     "typescript": "6.0.3",

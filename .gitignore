@@ -6,4 +6,6 @@ coverage/
 playwright-report/
 test-results/
 public/lab/terminal/ico/Thumbs.db
+_media-source/*
+!_media-source/.gitkeep
 
