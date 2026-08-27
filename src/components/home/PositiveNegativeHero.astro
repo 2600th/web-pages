@@ -15,8 +15,9 @@
     </h1>
   </div>
 
-  <span class="exposure-hero__identity-note" data-generated-direction-study data-identity-media="generated-editorial">
-    Generated direction study · identity only · not project evidence
+  <span class="exposure-hero__identity-note" data-generated-direction-study data-identity-media="generated-editorial" aria-label="Generated direction study. Identity only. Not project evidence.">
+    <span class="exposure-hero__identity-note-desktop">Generated direction study · identity only · not project evidence</span>
+    <span class="exposure-hero__identity-note-mobile" data-identity-mobile aria-hidden="true">AI-generated identity study · not evidence</span>
   </span>
 
   <span class="exposure-hero__labmark" aria-hidden="true">2600TH</span>
@@ -178,6 +179,10 @@
     line-height: 1.35;
     text-align: right;
     text-transform: uppercase;
+  }
+
+  .exposure-hero__identity-note-mobile {
+    display: none;
   }
 
   .exposure-hero__labmark {
@@ -484,8 +489,12 @@
 
     .exposure-hero__positioning {
       right: var(--page-gutter);
-      bottom: 2rem;
+      bottom: 3.8rem;
       width: calc(100% - (var(--page-gutter) * 2));
+    }
+
+    .exposure-control__hint {
+      top: 70.8%;
     }
 
     .exposure-hero__positioning p {
@@ -500,11 +509,23 @@
     }
 
     .exposure-hero__identity-note {
+      left: calc(var(--exposure) + 0.35rem);
       right: var(--page-gutter);
       bottom: 0.9rem;
-      max-width: 48vw;
+      max-width: none;
       font-size: var(--type-hero-note);
+      letter-spacing: 0.11em;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+      display: block;
+    }
+
+    .exposure-hero__identity-note-desktop {
       display: none;
+    }
+
+    .exposure-hero__identity-note-mobile {
+      display: block;
     }
 
     .exposure-control__handle {

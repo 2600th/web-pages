@@ -69,6 +69,33 @@ test('the hero keeps its one action, legible instruction, and generated identity
   await expect(hero.locator('[data-generated-direction-study]')).toContainText(/identity only/i);
 });
 
+test('the generated identity disclosure stays visible and contained at 390px and 320px', async ({ page }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 320, height: 720 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+
+    const marker = page.locator('[data-generated-direction-study]');
+    const cta = page.getByRole('link', { name: 'Explore selected work' });
+    await expect(marker).toBeVisible();
+    const markerBox = await marker.boundingBox();
+    const ctaBox = await cta.boundingBox();
+    expect(markerBox).not.toBeNull();
+    expect(markerBox?.x ?? -1).toBeGreaterThanOrEqual(0);
+    expect(markerBox?.y ?? -1).toBeGreaterThanOrEqual(0);
+    expect((markerBox?.x ?? 0) + (markerBox?.width ?? 0)).toBeLessThanOrEqual(viewport.width);
+    expect((markerBox?.y ?? 0) + (markerBox?.height ?? 0)).toBeLessThanOrEqual(viewport.height);
+    const overlapsCta = Boolean(markerBox && ctaBox && markerBox.x < ctaBox.x + ctaBox.width && markerBox.x + markerBox.width > ctaBox.x && markerBox.y < ctaBox.y + ctaBox.height && markerBox.y + markerBox.height > ctaBox.y);
+    expect(overlapsCta, `${viewport.width}px disclosure overlaps CTA`).toBe(false);
+    await expect(marker.locator('[data-identity-mobile]')).toBeVisible();
+    await expect(marker.locator('[data-identity-mobile]')).toContainText(/not evidence/i);
+    const documentWidth = await page.evaluate(() => ({ clientWidth: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth }));
+    expect(documentWidth.scrollWidth, `${viewport.width}px page overflows horizontally`).toBeLessThanOrEqual(documentWidth.clientWidth);
+  }
+});
+
 test('homepage media exists over HTTP and carries its provenance boundary', async ({ page, request }) => {
   await page.goto('/');
 
