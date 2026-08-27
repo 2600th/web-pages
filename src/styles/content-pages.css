@@ -145,6 +145,7 @@
 .domain-filter a[aria-current='page'] { background: var(--text); color: var(--surface); }
 .domain-filter-mobile-links { display: none; }
 .domain-filter-select { display: none; }
+.domain-filter-select[hidden] { display: none !important; }
 [data-work-item][hidden] { display: none; }
 
 .work-archive .work-list { padding: 0; border-top: 1px solid var(--line); list-style: none; }

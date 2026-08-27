@@ -38,7 +38,7 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`}>{domain.label}</a>)}
       </nav>
     </noscript>
-    <label class="domain-filter-select">
+    <label class="domain-filter-select" hidden>
       <span>Work domain</span>
       <select aria-label="Choose a work domain" data-domain-select>
         <option value="all">All domains</option>
@@ -94,20 +94,14 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         if (status) status.textContent = `${activeLink.dataset.domainLabel ?? 'All work'}, ${visible} ${visible === 1 ? 'project' : 'projects'}`;
       };
 
-      for (const link of links) {
-        link.addEventListener('click', (event) => {
-          event.preventDefault();
-          history.pushState({}, '', link.href);
-          render();
+      if (select) {
+        select.addEventListener('change', () => {
+          const value = select.value;
+          const link = links.find((candidate) => candidate.dataset.domainLink === value) ?? links[0];
+          window.location.assign(link.href);
         });
+        root.querySelector<HTMLElement>('.domain-filter-select')?.removeAttribute('hidden');
       }
-      select?.addEventListener('change', () => {
-        const value = select.value;
-        const link = links.find((candidate) => candidate.dataset.domainLink === value) ?? links[0];
-        history.pushState({}, '', link.href);
-        render();
-      });
-      window.addEventListener('popstate', render);
       render();
     });
   };
@@ -120,6 +114,7 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
   .domain-filter a { min-width: max-content; min-height: 3rem; padding: 1rem 1.25rem; border-right: 1px solid var(--line); color: var(--text-muted); font-size: 0.76rem; font-weight: 680; text-decoration: none; }
   .domain-filter a[aria-current='page'] { background: var(--text); color: var(--surface); }
   .domain-filter-select { display: none; }
+  .domain-filter-select[hidden] { display: none !important; }
   .work-list-region { padding-block: clamp(4rem, 8vw, 8rem); }
   .work-list-region > header { display: grid; grid-template-columns: 1fr minmax(16rem, 0.45fr); gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
   .work-list-region > header > div { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }

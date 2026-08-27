@@ -19,7 +19,7 @@ const { media, label, priority = false } = Astro.props;
   )}
   <figcaption>
     <span>{label}</span>
-    {media.mp4 && <button type="button" data-evidence-video-toggle aria-label={`Play ${label} clip`}>Play</button>}
+    {media.mp4 && <button type="button" data-evidence-video-toggle aria-label={`Play ${label} clip`} aria-pressed="false" hidden>Play</button>}
   </figcaption>
 </figure>
 

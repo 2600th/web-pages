@@ -1,11 +1,13 @@
 export function initEvidenceMedia() {
   document.querySelectorAll<HTMLElement>('[data-evidence-media]').forEach((root) => {
     if (root.dataset.bound === 'true') return;
-    root.dataset.bound = 'true';
 
     const video = root.querySelector<HTMLVideoElement>('[data-evidence-video]');
     const toggle = root.querySelector<HTMLButtonElement>('[data-evidence-video-toggle]');
     if (!video || !toggle) return;
+    root.dataset.bound = 'true';
+    video.controls = false;
+    toggle.hidden = false;
 
     const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
     let visible = false;

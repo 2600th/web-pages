@@ -59,7 +59,7 @@ const domainMeta = CAREER_DOMAIN_META[domain];
         {domains.map(([key, meta]) => <a href={`/work/domain/${key}/`}>{meta.label}</a>)}
       </nav>
     </noscript>
-    <label class="domain-filter-select">
+    <label class="domain-filter-select" hidden>
       <span>Work domain</span>
       <select aria-label="Choose a work domain" data-domain-select>
         <option value="all">All domains</option>
@@ -84,9 +84,12 @@ const domainMeta = CAREER_DOMAIN_META[domain];
       if (root.dataset.bound === 'true') return;
       root.dataset.bound = 'true';
       const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
-      select?.addEventListener('change', () => {
-        window.location.assign(select.value === 'all' ? '/work/' : `/work/domain/${select.value}/`);
-      });
+      if (select) {
+        select.addEventListener('change', () => {
+          window.location.assign(select.value === 'all' ? '/work/' : `/work/domain/${select.value}/`);
+        });
+        root.querySelector<HTMLElement>('.domain-filter-select')?.removeAttribute('hidden');
+      }
     });
   };
   initStaticDomain();

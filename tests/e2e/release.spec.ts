@@ -91,6 +91,17 @@ test('work domain links target canonical static subsets', async ({ page }) => {
   }
 });
 
+test('desktop domain navigation loads the canonical static document', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/work/');
+  await page.locator('[data-domain-link="xr"]').click();
+
+  await expect(page).toHaveURL(/\/work\/domain\/xr\/$/);
+  await expect(page).toHaveTitle(/XR and spatial computing · Career work/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.2600th.com/work/domain/xr/');
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://www.2600th.com/work/domain/xr/');
+});
+
 test('crawlable work domain routes render only their subset without JavaScript', async ({ browser }) => {
   const noJs = await browser.newContext({ javaScriptEnabled: false });
   const page = await noJs.newPage();
@@ -160,6 +171,8 @@ test('work filtering announces the selected domain and result count', async ({ p
   await page.goto('/work/');
 
   await page.getByLabel('Choose a work domain').selectOption('simulation');
+  await expect(page).toHaveURL(/\/work\/domain\/simulation\/$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.2600th.com/work/domain/simulation/');
   await expect(page.locator('[data-work-status]')).toHaveText(/Training and simulation, \d+ projects/i);
 });
 
@@ -189,14 +202,14 @@ test('all interior routes contain their content at the 320, 390, 946, and 1440px
 
 test('case-study videos remain paused until explicit user action and pause out of view', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('/work/homelane-spacecraft-pro/');
+  await page.goto('/work/ira-vr/');
 
   const videos = page.locator('[data-evidence-video]');
   const toggles = page.locator('[data-evidence-video-toggle]');
-  await expect(videos).toHaveCount(2);
-  await expect(toggles).toHaveCount(2);
+  expect(await videos.count()).toBeGreaterThan(0);
+  expect(await toggles.count()).toBe(await videos.count());
   await expect.poll(() => videos.evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).paused))).toBe(true);
-  await expect(toggles).toHaveText(['Play', 'Play']);
+  await expect(toggles).toHaveText(Array.from({ length: await toggles.count() }, () => 'Play'));
 
   const firstVideo = videos.first();
   const firstToggle = toggles.first();
@@ -227,21 +240,35 @@ test('case-study videos remain paused until explicit user action and pause out o
 test('case-study video controls retain a native no-JavaScript fallback', async ({ browser }) => {
   const noJs = await browser.newContext({ javaScriptEnabled: false });
   const page = await noJs.newPage();
-  await page.goto('/work/homelane-spacecraft-pro/');
+  await page.goto('/work/ira-vr/');
 
   const videos = page.locator('[data-evidence-video]');
-  await expect(videos).toHaveCount(2);
+  expect(await videos.count()).toBeGreaterThan(0);
   await expect(videos.first()).toHaveAttribute('controls', '');
-  await expect(page.locator('[data-evidence-video-toggle]')).toHaveText(['Play', 'Play']);
+  expect(await videos.evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).controls))).toBe(true);
+  const toggles = page.locator('[data-evidence-video-toggle]');
+  expect(await toggles.count()).toBe(await videos.count());
+  for (const toggle of await toggles.all()) await expect(toggle).toBeHidden();
   await noJs.close();
+});
+
+test('case-study JavaScript binding hands playback to the custom control', async ({ page }) => {
+  await page.goto('/work/ira-vr/');
+
+  const videos = page.locator('[data-evidence-video]');
+  const toggles = page.locator('[data-evidence-video-toggle]');
+  expect(await videos.count()).toBeGreaterThan(0);
+  expect(await toggles.count()).toBe(await videos.count());
+  for (const toggle of await toggles.all()) await expect(toggle).toBeVisible();
+  expect(await videos.evaluateAll((elements) => elements.every((element) => !(element as HTMLVideoElement).controls))).toBe(true);
 });
 
 test('case-study motion controls meet the mobile touch target floor', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto('/work/homelane-spacecraft-pro/');
+  await page.goto('/work/ira-vr/');
 
   const controls = page.locator('[data-evidence-video-toggle]');
-  await expect(controls).toHaveCount(2);
+  expect(await controls.count()).toBeGreaterThan(0);
   for (const control of await controls.all()) {
     const box = await control.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
@@ -251,13 +278,33 @@ test('case-study motion controls meet the mobile touch target floor', async ({ p
 
 test('reduced motion keeps case videos paused until explicit user action', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/work/homelane-spacecraft-pro/');
+  await page.goto('/work/ira-vr/');
 
   const videos = page.locator('[data-evidence-video]');
   const toggles = page.locator('[data-evidence-video-toggle]');
   expect(await videos.count()).toBeGreaterThan(0);
   await expect.poll(async () => videos.evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).paused))).toBe(true);
   await expect(toggles).toHaveText(Array.from({ length: await toggles.count() }, () => 'Play'));
+});
+
+test('no-JavaScript mobile domain fallback hides enhancement controls at the containment floors', async ({ browser }) => {
+  const noJs = await browser.newContext({ javaScriptEnabled: false });
+  const page = await noJs.newPage();
+
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/work/');
+    await expect(page.locator('.domain-filter-select')).toBeHidden();
+    const fallback = page.locator('.domain-filter-mobile-links');
+    await expect(fallback).toBeVisible();
+    const xrLink = fallback.getByRole('link', { name: /XR/ });
+    await expect(xrLink).toHaveAttribute('href', '/work/domain/xr/');
+    await xrLink.click();
+    await expect(page).toHaveURL(/\/work\/domain\/xr\/$/);
+    await expect(page.locator('[data-work-item]')).toHaveCount(workDomainCounts.xr);
+  }
+
+  await noJs.close();
 });
 
 test('the eclipse remains singular and available on every page', async ({ page }) => {
