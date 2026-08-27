@@ -180,6 +180,9 @@ p, li { text-wrap: pretty; }
   background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
+.site-header .site-nav { grid-column: 2; grid-row: 1; }
+.site-header .theme-control { grid-column: 3; grid-row: 1; }
+
 .home-page .site-header {
   position: absolute;
   inset: 0 0 auto;
@@ -347,22 +350,6 @@ p, li { text-wrap: pretty; }
 .button-link.button-link--primary:hover,
 .button-link.button-link--primary:focus-visible { border-color: var(--signal-blue-dark); background: var(--signal-blue-dark); color: #fff; }
 
-/* The closing conversation is a deliberate positive/negative plane; cobalt remains a signal, never its surface. */
-.home-page .conversation-close {
-  background: transparent !important;
-  color: var(--negative) !important;
-}
-.home-page .conversation-close__lead {
-  background: var(--positive) !important;
-  color: var(--negative) !important;
-}
-.home-page .conversation-close__paths {
-  background: var(--negative) !important;
-  color: var(--positive) !important;
-}
-.home-page .conversation-close__lead p { color: var(--graphite) !important; }
-.home-page .conversation-close__paths > p span { color: var(--fog) !important; }
-
 @media (max-width: 46rem) {
   :root { --header-height: auto; }
 
@@ -371,12 +358,14 @@ p, li { text-wrap: pretty; }
     padding-top: 0.45rem;
   }
 
-  .site-nav {
+  .site-header .site-nav {
     grid-column: 1 / -1;
     grid-row: 2;
     justify-content: space-between;
     border-top: 1px solid var(--line);
   }
+
+  .site-header .theme-control { grid-column: 2; grid-row: 1; }
 
   .site-nav a { flex: 1; min-width: 3rem; }
   .site-footer { grid-template-columns: 1fr; align-items: start; }

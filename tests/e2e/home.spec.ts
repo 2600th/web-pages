@@ -135,13 +135,15 @@ test('every homepage motion clip has a working user control', async ({ page }) =
   await expect(firstControl).not.toHaveAttribute('aria-pressed', initial ?? 'false');
 });
 
-test('homepage evidence stays concise on a mobile reading path', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+test('homepage has no horizontal overflow at the 320px support floor', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
 
-  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(7600);
-  await expect(page.locator('.proof-line li')).toHaveCount(4);
-  await expect(page.locator('.ledger')).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  for (const target of await page.locator('main a, main button, main input, main select').all()) {
+    const box = await target.boundingBox();
+    expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(320);
+  }
 });
 
 test('the conversation and footer close use split polarity planes instead of a cobalt slab', async ({ page }) => {
@@ -149,6 +151,9 @@ test('the conversation and footer close use split polarity planes instead of a c
 
   const conversation = page.locator('.conversation-close');
   await expect(conversation).toBeVisible();
+  await expect(conversation).toHaveAttribute('data-closing-plane', 'split');
+  await expect(conversation.locator('[data-polarity="positive"]')).toHaveCount(1);
+  await expect(conversation.locator('[data-polarity="negative"]')).toHaveCount(1);
   const conversationColors = await conversation.evaluate((element) => {
     const lead = element.querySelector('.conversation-close__lead');
     const paths = element.querySelector('.conversation-close__paths');
@@ -160,6 +165,8 @@ test('the conversation and footer close use split polarity planes instead of a c
   });
 
   expect(conversationColors.root).not.toBe('rgb(36, 87, 255)');
+  expect(conversationColors.lead).not.toBe('rgb(36, 87, 255)');
+  expect(conversationColors.paths).not.toBe('rgb(36, 87, 255)');
   expect(conversationColors.lead).not.toBe(conversationColors.paths);
 
   const footerColors = await page.locator('.site-footer').evaluate((element) => {
@@ -170,6 +177,10 @@ test('the conversation and footer close use split polarity planes instead of a c
     };
   });
 
+  await expect(page.locator('.site-footer')).toHaveAttribute('data-closing-plane', 'split');
+  await expect(page.locator('.site-footer [data-polarity="positive"]')).toHaveCount(2);
+  await expect(page.locator('.site-footer [data-polarity="negative"]')).toHaveCount(1);
   expect(footerColors.root).not.toBe('rgb(36, 87, 255)');
+  expect(footerColors.contact).not.toBe('rgb(36, 87, 255)');
   expect(footerColors.contact).not.toBe(footerColors.root);
 });

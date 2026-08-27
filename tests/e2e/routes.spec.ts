@@ -121,11 +121,15 @@ test('unknown routes provide a useful return path', async ({ page }) => {
   await expect(page.getByRole('link', { name: /Return home/i })).toHaveAttribute('href', '/');
 });
 
-test('the console archive link uses an explicit file URL and serves the archive', async ({ page, request }) => {
-  await page.goto('/');
-
-  const archiveLink = page.locator('.site-footer a').filter({ hasText: /console archive/i });
-  await expect(archiveLink).toHaveAttribute('href', '/lab/terminal/index.html');
+test('every console archive link uses an explicit file URL and serves the archive', async ({ page, request }) => {
+  for (const path of ['/', '/lab/']) {
+    await page.goto(path);
+    const archiveLinks = page.locator('a[href*="/lab/terminal/"]');
+    await expect(archiveLinks).toHaveCount(path === '/' ? 1 : 2);
+    for (const archiveLink of await archiveLinks.all()) {
+      await expect(archiveLink).toHaveAttribute('href', '/lab/terminal/index.html');
+    }
+  }
 
   const response = await request.get('/lab/terminal/index.html');
   expect(response.status()).toBe(200);

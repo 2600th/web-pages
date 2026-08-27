@@ -12,10 +12,10 @@ const isCurrent = (href: string) => href.startsWith('/#') ? false : pathname.sta
     <span class="site-signature__compact" aria-hidden="true">PC</span>
     <span aria-hidden="true">/ 2600th</span>
   </a>
+  <ThemeControl />
   <nav class="site-nav" aria-label="Primary navigation">
     {NAVIGATION.map((item) => (
       <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
     ))}
   </nav>
-  <ThemeControl />
 </header>

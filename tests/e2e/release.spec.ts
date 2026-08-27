@@ -212,6 +212,24 @@ test('primary CTA text stays visible in both color themes after hover', async ({
   }
 });
 
+test('mobile header focus order follows the visual order', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const signature = page.locator('.site-signature');
+  const theme = page.locator('[data-theme-control]');
+  const work = page.getByRole('link', { name: 'Work', exact: true });
+  const themeBox = await theme.boundingBox();
+  const workBox = await work.boundingBox();
+
+  expect(themeBox?.y ?? Number.POSITIVE_INFINITY).toBeLessThan(workBox?.y ?? 0);
+  await signature.focus();
+  await page.keyboard.press('Tab');
+  await expect(theme).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(work).toBeFocused();
+});
+
 for (const path of [
   '/',
   '/work/',

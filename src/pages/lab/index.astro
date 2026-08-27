@@ -1,6 +1,39 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import '../../styles/content-pages.css';
+
+const builds = [
+  {
+    state: 'Active',
+    title: 'Kinema',
+    description: 'A browser-native third-person gameplay lab joining runtime, rendering, physics, and level editing in one TypeScript codebase.',
+    href: '/work/kinema/',
+  },
+  {
+    state: 'Shipped',
+    title: 'Web Ocean 3D',
+    description: 'A public real-time ocean experiment whose most useful chapter began when real devices exposed its limits.',
+    href: '/work/web-ocean-3d/',
+  },
+  {
+    state: 'Shipped',
+    title: 'Safed Sagar',
+    description: 'A compact fictional reconnaissance experience built and released in days as a browser flight experiment.',
+    href: '/work/safed-sagar/',
+  },
+  {
+    state: 'Source',
+    title: 'GitHub',
+    description: 'Repositories, 3D experiments, AI workflows, and the implementation behind this site.',
+    href: 'https://github.com/2600th',
+  },
+  {
+    state: 'Archived',
+    title: '2600th console archive',
+    description: 'The original command-line portfolio preserved as an interactive artifact: same character, new address.',
+    href: '/lab/terminal/index.html',
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -8,49 +41,76 @@ import '../../styles/content-pages.css';
   description="The 2600th lab: public browser-native game, graphics, AI, and interaction experiments by Pranshul Chandhok, plus the archived original console portfolio."
   canonical="/lab/"
 >
-  <div class="page-shell">
-    <header class="page-hero">
+  <div class="lab-page">
+    <header class="lab-hero">
       <div>
-        <p class="section-kicker">Lab · 2600th</p>
         <h1>Experiments with a public edge</h1>
+        <p>2600th is the negative to the operator’s positive: small worlds, useful probes, and unfinished questions made concrete enough to enter.</p>
       </div>
-      <div class="page-hero__aside">
-        <p>Small worlds, useful probes, and unfinished questions that are concrete enough to enter.</p>
-        <p>The lab keeps experiments discoverable without asking every one of them to behave like a polished case study.</p>
-      </div>
+      <figure>
+        <picture>
+          <source media="(max-width: 42rem)" srcset="/media/work/kinema/inside-mobile.webp" />
+          <img src="/media/work/kinema/inside.webp" alt="Kinema browser gameplay experiment with a live objective and spatial obstacle course" width="1600" height="900" />
+        </picture>
+        <figcaption><span>Current build</span><strong>Kinema / browser-native gameplay</strong></figcaption>
+      </figure>
     </header>
 
-    <section class="lab-grid" aria-label="Public experiments">
-      <article>
-        <p class="section-kicker">Archive · 2600th v1</p>
-        <h2>The console still lives.</h2>
-        <p>The original command-line portfolio is preserved as an interactive artifact: same character, new address.</p>
-        <a class="button-link button-link--primary" href="/lab/terminal/">Enter the console ↗</a>
-      </article>
-      <article>
-        <p class="section-kicker">Gameplay systems</p>
-        <h2>Kinema</h2>
-        <p>A browser-native third-person gameplay lab, playable runtime, WebGPU-first renderer, physics, and level editor.</p>
-        <a class="button-link" href="/work/kinema/">Open the case ↗</a>
-      </article>
-      <article>
-        <p class="section-kicker">Graphics and reliability</p>
-        <h2>Web Ocean 3D</h2>
-        <p>A public ocean-rendering experiment whose most useful chapter began when real devices exposed its limits.</p>
-        <a class="button-link" href="/work/web-ocean-3d/">Open the case ↗</a>
-      </article>
-      <article>
-        <p class="section-kicker">Browser flight experiment</p>
-        <h2>Safed Sagar</h2>
-        <p>A compact fictional reconnaissance experience made in response to a documentary and released in days.</p>
-        <a class="button-link" href="/work/safed-sagar/">Open the case ↗</a>
-      </article>
-      <article>
-        <p class="section-kicker">Public code</p>
-        <h2>More on GitHub</h2>
-        <p>Source repositories, prototypes, 3D experiments, AI workflows, and the work behind this site.</p>
-        <a class="button-link" href="https://github.com/2600th" target="_blank" rel="noreferrer">Browse GitHub ↗</a>
-      </article>
+    <section class="build-index" aria-labelledby="build-index-title">
+      <header>
+        <h2 id="build-index-title">Built in public.</h2>
+        <p>Open the case, inspect the source, or enter the preserved first version.</p>
+      </header>
+      <ol>
+        {builds.map((build) => (
+          <li>
+            <a href={build.href} target={build.href.startsWith('http') ? '_blank' : undefined} rel={build.href.startsWith('http') ? 'noopener' : undefined}>
+              <span>{build.state}</span>
+              <strong>{build.title}</strong>
+              <span>{build.description}</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ol>
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  .lab-page { background: var(--inverse-surface); color: var(--inverse-text); }
+  .lab-hero { display: grid; min-height: calc(100svh - var(--header-height)); grid-template-columns: minmax(24rem, 0.82fr) minmax(0, 1.18fr); }
+  .lab-hero > div { display: flex; padding: clamp(3rem, 7vw, 7rem) var(--page-gutter); flex-direction: column; justify-content: space-between; border-right: 1px solid color-mix(in srgb, var(--inverse-text) 25%, transparent); }
+  .lab-hero h1 { max-width: 10ch; margin: 0; font-size: clamp(3.6rem, 5.4vw, 6.5rem); font-stretch: 80%; overflow-wrap: normal; }
+  .lab-hero p { max-width: 31ch; margin: 3rem 0 0; color: var(--inverse-muted); }
+  .lab-hero figure { position: relative; min-height: 38rem; margin: 0; overflow: hidden; }
+  .lab-hero figure::after { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 54%, rgba(8, 9, 8, 0.85)); content: ''; }
+  .lab-hero picture { position: absolute; inset: 0; }
+  .lab-hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+  .lab-hero figcaption { position: absolute; right: var(--page-gutter); bottom: 2rem; left: var(--page-gutter); z-index: 2; display: flex; justify-content: space-between; gap: 2rem; color: #f1f0ea; }
+  .lab-hero figcaption span { font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: 0.62rem; text-transform: uppercase; }
+  .build-index { padding: clamp(5rem, 10vw, 9rem) var(--page-gutter); }
+  .build-index > header { display: grid; max-width: var(--content-width); grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: end; margin: 0 auto clamp(3rem, 6vw, 5rem); }
+  .build-index h2 { max-width: 8ch; margin: 0; }
+  .build-index header p { max-width: 30ch; margin: 0; color: var(--inverse-muted); }
+  .build-index ol { max-width: var(--content-width); margin: 0 auto; padding: 0; border-top: 1px solid color-mix(in srgb, var(--inverse-text) 45%, transparent); list-style: none; }
+  .build-index li { border-bottom: 1px solid color-mix(in srgb, var(--inverse-text) 25%, transparent); }
+  .build-index a { display: grid; min-height: 7rem; grid-template-columns: 7rem minmax(11rem, 0.7fr) minmax(16rem, 1fr) 1rem; gap: 1.5rem; align-items: center; text-decoration: none; transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out), transform 220ms var(--ease-out); }
+  .build-index a:hover { background: var(--signal-blue); color: #fff; transform: translateX(0.35rem); }
+  .build-index a > span:first-child { color: var(--inverse-muted); font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: 0.62rem; text-transform: uppercase; }
+  .build-index a > span:nth-child(3) { max-width: 50ch; color: var(--inverse-muted); font-size: 0.8rem; }
+  .build-index a:hover > span { color: #fff; }
+  .build-index strong { font-size: clamp(1.2rem, 2vw, 2rem); }
+  @media (max-width: 58rem) {
+    .lab-hero { min-height: auto; grid-template-columns: 1fr; }
+    .lab-hero > div { min-height: 32rem; border-right: 0; border-bottom: 1px solid color-mix(in srgb, var(--inverse-text) 25%, transparent); }
+    .lab-hero figure { min-height: 0; aspect-ratio: 16 / 10; }
+  }
+  @media (max-width: 42rem) {
+    .lab-hero figure { aspect-ratio: 4 / 3; }
+    .lab-hero figcaption { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
+    .build-index > header { grid-template-columns: 1fr; }
+    .build-index a { min-height: 9rem; grid-template-columns: 4.5rem 1fr 1rem; gap: 0.75rem; }
+    .build-index a > span:nth-child(3) { grid-column: 2 / -1; }
+  }
+</style>
