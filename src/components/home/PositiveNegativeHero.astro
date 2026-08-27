@@ -1,0 +1,440 @@
+---
+import { CONTACT_EMAIL } from '../../data/site';
+---
+
+<section class="exposure-hero" aria-labelledby="exposure-title" data-exposure-hero style="--exposure: 50%; --handle-y: 67.5%">
+  <div class="exposure-hero__plane exposure-hero__plane--positive" data-polarity="positive" aria-hidden="true"></div>
+  <div class="exposure-hero__plane exposure-hero__plane--negative" data-polarity="negative" aria-hidden="true"></div>
+
+  <div class="exposure-hero__identity">
+    <h1 class="exposure-wordmark" id="exposure-title" aria-label="Pranshul Chandhok">
+      <span class="exposure-wordmark__line exposure-wordmark__line--positive" aria-hidden="true">PRANSHUL CHANDHOK</span>
+      <span class="exposure-wordmark__line exposure-wordmark__line--negative" aria-hidden="true">PRANSHUL CHANDHOK</span>
+      <span class="exposure-wordmark__rule" aria-hidden="true">PRANSHUL CHANDHOK</span>
+    </h1>
+  </div>
+
+  <span class="exposure-hero__labmark" aria-hidden="true">2600TH</span>
+
+  <div class="exposure-hero__positioning">
+    <p>Operator–advisor building at the edge of AI and spatial computing.</p>
+    <a class="exposure-actions__primary" href="#selected-work" aria-label="Explore selected work">Explore the work <span aria-hidden="true">→</span></a>
+  </div>
+
+  <a class="exposure-hero__email" href={`mailto:${CONTACT_EMAIL}`} aria-label="Email Pranshul">Start a conversation <span aria-hidden="true">↗</span></a>
+
+  <label class="exposure-control">
+    <span class="sr-only">Adjust the positive and negative exposure</span>
+    <input type="range" min="34" max="66" value="50" step="1" data-exposure-control />
+    <span class="exposure-control__line" aria-hidden="true"></span>
+    <span class="exposure-control__handle" aria-hidden="true"></span>
+    <span class="exposure-control__hint" aria-hidden="true">Drag the light</span>
+  </label>
+</section>
+
+<script>
+  import { initExposureHero } from '../../scripts/exposure-hero';
+  initExposureHero();
+  document.addEventListener('astro:after-swap', initExposureHero);
+</script>
+
+<style>
+  .exposure-hero {
+    --positive: #f1f0ea;
+    --negative: #080908;
+    --signal: #2457ff;
+    --hero-gutter: clamp(1.4rem, 5vw, 5.25rem);
+    position: relative;
+    min-height: 100svh;
+    overflow: clip;
+    isolation: isolate;
+    background: var(--negative);
+    color: var(--positive);
+  }
+
+  .exposure-hero__plane {
+    position: absolute;
+    inset-block: 0;
+    z-index: -2;
+  }
+
+  .exposure-hero__plane--positive {
+    left: 0;
+    width: var(--exposure);
+    background: var(--positive);
+  }
+
+  .exposure-hero__plane--negative {
+    right: 0;
+    width: calc(100% - var(--exposure));
+    background: var(--negative);
+  }
+
+  .exposure-hero__identity {
+    position: absolute;
+    top: 46.4%;
+    right: var(--hero-gutter);
+    left: var(--hero-gutter);
+    transform: translateY(-50%);
+  }
+
+  .exposure-wordmark {
+    position: relative;
+    height: clamp(14rem, 31vw, 29rem);
+    max-width: none;
+    margin: 0;
+    overflow: visible;
+    font-size: clamp(5rem, 11.7vw, 12rem);
+    font-stretch: 84%;
+    font-weight: 780;
+    letter-spacing: -0.04em;
+    line-height: 0.82;
+    white-space: nowrap;
+  }
+
+  .exposure-wordmark__line,
+  .exposure-wordmark__rule {
+    position: absolute;
+    inset: 50% 0 auto;
+    display: block;
+    height: 0.82em;
+    background-position: center;
+    background-size: cover;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transform: translateY(-50%) scaleY(2.7);
+    transform-origin: center;
+  }
+
+  .exposure-wordmark__line {
+    background-image: url('/media/generated/editorial/work-aperture.webp');
+  }
+
+  .exposure-wordmark__line--positive {
+    clip-path: inset(0 calc(100% - var(--exposure)) 0 0);
+    filter: saturate(0.58) contrast(1.06) brightness(1.16);
+  }
+
+  .exposure-wordmark__line--negative {
+    clip-path: inset(0 0 0 var(--exposure));
+    filter: saturate(0.68) contrast(1.17) brightness(0.66);
+  }
+
+  .exposure-wordmark__rule {
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--positive) 25%, transparent);
+    mix-blend-mode: difference;
+  }
+
+  .exposure-hero__labmark {
+    position: absolute;
+    top: clamp(1.4rem, 2.5vw, 2.4rem);
+    right: var(--hero-gutter);
+    z-index: 3;
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.2em;
+  }
+
+  .exposure-hero__positioning {
+    position: absolute;
+    bottom: clamp(4rem, 10vh, 7.5rem);
+    left: var(--hero-gutter);
+    z-index: 3;
+    width: min(25rem, calc(var(--exposure) - 5rem));
+    color: #080908;
+  }
+
+  .exposure-hero__positioning p {
+    max-width: 31ch;
+    margin: 0 0 2.5rem;
+    font-size: clamp(1rem, 1.35vw, 1.32rem);
+    line-height: 1.35;
+  }
+
+  .exposure-actions__primary {
+    display: inline-flex;
+    min-width: 18.75rem;
+    min-height: 3.4rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid currentColor;
+    color: inherit;
+    font-size: 0.72rem;
+    font-weight: 760;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out);
+  }
+
+  .exposure-actions__primary:hover,
+  .exposure-actions__primary:focus-visible {
+    background: #080908;
+    color: var(--positive);
+  }
+
+  .exposure-hero__email {
+    position: absolute;
+    right: var(--hero-gutter);
+    bottom: clamp(4rem, 9vh, 7.5rem);
+    z-index: 3;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--positive);
+    font-size: 0.72rem;
+    font-weight: 720;
+  }
+
+  .exposure-control {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .exposure-control input {
+    position: absolute;
+    top: calc(var(--handle-y) - 2rem);
+    left: 34%;
+    z-index: 3;
+    width: 32%;
+    height: 4rem;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    pointer-events: auto;
+  }
+
+  .exposure-control__line {
+    position: absolute;
+    inset-block: 0;
+    left: var(--exposure);
+    width: 1px;
+    background: var(--signal);
+    box-shadow: 0 0 0.75rem rgb(36 87 255 / 0.95), 0 0 2rem rgb(36 87 255 / 0.55);
+    transform: translateX(-50%);
+  }
+
+  .exposure-control__handle {
+    position: absolute;
+    top: var(--handle-y);
+    left: var(--exposure);
+    width: 3rem;
+    height: 3rem;
+    border: 0.3rem solid var(--positive);
+    border-radius: 50%;
+    background: var(--negative);
+    box-shadow: 0 0 0 1px var(--negative), 0 0 1rem var(--signal);
+    transform: translate(-50%, -50%);
+    transition: scale 180ms var(--ease-out);
+  }
+
+  .exposure-control:focus-within .exposure-control__handle,
+  .exposure-control:hover .exposure-control__handle {
+    scale: 1.08;
+  }
+
+  .exposure-control:focus-within .exposure-control__handle {
+    box-shadow: 0 0 0 2px var(--negative), 0 0 0 5px var(--positive), 0 0 1.5rem var(--signal);
+  }
+
+  .exposure-control__hint {
+    position: absolute;
+    bottom: 11.5%;
+    left: var(--exposure);
+    color: var(--positive);
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+    mix-blend-mode: difference;
+  }
+
+  :global(.home-page .site-header) {
+    mix-blend-mode: difference;
+  }
+
+  :global(.home-page .site-signature) {
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  :global(.home-page .site-signature span:last-child) {
+    display: none;
+  }
+
+  :global(.home-page .site-signature__full) {
+    font-size: 0;
+  }
+
+  :global(.home-page .site-signature__full::before) {
+    content: 'PRANSHUL';
+    font-size: 0.68rem;
+  }
+
+  :global(.home-page .site-nav a) {
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 48.01rem) {
+    :global(.home-page .site-header) {
+      display: block;
+    }
+
+    :global(.home-page .site-signature) {
+      position: absolute;
+      top: 1.25rem;
+      left: clamp(1rem, 1.8vw, 2rem);
+    }
+
+    :global(.home-page .theme-control) {
+      position: absolute;
+      top: 1rem;
+      left: calc(50% - 1.375rem);
+      opacity: 0.06;
+    }
+
+    :global(.home-page .site-nav) {
+      position: absolute;
+      top: 1rem;
+      right: clamp(15rem, 20vw, 20rem);
+      left: 56%;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 64rem) {
+    .exposure-wordmark {
+      font-size: clamp(4.4rem, 11.3vw, 7.5rem);
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .exposure-hero {
+      min-height: 50rem;
+    }
+
+    .exposure-hero__identity {
+      top: 39%;
+      right: var(--page-gutter);
+      left: var(--page-gutter);
+    }
+
+    .exposure-wordmark {
+      height: 14rem;
+      font-size: clamp(3.8rem, 16.5vw, 7rem);
+      white-space: normal;
+    }
+
+    .exposure-wordmark__line,
+    .exposure-wordmark__rule {
+      inset-inline: 0;
+      height: auto;
+      max-width: 7.3ch;
+      transform: translateY(-50%) scaleY(2.3);
+      transform-origin: top center;
+    }
+
+    .exposure-hero__positioning {
+      right: var(--page-gutter);
+      bottom: 4.2rem;
+      width: auto;
+      color: var(--positive);
+      mix-blend-mode: difference;
+    }
+
+    .exposure-hero__positioning p {
+      max-width: 27ch;
+      font-size: 0.95rem;
+    }
+
+    .exposure-actions__primary {
+      min-width: 0;
+      width: min(100%, 18rem);
+    }
+
+    .exposure-hero__email {
+      right: var(--page-gutter);
+      bottom: 4.2rem;
+      max-width: 33vw;
+      text-align: right;
+    }
+
+    .exposure-control input {
+      left: 25%;
+      width: 50%;
+    }
+
+    .exposure-hero__labmark {
+      top: 7.1rem;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .exposure-hero {
+      --exposure: 52%;
+      --handle-y: 60%;
+      min-height: 52rem;
+    }
+
+    .exposure-hero__identity {
+      top: 35%;
+    }
+
+    .exposure-wordmark {
+      height: 13.5rem;
+      font-size: clamp(3.4rem, 17.2vw, 5.6rem);
+    }
+
+    .exposure-hero__positioning {
+      bottom: 5rem;
+    }
+
+    .exposure-hero__positioning p {
+      max-width: 24ch;
+      margin-bottom: 1rem;
+    }
+
+    .exposure-hero__email,
+    .exposure-hero__labmark {
+      display: none;
+    }
+
+    .exposure-control__handle {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exposure-actions__primary,
+    .exposure-control__handle {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .exposure-wordmark__line {
+      color: CanvasText;
+      background: none;
+    }
+
+    .exposure-control__line {
+      background: Highlight;
+      box-shadow: none;
+    }
+  }
+</style>

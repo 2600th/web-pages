@@ -1,0 +1,437 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  work: CollectionEntry<'work'>[];
+}
+
+type Presentation = {
+  signal: string;
+  phase: string;
+  statement: string;
+  role: string;
+  poster: string;
+  mp4: string;
+};
+
+const { work } = Astro.props;
+const display: Record<string, Presentation> = {
+  'blocks-inco-ai': {
+    signal: 'Production AI',
+    phase: 'Current operator work · launching in 2026',
+    statement: 'Generative AI joined to the real interior-design workflow—not isolated as a demo.',
+    role: 'Product and technology leadership',
+    poster: '/media/work/blocks-inco-ai/designesto-edit-room-poster.webp',
+    mp4: '/media/work/blocks-inco-ai/designesto-edit-room.mp4',
+  },
+  'ira-vr': {
+    signal: 'Immersive learning',
+    phase: 'Founder-era platform · 2016–2020',
+    statement: 'A classroom platform around immersive lessons: control, assessment, reporting, and multiple learning modes.',
+    role: 'Co-founder, product and technology lead',
+    poster: '/media/career/ira-vr/newton-poster.webp',
+    mp4: '/media/career/ira-vr/newton-loop.mp4',
+  },
+  'enterprise-immersive-systems': {
+    signal: 'Spatial systems',
+    phase: 'Enterprise XR · 2016–2021',
+    statement: 'Hotel 360°, industrial research, maritime XR training, and ageing-simulation learning built around real contexts.',
+    role: 'Co-founder and CTO',
+    poster: '/media/work/enterprise-immersive-systems/swissotel-poster.webp',
+    mp4: '/media/work/enterprise-immersive-systems/swissotel-loop.mp4',
+  },
+};
+const signals = work
+  .map((entry) => ({ entry, presentation: display[entry.data.slug] }))
+  .filter((item): item is typeof item & { presentation: Presentation } => Boolean(item.presentation));
+---
+
+<section class="signal-work" id="selected-work" aria-labelledby="selected-work-title" data-signal-work>
+  <header class="signal-work__prologue" data-polarity="positive">
+    <h2 id="selected-work-title" aria-label="Selected work: from ambiguity to an operable system.">From ambiguity<br />to an operable system.</h2>
+    <p>Three chapters, one repeated job: turn emerging technology into something people can operate, test, and trust.</p>
+  </header>
+
+  <div class="signal-work__cases">
+    {signals.map(({ entry, presentation }, index) => (
+      <article class:list={['signal-case', index % 2 === 1 && 'signal-case--light']} data-signal-case data-case-slug={entry.data.slug}>
+        <div class="signal-case__copy">
+          <p class="signal-case__phase">{presentation.phase}</p>
+          <h3>{entry.data.title}</h3>
+          <p class="signal-case__statement">{presentation.statement}</p>
+          <dl class="signal-case__facts">
+            <div>
+              <dt>Role</dt>
+              <dd>{presentation.role}</dd>
+            </div>
+            <div>
+              <dt>State</dt>
+              <dd>{presentation.signal}</dd>
+            </div>
+          </dl>
+          <a class="signal-case__link" href={`/work/${entry.data.slug}/`} aria-label={`Open ${entry.data.title} case study`}>Open the case <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="signal-case__media">
+          <a class="signal-case__media-link" href={`/work/${entry.data.slug}/`} aria-label={`View ${entry.data.title}`}>
+            <video muted loop playsinline preload="none" poster={presentation.poster} data-signal-video aria-label={entry.data.heroMedia?.alt ?? entry.data.summary}>
+              <source src={presentation.mp4} type="video/mp4" />
+            </video>
+            <span class="signal-case__reticle" aria-hidden="true"></span>
+          </a>
+          <button type="button" class="signal-case__motion" data-signal-motion-toggle aria-label={`Play ${entry.data.title} motion`} aria-pressed="false">
+            <svg aria-hidden="true" data-signal-motion-icon viewBox="0 0 16 16" width="14" height="14"><path d="M5 3.5 12 8l-7 4.5Z" fill="currentColor" /></svg>
+            <span data-signal-motion-label>Play</span>
+          </button>
+          <p class="signal-case__caption">Authentic project media · poster first · user controlled</p>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <a class="signal-work__archive" href="/work/">Complete work archive <span aria-hidden="true">→</span></a>
+</section>
+
+<script>
+  import { initSignalWork } from '../../scripts/signal-work';
+  initSignalWork();
+  document.addEventListener('astro:after-swap', initSignalWork);
+</script>
+
+<style>
+  .signal-work {
+    background: #080908;
+    color: #f1f0ea;
+  }
+
+  .signal-work__prologue {
+    display: grid;
+    min-height: 47svh;
+    grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.55fr);
+    gap: clamp(2rem, 8vw, 9rem);
+    align-items: end;
+    padding: clamp(5rem, 8vw, 8rem) var(--page-gutter) clamp(3rem, 5vw, 5rem);
+    background: #f1f0ea;
+    color: #080908;
+  }
+
+  .signal-work__prologue h2 {
+    max-width: 11ch;
+    margin: 0;
+    font-size: clamp(4rem, 8vw, 8.5rem);
+    font-stretch: 82%;
+    font-weight: 780;
+    line-height: 0.84;
+  }
+
+  .signal-work__prologue p {
+    max-width: 34ch;
+    margin: 0 0 0.6rem;
+    color: #4f514c;
+    font-size: clamp(1rem, 1.3vw, 1.24rem);
+    line-height: 1.45;
+  }
+
+  .signal-case {
+    display: grid;
+    min-height: 70svh;
+    grid-template-columns: minmax(20rem, 0.7fr) minmax(0, 1.3fr);
+    border-top: 1px solid rgb(241 240 234 / 0.28);
+  }
+
+  .signal-case__copy {
+    display: flex;
+    min-width: 0;
+    padding: clamp(3rem, 6vw, 7rem) var(--page-gutter);
+    flex-direction: column;
+    justify-content: center;
+    background: #080908;
+    color: #f1f0ea;
+  }
+
+  .signal-case--light .signal-case__copy {
+    background: #f1f0ea;
+    color: #080908;
+  }
+
+  .signal-case__phase {
+    margin: 0 0 clamp(2rem, 6vh, 5rem);
+    color: #2457ff;
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.66rem;
+    font-weight: 720;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .signal-case h3 {
+    max-width: 10ch;
+    margin-bottom: 1.35rem;
+    font-size: clamp(3.4rem, 6.5vw, 7rem);
+    font-stretch: 80%;
+    line-height: 0.84;
+    overflow-wrap: anywhere;
+  }
+
+  .signal-case__statement {
+    max-width: 31ch;
+    margin-bottom: 0;
+    color: #c2c3bc;
+    font-size: clamp(1.03rem, 1.35vw, 1.28rem);
+    line-height: 1.45;
+  }
+
+  .signal-case--light .signal-case__statement {
+    color: #4f514c;
+  }
+
+  .signal-case__facts {
+    display: grid;
+    max-width: 31ch;
+    margin: clamp(2rem, 5vh, 4rem) 0 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .signal-case__facts div {
+    min-width: 0;
+    padding-top: 0.65rem;
+    border-top: 1px solid currentColor;
+  }
+
+  .signal-case__facts dt {
+    margin-bottom: 0.35rem;
+    color: #2457ff;
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .signal-case__facts dd {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .signal-case__link {
+    display: inline-flex;
+    width: max-content;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.7rem;
+    color: inherit;
+    font-size: 0.74rem;
+    font-weight: 740;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .signal-case__link:hover {
+    color: #2457ff;
+  }
+
+  .signal-case__media {
+    position: relative;
+    min-width: 0;
+    min-height: 30rem;
+    overflow: hidden;
+    background: #111210;
+  }
+
+  .signal-case__media-link {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .signal-case__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.78) contrast(1.08);
+    transition: transform 700ms var(--ease-out), filter 500ms var(--ease-out);
+  }
+
+  .signal-case__media-link:hover video,
+  .signal-case__media-link:focus-visible video {
+    filter: saturate(0.95) contrast(1.04);
+    transform: scale(1.02);
+  }
+
+  .signal-case__media::after {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgb(241 240 234 / 0.18);
+    content: '';
+    pointer-events: none;
+  }
+
+  .signal-case__reticle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid #2457ff;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 180ms var(--ease-out);
+  }
+
+  .signal-case__reticle::before,
+  .signal-case__reticle::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #2457ff;
+    content: '';
+  }
+
+  .signal-case__reticle::before {
+    width: 5rem;
+    height: 1px;
+    transform: translate(-50%, -50%);
+  }
+
+  .signal-case__reticle::after {
+    width: 1px;
+    height: 5rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .signal-case__media-link:hover .signal-case__reticle,
+  .signal-case__media-link:focus-visible .signal-case__reticle {
+    opacity: 1;
+  }
+
+  .signal-case__motion {
+    position: absolute;
+    right: 1rem;
+    bottom: 2.5rem;
+    z-index: 2;
+    display: inline-flex;
+    min-width: 5.5rem;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #f1f0ea;
+    background: #080908;
+    color: #f1f0ea;
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 720;
+  }
+
+  .signal-case--light .signal-case__motion {
+    border-color: #080908;
+    background: #f1f0ea;
+    color: #080908;
+  }
+
+  .signal-case__motion:hover,
+  .signal-case__motion:focus-visible {
+    border-color: #2457ff;
+    color: #2457ff;
+  }
+
+  .signal-case__caption {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.65rem;
+    left: 1rem;
+    z-index: 2;
+    margin: 0;
+    color: #c2c3bc;
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  .signal-work__archive {
+    display: flex;
+    min-height: 8rem;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem var(--page-gutter);
+    color: #f1f0ea;
+    font-size: 0.76rem;
+    font-weight: 740;
+    text-decoration: none;
+  }
+
+  .signal-work__archive:hover {
+    color: #2457ff;
+  }
+
+  @media (max-width: 62rem) {
+    .signal-work__prologue {
+      min-height: 38svh;
+      grid-template-columns: 1fr;
+    }
+
+    .signal-case {
+      min-height: auto;
+      grid-template-columns: 1fr;
+    }
+
+    .signal-case__media {
+      min-height: 0;
+      aspect-ratio: 16 / 10;
+    }
+
+    .signal-case__copy {
+      min-height: 0;
+      grid-row: 2;
+      padding-block: 4.75rem 4rem;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .signal-work__prologue {
+      min-height: 21rem;
+      padding-block: 4rem 3rem;
+    }
+
+    .signal-work__prologue h2 {
+      font-size: clamp(3.5rem, 16vw, 5.4rem);
+    }
+
+    .signal-case__copy {
+      padding-block: 2.75rem 2.25rem;
+    }
+
+    .signal-case__phase {
+      margin-bottom: 1.5rem;
+    }
+
+    .signal-case h3 {
+      max-width: 11ch;
+      font-size: clamp(3.15rem, 13.5vw, 4.65rem);
+    }
+
+    .signal-case__facts {
+      margin: 1.5rem 0 1rem;
+    }
+
+    .signal-case__media {
+      aspect-ratio: 21 / 9;
+    }
+
+    .signal-work__archive {
+      min-height: 5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .signal-case__media video,
+    .signal-case__reticle {
+      transition: none;
+    }
+  }
+</style>

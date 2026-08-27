@@ -1,0 +1,144 @@
+---
+const proof = [
+  { year: '2015', title: 'GreyKernel · founder and CTO chapter', detail: 'XR, games, simulation, robotics, and enterprise production', href: '/work/greykernel/' },
+  { year: '2019', title: 'Defense technology and simulation', detail: 'Seven named training systems across hardware, tracking, and real-time 3D', href: '/work/defense-simulation-systems/' },
+  { year: '2019 / 2022', title: 'Humanoid Robot Control System · Patent 395331', detail: 'IMU body tracking translated into on-device robot control', href: '/work/humanoid-robot-control-system/' },
+  { year: '2021', title: 'HomeLane SpaceCraft Pro', detail: 'Interior planning, visualization, pricing, and production handoff', href: '/work/homelane-spacecraft-pro/' },
+  { year: '2025', title: 'Blocks team · Speed and Execution Award', detail: 'Public acknowledgement of the current product team', href: '/work/blocks-inco-ai/' },
+  { year: '2026', title: 'Public work · Kinema, Web Ocean 3D, Safed Sagar', detail: 'Browser-native experiments with source-visible progress', href: '/lab/' },
+] as const;
+---
+
+<section class="proof-line" id="proof-line" aria-labelledby="proof-line-title" data-proof-index>
+  <header>
+    <h2 id="proof-line-title">The work leaves a trail.</h2>
+    <p>Original sources, independent coverage, public builds, and clearly labelled reviewed material.</p>
+  </header>
+
+  <ol>
+    {proof.map((item) => (
+      <li>
+        <a href={item.href}>
+          <time datetime={item.year.split(' ')[0]}>{item.year}</time>
+          <strong>{item.title}</strong>
+          <span>{item.detail}</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .proof-line {
+    padding: clamp(5rem, 10vw, 9rem) var(--page-gutter);
+    background: #f1f0ea;
+    color: #080908;
+    border-top: 1px solid rgb(8 9 8 / 0.25);
+  }
+
+  .proof-line header {
+    display: grid;
+    max-width: var(--content-width);
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 2rem;
+    align-items: end;
+    margin: 0 auto clamp(3rem, 6vw, 5rem);
+  }
+
+  .proof-line h2 {
+    max-width: 10ch;
+    margin: 0;
+    font-size: clamp(3.6rem, 6vw, 6.5rem);
+    line-height: 0.88;
+  }
+
+  .proof-line header p {
+    max-width: 35ch;
+    margin: 0 0 0.4rem;
+    color: #4f514c;
+  }
+
+  .proof-line ol {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0;
+    border-top: 1px solid #080908;
+    list-style: none;
+  }
+
+  .proof-line li {
+    border-bottom: 1px solid rgb(8 9 8 / 0.25);
+  }
+
+  .proof-line a {
+    display: grid;
+    min-height: 5.5rem;
+    grid-template-columns: 7.5rem minmax(12rem, 0.9fr) minmax(10rem, 0.65fr) 1rem;
+    gap: 1rem;
+    align-items: center;
+    padding-block: 0.65rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out), transform 180ms var(--ease-out);
+  }
+
+  .proof-line a:hover,
+  .proof-line a:focus-visible {
+    background: #080908;
+    color: #f1f0ea;
+    transform: translateX(0.35rem);
+  }
+
+  .proof-line time,
+  .proof-line a > span {
+    color: #2457ff;
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+  }
+
+  .proof-line a > span:nth-child(3) {
+    color: #4f514c;
+    font-family: inherit;
+    letter-spacing: normal;
+  }
+
+  .proof-line a:hover > span:nth-child(3),
+  .proof-line a:focus-visible > span:nth-child(3) {
+    color: #c2c3bc;
+  }
+
+  .proof-line a > span:last-child {
+    justify-self: end;
+    color: currentColor;
+  }
+
+  @media (max-width: 48rem) {
+    .proof-line header {
+      grid-template-columns: 1fr;
+      margin-bottom: 2rem;
+    }
+
+    .proof-line a {
+      min-height: 5.75rem;
+      grid-template-columns: 5rem 1fr 1rem;
+    }
+
+    .proof-line a > span:nth-child(3) {
+      grid-column: 2;
+    }
+
+    .proof-line a > span:last-child {
+      grid-column: 3;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  @media (max-width: 22rem) {
+    .proof-line a {
+      grid-template-columns: 4.25rem 1fr 1rem;
+      gap: 0.55rem;
+    }
+  }
+</style>
