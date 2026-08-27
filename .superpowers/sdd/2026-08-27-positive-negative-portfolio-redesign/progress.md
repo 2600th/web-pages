@@ -46,3 +46,9 @@ Task 3: complete (commits 4dd220a..1fd33f1, SPEC PASS, QUALITY PASS; no Critical
 Task 4: Ruling: the Impeccable detector's earlier run satisfies the plan's one-run requirement; Task 4 must consume its findings and use production screenshots, axe/browser coverage, and the shipped finish reviewer rather than rerun it — cost if wrong: no second automated detector delta exists, so remaining judgment depends on the audited visual and test evidence.
 Task 4: Ruling: keep the intentionally deferred home theme control at 2% idle opacity because it remains keyboard-visible and the finish reviewer classified it as Minor; do not dilute the controlling hero composition for a non-blocking discoverability tradeoff — cost if wrong: pointer-only visitors may not immediately notice the theme affordance.
 Task 4: complete (commit 5c5cdd1; npm run verify green; Impeccable disposition SHIP with no Critical or Important findings)
+
+Final code review: fix round 1/5 (case-media opt-in playback and six static Work domain routes added; rereview found the custom no-JS control, stale client-history metadata, inert mobile select, and dirty-HomeLane-dependent tests still open; commits 9798568..0c1f4f0)
+Final code review: Ruling: static domain anchors and the enhanced mobile select perform real navigation instead of pushState filtering, so canonical/title/OG metadata always match the visible route — cost if wrong: filtering is a page navigation rather than an instant in-place transition.
+Final code review: Ruling: case tests use the already tracked IRA VR MP4 evidence, and custom controls remain hidden until binding while native controls are the no-JS surface — cost if wrong: the browser's native video chrome appears briefly or permanently when enhancement is unavailable.
+Final code review: fix round 2/5 (all I1, M1, N1, and N2 findings addressed; no new Critical/Important findings; focused rereview 7/7; commits 0c1f4f0..72b1d60)
+Final code review: complete (Ready: Yes)
