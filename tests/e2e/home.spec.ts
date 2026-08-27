@@ -1,73 +1,58 @@
 import { expect, test } from '@playwright/test';
 
-test('first viewport identifies Pranshul, the work, and the next action', async ({ page }) => {
+test('first viewport names the operator, the practice, and the next action', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Pranshul Chandhok' })).toBeVisible();
-  await expect(page.locator('.hero__positioning').getByText(/fifteen years.*games.*AI/i)).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Discuss an opportunity' }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: 'View selected work' })).toHaveAttribute('href', '#selected-work');
+  await expect(page.getByText(/operator.advisor building at the edge of AI/i)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Explore selected work' })).toHaveAttribute('href', '#selected-work');
+  await expect(page.getByRole('link', { name: 'Email Pranshul' }).first()).toHaveAttribute('href', /mailto:2600th@gmail.com/);
+  await expect(page.getByRole('slider', { name: /adjust the positive and negative exposure/i })).toBeVisible();
+  await expect(page.locator('[data-theme-control]')).toBeVisible();
 });
 
-test('selected work leads with four operator-grade cases', async ({ page }) => {
+test('primary navigation is the four-part public map', async ({ page }) => {
+  await page.goto('/');
+  const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+
+  await expect(navigation.getByRole('link')).toHaveCount(4);
+  await expect(navigation.getByRole('link', { name: 'Work', exact: true })).toHaveAttribute('href', '/work/');
+  await expect(navigation.getByRole('link', { name: 'Lab', exact: true })).toHaveAttribute('href', '/lab/');
+  await expect(navigation.getByRole('link', { name: 'Notes', exact: true })).toHaveAttribute('href', '/notes/');
+  await expect(navigation.getByRole('link', { name: 'Contact', exact: true })).toHaveAttribute('href', '/#contact');
+});
+
+test('selected work presents four authentic signals led by current operator work', async ({ page }) => {
   await page.goto('/#selected-work');
-  const projects = page.getByRole('navigation', { name: 'Selected projects' });
+  const selectedWork = page.locator('#selected-work');
+  const cases = selectedWork.locator('[data-signal-case]');
 
-  await expect(projects.getByRole('link')).toHaveCount(4);
-  await expect(projects.getByRole('link').first()).toContainText(/Blocks.*designesto\.ai/i);
-});
-
-test('Proof in motion leads with six authentic evidence frames and responsible video', async ({ page }) => {
-  await page.goto('/#proof-in-motion');
-  const proof = page.locator('#proof-in-motion');
-
-  await expect(proof.getByRole('heading', { level: 2, name: /Systems you can see moving/i })).toBeVisible();
-  await expect(proof.locator('figure')).toHaveCount(6);
-  await expect(proof.locator('figure > a')).toHaveCount(6);
-  await expect(proof.locator('video')).toHaveCount(6);
-  await expect(proof.locator('figure').first()).toContainText(/designesto\.ai/i);
-  await expect(proof.getByText(/experiential learning/i)).toBeVisible();
-  await expect(proof.getByRole('link', { name: /View IRA VR.*case study/i })).toHaveAttribute(
+  await expect(selectedWork.getByRole('heading', { level: 2, name: /Selected work/i })).toBeVisible();
+  await expect(cases).toHaveCount(4);
+  await expect(cases.first().getByRole('heading', { level: 3 })).toHaveText(/Blocks.*designesto\.ai/i);
+  await expect(cases.first()).toContainText(/launching in 2026/i);
+  await expect(cases.first().getByRole('link', { name: /Open.*Blocks.*designesto/i })).toHaveAttribute(
     'href',
-    '/work/ira-vr/',
+    '/work/blocks-inco-ai/',
   );
 
-  for (const video of await proof.locator('video').all()) {
-    await expect(video).toHaveAttribute('muted', '');
-    await expect(video).toHaveAttribute('loop', '');
-    await expect(video).toHaveAttribute('playsinline', '');
-    await expect(video).toHaveAttribute('preload', 'none');
-    await expect(video).toHaveAttribute('poster', /\/media\//);
-  }
-
-  const leadingVideo = proof.locator('video').first();
-  const trailingVideo = proof.locator('video').last();
-  await leadingVideo.scrollIntoViewIfNeeded();
-  await expect.poll(async () => leadingVideo.evaluate((video) => !(video as HTMLVideoElement).paused)).toBe(true);
-  await expect.poll(async () => trailingVideo.evaluate((video) => (video as HTMLVideoElement).paused)).toBe(true);
-
-  const motionToggle = proof.getByRole('button', { name: 'Motion playback' });
-  await expect(motionToggle).toHaveAttribute('aria-pressed', 'true');
-  await motionToggle.click();
-  await expect(motionToggle).toHaveAttribute('aria-pressed', 'false');
-  await expect.poll(async () => proof.locator('video').evaluateAll((elements) =>
-    elements.every((element) => (element as HTMLVideoElement).paused),
-  )).toBe(true);
-
-  await expect(proof.getByRole('link', { name: /Open the complete work archive/i })).toBeVisible();
+  const ira = cases.filter({ hasText: 'IRA VR' });
+  await expect(ira.locator('video')).toHaveAttribute('poster', '/media/career/ira-vr/newton-poster.webp');
+  await expect(ira.locator('video')).toHaveAttribute('preload', 'none');
+  await expect(ira.getByRole('link', { name: /Open.*IRA VR/i })).toHaveAttribute('href', '/work/ira-vr/');
 });
 
-test('Proof in motion falls back to still frames when reduced motion is requested', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/#proof-in-motion');
-  const videos = page.locator('#proof-in-motion video');
-  const motionToggle = page.getByRole('button', { name: 'Motion playback' });
+test('current work and the public lab remain explicit and findable', async ({ page }) => {
+  await page.goto('/#public-build');
+  const lab = page.locator('#public-build');
 
-  await expect(videos).toHaveCount(6);
-  await expect(motionToggle).toHaveAttribute('aria-pressed', 'false');
-  await expect.poll(async () => videos.evaluateAll((elements) =>
-    elements.every((element) => (element as HTMLVideoElement).paused),
-  )).toBe(true);
+  await expect(lab.getByRole('heading', { level: 2, name: /designesto.ai/i })).toBeVisible();
+  await expect(lab).toContainText(/launching in 2026/i);
+  await expect(lab.getByRole('link', { name: /Kinema/i })).toHaveAttribute('href', '/work/kinema/');
+  await expect(lab.getByRole('link', { name: /Web Ocean 3D/i })).toHaveAttribute('href', '/work/web-ocean-3d/');
+  await expect(lab.getByRole('link', { name: /Open the lab/i })).toHaveAttribute('href', '/lab/');
+  await expect(lab.locator('.build-field__media')).toHaveCount(0);
+  await expect(lab).toContainText(/current build report/i);
 });
 
 test('motion-rich case studies expose real clips with poster fallbacks', async ({ page }) => {
@@ -82,62 +67,109 @@ test('motion-rich case studies expose real clips with poster fallbacks', async (
   }
 });
 
-test('the identity and conversion path remain complete without JavaScript', async ({ browser }) => {
+test('the identity, work, and conversion path remain complete without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Pranshul Chandhok' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Discuss an opportunity' }).first()).toHaveAttribute('href', /mailto:2600th@gmail.com/);
-  await expect(page.locator('.career-atlas__index').getByRole('link', { name: 'Kinema' })).toHaveAttribute('href', '/work/kinema/');
-  await expect(page.getByRole('link', { name: /The Brutal Spy/ })).toHaveAttribute('href', '/work/the-brutal-spy/');
-  await expect(page.getByRole('navigation', { name: 'Selected projects' }).getByRole('link').first()).toHaveAttribute(
-    'href',
-    '/work/blocks-inco-ai/',
-  );
+  await expect(page.getByRole('link', { name: 'Email Pranshul' }).first()).toHaveAttribute('href', /mailto:2600th@gmail.com/);
+  await expect(page.locator('#selected-work [data-signal-case]')).toHaveCount(4);
+  await expect(page.getByRole('link', { name: /Open.*IRA VR/i })).toHaveAttribute('href', '/work/ira-vr/');
   await context.close();
 });
 
-test('Three Distances changes real content and keeps the state in the URL', async ({ page }) => {
-  await page.goto('/?work=kinema&distance=out#selected-work');
-  const work = page.locator('#selected-work');
-
-  await expect(work.getByRole('heading', { level: 3, name: 'Kinema' })).toBeVisible();
-  await work.getByRole('button', { name: /NEAR/ }).click();
-  await expect(page).toHaveURL(/work=kinema&distance=near/);
-  await expect(work.getByText(/Players move through a procedural showcase/)).toBeVisible();
-
-  await work.getByRole('link', { name: /Web Ocean 3D/ }).click();
-  await expect(page).toHaveURL(/work=web-ocean-3d&distance=near/);
-  await expect(work.getByRole('heading', { level: 3, name: 'Web Ocean 3D' })).toBeVisible();
-});
-
-test('selected-work media stays inside the desktop viewport', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 900 });
+test('reduced motion preserves still evidence and disables authored transitions', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/#selected-work');
-  const panel = page.locator('#selected-work [data-distance-panel="out"]:visible').first();
-  const figure = await panel.locator('figure').boundingBox();
 
-  expect(figure).not.toBeNull();
-  expect((figure?.x ?? 0) + (figure?.width ?? 0)).toBeLessThanOrEqual(1280);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1280);
-});
-
-test('the authored defense systems map remains fully legible in the Career Atlas', async ({ page }) => {
-  await page.goto('/?career=defense-simulation-systems#career-atlas');
-
-  const fit = await page.locator('.career-atlas__panel[data-slug="defense-simulation-systems"] img').evaluate((image) =>
-    getComputedStyle(image).objectFit,
+  const duration = await page.locator('[data-signal-case]').first().evaluate((element) =>
+    getComputedStyle(element).transitionDuration,
   );
-  expect(fit).toBe('contain');
+  expect(Number.parseFloat(duration)).toBeLessThanOrEqual(0.01);
+
+  const videos = page.locator('#selected-work video');
+  await expect(videos).toHaveCount(3);
+  await expect.poll(async () => videos.evaluateAll((elements) =>
+    elements.every((element) => (element as HTMLVideoElement).paused),
+  )).toBe(true);
 });
 
-test('the longest selected-work title stays inside a 320px viewport', async ({ page }) => {
+test('the homepage stays inside the 320px support floor', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto('/#selected-work');
+  await page.goto('/');
 
-  const title = await page.locator('[data-work-project="blocks-inco-ai"] .project__header h3').boundingBox();
-  expect(title).not.toBeNull();
-  expect((title?.x ?? 0) + (title?.width ?? 0)).toBeLessThanOrEqual(320);
+  await expect(page.getByRole('heading', { level: 1, name: 'Pranshul Chandhok' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  for (const target of await page.locator('.site-nav a, [data-theme-control], .hero-actions a').all()) {
+    const box = await target.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test('mobile exposure control does not intercept the primary action', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const action = page.getByRole('link', { name: 'Explore selected work' });
+  const box = await action.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.click((box?.x ?? 0) + (box?.width ?? 0) / 2, (box?.y ?? 0) + (box?.height ?? 0) / 2);
+  await expect(page).toHaveURL(/#selected-work$/);
+
+  const sliderBox = await page.getByRole('slider', { name: /adjust the positive and negative exposure/i }).boundingBox();
+  expect(sliderBox?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(64);
+});
+
+test('every homepage motion clip has a working user control', async ({ page }) => {
+  await page.goto('/#selected-work');
+  const videos = page.locator('#selected-work video');
+  const controls = page.locator('#selected-work [data-signal-motion-toggle]');
+
+  await expect(controls).toHaveCount(await videos.count());
+  const firstControl = controls.first();
+  await firstControl.scrollIntoViewIfNeeded();
+  const initial = await firstControl.getAttribute('aria-pressed');
+  await firstControl.click();
+  await expect(firstControl).not.toHaveAttribute('aria-pressed', initial ?? 'false');
+});
+
+test('homepage evidence stays concise on a mobile reading path', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(7600);
+  await expect(page.locator('.proof-line li')).toHaveCount(4);
+  await expect(page.locator('.ledger')).toHaveCount(0);
+});
+
+test('the conversation and footer close use split polarity planes instead of a cobalt slab', async ({ page }) => {
+  await page.goto('/#contact');
+
+  const conversation = page.locator('.conversation-close');
+  await expect(conversation).toBeVisible();
+  const conversationColors = await conversation.evaluate((element) => {
+    const lead = element.querySelector('.conversation-close__lead');
+    const paths = element.querySelector('.conversation-close__paths');
+    return {
+      root: getComputedStyle(element).backgroundColor,
+      lead: lead ? getComputedStyle(lead).backgroundColor : '',
+      paths: paths ? getComputedStyle(paths).backgroundColor : '',
+    };
+  });
+
+  expect(conversationColors.root).not.toBe('rgb(36, 87, 255)');
+  expect(conversationColors.lead).not.toBe(conversationColors.paths);
+
+  const footerColors = await page.locator('.site-footer').evaluate((element) => {
+    const contact = element.querySelector('.site-footer__contact');
+    return {
+      root: getComputedStyle(element).backgroundColor,
+      contact: contact ? getComputedStyle(contact).backgroundColor : '',
+    };
+  });
+
+  expect(footerColors.root).not.toBe('rgb(36, 87, 255)');
+  expect(footerColors.contact).not.toBe(footerColors.root);
 });

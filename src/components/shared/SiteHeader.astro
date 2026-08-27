@@ -3,6 +3,7 @@ import { NAVIGATION } from '../../data/site';
 import ThemeControl from './ThemeControl.astro';
 
 const pathname = Astro.url.pathname;
+const isCurrent = (href: string) => href.startsWith('/#') ? false : pathname.startsWith(href);
 ---
 
 <header class="site-header" data-site-header>
@@ -13,8 +14,8 @@ const pathname = Astro.url.pathname;
   </a>
   <nav class="site-nav" aria-label="Primary navigation">
     {NAVIGATION.map((item) => (
-      <a href={item.href} aria-current={pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+      <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
     ))}
-    {pathname !== '/' && <ThemeControl />}
   </nav>
+  <ThemeControl />
 </header>

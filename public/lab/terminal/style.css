@@ -2664,3 +2664,16 @@ body.fx-muted .quote-panel {
     background: #42ff7c;
     color: #020704;
 }
+
+@media (max-width: 760px) {
+    /* Keep the archive handoff in document flow so it cannot cover the console controls or content. */
+    .archive-return {
+        position: relative;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        left: auto;
+        z-index: 42;
+        margin: 0.75rem 1rem 0;
+    }
+}

@@ -2,16 +2,17 @@
 import { CONTACT_EMAIL, SOCIAL_LINKS } from '../../data/site';
 ---
 
-<footer class="site-footer">
-  <div class="site-footer__identity">
+<footer class="site-footer" data-closing-plane="split">
+  <div class="site-footer__identity" data-polarity="positive">
     <strong>Pranshul Chandhok</strong>
-    <span>Product, technology, AI, and spatial systems.</span>
+    <span>Operator / advisor · Product, AI, and spatial systems.</span>
   </div>
-  <nav aria-label="Social links">
+  <nav aria-label="Footer navigation" data-polarity="positive">
+    <a href="/about/">About</a>
     {SOCIAL_LINKS.map((item) => <a href={item.href} target="_blank" rel="me noopener">{item.label}</a>)}
-    <a href="/lab/terminal/">2600th v1</a>
+    <a href="/lab/terminal/index.html">Console archive</a>
   </nav>
-  <div class="site-footer__contact">
+  <div class="site-footer__contact" data-polarity="negative">
     <a href={`mailto:${CONTACT_EMAIL}`} data-event="contact_start" data-event-context="footer">{CONTACT_EMAIL}</a>
     <span>© {new Date().getFullYear()}</span>
   </div>

@@ -47,9 +47,10 @@ test('defense work names the full program and systems contribution', async ({ pa
   await page.goto('/work/defense-simulation-systems/');
 
   const defenseRecord = await page.locator('main').textContent();
-  for (const program of ['BLT T-72', 'Tunguska', 'LLLR', 'M777', 'T-90', 'Advanced Mannequin System', 'Radio Telephony', 'Tata Safari']) {
+  for (const program of ['BLT T-72', 'Tunguska', 'LLLR', 'M777', 'T-90', 'Advanced Mannequin System', 'Radio Telephony']) {
     expect(defenseRecord).toContain(program);
   }
+  expect(defenseRecord).not.toContain('Tata Safari');
   expect(defenseRecord).toMatch(/custom hardware[\s\S]*IMU[\s\S]*sensor[\s\S]*instructor[\s\S]*evaluation/i);
   await expect(page.locator('.project-media figcaption')).toContainText('not client documentation');
   await expect(page.locator('a[href*="drive.google.com"], a[href*="docs.google.com"]')).toHaveCount(0);
@@ -60,11 +61,13 @@ test('enterprise immersive work includes the wider client and domain record', as
 
   const enterpriseRecord = await page.locator('main').textContent();
   expect(enterpriseRecord).toMatch(/JPMorgan Chase[\s\S]*Anglian Water[\s\S]*Voxel Worlds VR/i);
-  expect(enterpriseRecord).toMatch(/Myntra[\s\S]*scope is not expanded/i);
-  expect(enterpriseRecord).toMatch(/Sight Savers/i);
-  expect(enterpriseRecord).toMatch(/maritime[\s\S]*accessibility[\s\S]*analytics[\s\S]*production-facility/i);
+  expect(enterpriseRecord).toMatch(/Myntra[\s\S]*stronger public scope record/i);
+  expect(enterpriseRecord).toMatch(/Cycling Without Age Singapore[\s\S]*Swissôtel/i);
+  expect(enterpriseRecord).toMatch(/maritime/i);
+  expect(enterpriseRecord).toMatch(/automotive|technical-learning/i);
+  expect(enterpriseRecord).toMatch(/production-facility/i);
   await expect(page.getByRole('heading', { name: 'Privately reviewed evidence' })).toBeVisible();
-  await expect(page.getByText(/VR\/360 Video Production — Boston/)).toBeVisible();
+  await expect(page.getByText(/VR (?:and|\/) 360 Video Production — Boston/)).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Public corroboration' })).toBeVisible();
 });
 
@@ -89,9 +92,11 @@ test('work detail exposes evidence and CreativeWork structured data', async ({ p
     'href',
     'https://github.com/2600th/Kinema',
   );
-  const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
-  expect(jsonLd).toContain('CreativeWork');
-  expect(jsonLd).toContain('Kinema');
+  const jsonLd = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '[]');
+  const creativeWork = jsonLd.find((entry: { '@type'?: string }) => entry['@type'] === 'CreativeWork');
+  expect(creativeWork.name).toBe('Kinema');
+  expect(creativeWork.citation).toContain('https://github.com/2600th/Kinema');
+  expect(creativeWork.sameAs).toBeUndefined();
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
 });
 
@@ -114,4 +119,30 @@ test('unknown routes provide a useful return path', async ({ page }) => {
   expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { level: 1, name: /not found/i })).toBeVisible();
   await expect(page.getByRole('link', { name: /Return home/i })).toHaveAttribute('href', '/');
+});
+
+test('the console archive link uses an explicit file URL and serves the archive', async ({ page, request }) => {
+  await page.goto('/');
+
+  const archiveLink = page.locator('.site-footer a').filter({ hasText: /console archive/i });
+  await expect(archiveLink).toHaveAttribute('href', '/lab/terminal/index.html');
+
+  const response = await request.get('/lab/terminal/index.html');
+  expect(response.status()).toBe(200);
+});
+
+test('the archive return action stays in mobile flow instead of covering the console', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/lab/terminal/index.html');
+
+  const returnAction = page.locator('.archive-return');
+  await expect(returnAction).toBeVisible();
+  await expect.poll(() => returnAction.evaluate((element) => getComputedStyle(element).position)).not.toBe('fixed');
+
+  const actionBox = await returnAction.boundingBox();
+  const firstPanel = await page.locator('.terminal-screen').boundingBox();
+  expect(actionBox).not.toBeNull();
+  expect(firstPanel).not.toBeNull();
+  const actionBottom = (actionBox?.y ?? 0) + (actionBox?.height ?? Number.POSITIVE_INFINITY);
+  expect(actionBottom).toBeLessThanOrEqual((firstPanel?.y ?? 0) + 80);
 });
