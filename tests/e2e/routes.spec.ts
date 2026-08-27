@@ -176,7 +176,7 @@ test('work archive renders one canonical list and supports link filters', async 
   await expect(page.getByText('17 public records')).toBeVisible();
   await expect(page.locator('[data-work-item]')).toHaveCount(17);
   await page.getByRole('link', { name: 'XR and spatial computing', exact: true }).first().click();
-  await expect(page).toHaveURL(/domain=xr/);
+  await expect(page).toHaveURL(/\/work\/domain\/xr\/$/);
   await expect(page.getByRole('link', { name: /IRA VR/ })).toBeVisible();
   await expect(page.locator('[data-work-item]:visible')).toHaveCount(6);
 });

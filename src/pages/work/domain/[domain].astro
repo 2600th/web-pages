@@ -1,0 +1,94 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Breadcrumbs from '../../../components/shared/Breadcrumbs.astro';
+import WorkList from '../../../components/work/WorkList.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { CAREER_DOMAIN_META } from '../../../data/career-domains';
+import type { CareerDomain } from '../../../content/evidence';
+import '../../../styles/content-pages.css';
+
+export async function getStaticPaths() {
+  const work = await getCollection('work');
+  const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
+  return domains.map(([domain]) => ({
+    params: { domain },
+    props: {
+      domain,
+      work: work.filter((entry) => entry.data.domains.includes(domain)).sort((a, b) => a.data.careerOrder - b.data.careerOrder),
+    },
+  }));
+}
+
+const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
+
+interface Props {
+  domain: CareerDomain;
+  work: CollectionEntry<'work'>[];
+}
+
+const { domain, work } = Astro.props;
+const domainMeta = CAREER_DOMAIN_META[domain];
+---
+
+<BaseLayout
+  title={`${domainMeta.label} · Career work`}
+  description={`${domainMeta.description} Browse the ${domainMeta.label.toLowerCase()} work record of Pranshul Chandhok.`}
+  canonical={`/work/domain/${domain}/`}
+>
+  <div class="page-shell work-archive" data-work-archive data-static-domain={domain}>
+    <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: domainMeta.label }]} />
+    <header class="route-opening route-opening--work" data-route-opening>
+      <div class="route-opening__positive" data-polarity="positive">
+        <h1>{domainMeta.label}</h1>
+        <p class="route-opening__statement">{domainMeta.description}</p>
+      </div>
+      <div class="route-opening__negative" data-polarity="negative">
+        <p class="route-opening__context">Filtered public record · {work.length} records</p>
+        <p><strong>{work.length} public records</strong> where {domainMeta.label.toLowerCase()} shaped the work.</p>
+        <p>Each row returns to its canonical case record; the full archive remains available through Work.</p>
+      </div>
+    </header>
+
+    <nav class="domain-filter" aria-label="Filter work by domain">
+      <a href="/work/">All domains</a>
+      {domains.map(([key, meta]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={meta.label} data-domain-description={meta.description} aria-current={key === domain ? 'page' : undefined}>{meta.label}</a>)}
+    </nav>
+    <noscript>
+      <nav class="domain-filter-mobile-links" aria-label="Browse work domains">
+        <a href="/work/">All domains</a>
+        {domains.map(([key, meta]) => <a href={`/work/domain/${key}/`}>{meta.label}</a>)}
+      </nav>
+    </noscript>
+    <label class="domain-filter-select">
+      <span>Work domain</span>
+      <select aria-label="Choose a work domain" data-domain-select>
+        <option value="all">All domains</option>
+        {domains.map(([key, meta]) => <option value={key} selected={key === domain}>{meta.label}</option>)}
+      </select>
+    </label>
+
+    <p class="sr-only" aria-live="polite" data-work-status>{domainMeta.label}, {work.length} {work.length === 1 ? 'project' : 'projects'}</p>
+    <section class="work-list-region" aria-labelledby="work-list-heading">
+      <header>
+        <div><h2 id="work-list-heading" data-work-heading>{domainMeta.label}</h2><span class="work-list-region__count" data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
+        <p data-work-description>{domainMeta.description}</p>
+      </header>
+      <WorkList work={work} />
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  const initStaticDomain = () => {
+    document.querySelectorAll<HTMLElement>('[data-static-domain]').forEach((root) => {
+      if (root.dataset.bound === 'true') return;
+      root.dataset.bound = 'true';
+      const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
+      select?.addEventListener('change', () => {
+        window.location.assign(select.value === 'all' ? '/work/' : `/work/domain/${select.value}/`);
+      });
+    });
+  };
+  initStaticDomain();
+  document.addEventListener('astro:after-swap', initStaticDomain);
+</script>

@@ -30,8 +30,14 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
 
     <nav class="domain-filter" aria-label="Filter work by domain">
       <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="The complete public record." aria-current="page">All domains</a>
-      {domains.map(([key, domain]) => <a href={`/work/?domain=${key}`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description}>{domain.label}</a>)}
+      {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description}>{domain.label}</a>)}
     </nav>
+    <noscript>
+      <nav class="domain-filter-mobile-links" aria-label="Browse work domains">
+        <a href="/work/">All domains</a>
+        {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`}>{domain.label}</a>)}
+      </nav>
+    </noscript>
     <label class="domain-filter-select">
       <span>Work domain</span>
       <select aria-label="Choose a work domain" data-domain-select>
@@ -61,7 +67,8 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
       const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
 
       const render = () => {
-        const requested = new URLSearchParams(location.search).get('domain');
+        const pathDomain = location.pathname.match(/^\/work\/domain\/([^/]+)\/?$/)?.[1];
+        const requested = pathDomain ?? new URLSearchParams(location.search).get('domain');
         const activeLink = links.find((link) => link.dataset.domainLink === requested) ?? links[0];
         const activeDomain = activeLink.dataset.domainLink ?? 'all';
         if (select) select.value = activeDomain;

@@ -12,6 +12,7 @@ const slugs = async (collection) => (await readdir(join(project, 'src', 'content
 
 const workSlugs = await slugs('work');
 const noteSlugs = await slugs('notes');
+const workDomainSlugs = ['games', 'xr', 'simulation', 'robotics', 'design-tech', 'applied-ai'];
 const requiredFiles = [
   'index.html',
   '404.html',
@@ -31,6 +32,7 @@ const requiredFiles = [
   'lab/terminal/index.html',
   'media/social/career-atlas.webp',
   ...workSlugs.map((slug) => `work/${slug}/index.html`),
+  ...workDomainSlugs.map((domain) => `work/domain/${domain}/index.html`),
   ...noteSlugs.map((slug) => `notes/${slug}/index.html`),
 ];
 
@@ -77,4 +79,4 @@ for (const file of builtFiles.filter((path) => path.includes(`${join('media')}`)
   if (bytes > 2_200_000) throw new Error(`${relative(output, file)} exceeds the 2.2 MB public media budget.`);
 }
 
-console.log(`Verified ${requiredFiles.length} production artifacts, ${workSlugs.length} work routes, and ${noteSlugs.length} note routes.`);
+console.log(`Verified ${requiredFiles.length} production artifacts, ${workSlugs.length} work routes, ${workDomainSlugs.length} domain routes, and ${noteSlugs.length} note routes.`);

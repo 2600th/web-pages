@@ -10,7 +10,7 @@ const { media, label, priority = false } = Astro.props;
 
 <figure class="project-media" data-evidence-media data-media-label={label}>
   {media.mp4 ? (
-    <video muted loop playsinline preload="none" poster={media.src} width={media.width} height={media.height} aria-label={media.alt} data-evidence-video>
+    <video controls muted loop playsinline preload="none" poster={media.src} width={media.width} height={media.height} aria-label={media.alt} data-evidence-video>
       {media.webm && <source src={media.webm} type="video/webm" />}
       <source src={media.mp4} type="video/mp4" />
     </video>
@@ -19,7 +19,7 @@ const { media, label, priority = false } = Astro.props;
   )}
   <figcaption>
     <span>{label}</span>
-    {media.mp4 && <button type="button" data-evidence-video-toggle aria-label={`Pause ${label} clip`}>Pause</button>}
+    {media.mp4 && <button type="button" data-evidence-video-toggle aria-label={`Play ${label} clip`}>Play</button>}
   </figcaption>
 </figure>
 

@@ -12,6 +12,15 @@ const interiorPaths = [
   '/lab/',
 ] as const;
 
+const workDomainCounts = {
+  games: 9,
+  xr: 6,
+  simulation: 6,
+  robotics: 2,
+  'design-tech': 2,
+  'applied-ai': 3,
+} as const;
+
 test('robots and RSS expose the canonical public site', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.status()).toBe(200);
@@ -74,6 +83,38 @@ test('the work archive remains link-complete without JavaScript', async ({ brows
   await noJs.close();
 });
 
+test('work domain links target canonical static subsets', async ({ page }) => {
+  await page.goto('/work/');
+
+  for (const domain of Object.keys(workDomainCounts)) {
+    await expect(page.locator(`[data-domain-link="${domain}"]`)).toHaveAttribute('href', `/work/domain/${domain}/`);
+  }
+});
+
+test('crawlable work domain routes render only their subset without JavaScript', async ({ browser }) => {
+  const noJs = await browser.newContext({ javaScriptEnabled: false });
+  const page = await noJs.newPage();
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  await page.goto('/work/');
+  await expect(page.locator('.domain-filter-mobile-links')).toBeVisible();
+  for (const domain of Object.keys(workDomainCounts)) {
+    await expect(page.locator(`.domain-filter-mobile-links a[href="/work/domain/${domain}/"]`)).toHaveCount(1);
+  }
+
+  for (const [domain, count] of Object.entries(workDomainCounts)) {
+    const response = await page.goto(`/work/domain/${domain}/`);
+    expect(response?.status(), domain).toBe(200);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://www.2600th.com/work/domain/${domain}/`);
+    await expect(page.locator('[data-work-item]')).toHaveCount(count);
+    const hrefs = await page.locator('[data-work-item] a').evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).getAttribute('href')));
+    expect(new Set(hrefs).size, domain).toBe(count);
+    for (const href of hrefs) expect(href, domain).toMatch(/^\/work\/[a-z0-9-]+\/$/);
+  }
+
+  await noJs.close();
+});
+
 test('interior index openings keep the compact split optical contract', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   for (const path of ['/work/', '/notes/', '/about/', '/lab/']) {
@@ -133,7 +174,7 @@ test('long case titles remain bounded near tablet width', async ({ page }) => {
 test('all interior routes contain their content at the 320, 390, 946, and 1440px floors', async ({ page }) => {
   for (const width of [320, 390, 946, 1440]) {
     await page.setViewportSize({ width, height: width < 500 ? 844 : 900 });
-    for (const path of ['/work/', '/work/kinema/', '/notes/', '/notes/ai-video-control/', '/about/', '/lab/']) {
+    for (const path of ['/work/', '/work/domain/xr/', '/work/kinema/', '/notes/', '/notes/ai-video-control/', '/about/', '/lab/']) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `${path} at ${width}px`).toBeLessThanOrEqual(width);
       for (const element of await page.locator('main a, main button, main input, main select').all()) {
@@ -144,6 +185,55 @@ test('all interior routes contain their content at the 320, 390, 946, and 1440px
       }
     }
   }
+});
+
+test('case-study videos remain paused until explicit user action and pause out of view', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/work/homelane-spacecraft-pro/');
+
+  const videos = page.locator('[data-evidence-video]');
+  const toggles = page.locator('[data-evidence-video-toggle]');
+  await expect(videos).toHaveCount(2);
+  await expect(toggles).toHaveCount(2);
+  await expect.poll(() => videos.evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).paused))).toBe(true);
+  await expect(toggles).toHaveText(['Play', 'Play']);
+
+  const firstVideo = videos.first();
+  const firstToggle = toggles.first();
+  await firstVideo.evaluate((element) => {
+    const video = element as HTMLVideoElement;
+    video.muted = true;
+    video.load();
+  });
+  await expect.poll(() => firstVideo.evaluate((element) => (element as HTMLVideoElement).readyState)).toBeGreaterThanOrEqual(2);
+  await firstToggle.click();
+  await expect.poll(() => firstVideo.evaluate((element) => !(element as HTMLVideoElement).paused), { timeout: 10000 }).toBe(true);
+  await expect(firstToggle).toHaveText('Pause');
+
+  await firstToggle.click();
+  await expect.poll(() => firstVideo.evaluate((element) => (element as HTMLVideoElement).paused)).toBe(true);
+  await expect(firstToggle).toHaveText('Play');
+
+  await firstToggle.click();
+  await expect.poll(() => firstVideo.evaluate((element) => !(element as HTMLVideoElement).paused), { timeout: 10000 }).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect.poll(() => firstVideo.evaluate((element) => (element as HTMLVideoElement).paused)).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(250);
+  await expect(firstVideo).toBeVisible();
+  await expect.poll(() => firstVideo.evaluate((element) => (element as HTMLVideoElement).paused)).toBe(true);
+});
+
+test('case-study video controls retain a native no-JavaScript fallback', async ({ browser }) => {
+  const noJs = await browser.newContext({ javaScriptEnabled: false });
+  const page = await noJs.newPage();
+  await page.goto('/work/homelane-spacecraft-pro/');
+
+  const videos = page.locator('[data-evidence-video]');
+  await expect(videos).toHaveCount(2);
+  await expect(videos.first()).toHaveAttribute('controls', '');
+  await expect(page.locator('[data-evidence-video-toggle]')).toHaveText(['Play', 'Play']);
+  await noJs.close();
 });
 
 test('case-study motion controls meet the mobile touch target floor', async ({ page }) => {
@@ -159,13 +249,15 @@ test('case-study motion controls meet the mobile touch target floor', async ({ p
   }
 });
 
-test('reduced motion preserves still evidence and disables authored transitions', async ({ page }) => {
+test('reduced motion keeps case videos paused until explicit user action', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/work/kinema/');
+  await page.goto('/work/homelane-spacecraft-pro/');
 
-  const duration = await page.locator('[data-case-part="thesis"]').evaluate((element) => getComputedStyle(element).transitionDuration);
-  expect(Number.parseFloat(duration)).toBeLessThanOrEqual(0.01);
-  await expect.poll(async () => page.locator('video').evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).paused))).toBe(true);
+  const videos = page.locator('[data-evidence-video]');
+  const toggles = page.locator('[data-evidence-video-toggle]');
+  expect(await videos.count()).toBeGreaterThan(0);
+  await expect.poll(async () => videos.evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).paused))).toBe(true);
+  await expect(toggles).toHaveText(Array.from({ length: await toggles.count() }, () => 'Play'));
 });
 
 test('the eclipse remains singular and available on every page', async ({ page }) => {
