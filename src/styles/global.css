@@ -180,8 +180,8 @@ p, li { text-wrap: pretty; }
   background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
-.site-header .site-nav { grid-column: 2; grid-row: 1; }
-.site-header .theme-control { grid-column: 3; grid-row: 1; }
+.site-header .theme-control { grid-column: 2; grid-row: 1; }
+.site-header .site-nav { grid-column: 3; grid-row: 1; }
 
 .home-page .site-header {
   position: absolute;
