@@ -91,7 +91,7 @@ Playwright: 81 passed (37.4s)
 Astro build: 35 pages built
 Build verifier: Verified 46 production artifacts, 17 work routes, 6 domain routes, and 6 note routes.
 
-HEAD:0c1f4f00c75f21347f24ede3e4d32526d88a7bc6
+HEAD:17029fc5f16bab6fdc8d8491e7d786ecca6daa5f
 IRA_HEAD_MP4_REFS=2
 media/career/ira-vr/newton-loop.mp4 -> HEAD:public/media/career/ira-vr/newton-loop.mp4 OK
 media/career/ira-vr/classroom-loop.mp4 -> HEAD:public/media/career/ira-vr/classroom-loop.mp4 OK
@@ -103,4 +103,5 @@ The object check reads the IRA VR MP4 references from the committed source at HE
 
 - `ProjectMedia` emits native `controls` and a hidden custom button server-side; successful binding disables native controls and reveals the working custom control.
 - Domain anchors no longer intercept clicks or call `pushState`; the select uses `window.location.assign`, and both root and static-domain selects remain hidden until their change handlers bind.
+- Round 2 implementation commit: `17029fc5f16bab6fdc8d8491e7d786ecca6daa5f` — `fix: close rereview media and route gaps`.
 - The relevant implementation/tests/report files are the only files intended for this fix commit. No deploy, push, merge, destructive command, or detector rerun was performed.
