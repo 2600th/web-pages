@@ -1,0 +1,35 @@
+{
+  "createdAt": "2026-08-27",
+  "generator": "OpenAI GPT Image",
+  "classification": "generated editorial illustration",
+  "evidenceUse": false,
+  "artDirectionReferences": [
+    ".impeccable/mocks/clarity-round/31-single-signal.png",
+    ".impeccable/mocks/clarity-round/32-positive-negative.png",
+    ".impeccable/mocks/clarity-round/33-public-build.png"
+  ],
+  "assets": [
+    {
+      "file": "work-aperture.webp",
+      "route": "/work/",
+      "purpose": "Optical editorial aperture expressing ambiguous technology becoming an operable system.",
+      "sourceAsset": "exec-86229836-d6d6-4c84-97f8-a4d347737829.png",
+      "prompt": "Wide modern retro-futurist editorial image for a Work archive: one architectural prototype gallery split between warm optical white and near-black, physical model tables becoming translucent spatial-system planes, a single cobalt registration beam, anonymous distant scale figure, restrained premium design-studio realism; no text, logos, terminals, cyberpunk clutter, or factual project claims."
+    },
+    {
+      "file": "notes-aperture.webp",
+      "route": "/notes/",
+      "purpose": "Optical workbench still life for observations and field notes.",
+      "sourceAsset": "exec-eda0a39e-809e-4b0f-8577-147da0e29d61.png",
+      "prompt": "Wide modern retro-futurist optical workbench still life split between warm drafting light and a precise darkroom: sketches, translucent material samples, a lens, and a physical model connected by one cobalt trace; tactile, calm, legible, premium; no readable text, logos, laptops, terminals, or factual claims."
+    },
+    {
+      "file": "about-aperture.webp",
+      "route": "/about/",
+      "purpose": "Three-act editorial installation representing a compounding operating practice.",
+      "sourceAsset": "exec-d5ef7fd1-4434-4297-a6c2-6751fef93df3.png",
+      "prompt": "Wide modern retro-futurist three-zone spatial installation for an About page: warm physical making, a luminous spatial-computing passage, and an AI-native generative interior surface joined as one continuous practice; one cobalt optical beam, restrained human scale, elegant and comprehensible; no text, logos, robots, headsets, terminals, or factual career claims."
+    }
+  ],
+  "constraint": "These images are identity and editorial media only. They must not be presented as project, client, product, or career evidence."
+}

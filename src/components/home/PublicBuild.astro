@@ -36,6 +36,18 @@ const builds = [
 
 <style>
   .public-build {
+    /* Intentional ledger tokens: compact metadata stays readable on both polarity planes. */
+    --build-meta-on-light: #4f514c;
+    --build-meta-on-negative: #c2c3bc;
+    --type-build-state: 0.66rem;
+    --type-build-title: clamp(4rem, 7vw, 7.5rem);
+    --type-build-thesis: clamp(1.05rem, 1.45vw, 1.35rem);
+    --type-build-link: 0.72rem;
+    --type-build-ledger-title: clamp(2.2rem, 4vw, 4.6rem);
+    --type-build-ledger-body: 0.92rem;
+    --type-build-row-state: 0.6rem;
+    --type-build-row-name: clamp(1.15rem, 2vw, 1.75rem);
+    --type-build-row-detail: 0.76rem;
     display: grid;
     grid-template-columns: minmax(20rem, 0.78fr) minmax(0, 1.22fr);
   }
@@ -52,9 +64,9 @@ const builds = [
 
   .public-build__state {
     margin: 0 0 2rem;
-    color: #2457ff;
+    color: var(--build-meta-on-light);
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.66rem;
+    font-size: var(--type-build-state);
     font-weight: 700;
     letter-spacing: 0.07em;
     text-transform: uppercase;
@@ -63,7 +75,7 @@ const builds = [
   .public-build h2 {
     max-width: 8ch;
     margin: 0 0 1.3rem;
-    font-size: clamp(4rem, 7vw, 7.5rem);
+    font-size: var(--type-build-title);
     font-stretch: 78%;
     line-height: 0.82;
     overflow-wrap: anywhere;
@@ -72,7 +84,7 @@ const builds = [
   .public-build__thesis {
     max-width: 30ch;
     margin: 0 0 3rem;
-    font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+    font-size: var(--type-build-thesis);
     line-height: 1.45;
   }
 
@@ -84,7 +96,7 @@ const builds = [
     gap: 0.75rem;
     border-bottom: 1px solid currentColor;
     color: inherit;
-    font-size: 0.72rem;
+    font-size: var(--type-build-link);
     font-weight: 740;
     letter-spacing: 0.07em;
     text-decoration: none;
@@ -112,7 +124,7 @@ const builds = [
 
   .public-build__ledger h3 {
     margin: 0;
-    font-size: clamp(2.2rem, 4vw, 4.6rem);
+    font-size: var(--type-build-ledger-title);
     line-height: 0.9;
   }
 
@@ -120,7 +132,7 @@ const builds = [
     max-width: 34ch;
     margin: 0;
     color: #c2c3bc;
-    font-size: 0.92rem;
+    font-size: var(--type-build-ledger-body);
     line-height: 1.45;
   }
 
@@ -148,9 +160,9 @@ const builds = [
   }
 
   .public-build__row-state {
-    color: #2457ff;
+    color: var(--build-meta-on-negative);
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.6rem;
+    font-size: var(--type-build-row-state);
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
@@ -161,13 +173,13 @@ const builds = [
   }
 
   .public-build__ledger strong {
-    font-size: clamp(1.15rem, 2vw, 1.75rem);
+    font-size: var(--type-build-row-name);
     line-height: 1;
   }
 
   .public-build__row-detail {
-    color: #c2c3bc;
-    font-size: 0.76rem;
+    color: var(--build-meta-on-negative);
+    font-size: var(--type-build-row-detail);
     line-height: 1.35;
   }
 

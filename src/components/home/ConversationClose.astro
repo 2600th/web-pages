@@ -28,6 +28,12 @@ import { CONTACT_EMAIL, CONVERSATION_PROMPTS } from '../../data/site';
 
 <style>
   .conversation-close {
+    /* Intentional close tokens: the final split remains calm while preserving a clear action hierarchy. */
+    --type-close-title: clamp(3rem, 6.8vw, 6rem);
+    --type-close-lead: 0.9rem;
+    --type-close-prompt: clamp(1.1rem, 2vw, 1.6rem);
+    --type-close-detail: 0.7rem;
+    --type-close-footer: 0.72rem;
     display: grid;
     min-height: 75svh;
     grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.2fr);
@@ -36,8 +42,8 @@ import { CONTACT_EMAIL, CONVERSATION_PROMPTS } from '../../data/site';
   }
 
   .conversation-close__lead { display: flex; padding: clamp(3rem, 7vw, 7rem) var(--page-gutter); flex-direction: column; justify-content: space-between; border-right: 1px solid color-mix(in srgb, var(--negative) 24%, transparent); background: var(--positive); color: var(--negative); }
-  h2 { max-width: 10ch; margin: 0; font-size: clamp(3rem, 6.8vw, 6rem); }
-  .conversation-close__lead p { max-width: 34ch; margin: 3rem 0 0; color: var(--graphite); font-size: 0.9rem; }
+  h2 { max-width: 10ch; margin: 0; font-size: var(--type-close-title); }
+  .conversation-close__lead p { max-width: 34ch; margin: 3rem 0 0; color: var(--graphite); font-size: var(--type-close-lead); }
   .conversation-close__paths { display: flex; padding: clamp(3rem, 7vw, 7rem) var(--page-gutter); flex-direction: column; justify-content: space-between; background: var(--negative); color: var(--positive); }
   ul { margin: 0; padding: 0; border-top: 1px solid color-mix(in srgb, var(--positive) 70%, transparent); list-style: none; }
   li { border-bottom: 1px solid color-mix(in srgb, var(--positive) 70%, transparent); }
@@ -45,9 +51,9 @@ import { CONTACT_EMAIL, CONVERSATION_PROMPTS } from '../../data/site';
   li > a:hover { background: var(--positive); color: var(--negative); transform: translateX(0.35rem); }
   li strong,
   li small { display: block; }
-  li strong { font-size: clamp(1.1rem, 2vw, 1.6rem); }
-  li small { max-width: 58ch; margin-top: 0.35rem; font-size: 0.7rem; font-weight: 530; }
-  .conversation-close__paths > p { display: flex; gap: 1rem 2rem; align-items: end; justify-content: space-between; margin: 4rem 0 0; font-size: 0.72rem; }
+  li strong { font-size: var(--type-close-prompt); }
+  li small { max-width: 58ch; margin-top: 0.35rem; font-size: var(--type-close-detail); font-weight: 530; }
+  .conversation-close__paths > p { display: flex; gap: 1rem 2rem; align-items: end; justify-content: space-between; margin: 4rem 0 0; font-size: var(--type-close-footer); }
   .conversation-close__paths > p a { font-weight: 760; }
   .conversation-close__paths > p span { max-width: 28ch; color: var(--fog); text-align: right; }
   @media (max-width: 54rem) {

@@ -31,6 +31,9 @@ const proof = [
 
 <style>
   .proof-line {
+    /* Intentional index tokens: these values keep the proof trail compact without collapsing its reading hierarchy. */
+    --type-proof-title: clamp(3.6rem, 6vw, 6.5rem);
+    --type-proof-meta: 0.62rem;
     padding: clamp(5rem, 10vw, 9rem) var(--page-gutter);
     background: #f1f0ea;
     color: #080908;
@@ -49,7 +52,7 @@ const proof = [
   .proof-line h2 {
     max-width: 10ch;
     margin: 0;
-    font-size: clamp(3.6rem, 6vw, 6.5rem);
+    font-size: var(--type-proof-title);
     line-height: 0.88;
   }
 
@@ -94,7 +97,7 @@ const proof = [
   .proof-line a > span {
     color: #2457ff;
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.62rem;
+    font-size: var(--type-proof-meta);
     letter-spacing: 0.04em;
   }
 

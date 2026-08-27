@@ -27,6 +27,26 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
     sourceUrl: 'https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild',
     status: 'public-approved',
   },
+  '/media/work/enterprise-immersive-systems/swissotel-loop.mp4': {
+    sourceUrl: 'https://drive.google.com/file/d/1zBseAGm8RaS9e3mUsMXfVCi3mxnKW-nZ/view',
+    status: 'public-corroborated',
+  },
+  '/media/work/enterprise-immersive-systems/swissotel-poster.webp': {
+    sourceUrl: 'https://drive.google.com/file/d/1zBseAGm8RaS9e3mUsMXfVCi3mxnKW-nZ/view',
+    status: 'public-corroborated',
+  },
+  '/media/work/enterprise-immersive-systems/facility-loop.mp4': {
+    sourceUrl: 'https://drive.google.com/file/d/1XmopB2DVkQLK2KgtywgBIngrHlUr0-7Z/view',
+    status: 'public-corroborated',
+  },
+  '/media/work/enterprise-immersive-systems/facility-poster.webp': {
+    sourceUrl: 'https://drive.google.com/file/d/1XmopB2DVkQLK2KgtywgBIngrHlUr0-7Z/view',
+    status: 'public-corroborated',
+  },
+  '/media/work/enterprise-immersive-systems/ageing-simulation-map.svg': {
+    sourceUrl: 'https://cyclingwithoutage.sg/wp-content/uploads/sites/25/2023/05/Annual-Report31Dec2021.pdf',
+    status: 'public-corroborated',
+  },
   '/media/work/ai-native-game-thesis/hero.webp': {
     sourceUrl: 'https://2600th.substack.com/p/revolutionizing-realms-how-ai-is',
     status: 'public-approved',

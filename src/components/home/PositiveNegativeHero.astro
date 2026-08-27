@@ -1,5 +1,4 @@
 ---
-import { CONTACT_EMAIL } from '../../data/site';
 ---
 
 <section class="exposure-hero" aria-labelledby="exposure-title" data-exposure-hero style="--exposure: 50%; --handle-y: 67.5%">
@@ -10,9 +9,15 @@ import { CONTACT_EMAIL } from '../../data/site';
     <h1 class="exposure-wordmark" id="exposure-title" aria-label="Pranshul Chandhok">
       <span class="exposure-wordmark__line exposure-wordmark__line--positive" aria-hidden="true">PRANSHUL CHANDHOK</span>
       <span class="exposure-wordmark__line exposure-wordmark__line--negative" aria-hidden="true">PRANSHUL CHANDHOK</span>
+      <span class="exposure-wordmark__contrast exposure-wordmark__contrast--positive" aria-hidden="true">PRANSHUL CHANDHOK</span>
+      <span class="exposure-wordmark__contrast exposure-wordmark__contrast--negative" aria-hidden="true">PRANSHUL CHANDHOK</span>
       <span class="exposure-wordmark__rule" aria-hidden="true">PRANSHUL CHANDHOK</span>
     </h1>
   </div>
+
+  <span class="exposure-hero__identity-note" data-generated-direction-study data-identity-media="generated-editorial">
+    Generated direction study · identity only · not project evidence
+  </span>
 
   <span class="exposure-hero__labmark" aria-hidden="true">2600TH</span>
 
@@ -21,14 +26,15 @@ import { CONTACT_EMAIL } from '../../data/site';
     <a class="exposure-actions__primary" href="#selected-work" aria-label="Explore selected work">Explore the work <span aria-hidden="true">→</span></a>
   </div>
 
-  <a class="exposure-hero__email" href={`mailto:${CONTACT_EMAIL}`} aria-label="Email Pranshul">Start a conversation <span aria-hidden="true">↗</span></a>
-
   <label class="exposure-control">
     <span class="sr-only">Adjust the positive and negative exposure</span>
     <input type="range" min="34" max="66" value="50" step="1" data-exposure-control />
     <span class="exposure-control__line" aria-hidden="true"></span>
     <span class="exposure-control__handle" aria-hidden="true"></span>
-    <span class="exposure-control__hint" aria-hidden="true">Drag the light</span>
+    <span class="exposure-control__hint" data-exposure-hint aria-hidden="true">
+      <span class="exposure-control__hint-positive">Drag the light</span>
+      <span class="exposure-control__hint-negative">Drag the light</span>
+    </span>
   </label>
 </section>
 
@@ -44,6 +50,13 @@ import { CONTACT_EMAIL } from '../../data/site';
     --negative: #080908;
     --signal: #2457ff;
     --hero-gutter: clamp(1.4rem, 5vw, 5.25rem);
+    /* Intentional comp tokens: these fluid values preserve the approved 1672px object and its mobile minimum. */
+    --type-hero-wordmark: clamp(5rem, 11.7vw, 12rem);
+    --type-hero-positioning: clamp(1rem, 1.35vw, 1.32rem);
+    --type-hero-action: 0.72rem;
+    --type-hero-nav: 0.68rem;
+    --type-hero-hint: 0.58rem;
+    --type-hero-note: 0.54rem;
     position: relative;
     min-height: 100svh;
     overflow: clip;
@@ -84,7 +97,7 @@ import { CONTACT_EMAIL } from '../../data/site';
     max-width: none;
     margin: 0;
     overflow: visible;
-    font-size: clamp(5rem, 11.7vw, 12rem);
+    font-size: var(--type-hero-wordmark);
     font-stretch: 84%;
     font-weight: 780;
     letter-spacing: -0.04em;
@@ -93,6 +106,7 @@ import { CONTACT_EMAIL } from '../../data/site';
   }
 
   .exposure-wordmark__line,
+  .exposure-wordmark__contrast,
   .exposure-wordmark__rule {
     position: absolute;
     inset: 50% 0 auto;
@@ -108,22 +122,62 @@ import { CONTACT_EMAIL } from '../../data/site';
   }
 
   .exposure-wordmark__line {
+    z-index: 1;
     background-image: url('/media/generated/editorial/work-aperture.webp');
   }
 
   .exposure-wordmark__line--positive {
     clip-path: inset(0 calc(100% - var(--exposure)) 0 0);
-    filter: saturate(0.58) contrast(1.06) brightness(1.16);
+    filter: saturate(0.72) contrast(1.42) brightness(0.84);
+    -webkit-text-stroke: 1px rgb(8 9 8 / 0.72);
   }
 
   .exposure-wordmark__line--negative {
     clip-path: inset(0 0 0 var(--exposure));
-    filter: saturate(0.68) contrast(1.17) brightness(0.66);
+    filter: saturate(0.82) contrast(1.38) brightness(1.02);
+    -webkit-text-stroke: 1px rgb(241 240 234 / 0.76);
+  }
+
+  .exposure-wordmark__contrast {
+    z-index: 2;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    -webkit-text-stroke-width: 1.4px;
+    opacity: 0.34;
+  }
+
+  .exposure-wordmark__contrast--positive {
+    clip-path: inset(0 calc(100% - var(--exposure)) 0 0);
+    color: var(--negative);
+    mix-blend-mode: multiply;
+  }
+
+  .exposure-wordmark__contrast--negative {
+    clip-path: inset(0 0 0 var(--exposure));
+    color: var(--positive);
+    mix-blend-mode: screen;
   }
 
   .exposure-wordmark__rule {
+    z-index: 3;
     -webkit-text-stroke: 1px color-mix(in srgb, var(--positive) 25%, transparent);
     mix-blend-mode: difference;
+  }
+
+  .exposure-hero__identity-note {
+    position: absolute;
+    right: var(--hero-gutter);
+    bottom: clamp(1.4rem, 3.2vw, 2.8rem);
+    z-index: 3;
+    max-width: min(32rem, 42vw);
+    color: var(--positive);
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: var(--type-hero-note);
+    letter-spacing: 0.18em;
+    line-height: 1.35;
+    text-align: right;
+    text-transform: uppercase;
   }
 
   .exposure-hero__labmark {
@@ -132,7 +186,7 @@ import { CONTACT_EMAIL } from '../../data/site';
     right: var(--hero-gutter);
     z-index: 3;
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.68rem;
+    font-size: var(--type-hero-nav);
     font-weight: 650;
     letter-spacing: 0.2em;
   }
@@ -142,14 +196,14 @@ import { CONTACT_EMAIL } from '../../data/site';
     bottom: clamp(4rem, 10vh, 7.5rem);
     left: var(--hero-gutter);
     z-index: 3;
-    width: min(25rem, calc(var(--exposure) - 5rem));
+    width: min(25rem, calc(var(--exposure) - (var(--hero-gutter) * 2) - 1rem));
     color: #080908;
   }
 
   .exposure-hero__positioning p {
     max-width: 31ch;
     margin: 0 0 2.5rem;
-    font-size: clamp(1rem, 1.35vw, 1.32rem);
+    font-size: var(--type-hero-positioning);
     line-height: 1.35;
   }
 
@@ -163,7 +217,7 @@ import { CONTACT_EMAIL } from '../../data/site';
     padding: 0.75rem 1rem;
     border: 1px solid currentColor;
     color: inherit;
-    font-size: 0.72rem;
+    font-size: var(--type-hero-action);
     font-weight: 760;
     letter-spacing: 0.1em;
     text-decoration: none;
@@ -175,20 +229,6 @@ import { CONTACT_EMAIL } from '../../data/site';
   .exposure-actions__primary:focus-visible {
     background: #080908;
     color: var(--positive);
-  }
-
-  .exposure-hero__email {
-    position: absolute;
-    right: var(--hero-gutter);
-    bottom: clamp(4rem, 9vh, 7.5rem);
-    z-index: 3;
-    display: inline-flex;
-    min-height: 2.75rem;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--positive);
-    font-size: 0.72rem;
-    font-weight: 720;
   }
 
   .exposure-control {
@@ -248,22 +288,45 @@ import { CONTACT_EMAIL } from '../../data/site';
     position: absolute;
     bottom: 11.5%;
     left: var(--exposure);
-    color: var(--positive);
+    min-width: 6rem;
+    width: max-content;
+    height: 0.9rem;
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.58rem;
+    font-size: var(--type-hero-hint);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     transform: translateX(-50%);
-    mix-blend-mode: difference;
+  }
+
+  .exposure-control__hint-positive,
+  .exposure-control__hint-negative {
+    position: absolute;
+    inset: 0;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .exposure-control__hint-positive {
+    color: var(--negative);
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .exposure-control__hint-negative {
+    color: var(--positive);
+    clip-path: inset(0 0 0 50%);
   }
 
   :global(.home-page .site-header) {
     mix-blend-mode: difference;
   }
 
+  :global(.home-page) {
+    --type-hero-nav: 0.68rem;
+  }
+
   :global(.home-page .site-signature) {
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.68rem;
+    font-size: var(--type-hero-nav);
     letter-spacing: 0.2em;
     text-transform: uppercase;
   }
@@ -278,12 +341,12 @@ import { CONTACT_EMAIL } from '../../data/site';
 
   :global(.home-page .site-signature__full::before) {
     content: 'PRANSHUL';
-    font-size: 0.68rem;
+    font-size: var(--type-hero-nav);
   }
 
   :global(.home-page .site-nav a) {
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.68rem;
+    font-size: var(--type-hero-nav);
     letter-spacing: 0.16em;
     text-transform: uppercase;
   }
@@ -303,7 +366,7 @@ import { CONTACT_EMAIL } from '../../data/site';
       position: absolute;
       top: 1rem;
       left: calc(50% - 1.375rem);
-      opacity: 0.06;
+      opacity: 0.02;
     }
 
     :global(.home-page .site-nav) {
@@ -317,12 +380,21 @@ import { CONTACT_EMAIL } from '../../data/site';
   }
 
   @media (max-width: 64rem) {
+    .exposure-hero {
+      --type-hero-wordmark: clamp(4.4rem, 11.3vw, 7.5rem);
+    }
+
     .exposure-wordmark {
-      font-size: clamp(4.4rem, 11.3vw, 7.5rem);
+      font-size: var(--type-hero-wordmark);
     }
   }
 
   @media (max-width: 48rem) {
+    .exposure-hero {
+      --type-hero-wordmark: clamp(3.8rem, 16.5vw, 7rem);
+      --type-hero-positioning: 0.95rem;
+    }
+
     .exposure-hero {
       min-height: 50rem;
     }
@@ -333,13 +405,10 @@ import { CONTACT_EMAIL } from '../../data/site';
       left: var(--page-gutter);
     }
 
-    .exposure-wordmark {
-      height: 14rem;
-      font-size: clamp(3.8rem, 16.5vw, 7rem);
-      white-space: normal;
-    }
+    .exposure-wordmark { height: 14rem; white-space: normal; }
 
     .exposure-wordmark__line,
+    .exposure-wordmark__contrast,
     .exposure-wordmark__rule {
       inset-inline: 0;
       height: auto;
@@ -356,21 +425,20 @@ import { CONTACT_EMAIL } from '../../data/site';
       mix-blend-mode: difference;
     }
 
+    .exposure-control__hint {
+      top: 73%;
+      bottom: auto;
+    }
+
     .exposure-hero__positioning p {
       max-width: 27ch;
-      font-size: 0.95rem;
+      font-size: var(--type-hero-positioning);
     }
 
     .exposure-actions__primary {
       min-width: 0;
       width: min(100%, 18rem);
-    }
-
-    .exposure-hero__email {
-      right: var(--page-gutter);
-      bottom: 4.2rem;
-      max-width: 33vw;
-      text-align: right;
+      font-size: var(--type-hero-action);
     }
 
     .exposure-control input {
@@ -383,24 +451,41 @@ import { CONTACT_EMAIL } from '../../data/site';
     }
   }
 
+  :global(.home-page .theme-control) {
+    opacity: 0.02;
+    transition: opacity 180ms var(--ease-out), background-color 320ms var(--ease-out), border-color 180ms var(--ease-out), transform 220ms var(--ease-out);
+  }
+
+  :global(.home-page .theme-control:hover),
+  :global(.home-page .theme-control:focus),
+  :global(.home-page .theme-control:focus-visible) {
+    opacity: 1;
+    transition: none;
+  }
+
   @media (max-width: 34rem) {
     .exposure-hero {
       --exposure: 52%;
       --handle-y: 60%;
-      min-height: 52rem;
+      --type-hero-wordmark: clamp(3.4rem, 17.2vw, 5.6rem);
+      --type-hero-note: 0.48rem;
+      min-height: 100svh;
     }
 
     .exposure-hero__identity {
       top: 35%;
     }
 
-    .exposure-wordmark {
-      height: 13.5rem;
-      font-size: clamp(3.4rem, 17.2vw, 5.6rem);
+    .exposure-wordmark { height: 13.5rem; }
+
+    .exposure-hero__labmark {
+      display: none;
     }
 
     .exposure-hero__positioning {
-      bottom: 5rem;
+      right: var(--page-gutter);
+      bottom: 2rem;
+      width: calc(100% - (var(--page-gutter) * 2));
     }
 
     .exposure-hero__positioning p {
@@ -408,8 +493,17 @@ import { CONTACT_EMAIL } from '../../data/site';
       margin-bottom: 1rem;
     }
 
-    .exposure-hero__email,
-    .exposure-hero__labmark {
+    .exposure-actions__primary {
+      min-width: 0;
+      width: min(100%, 18rem);
+      font-size: var(--type-hero-action);
+    }
+
+    .exposure-hero__identity-note {
+      right: var(--page-gutter);
+      bottom: 0.9rem;
+      max-width: 48vw;
+      font-size: var(--type-hero-note);
       display: none;
     }
 

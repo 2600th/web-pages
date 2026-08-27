@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { MEDIA_PROVENANCE } from '../../data/media-provenance';
 
 interface Props {
   work: CollectionEntry<'work'>[];
@@ -73,7 +74,17 @@ const signals = work
         </div>
         <div class="signal-case__media">
           <a class="signal-case__media-link" href={`/work/${entry.data.slug}/`} aria-label={`View ${entry.data.title}`}>
-            <video muted loop playsinline preload="none" poster={presentation.poster} data-signal-video aria-label={entry.data.heroMedia?.alt ?? entry.data.summary}>
+            <video
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster={presentation.poster}
+              data-signal-video
+              data-media-source-url={MEDIA_PROVENANCE[presentation.poster]?.sourceUrl}
+              data-media-source-status={MEDIA_PROVENANCE[presentation.poster]?.status}
+              aria-label={entry.data.heroMedia?.alt ?? entry.data.summary}
+            >
               <source src={presentation.mp4} type="video/mp4" />
             </video>
             <span class="signal-case__reticle" aria-hidden="true"></span>
@@ -99,6 +110,20 @@ const signals = work
 
 <style>
   .signal-work {
+    /* Intentional editorial tokens: the sequence keeps the approved type scale while allowing compact mobile overrides. */
+    --signal-meta-on-negative: #c2c3bc;
+    --signal-meta-on-light: #4f514c;
+    --type-signal-prologue: clamp(4rem, 8vw, 8.5rem);
+    --type-signal-prologue-body: clamp(1rem, 1.3vw, 1.24rem);
+    --type-signal-phase: 0.66rem;
+    --type-signal-case-title: clamp(3.4rem, 6.5vw, 7rem);
+    --type-signal-statement: clamp(1.03rem, 1.35vw, 1.28rem);
+    --type-signal-fact-label: 0.6rem;
+    --type-signal-fact: 0.78rem;
+    --type-signal-link: 0.74rem;
+    --type-signal-motion: 0.68rem;
+    --type-signal-caption: 0.58rem;
+    --type-signal-archive: 0.76rem;
     background: #080908;
     color: #f1f0ea;
   }
@@ -117,7 +142,7 @@ const signals = work
   .signal-work__prologue h2 {
     max-width: 11ch;
     margin: 0;
-    font-size: clamp(4rem, 8vw, 8.5rem);
+    font-size: var(--type-signal-prologue);
     font-stretch: 82%;
     font-weight: 780;
     line-height: 0.84;
@@ -127,7 +152,7 @@ const signals = work
     max-width: 34ch;
     margin: 0 0 0.6rem;
     color: #4f514c;
-    font-size: clamp(1rem, 1.3vw, 1.24rem);
+    font-size: var(--type-signal-prologue-body);
     line-height: 1.45;
   }
 
@@ -155,9 +180,9 @@ const signals = work
 
   .signal-case__phase {
     margin: 0 0 clamp(2rem, 6vh, 5rem);
-    color: #2457ff;
+    color: var(--signal-meta-on-negative);
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.66rem;
+    font-size: var(--type-signal-phase);
     font-weight: 720;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -166,7 +191,7 @@ const signals = work
   .signal-case h3 {
     max-width: 10ch;
     margin-bottom: 1.35rem;
-    font-size: clamp(3.4rem, 6.5vw, 7rem);
+    font-size: var(--type-signal-case-title);
     font-stretch: 80%;
     line-height: 0.84;
     overflow-wrap: anywhere;
@@ -176,12 +201,16 @@ const signals = work
     max-width: 31ch;
     margin-bottom: 0;
     color: #c2c3bc;
-    font-size: clamp(1.03rem, 1.35vw, 1.28rem);
+    font-size: var(--type-signal-statement);
     line-height: 1.45;
   }
 
   .signal-case--light .signal-case__statement {
     color: #4f514c;
+  }
+
+  .signal-case--light .signal-case__phase {
+    color: var(--signal-meta-on-light);
   }
 
   .signal-case__facts {
@@ -200,9 +229,9 @@ const signals = work
 
   .signal-case__facts dt {
     margin-bottom: 0.35rem;
-    color: #2457ff;
+    color: var(--signal-meta-on-negative);
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.6rem;
+    font-size: var(--type-signal-fact-label);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -210,7 +239,7 @@ const signals = work
 
   .signal-case__facts dd {
     margin: 0;
-    font-size: 0.78rem;
+    font-size: var(--type-signal-fact);
     line-height: 1.35;
   }
 
@@ -221,14 +250,23 @@ const signals = work
     align-items: center;
     gap: 0.7rem;
     color: inherit;
-    font-size: 0.74rem;
+    font-size: var(--type-signal-link);
     font-weight: 740;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   .signal-case__link:hover {
-    color: #2457ff;
+    color: var(--signal-meta-on-negative);
+    text-decoration-color: #2457ff;
+  }
+
+  .signal-case--light .signal-case__facts dt {
+    color: var(--signal-meta-on-light);
+  }
+
+  .signal-case--light .signal-case__link:hover {
+    color: var(--signal-meta-on-light);
   }
 
   .signal-case__media {
@@ -321,7 +359,7 @@ const signals = work
     background: #080908;
     color: #f1f0ea;
     cursor: pointer;
-    font-size: 0.68rem;
+    font-size: var(--type-signal-motion);
     font-weight: 720;
   }
 
@@ -334,7 +372,7 @@ const signals = work
   .signal-case__motion:hover,
   .signal-case__motion:focus-visible {
     border-color: #2457ff;
-    color: #2457ff;
+    color: currentColor;
   }
 
   .signal-case__caption {
@@ -346,7 +384,7 @@ const signals = work
     margin: 0;
     color: #c2c3bc;
     font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-    font-size: 0.58rem;
+    font-size: var(--type-signal-caption);
     letter-spacing: 0.06em;
     text-align: right;
     text-transform: uppercase;
@@ -360,13 +398,14 @@ const signals = work
     gap: 1rem;
     padding: 1rem var(--page-gutter);
     color: #f1f0ea;
-    font-size: 0.76rem;
+    font-size: var(--type-signal-archive);
     font-weight: 740;
     text-decoration: none;
   }
 
   .signal-work__archive:hover {
-    color: #2457ff;
+    color: var(--signal-meta-on-negative);
+    text-decoration-color: #2457ff;
   }
 
   @media (max-width: 62rem) {
@@ -393,13 +432,18 @@ const signals = work
   }
 
   @media (max-width: 42rem) {
+    .signal-work {
+      --type-signal-prologue: clamp(3.5rem, 16vw, 5.4rem);
+      --type-signal-case-title: clamp(3.15rem, 13.5vw, 4.65rem);
+    }
+
     .signal-work__prologue {
       min-height: 21rem;
       padding-block: 4rem 3rem;
     }
 
     .signal-work__prologue h2 {
-      font-size: clamp(3.5rem, 16vw, 5.4rem);
+      font-size: var(--type-signal-prologue);
     }
 
     .signal-case__copy {
@@ -412,7 +456,7 @@ const signals = work
 
     .signal-case h3 {
       max-width: 11ch;
-      font-size: clamp(3.15rem, 13.5vw, 4.65rem);
+      font-size: var(--type-signal-case-title);
     }
 
     .signal-case__facts {
