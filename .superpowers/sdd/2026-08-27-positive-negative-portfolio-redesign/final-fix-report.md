@@ -50,7 +50,7 @@ The full verification includes the 320/390/946/1440 containment checks, static d
 
 ## Commit
 
-Fix-round implementation commit: pending at report creation; the final hash is recorded after staging and commit.
+Fix-round implementation commit: `d00d104` — `fix: close media and domain route review gaps`.
 
 ## Concerns
 
