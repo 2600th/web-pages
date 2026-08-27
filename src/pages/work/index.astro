@@ -16,12 +16,13 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
   canonical="/work/"
 >
   <div class="page-shell work-archive" data-work-archive>
-    <header class="page-hero">
-      <div>
-        <p class="section-kicker">Work · public-first evidence</p>
+    <header class="route-opening route-opening--work" data-route-opening>
+      <div class="route-opening__positive" data-polarity="positive">
         <h1>Career work</h1>
+        <p class="route-opening__statement">A public record of systems made real: games, immersive learning, robotics, design technology, and applied AI.</p>
       </div>
-      <div class="page-hero__aside">
+      <div class="route-opening__negative" data-polarity="negative">
+        <p class="route-opening__context">Public-first evidence · {work.length} records</p>
         <p><strong>{work.length} public records</strong> across the recurring systems, products, and questions that shaped the practice.</p>
         <p>Full cases go deep. Evidence notes stay deliberately concise where the public record is lighter.</p>
       </div>
@@ -31,10 +32,18 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
       <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="The complete public record." aria-current="page">All domains</a>
       {domains.map(([key, domain]) => <a href={`/work/?domain=${key}`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description}>{domain.label}</a>)}
     </nav>
+    <label class="domain-filter-select">
+      <span>Work domain</span>
+      <select aria-label="Choose a work domain" data-domain-select>
+        <option value="all">All domains</option>
+        {domains.map(([key, domain]) => <option value={key}>{domain.label}</option>)}
+      </select>
+    </label>
+    <p class="sr-only" aria-live="polite" data-work-status>All work, {work.length} projects</p>
 
     <section class="work-list-region" aria-labelledby="work-list-heading">
       <header>
-        <div><h2 id="work-list-heading" data-work-heading>All work</h2><span data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
+        <div><h2 id="work-list-heading" data-work-heading>All work</h2><span class="work-list-region__count" data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
         <p data-work-description>The complete public record.</p>
       </header>
       <WorkList work={work} />
@@ -49,11 +58,13 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
       root.dataset.bound = 'true';
       const links = [...root.querySelectorAll<HTMLAnchorElement>('[data-domain-link]')];
       const items = [...root.querySelectorAll<HTMLElement>('[data-work-item]')];
+      const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
 
       const render = () => {
         const requested = new URLSearchParams(location.search).get('domain');
         const activeLink = links.find((link) => link.dataset.domainLink === requested) ?? links[0];
         const activeDomain = activeLink.dataset.domainLink ?? 'all';
+        if (select) select.value = activeDomain;
         let visible = 0;
 
         for (const item of items) {
@@ -69,9 +80,11 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         const heading = root.querySelector<HTMLElement>('[data-work-heading]');
         const description = root.querySelector<HTMLElement>('[data-work-description]');
         const count = root.querySelector<HTMLElement>('[data-visible-count]');
+        const status = root.querySelector<HTMLElement>('[data-work-status]');
         if (heading) heading.textContent = activeLink.dataset.domainLabel ?? 'All work';
         if (description) description.textContent = activeLink.dataset.domainDescription ?? '';
         if (count) count.textContent = String(visible).padStart(2, '0');
+        if (status) status.textContent = `${activeLink.dataset.domainLabel ?? 'All work'}, ${visible} ${visible === 1 ? 'project' : 'projects'}`;
       };
 
       for (const link of links) {
@@ -81,6 +94,12 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
           render();
         });
       }
+      select?.addEventListener('change', () => {
+        const value = select.value;
+        const link = links.find((candidate) => candidate.dataset.domainLink === value) ?? links[0];
+        history.pushState({}, '', link.href);
+        render();
+      });
       window.addEventListener('popstate', render);
       render();
     });
@@ -90,15 +109,23 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
 </script>
 
 <style>
-  .domain-filter { display: flex; overflow-x: auto; border-block: 1px solid var(--line); }
-  .domain-filter a { min-width: max-content; padding: 1rem 1.25rem; border-right: 1px solid var(--line); color: var(--text-muted); font-size: 0.76rem; font-weight: 680; text-decoration: none; }
+  .domain-filter { display: flex; overflow-x: auto; border-block: 1px solid var(--line); scrollbar-width: thin; }
+  .domain-filter a { min-width: max-content; min-height: 3rem; padding: 1rem 1.25rem; border-right: 1px solid var(--line); color: var(--text-muted); font-size: 0.76rem; font-weight: 680; text-decoration: none; }
   .domain-filter a[aria-current='page'] { background: var(--text); color: var(--surface); }
+  .domain-filter-select { display: none; }
   .work-list-region { padding-block: clamp(4rem, 8vw, 8rem); }
   .work-list-region > header { display: grid; grid-template-columns: 1fr minmax(16rem, 0.45fr); gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
   .work-list-region > header > div { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
   .work-list-region h2 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 7vw, 6rem); }
-  .work-list-region header span { color: var(--signal); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+  .work-list-region__count { color: var(--signal); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
   .work-list-region header p { max-width: 34ch; margin: 0; color: var(--text-muted); font-size: 0.85rem; }
   [data-work-item][hidden] { display: none; }
-  @media (max-width: 46rem) { .work-list-region > header { grid-template-columns: 1fr; } }
+
+  @media (max-width: 46rem) {
+    .domain-filter { display: none; }
+    .domain-filter-select { display: grid; gap: 0.4rem; padding: 1rem 0; border-block: 1px solid var(--line); }
+    .domain-filter-select span { color: var(--text-muted); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
+    .domain-filter-select select { width: 100%; min-height: 3rem; padding: 0.6rem 2.5rem 0.6rem 0.75rem; border: 1px solid var(--line-strong); border-radius: 0; background: var(--surface); color: var(--text); }
+    .work-list-region > header { grid-template-columns: 1fr; }
+  }
 </style>

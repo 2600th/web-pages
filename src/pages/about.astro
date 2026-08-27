@@ -9,20 +9,21 @@ import '../styles/content-pages.css';
   description="Pranshul Chandhok is a hands-on product and technology operator whose work spans games, immersive systems, robotics, design technology, and production AI."
   canonical="/about/"
 >
-  <div class="page-shell about-page">
-    <header class="page-hero">
-      <div>
-        <p class="section-kicker">About · Pranshul Chandhok / 2600th</p>
+  <div class="page-shell about-page" data-operating-dossier>
+    <header class="route-opening route-opening--about" data-route-opening>
+      <div class="route-opening__positive" data-polarity="positive">
         <h1>Three acts. One operating instinct.</h1>
+        <p class="route-opening__statement">Product strategy and implementation stay close enough to change each other.</p>
       </div>
-      <div class="page-hero__aside">
+      <div class="route-opening__negative" data-polarity="negative">
+        <p class="route-opening__context">Pranshul Chandhok / 2600th</p>
         <p>I work where product strategy and implementation are still close enough to change each other.</p>
         <p>Currently VP Product & Technology at Square Yards, based in Gurugram.</p>
       </div>
     </header>
 
     <section class="career-acts" aria-labelledby="career-acts-title">
-      <header><p class="section-kicker">The long arc</p><h2 id="career-acts-title">The medium changed. The questions compounded.</h2></header>
+      <header><h2 id="career-acts-title">The medium changed. The questions compounded.</h2></header>
       <ol>
         <li>
           <span>Act I · Programmer</span>
@@ -46,7 +47,7 @@ import '../styles/content-pages.css';
     </section>
 
     <section class="about-grid" aria-labelledby="patent-title">
-      <div><p class="section-kicker">Public credential</p><h2 id="patent-title">Humanoid Robot Control System</h2></div>
+      <div><h2 id="patent-title">Humanoid Robot Control System</h2></div>
       <div class="prose">
         <p>Indian Patent No. 395331 was granted on 25 April 2022 for work filed on 14 February 2019. The invention concerns translating tracked human motion into humanoid robot control.</p>
         <p>The patent is held by GreyKernel Technologies India Pvt Ltd and names Pranshul Chandhok with Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh as inventors.</p>
@@ -55,7 +56,7 @@ import '../styles/content-pages.css';
     </section>
 
     <section class="about-grid" aria-labelledby="principles-title">
-      <div><p class="section-kicker">How I work</p><h2 id="principles-title">Four durable preferences.</h2></div>
+      <div><h2 id="principles-title">Four durable preferences.</h2></div>
       <ol class="principles">
         <li><span><strong>Make the claim testable.</strong><br />A product story gets stronger when the evidence is easy to inspect.</span></li>
         <li><span><strong>Keep strategy close to implementation.</strong><br />The fastest way to improve a plan is often to encounter the system it depends on.</span></li>
@@ -65,7 +66,7 @@ import '../styles/content-pages.css';
     </section>
 
     <section class="about-grid" aria-labelledby="conversation-title">
-      <div><p class="section-kicker">Conversation</p><h2 id="conversation-title">Bring the awkward problem.</h2></div>
+      <div><h2 id="conversation-title">Bring the awkward problem.</h2></div>
       <div class="prose">
         <p>Operator and advisory work, product collaboration, selective leadership opportunities, speaking, writing, or a serious technical conversation.</p>
         <p><a class="button-link button-link--primary" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Opportunity for Pranshul Chandhok')}`}>Discuss an opportunity ↗</a></p>
@@ -76,7 +77,7 @@ import '../styles/content-pages.css';
 
 <style>
   .career-acts { padding-block: clamp(4rem, 9vw, 8rem); border-top: 1px solid var(--line); }
-  .career-acts > header { display: grid; grid-template-columns: 0.4fr 1fr; gap: clamp(2rem, 6vw, 7rem); margin-bottom: clamp(3rem, 7vw, 6rem); }
+  .career-acts > header { display: grid; grid-template-columns: 1fr; margin-bottom: clamp(3rem, 7vw, 6rem); }
   .career-acts h2 { max-width: 13ch; font-size: clamp(2.8rem, 6vw, 5.5rem); }
   .career-acts ol { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
   .career-acts li { display: grid; padding: clamp(2rem, 5vw, 4rem) 0; grid-template-columns: 0.32fr 0.75fr 1fr; gap: clamp(1.5rem, 4vw, 5rem); border-bottom: 1px solid var(--line); }

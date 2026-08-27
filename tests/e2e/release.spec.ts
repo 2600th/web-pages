@@ -1,6 +1,173 @@
 import { expect, test } from '@playwright/test';
 import axe from 'axe-core';
 
+const interiorPaths = [
+  '/',
+  '/work/',
+  '/work/kinema/',
+  '/work/defense-simulation-systems/',
+  '/notes/',
+  '/notes/ai-video-control/',
+  '/about/',
+  '/lab/',
+] as const;
+
+test('robots and RSS expose the canonical public site', async ({ request }) => {
+  const robots = await request.get('/robots.txt');
+  expect(robots.status()).toBe(200);
+  expect(await robots.text()).toContain('Sitemap: https://www.2600th.com/sitemap-index.xml');
+
+  const feed = await request.get('/rss.xml');
+  expect(feed.status()).toBe(200);
+  expect(feed.headers()['content-type']).toContain('xml');
+  const xml = await feed.text();
+  expect(xml).toContain('<title>Pranshul Chandhok — Notes</title>');
+  expect(xml).toContain('https://www.2600th.com/notes/ai-video-control/');
+  expect((xml.match(/<item>/g) ?? []).length).toBeGreaterThanOrEqual(6);
+});
+
+test('the identity icon set and web manifest are published and linked', async ({ page, request }) => {
+  for (const asset of ['/manifest.webmanifest', '/favicon.svg', '/favicon.ico', '/apple-touch-icon.png']) {
+    const response = await request.get(asset);
+    expect(response.status(), asset).toBe(200);
+    expect((await response.body()).byteLength, asset).toBeGreaterThan(100);
+  }
+
+  await page.goto('/');
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', '/manifest.webmanifest');
+  await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute('href', '/favicon.svg');
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/apple-touch-icon.png');
+});
+
+test('social metadata includes accessible image dimensions and the creator identity', async ({ page }) => {
+  await page.goto('/work/ira-vr/');
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /IRA VR/i);
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', /^\d+$/);
+  await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', /^\d+$/);
+  await expect(page.locator('meta[name="twitter:creator"]')).toHaveAttribute('content', '@2600th');
+});
+
+test('designesto is framed as a 2026 launch, not an already-live product', async ({ page }) => {
+  await page.goto('/work/blocks-inco-ai/');
+  await expect(page.getByText(/launching in 2026/i).first()).toBeVisible();
+  await expect(page.getByText(/live product/i)).toHaveCount(0);
+});
+
+test('global Person data names the verified public identities', async ({ page }) => {
+  await page.goto('/');
+  const jsonLd = JSON.parse((await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '[]');
+  const person = jsonLd.find((entry: { '@type'?: string }) => entry['@type'] === 'Person');
+  expect(person.sameAs).toEqual(expect.arrayContaining([
+    'https://www.linkedin.com/in/pranshulchandhok/',
+    'https://x.com/2600th',
+  ]));
+  expect(person.knowsAbout).toEqual(expect.arrayContaining(['Applied AI', 'Real-time 3D', 'XR']));
+});
+
+test('the work archive remains link-complete without JavaScript', async ({ browser }) => {
+  const noJs = await browser.newContext({ javaScriptEnabled: false });
+  const fallback = await noJs.newPage();
+  await fallback.goto('/work/');
+  await expect(fallback.locator('[data-work-item]')).toHaveCount(17);
+  await expect(fallback.getByRole('link', { name: /IRA VR/ })).toHaveAttribute('href', '/work/ira-vr/');
+  await expect(fallback.getByRole('link', { name: /Kinema/ })).toHaveAttribute('href', '/work/kinema/');
+  await noJs.close();
+});
+
+test('interior index openings keep the compact split optical contract', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const path of ['/work/', '/notes/', '/about/', '/lab/']) {
+    await page.goto(path);
+    const opening = page.locator('[data-route-opening]');
+    await expect(opening).toBeVisible();
+    await expect(opening.locator('[data-polarity="positive"]')).toBeVisible();
+    await expect(opening.locator('[data-polarity="negative"]')).toBeVisible();
+    await expect(page.locator('img[src*="/media/generated/editorial/"]')).toHaveCount(0);
+    expect((await opening.boundingBox())?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(620);
+  }
+});
+
+test('lab hero keeps its title inside the copy plane', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/lab/');
+
+  const title = await page.locator('.lab-hero h1').boundingBox();
+  const media = await page.locator('.lab-hero figure').boundingBox();
+  expect(title).not.toBeNull();
+  expect(media).not.toBeNull();
+  expect((title?.x ?? 0) + (title?.width ?? 0)).toBeLessThanOrEqual((media?.x ?? 0) - 8);
+});
+
+test('lab hero uses art-directed mobile media and a stacked caption', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/lab/');
+
+  await expect(page.locator('.lab-hero source[media]')).toHaveAttribute('srcset', '/media/work/kinema/inside-mobile.webp');
+  await expect(page.locator('.lab-hero img')).toHaveAttribute('src', '/media/work/kinema/inside.webp');
+  expect(await page.locator('.lab-hero figcaption').evaluate((element) => getComputedStyle(element).flexDirection)).toBe('column');
+});
+
+test('mobile work filters expose every domain without a hidden horizontal rail', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/work/');
+
+  await expect(page.getByLabel('Choose a work domain')).toBeVisible();
+});
+
+test('work filtering announces the selected domain and result count', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work/');
+
+  await page.getByLabel('Choose a work domain').selectOption('simulation');
+  await expect(page.locator('[data-work-status]')).toHaveText(/Training and simulation, \d+ projects/i);
+});
+
+test('long case titles remain bounded near tablet width', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto('/work/enterprise-immersive-systems/');
+
+  const fontSize = await page.locator('.case-hero--long h1').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  expect(fontSize).toBeLessThanOrEqual(96);
+});
+
+test('all interior routes contain their content at the 320, 390, 946, and 1440px floors', async ({ page }) => {
+  for (const width of [320, 390, 946, 1440]) {
+    await page.setViewportSize({ width, height: width < 500 ? 844 : 900 });
+    for (const path of ['/work/', '/work/kinema/', '/notes/', '/notes/ai-video-control/', '/about/', '/lab/']) {
+      await page.goto(path);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth), `${path} at ${width}px`).toBeLessThanOrEqual(width);
+      for (const element of await page.locator('main a, main button, main input, main select').all()) {
+        const box = await element.boundingBox();
+        if (!box) continue;
+        expect(box.x, `${path} control x at ${width}px`).toBeGreaterThanOrEqual(-1);
+        expect(box.x + box.width, `${path} control right at ${width}px`).toBeLessThanOrEqual(width + 1);
+      }
+    }
+  }
+});
+
+test('case-study motion controls meet the mobile touch target floor', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/work/homelane-spacecraft-pro/');
+
+  const controls = page.locator('[data-evidence-video-toggle]');
+  await expect(controls).toHaveCount(2);
+  for (const control of await controls.all()) {
+    const box = await control.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test('reduced motion preserves still evidence and disables authored transitions', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/work/kinema/');
+
+  const duration = await page.locator('[data-case-part="thesis"]').evaluate((element) => getComputedStyle(element).transitionDuration);
+  expect(Number.parseFloat(duration)).toBeLessThanOrEqual(0.01);
+  await expect.poll(async () => page.locator('video').evaluateAll((elements) => elements.every((element) => (element as HTMLVideoElement).paused))).toBe(true);
+});
+
 test('the eclipse remains singular and available on every page', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('[data-theme-control]')).toHaveCount(1);
@@ -95,3 +262,18 @@ test('mobile header focus order follows the visual order', async ({ page }) => {
   await page.keyboard.press('Tab');
   await expect(work).toBeFocused();
 });
+
+for (const path of interiorPaths) {
+  test(`${path} has no serious or critical automated accessibility violations`, async ({ page }) => {
+    await page.goto(path);
+    await page.addScriptTag({ content: axe.source });
+    const violations = await page.evaluate(async () => {
+      const result = await (window as typeof window & { axe: typeof axe }).axe.run(document, {
+        runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] },
+      });
+      return result.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
+    });
+
+    expect(violations).toEqual([]);
+  });
+}

@@ -8,7 +8,7 @@ interface Props {
 const { media, label, priority = false } = Astro.props;
 ---
 
-<figure class="project-media" data-evidence-media>
+<figure class="project-media" data-evidence-media data-media-label={label}>
   {media.mp4 ? (
     <video muted loop playsinline preload="none" poster={media.src} width={media.width} height={media.height} aria-label={media.alt} data-evidence-video>
       {media.webm && <source src={media.webm} type="video/webm" />}
@@ -48,12 +48,15 @@ const { media, label, priority = false } = Astro.props;
   }
 
   .project-media figcaption {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     padding: 0.6rem 0.85rem;
-    background: var(--cobalt);
-    color: white;
+    border-top: 1px solid var(--signal);
+    background: var(--inverse-surface);
+    color: var(--inverse-text);
     font-size: 0.72rem;
     font-weight: 720;
     letter-spacing: 0.04em;
@@ -64,9 +67,9 @@ const { media, label, priority = false } = Astro.props;
 
   .project-media figcaption button {
     min-width: 3.25rem;
-    min-height: 2rem;
-    margin: 0.45rem -0.25rem -0.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.62);
+    min-height: 2.75rem;
+    margin: -0.25rem 0;
+    border: 1px solid var(--signal);
     background: transparent;
     color: inherit;
     cursor: pointer;

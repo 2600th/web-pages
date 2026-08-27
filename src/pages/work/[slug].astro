@@ -29,7 +29,7 @@ const jsonLd = [{
   creator: { '@id': `${SITE.url}/#person` },
   dateCreated: String(data.yearStart),
   keywords: data.disciplines.join(', '),
-  sameAs: data.sources.map((source) => source.url),
+  citation: data.sources.map((source) => source.url),
 }, {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -53,29 +53,29 @@ const jsonLd = [{
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: data.title }]} />
-  <header class:list={['case-hero', { 'case-hero--long': data.title.length > 36 }]}>
-    <div class="case-hero__head">
-      <div>
-        <p class="section-kicker">{data.yearStart} · {data.status}</p>
-        <h1>{data.title}</h1>
-      </div>
-      <div>
-        <p class="case-hero__summary">{data.summary}</p>
-        <dl class="case-hero__meta">
-          <div><dt>Role</dt><dd>{data.role}</dd></div>
-          <div><dt>Visibility</dt><dd>{data.visibility.replace('-', ' ')}</dd></div>
-        </dl>
-      </div>
+  <header class:list={['case-hero route-opening route-opening--case', { 'case-hero--long': data.title.length > 36 }]} data-route-opening>
+    <div class="case-hero__positive" data-polarity="positive">
+      <h1>{data.title}</h1>
     </div>
-    {data.heroMedia && <ProjectMedia media={data.heroMedia} label={data.heroLabel ?? `${data.title} · public result`} priority />}
+    <div class="case-hero__negative" data-polarity="negative">
+      <p class="case-hero__context">{data.yearStart} · {data.status}</p>
+      <p class="case-hero__summary">{data.summary}</p>
+      <dl class="case-hero__meta">
+        <div><dt>Role</dt><dd>{data.role}</dd></div>
+        <div><dt>Period</dt><dd>{data.yearStart}{data.yearEnd ? `–${data.yearEnd}` : ''}</dd></div>
+        <div><dt>Status</dt><dd>{data.status}</dd></div>
+        <div><dt>Visibility</dt><dd>{data.visibility.replace('-', ' ')}</dd></div>
+      </dl>
+    </div>
+    {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroLabel ?? `${data.title} · public result`} priority /></div>}
   </header>
 
   {data.recordType !== 'evidence-note' ? (
     <div class="project-story">
-      <section class="project-story__frame" aria-labelledby="out-title">
-        <div class="project-story__marker"><span>Distance 01</span><strong>OUT</strong></div>
+      <section class="project-story__frame project-story__section" data-case-part="thesis" aria-labelledby="thesis-title">
+        <div class="project-story__marker"><span>Case structure</span><strong>THESIS</strong></div>
         <div class="project-story__body">
-          <div><p class="section-kicker">Thesis</p><h2 id="out-title">{data.out.thesis}</h2></div>
+          <div><h2 id="thesis-title">{data.out.thesis}</h2></div>
           <dl class="fact-grid">
             <div><dt>For</dt><dd>{data.out.audience}</dd></div>
             <div><dt>Public result</dt><dd>{data.out.outcome}</dd></div>
@@ -84,44 +84,50 @@ const jsonLd = [{
         </div>
       </section>
 
-      <section class="project-story__frame" aria-labelledby="near-title">
-        <div class="project-story__marker"><span>Distance 02</span><strong>NEAR</strong></div>
+      <section class="project-story__frame project-story__section" data-case-part="contribution" aria-labelledby="contribution-title">
+        <div class="project-story__marker"><span>Case structure</span><strong>CONTRIBUTION</strong></div>
         <div class="project-story__body">
-          <div><p class="section-kicker">Experience</p><h2 id="near-title">{data.near.experience}</h2></div>
+          <div><h2 id="contribution-title">{data.near.experience}</h2></div>
           <dl class="fact-grid">
             <div><dt>Contribution</dt><dd>{data.near.contribution}</dd></div>
-            <div><dt>System</dt><dd>{data.near.system}</dd></div>
           </dl>
           <ProjectMedia media={data.near.media} label="Near · experience" />
         </div>
       </section>
 
-      <section class="project-story__frame" aria-labelledby="inside-title">
-        <div class="project-story__marker"><span>Distance 03</span><strong>IN</strong></div>
+      <section class="project-story__frame project-story__section" data-case-part="system" aria-labelledby="system-title">
+        <div class="project-story__marker"><span>Case structure</span><strong>SYSTEM</strong></div>
         <div class="project-story__body">
-          <div><p class="section-kicker">Decisions</p><h2 id="inside-title">What had to be true underneath.</h2></div>
+          <div><h2 id="system-title">What had to be true underneath.</h2></div>
           <dl class="fact-grid">
+            <div><dt>System</dt><dd>{data.near.system}</dd></div>
             <div><dt>Key decisions</dt><dd><ul>{data.inside.decisions.map((item) => <li>{item}</li>)}</ul></dd></div>
             <div><dt>Constraints</dt><dd><ul>{data.inside.constraints.map((item) => <li>{item}</li>)}</ul></dd></div>
           </dl>
           <ProjectMedia media={data.inside.media} label="Inside · system" />
-          <div><p class="section-kicker">Evidence record</p><ul>{data.inside.evidence.map((item) => <li>{item}</li>)}</ul></div>
+        </div>
+      </section>
+
+      <section class="project-story__frame project-story__section" data-case-part="evidence" aria-labelledby="evidence-record-title">
+        <div class="project-story__marker"><span>Case structure</span><strong>EVIDENCE</strong></div>
+        <div class="project-story__body">
+          <div class="project-story__evidence"><h2 id="evidence-record-title">Evidence record</h2><ul>{data.inside.evidence.map((item) => <li>{item}</li>)}</ul></div>
           <div class="prose"><Content /></div>
         </div>
       </section>
 
-      <EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} />
+      <div data-case-part="sources"><EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} /></div>
     </div>
   ) : (
     <div class="project-story">
-      <section class="project-story__frame" aria-labelledby="evidence-note-title">
-        <div class="project-story__marker"><span>Evidence</span><strong>{data.yearStart}</strong></div>
+      <section class="project-story__frame project-story__section" data-case-part="evidence" aria-labelledby="evidence-note-title">
+        <div class="project-story__marker"><span>Case structure</span><strong>EVIDENCE</strong></div>
         <div class="project-story__body">
-          <div><p class="section-kicker">Career record</p><h2 id="evidence-note-title">{data.title}, in the public record.</h2></div>
+          <div><h2 id="evidence-note-title">{data.title}, in the public record.</h2></div>
           <div class="prose"><Content /></div>
         </div>
       </section>
-      <EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} />
+      <div data-case-part="sources"><EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} /></div>
     </div>
   )}
 </BaseLayout>

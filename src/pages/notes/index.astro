@@ -14,13 +14,14 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-di
   description="Notes by Pranshul Chandhok on production AI, creative control, browser-native 3D, product reliability, and building emerging technologies into useful systems."
   canonical="/notes/"
 >
-  <div class="page-shell">
-    <header class="page-hero">
-      <div>
-        <p class="section-kicker">Notes · field observations</p>
+  <div class="page-shell notes-page">
+    <header class="route-opening route-opening--notes" data-route-opening>
+      <div class="route-opening__positive" data-polarity="positive">
         <h1>Notes from the workbench</h1>
+        <p class="route-opening__statement">Observations from the distance between a promising demo and a system people can actually use.</p>
       </div>
-      <div class="page-hero__aside">
+      <div class="route-opening__negative" data-polarity="negative">
+        <p class="route-opening__context">Field observations · {notes.length} notes</p>
         <p>Short observations from building, breaking, and improving AI and spatial products in public.</p>
         <p><a href="/rss.xml">Follow via RSS ↗</a></p>
       </div>

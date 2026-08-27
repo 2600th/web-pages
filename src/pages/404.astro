@@ -9,13 +9,14 @@ import '../styles/content-pages.css';
   canonical="/404.html"
   robots="noindex,follow"
 >
-  <div class="page-shell">
-    <header class="page-hero">
-      <div>
-        <p class="section-kicker">404 · Coordinate drift</p>
+  <div class="page-shell not-found-page">
+    <header class="route-opening route-opening--404" data-route-opening>
+      <div class="route-opening__positive" data-polarity="positive">
         <h1>Page not found</h1>
+        <p class="route-opening__statement">The map has a gap here. The work is still in place.</p>
       </div>
-      <div class="page-hero__aside">
+      <div class="route-opening__negative" data-polarity="negative">
+        <p class="route-opening__context">404 · Coordinate drift</p>
         <p>This route left the map. The work, notes, and lab are still where they should be.</p>
         <p><a class="button-link button-link--primary" href="/">Return home ↗</a></p>
       </div>

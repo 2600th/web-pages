@@ -9,9 +9,11 @@ interface Props {
 const { sources, reviewedEvidence = [] } = Astro.props;
 ---
 
-<section class="evidence-sources" aria-labelledby="evidence-title">
-  <p class="section-kicker">Trace the claims</p>
-  <h2 id="evidence-title">{reviewedEvidence.length > 0 ? 'Evidence, with boundaries' : 'Public evidence'}</h2>
+<section class="evidence-sources" data-evidence-surface aria-labelledby="evidence-title">
+  <div class="evidence-sources__heading">
+    <p class="evidence-sources__label">Source ledger</p>
+    <h2 id="evidence-title">{reviewedEvidence.length > 0 ? 'Evidence, with boundaries' : 'Public evidence'}</h2>
+  </div>
   {reviewedEvidence.length > 0 && (
     <div class="evidence-sources__reviewed">
       <header>
@@ -47,10 +49,13 @@ const { sources, reviewedEvidence = [] } = Astro.props;
 <style>
   .evidence-sources {
     margin-top: clamp(5rem, 10vw, 9rem);
-    padding: clamp(2rem, 5vw, 4.5rem);
-    background: var(--cobalt);
-    color: white;
+    padding: clamp(2rem, 5vw, 4.5rem) 0;
+    border-top: 2px solid var(--signal);
+    color: var(--text);
   }
+
+  .evidence-sources__heading { display: grid; gap: 0.4rem; margin-bottom: 2rem; }
+  .evidence-sources__label { margin: 0; color: var(--signal); font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 
   .evidence-sources h2 {
     max-width: none;
@@ -61,8 +66,9 @@ const { sources, reviewedEvidence = [] } = Astro.props;
     grid-template-columns: minmax(14rem, 0.7fr) 1.5fr;
     gap: clamp(1.5rem, 4vw, 4rem);
     margin: 2rem 0 3rem;
-    padding: clamp(1.25rem, 3vw, 2rem);
+    padding: clamp(1.25rem, 3vw, 2rem) 0;
     border: 1px solid rgba(255, 255, 255, 0.48);
+    border-color: var(--line-strong);
   }
 
   .evidence-sources__reviewed h3,
@@ -70,7 +76,7 @@ const { sources, reviewedEvidence = [] } = Astro.props;
 
   .evidence-sources__reviewed header > p {
     margin-top: 0.75rem;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--text-muted);
     font-size: 0.82rem;
   }
 
@@ -81,25 +87,25 @@ const { sources, reviewedEvidence = [] } = Astro.props;
     grid-template-columns: minmax(12rem, 0.8fr) auto 1.2fr;
     gap: 1rem;
     padding: 1rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.36);
+    border-top: 1px solid var(--line);
   }
 
   .evidence-sources__reviewed li:first-child { border-top: 0; padding-top: 0; }
   .evidence-sources__reviewed li > div { display: grid; gap: 0.2rem; }
   .evidence-sources__reviewed li span,
-  .evidence-sources__reviewed li small { color: rgba(255, 255, 255, 0.78); font-size: 0.68rem; }
+  .evidence-sources__reviewed li small { color: var(--text-muted); font-size: 0.68rem; }
   .evidence-sources__reviewed li > p { font-size: 0.78rem; }
 
   .evidence-sources__public-title { margin: 0 0 0.9rem; font-size: 1rem; }
 
   .evidence-sources ul {
     padding: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.36);
+    border-top: 1px solid var(--line);
     list-style: none;
   }
 
   .evidence-sources li {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.36);
+    border-bottom: 1px solid var(--line);
   }
 
   .evidence-sources a {
