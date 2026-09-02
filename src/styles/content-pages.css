@@ -73,7 +73,7 @@
 .route-opening__negative > p:last-child { margin-bottom: 0; }
 .route-opening__negative strong { font-weight: 730; }
 .route-opening__negative a { color: var(--positive); }
-.route-opening__negative a:hover { color: var(--positive); }
+.route-opening__negative a:not(.button-link):hover { color: var(--positive); }
 
 .route-opening--work .route-opening__positive { padding-right: clamp(2rem, 6vw, 7rem); }
 .route-opening--notes .route-opening__positive { padding-top: clamp(3rem, 7vw, 6rem); }

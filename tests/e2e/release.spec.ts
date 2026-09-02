@@ -388,6 +388,7 @@ test('primary CTA text stays visible in the dark-first system after hover', asyn
   });
   await expect.poll(contrast).toBeGreaterThanOrEqual(4.5);
   await cta.hover();
+  await cta.evaluate(element => Promise.all(element.getAnimations().map(animation => animation.finished)));
   await expect.poll(contrast).toBeGreaterThanOrEqual(4.5);
 });
 

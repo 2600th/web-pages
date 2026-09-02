@@ -18,6 +18,7 @@ Targeted implementation of the live-audit handover, against source revision `310
 - AI-video teardown: consolidated the experiment disclosure near the introduction while preserving the distinction between the original experiment, later saved graphs and a proposed next sequence.
 - Archive social images: Humanoid Robot Control System, The Brutal Spy, Alphaman and Merkur Magie use their existing project-specific images with actual image dimensions.
 - Discovery: added `/sitemap.xml` as an XML compatibility index for the existing generated sitemap. Updated discovery documentation and removed a stale deployment instruction referring to a `gh-pages` branch.
+- Release-gate correction: excluded button links from the general route-opening hover colour rule. The 404 return button now retains white text on cobalt after its transition, rather than dropping below 4.5:1 contrast.
 
 ## Content lengths after editing
 
@@ -77,6 +78,7 @@ The eight files total **123,443 bytes**. The Ocean figure reuses `public/media/w
 - Generated discovery checks cover eight published Notes, dates, sitemap coverage, canonical URLs, draft exclusion and the 37-link LLM guide. Browser tests cover Open Graph/Twitter image dimensions, authorship and JSON-LD.
 - Independent source review reported no blocking defects. The Impeccable pass retained the established visual system and prompted the narrow-table correction; detector output contained existing advisory typography/token findings and was not represented as a clean scan.
 - Development-mode tests emitted intermittent Astro toolbar audit-fetch warnings. Production-preview browser checks are separate and did not reproduce those console errors. Automated checks do not replace physical-device or screen-reader testing.
+- The first CI attempt stopped before deployment on the settled 404-button hover contrast (4.31:1). The local test was strengthened to wait for CSS animations to finish, reproduced the same failure, and the selector was corrected rather than weakening the threshold. The live site was not replaced by the failed run.
 
 ## Manual follow-up
 
