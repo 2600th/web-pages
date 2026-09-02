@@ -3,7 +3,7 @@ title: AI-native game development thesis
 slug: ai-native-game-thesis
 summary: My March 2023 essay explored how generative AI could fit into game development, from dialogue and assets to animation and tools inside the editor.
 yearStart: 2023
-status: Essay published in March 2023
+status: Published essay
 role: Author and product technologist
 disciplines: [Applied AI, Game development, Product foresight]
 visibility: public

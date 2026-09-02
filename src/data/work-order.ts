@@ -3,6 +3,8 @@ type WorkRecord = { data: { slug: string; archive?: boolean; yearStart: number; 
 const PRIORITY = [
   'blocks', 'designesto', 'propvr-ai-craft', 'homelane-spacecraft-pro', 'greykernel',
   'enterprise-immersive-systems', 'humanoid-robot-control-system', 'web-ocean-3d', 'kinema', 'safed-sagar',
+  'little-wonder', 'ai-native-game-thesis', 'the-brutal-spy', 'alphaman', 'merkur-magie',
+  'ira-vr', 'machine-hunter', 'mysticmojo', 'defense-simulation-systems',
 ];
 const FEATURED = ['blocks', 'designesto', 'propvr-ai-craft', 'homelane-spacecraft-pro', 'enterprise-immersive-systems'];
 

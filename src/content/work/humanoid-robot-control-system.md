@@ -37,7 +37,7 @@ sources:
 seo:
   title: Humanoid Robot Control System — Patent 395331
   description: Indian Patent 395331 covers a Humanoid Robot Control System developed during the GreyKernel period, with Pranshul Chandhok named as a co-inventor.
-  socialImage: /media/social/career-atlas.webp
+  socialImage: /media/generated/editorial/enhanced/humanoid-robot-control-v2.webp
 ---
 
 I am one of four inventors on Indian Patent 395331, a Humanoid Robot Control System developed at GreyKernel. It was filed in February 2019 and granted in April 2022. My co-inventors are Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh; GreyKernel Technologies India Pvt Ltd holds the patent.

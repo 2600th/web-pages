@@ -3,7 +3,7 @@ title: Machine Hunter
 slug: machine-hunter
 summary: A VR archery game we built at GreyKernel in 2017, using tracked hand movements to draw a bow and shoot targets in an arena.
 yearStart: 2017
-status: VR game · 2017
+status: Released VR game
 role: Founder, product and technology lead
 disciplines: [Virtual reality, Games, Mixed-reality capture]
 visibility: public

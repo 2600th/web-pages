@@ -34,7 +34,7 @@ sources:
 seo:
   title: Merkur Magie — Cross-platform game engineering
   description: Merkur Magie represents Pranshul Chandhok's cross-platform game-engineering work before founding GreyKernel and moving into immersive systems.
-  socialImage: /media/social/career-atlas.webp
+  socialImage: /media/work/merkur-magie/store-poster.webp
 ---
 
 Merkur Magie was a cross-platform mobile product rather than a single self-contained game. Its rotating catalog, original game behaviors, and long-lived app context made consistency across devices, releases, and content updates part of the engineering problem.

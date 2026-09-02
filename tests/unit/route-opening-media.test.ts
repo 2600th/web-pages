@@ -14,6 +14,8 @@ it('builds every IRA opening format from the corrected Newton image, not the ret
       ['public/media/work/homelane-spacecraft-pro/public-demo-poster.webp', '#0000ff'],
       ['public/media/work/blocks-inco-ai/designesto-before-after.webp', '#0000ff'],
       ['public/media/generated/editorial/notes-aperture.webp', '#0000ff'],
+      ['public/media/generated/editorial/blocks-design-production-v1.webp', '#0000ff'],
+      ['public/media/work/propvr-ai-craft/craft-public-home-20260902.webp', '#0000ff'],
     ];
     for (const [relativePath, background] of sources) {
       const path = join(fixture, relativePath);
@@ -24,6 +26,10 @@ it('builds every IRA opening format from the corrected Newton image, not the ret
     const output = join(fixture, 'public/media/routes/work');
     const images = readdirSync(output).filter((name) => name.startsWith('ira-vr') && /\.(webp|avif)$/.test(name));
     expect(images).toHaveLength(4);
+    for (const project of ['blocks', 'craft']) {
+      const metadata = await sharp(readFileSync(join(output, `${project}-960.webp`))).metadata();
+      expect([metadata.width, metadata.height]).toEqual([960, 540]);
+    }
     for (const image of images) {
       const stats = await sharp(readFileSync(join(output, image))).stats();
       // The approved source is green; the obsolete source is red. Inspect

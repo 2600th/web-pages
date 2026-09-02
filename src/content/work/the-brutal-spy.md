@@ -3,7 +3,7 @@ title: The Brutal Spy
 slug: the-brutal-spy
 summary: A top-down action and stealth game for iPhone and iPad that I worked on early in my game-development career.
 yearStart: 2012
-status: Released in 2012
+status: Released mobile game
 role: Game programmer
 disciplines: [Games, Real-time systems]
 visibility: public
@@ -41,7 +41,7 @@ sources:
 seo:
   title: The Brutal Spy — Early game work by Pranshul Chandhok
   description: The Brutal Spy marks an early point in Pranshul Chandhok's path from game programming to immersive systems, design technology, and applied AI.
-  socialImage: /media/social/career-atlas.webp
+  socialImage: /media/work/the-brutal-spy/trailer-poster.webp
 ---
 
 Released for iPhone and iPad in January 2012, The Brutal Spy was a top-down action-adventure and stealth shooter. Players controlled Razor, a field operative, through close-quarters combat and encounters with armed enemies using touchscreen controls.

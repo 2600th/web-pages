@@ -3,7 +3,7 @@ title: Designesto
 slug: designesto
 summary: AI design studio for spaces. A focused workspace for exploring room directions, revising existing spaces, moving from sketches to renders, and communicating ideas through images and 360° experiences.
 yearStart: 2026
-status: Product development and rollout, 2026
+status: Product development and rollout
 role: Product and technology leadership
 context: Built as part of my current product leadership work
 disciplines: [Generative AI products, Interior design technology, Product leadership]
@@ -36,7 +36,7 @@ seo:
   socialImage: /media/work/blocks-inco-ai/designesto-before-after.webp
 ---
 
-## From a model demo to a design workflow
+## The product work around the model
 
 A convincing image can start a design conversation. It cannot decide which parts of a room should stay fixed, what the client wants to compare, or how a designer should revise the result. Designesto focuses on that surrounding workflow.
 
@@ -60,12 +60,12 @@ Images help compare directions. Video helps communicate a sequence or movement t
 
 The development work connects those outputs around the design task. It does not make an image, clip or panorama a substitute for measurements, site conditions or construction details.
 
-## The boundary today
+## What the case covers today
 
-This case covers concept exploration, revision and communication. Deeper costing and execution integration remain roadmap work unless separately confirmed as shipped. It does not claim public general availability or execution-ready output.
+Designesto’s current public case covers concept exploration, revision, and visual communication. Pricing and execution-ready output require structured product and project data, so I keep them outside the claim until they ship.
 
-A photograph can supply a starting point. It cannot supply every fact needed to build a room. Keeping that boundary visible protects both the usefulness of the visual tool and the decisions that still need structured project data.
+An image or panorama can help someone compare a direction. It cannot supply every measurement, site condition, or product fact needed to build the room.
 
 ## Relationship to Blocks
 
-[Blocks](/work/blocks/) handles structured room and product choices, pricing and production handoffs. Designesto develops visual exploration and revision. They belong to the same broader design process, but each case describes its own scope. The existing InCo AI integration with Blocks does not establish that Designesto has already shipped deeper costing or execution features.
+Designesto helps people explore what a space could become. [Blocks](/work/blocks/) resolves the measurable room and product choices needed to price, validate, and hand that design forward. They support the same broader design process without claiming the same capabilities.

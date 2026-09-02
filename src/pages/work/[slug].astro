@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/shared/Breadcrumbs.astro';
 import EvidenceSources from '../../components/work/EvidenceSources.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
 import CraftEvolution from '../../components/work/CraftEvolution.astro';
+import SpaceCraftBoundary from '../../components/work/SpaceCraftBoundary.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../data/site';
 import sharp from 'sharp';
@@ -137,6 +138,7 @@ const jsonLd = [{
         </div>
       </section>
 
+      {data.slug === 'homelane-spacecraft-pro' && <SpaceCraftBoundary />}
       <section class="project-story__frame project-story__section" data-case-part="story" aria-labelledby="operating-reality-title">
         <div class="project-story__marker"><span>Looking back</span><strong>PROJECT NOTES</strong></div>
         <div class="project-story__body">
@@ -153,7 +155,7 @@ const jsonLd = [{
         <div class="project-story__marker"><span>Project brief</span><strong>{data.storyLabel ?? 'WHAT WAS BUILT'}</strong></div>
         <div class="project-story__body">
           <div><h2 class="project-story__lead" id="project-story-title">{data.storyHeading ?? `${data.title}, in context.`}</h2></div>
-          <div class="prose"><Content /></div>
+          <div class:list={['prose', { 'prose--portfolio': data.slug === 'greykernel' }]}><Content /></div>
         </div>
       </section>
       <div data-case-part="sources"><EvidenceSources sources={data.sources} /></div>

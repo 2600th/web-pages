@@ -51,3 +51,32 @@ seo:
 I built Little Wonder around a child’s wish to make stories. It turns classic public-domain tales into personalised illustrated books with the child as the hero. The book includes a custom cover and comic-style pages, and can be downloaded as a print-ready PDF from the browser.
 
 I wanted the choices to feel familiar to a child. Behind those choices, the software has to coordinate the text and illustrations while keeping the character recognisable from page to page. That consistency is a much more useful test than the quality of any single image.
+
+## The workflow behind the book
+
+The visible interaction is deliberately small. A child chooses a story direction and supplies the details that make the book theirs. The application then has to coordinate several stages without turning the child into a prompt engineer.
+
+<figure class="stage-flow" aria-label="Storybook production stages">
+  <ol>
+    <li>Story choice and child details</li>
+    <li>Page-level story structure</li>
+    <li>Character and scene illustrations</li>
+    <li>Consistency review across pages</li>
+    <li>Cover, layout, and printable PDF</li>
+  </ol>
+  <figcaption>The book workflow, from a story choice to a printable sequence.</figcaption>
+</figure>
+
+Each stage has a different failure mode. A coherent story can still produce a different-looking hero on every page. Good illustrations can still fail when text and image compete in the layout. A browser preview can look correct while a printable PDF clips content or changes pagination.
+
+## The hard part was continuity
+
+The test was not whether the system could generate one attractive image. The child needed to recognise themselves as the same hero throughout the book. That meant carrying identity, clothing, visual style, and page context across several independent generations.
+
+I treated the book as a sequence rather than a gallery. Every page had to contribute to the same story, and the cover and PDF needed to feel like the output of that sequence rather than separate exports.
+
+## Keeping the interface child-sized
+
+The application hides most generation detail. The useful choices are story choices: who the hero is, what kind of adventure they want, and which drawings or ideas they want to include. Model settings and production stages belong behind the interaction unless something needs the parent’s attention.
+
+That constraint made Little Wonder a useful product exercise. The system does several technical things, but the person using it should feel that they are making a book.

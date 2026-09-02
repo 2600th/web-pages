@@ -5,6 +5,17 @@ import sharp from 'sharp';
 const root = process.cwd();
 const variants = [
   {
+    source: 'public/media/generated/editorial/blocks-design-production-v1.webp',
+    output: 'public/media/routes/work/blocks',
+    position: 'centre',
+  },
+  {
+    source: 'public/media/work/propvr-ai-craft/craft-public-home-20260902.webp',
+    output: 'public/media/routes/work/craft',
+    position: 'centre',
+    fit: 'contain',
+  },
+  {
     source: 'public/media/generated/editorial/enhanced/ira-newton-v2.webp',
     output: 'public/media/routes/work/ira-vr-v2',
     position: 'centre',
@@ -35,7 +46,7 @@ for (const variant of variants) {
     await mkdir(dirname(base), { recursive: true });
     const image = sharp(join(root, variant.source), { failOn: 'warning' })
       .rotate()
-      .resize({ width, height, fit: 'cover', position: variant.position, withoutEnlargement: true });
+      .resize({ width, height, fit: variant.fit ?? 'cover', background: '#030405', position: variant.position, withoutEnlargement: true });
 
     await image.clone().avif({ quality: 52, effort: 6, chromaSubsampling: '4:2:0' }).toFile(`${base}.avif`);
     await image.clone().webp({ quality: 72, effort: 6, smartSubsample: true }).toFile(`${base}.webp`);

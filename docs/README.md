@@ -8,6 +8,7 @@ Start with the maintained guides:
 - [Search and AI discovery](discovery.md): robots policy, generated sitemaps, RSS, the optional LLM guide, and validation.
 - [Deployment](deployment.md): explicit release approval, verification, and recoverable rollback.
 - [Editorial update report](editorial-update-report.md): implemented routes, article/source boundaries, exclusions, measured verification and remaining manual steps.
+- [Live-audit update report](live-audit-update-report.md): reviewer fixes, measured content lengths, responsive figures and conditional follow-ups.
 
 The current implementation is the final check for behavior: `src/pages/index.astro` composes `VelvetHero` and `VelvetHomeSections`; shared layout, content schemas, scripts, and tests define the rest of the running site. Documentation is not proof of a live deployment or a passing test run.
 

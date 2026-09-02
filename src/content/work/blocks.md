@@ -72,7 +72,9 @@ Validation is most useful when a finding points to a specific decision. A missin
 
 When a question has a definite answer, I prefer a rule that can be inspected. Dimensions, allowed configurations and pricing dependencies need repeatability. An attractive generated result does not make a cabinet fit or turn a concept into a manufacturing specification.
 
-Generative tools have a different job: help a designer explore what a space could become. The published InCo AI integration introduced a path from design exploration into Blocks for pricing and specifications. That does not mean every new visual tool inherits the same operational capabilities.
+Generative tools have a different job: help a designer explore what a space could become. Once a direction is selected, Blocks carries the measurable decisions into pricing, validation, and production.
+
+An earlier InCo AI integration created a path between visual exploration and Blocks. Designesto is presented separately here because its current public case covers exploration, revision, and communication rather than every structured capability inside Blocks.
 
 ## Relationship to Designesto
 

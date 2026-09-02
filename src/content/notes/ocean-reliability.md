@@ -6,7 +6,7 @@ relatedWork: [web-ocean-3d]
 ogImage: /media/social/ocean-reliability.webp
 summary: Sharing my browser ocean exposed a texture budget I was not measuring. The repair cut asset allocation, increased download weight, and revealed a broken visual baseline.
 publishedAt: 2026-08-09
-updatedAt: 2026-09-02
+updatedAt: 2026-09-03
 topics:
   - Reliability
   - Web graphics
@@ -19,6 +19,11 @@ draft: false
 The ocean demo worked on the machine that built it. The useful engineering started when it failed on other machines.
 
 I had built an interactive ocean with spectral waves, weather, underwater views and a boat responding to the water. Much of the early work was about what the scene looked like. Sharing it changed the question: could the browser finish loading everything and keep the scene alive?
+
+<figure class="article-figure">
+  <img src="/media/work/web-ocean-3d/hero.webp" width="1600" height="900" loading="lazy" decoding="async" alt="Original Web Ocean browser capture showing a sailing boat on the ocean near an island" />
+  <figcaption>Web Ocean 3D · The browser scene that prompted the resource-budget investigation.</figcaption>
+</figure>
 
 Some visitors crashed the tab. Those reports were useful, but they were not a controlled device study. I do not have a complete record of each visitor’s browser, GPU, available memory and settings. I cannot honestly reconstruct a low-end device matrix from the comments. What I can explain is the resource problem the investigation exposed, the changes recorded in the repository, and the limits of the measurements.
 
@@ -34,6 +39,24 @@ The completed low-end pass records the following comparison. It is a **dressing-
 |---|---:|---:|
 | Recorded texture allocation | 762.3 MiB | 79.9 MiB |
 | Download weight | 33.7 MiB | 40.7 MiB |
+
+<figure class="budget-figure" data-ocean-budgets aria-label="Two separate resource budgets for the same dressing assets">
+  <div class="budget-figure__panels">
+    <div data-budget-panel>
+      <h3>Texture allocation</h3>
+      <p class="budget-figure__scale">Scale: 0–800 MiB</p>
+      <div class="budget-figure__row"><span>Before</span><strong>762.3 MiB</strong><span class="budget-figure__track" aria-hidden="true"><i style="width:95.2875%"></i></span></div>
+      <div class="budget-figure__row"><span>After</span><strong>79.9 MiB</strong><span class="budget-figure__track" aria-hidden="true"><i style="width:9.9875%"></i></span></div>
+    </div>
+    <div data-budget-panel>
+      <h3>Download weight</h3>
+      <p class="budget-figure__scale">Scale: 0–50 MiB</p>
+      <div class="budget-figure__row"><span>Before</span><strong>33.7 MiB</strong><span class="budget-figure__track" aria-hidden="true"><i style="width:67.4%"></i></span></div>
+      <div class="budget-figure__row"><span>After</span><strong>40.7 MiB</strong><span class="budget-figure__track" aria-hidden="true"><i style="width:81.4%"></i></span></div>
+    </div>
+  </div>
+  <figcaption>Repository-recorded asset comparison for the same dressing set. Texture allocation and download weight are different budgets. These are not total process-memory values.</figcaption>
+</figure>
 
 The download got larger while the texture allocation got smaller. That is not a contradiction. Transfer size and the GPU representation are different budgets, and the codec choices traded one for the other. Compressed allocation also depends on the target format the device supports. This table is not a promise that every GPU will allocate precisely the same number of bytes.
 

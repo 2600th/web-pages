@@ -6,7 +6,7 @@ relatedWork: [safed-sagar]
 ogImage: /media/social/ai-video-control.webp
 summary: A thirty-second experiment, two saved local H3 control graphs, and a proposed six-beat sequence show why shot quality and editorial continuity are different problems.
 publishedAt: 2026-08-24
-updatedAt: 2026-09-02
+updatedAt: 2026-09-03
 topics:
   - AI video
   - Creative direction
@@ -17,6 +17,8 @@ draft: false
 ---
 
 I made a thirty-second science-fiction fight with MiniMax H3 running locally on an RTX 5090 and Seedance 2.5. The original post describes the experiment, without a benchmark or a repeatable success rate.
+
+This is a production reflection rather than a benchmark. I did not preserve a shot-by-shot log linking every final moment to one model or setting. The saved H3 graphs described below show the local workflow structure, while the six-beat example is the method I would use for the next sequence.
 
 The result was imperfect. I could see where continuity slipped, but I could also steer more of the sequence than I had expected. The interesting improvement was not simply a more convincing isolated frame. It was the possibility of carrying enough intent into a shot to make editing feel like a series of decisions.
 
@@ -42,7 +44,7 @@ Reference-to-video control        Image-to-video control
              Upscale / assemble / save
 ```
 
-Inspecting nodes and wiring verifies that those stages exist in a saved workflow. It does **not** verify a successful render, adherence to the first and last frame, temporal quality or throughput. These saved graphs also postdate the original post. I am not presenting them as a complete reconstruction of the settings that produced that thirty-second clip.
+Inspecting nodes and wiring verifies that those stages exist in a saved workflow. It does **not** verify a successful render, adherence to the first and last frame, temporal quality or throughput. These saved graphs postdate the original post.
 
 My public [ComfyUI Workflows repository](https://github.com/2600th/ComfyUI-Workflows) currently provides a Qwen example. It is not a download of these local H3 graphs, and it will not reproduce this sequence. I am keeping the local source references and generation prompts out of this article.
 
@@ -50,7 +52,7 @@ My public [ComfyUI Workflows repository](https://github.com/2600th/ComfyUI-Workf
 
 The generator needs inputs. The sequence needs a plan. Before I ask for a shot, I want to know what the viewer learns, where the subject begins and ends, and what must survive the cut. Those decisions become a continuity contract that I can inspect after generation.
 
-For a new sequence, I would put character references and a shot plan before the local graph, reserve hosted passes for a specific unresolved shot, then edit and review the assembled sequence before delivery. The original experiment used local H3 and Seedance 2.5, but I do not have a shot-by-shot record proving which stage or model produced every final moment. That more disciplined pipeline is my proposed working method, not a recovered production log.
+For a new sequence, I would put character references and a shot plan before the local graph, reserve hosted passes for a specific unresolved shot, then edit and review the assembled sequence before delivery.
 
 | Choice | Why I would use it | What I still need to inspect |
 |---|---|---|

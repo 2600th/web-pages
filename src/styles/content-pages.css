@@ -193,6 +193,29 @@
 
 .prose { max-width: 73ch; font-size: clamp(1.05rem, 1.2vw, 1.25rem); line-height: 1.62; text-align: start; }
 .prose p { margin-bottom: 1.4em; }
+.prose > h2 { margin-block: 2.5rem 1rem; }
+.prose table { width: 100%; border-collapse: collapse; margin-block: 1.5rem; font-size: 1rem; line-height: 1.5; }
+.prose th, .prose td { padding: 0.8rem 0.6rem; text-align: start; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.prose th { color: var(--warm); }
+.prose--portfolio table { table-layout: fixed; }
+.prose--portfolio th:first-child { width: 30%; }
+.prose--portfolio th, .prose--portfolio td { overflow-wrap: normal; }
+.prose .table-scroll { min-width: 0; max-width: 100%; overflow-x: auto; }
+.article-figure, .budget-figure, .stage-flow { margin: 2rem 0; }
+.article-figure img { display: block; width: 100%; height: auto; }
+.article-figure figcaption, .budget-figure figcaption, .stage-flow figcaption { margin-top: 1rem; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
+.stage-flow ol { margin: 0; padding-inline-start: 2rem; border-block: 1px solid var(--line); }
+.stage-flow li { padding: 0.65rem 0.7rem; border-bottom: 1px solid var(--line); }
+.stage-flow li:last-child { border-bottom: 0; }
+.stage-flow li::marker { color: var(--cobalt-bright); font-variant-numeric: tabular-nums; }
+.budget-figure__panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; padding-block: 1.5rem; border-block: 1px solid var(--line); }
+.budget-figure h3 { margin: 0; font-family: inherit; font-size: 1.2rem; font-weight: 650; }
+.budget-figure .budget-figure__scale { margin-block: 0.5rem 1.25rem; font-size: 0.9rem; }
+.budget-figure__row { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; margin-top: 1rem; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+.budget-figure__track { grid-column: 1 / -1; height: 0.65rem; background: var(--velvet-soft); }
+.budget-figure__track i { display: block; height: 100%; background: var(--cobalt-bright); }
+.budget-figure__row:last-child i { background: var(--gold); }
+@media (max-width: 40rem) { .budget-figure__panels { grid-template-columns: 1fr; } .prose th, .prose td { padding: 0.6rem 0.35rem; } }
 .prose a { color: var(--signal); }
 
 /* Notes are quiet reading surfaces: metadata is a rail, copy is the primary

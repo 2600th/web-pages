@@ -4,30 +4,29 @@ import { craft } from '../../data/craft';
 
 <section class="craft-evolution" aria-labelledby="craft-evolution-title">
   <h2 id="craft-evolution-title">From an internal foundation to Craft</h2>
+  <p>The MVP was handed to PropVR’s team as a foundation to extend. The current team developed, productionized, and expanded it into Craft.</p>
+  <p>Craft’s tools index now lists <strong>{craft.tools} production tools live across six studios</strong>: {craft.studios.slice(0, -1).join(', ')}, and {craft.studios.at(-1)}. Direct tools can be used individually. Agentic 1.0 and Arc 1.0 are in early access, adding outcome planning and shared project context around those tools.</p>
+  <p>That is the current PropVR Technology team’s platform. It should not be read as a retroactive description of the MVP I built.</p>
   <ol class="craft-evolution__steps" aria-label="Product evolution">
     <li><strong>Initial MVP</strong><span>22 tools across five studios</span><small>Pranshul Chandhok</small></li>
     <li><strong>Team handoff</strong><span>Product and technical foundation</span><small>PropVR Technology team takes it forward</small></li>
-    <li><strong>Current Craft</strong><span>{craft.tools} tools</span><small>{craft.directToolsStatus}</small></li>
+    <li><strong>Current Craft</strong><span>{craft.tools} production tools</span><small>{craft.directToolsStatus}</small></li>
     <li><strong>{craft.earlyAccess.join(' + ')}</strong><span>{craft.earlyAccessStatus}</span><small>Outcome planning and project context</small></li>
   </ol>
 
-  <h3>What it became</h3>
-  <p>Craft’s public site lists {craft.tools} tools. {craft.directToolsStatus}. {craft.earlyAccess.join(' and ')}: {craft.earlyAccessStatus.toLowerCase()}. {craft.roadmap.join(' and ')}: {craft.roadmapStatus.toLowerCase()}.</p>
-  <p>Homepage availability groups: {craft.studios.join(', ')}.</p>
-  <p>{craft.direction}</p>
   <div class="craft-evolution__table" tabindex="0" role="region" aria-label="Initial MVP and current Craft comparison">
     <table>
       <caption>Product scope, then and now</caption>
-      <thead><tr><th scope="col">Initial MVP</th><th scope="col">Current Craft direction</th></tr></thead>
+      <thead><tr><th scope="col">Initial PropVR AI MVP</th><th scope="col">Current Craft platform</th></tr></thead>
       <tbody>
-        <tr><td>User selects a specialist tool</td><td>Outcome planning alongside direct tools</td></tr>
-        <tr><td>22 tools across five workflow studios</td><td>{craft.tools} tools · {craft.directToolsStatus.toLowerCase()}</td></tr>
-        <tr><td>Client-side prototype state</td><td>Shared project context through Arc · {craft.earlyAccessStatus.toLowerCase()}</td></tr>
-        <tr><td>Prove workflow and tool boundaries</td><td>Plan execution, approvals, consistency and cost</td></tr>
+        <tr><td>22 tools across five workflow studios</td><td>{craft.tools} production tools live across six studios</td></tr>
+        <tr><td>User selects a specialist tool</td><td>Direct tools plus agent-planned workflows</td></tr>
+        <tr><td>Client-side prototype state</td><td>Shared project context through Arc in early access</td></tr>
+        <tr><td>Proved workflow structure, tool boundaries, and model routing</td><td>Adds production operations, approval, consistency, and cost controls</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="craft-evolution__note">Availability from Craft’s public site, <time datetime={craft.checkedAt}>{craft.checkedAt}</time>. {craft.statusNote}</p>
+  <p class="craft-evolution__note">Availability checked: <time datetime={craft.checkedAt}>3 September 2026</time>.</p>
   <ul class="craft-evolution__sources" aria-label="Current Craft sources">
     {craft.sources.map((source) => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}<span class="sr-only"> (opens in a new tab)</span></a></li>)}
   </ul>

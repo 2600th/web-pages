@@ -3,7 +3,7 @@ title: Alphaman
 slug: alphaman
 summary: A shipped mobile game that turned spelling practice into a maze-driven arcade loop across themed worlds.
 yearStart: 2013
-status: Released in 2013
+status: Released mobile game
 role: Game developer
 disciplines: [Games, Gameplay systems]
 visibility: public
@@ -43,7 +43,7 @@ sources:
 seo:
   title: Alphaman — Game development work by Pranshul Chandhok
   description: Alphaman was a 2013 iOS and Android puzzle-maze game combining spelling, themed worlds, enemies, and arcade powers.
-  socialImage: /media/social/career-atlas.webp
+  socialImage: /media/work/alphaman/gameplay-poster.webp
 ---
 
 Released by The Awesome Game Studio for iOS and Android in September 2013, Alphaman wrapped spelling practice inside an arcade maze. Players guided the character through **11 themed maps**, collecting letters in the correct order to complete words while avoiding enemies. Picking up Alphapowers introduced abilities such as teleportation and speed boosts, keeping the learning loop connected to movement, risk, and reward.

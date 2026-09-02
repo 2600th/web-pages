@@ -1,0 +1,20 @@
+<section class="project-story__frame project-story__section" aria-labelledby="spacecraft-boundary-title">
+  <div class="project-story__marker"><span>Connected decisions</span><strong>THE SYSTEM</strong></div>
+  <div class="project-story__body prose">
+    <h2 id="spacecraft-boundary-title">One edit, several consequences</h2>
+    <p>A room editor can make moving a cabinet feel like one action. The system has to treat it as several connected changes.</p>
+    <div class="table-scroll" role="region" aria-label="Designer actions and connected systems" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Designer action</th><th scope="col">Systems that may need to respond</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Change cabinet dimensions</th><td>Layout constraints, configuration rules, price, and production details</td></tr>
+          <tr><th scope="row">Select another material</th><td>Visual state, catalogue option, price, and material specification</td></tr>
+          <tr><th scope="row">Move between 2D and 3D</th><td>The same room and product state in two representations</td></tr>
+          <tr><th scope="row">Approve the room</th><td>Quote, CAD, documentation, and manufacturing handoff</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>This is why the editor could not be designed as an isolated visualization layer. The interaction had to remain connected to catalogue and pricing logic, then carry the selected design into documentation and production outputs.</p>
+    <p>My work as principal software architect focused on those connections: keeping the realtime editor responsive while ensuring that the system behind it still knew what the designer had changed and what downstream work depended on that choice.</p>
+  </div>
+</section>

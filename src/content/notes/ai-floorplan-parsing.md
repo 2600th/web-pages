@@ -4,7 +4,7 @@ slug: ai-floorplan-parsing
 type: technical-teardown
 summary: "A source-grounded look at a floorplan pipeline: where structured output helps, how file-based resume can fail, and which validation mechanisms still belong in the next version."
 publishedAt: 2026-09-02
-updatedAt: 2026-09-02
+updatedAt: 2026-09-03
 topics: [Applied AI, Spatial systems, Pipeline reliability]
 relatedWork: [blocks]
 ogImage: /media/social/ai-floorplan-parsing.webp
@@ -32,15 +32,18 @@ Processing begins with an isometric image stage, then proceeds through analysis,
 
 The following is a simplified dependency diagram, not a reproduction of the private workflow or its field schema:
 
-```text
-Floorplan input
-  → Isometric image stage
-  → Structured analysis
-  → Room detection
-  → Overlays for inspection
-  → Optional room renders
-  → Results and recorded errors
-```
+<figure class="stage-flow" data-stage-flow aria-label="Floorplan processing stage dependency">
+  <ol>
+    <li>Floorplan input</li>
+    <li>Isometric image stage</li>
+    <li>Structured analysis</li>
+    <li>Room detection</li>
+    <li>Overlays for inspection</li>
+    <li>Optional room renders</li>
+    <li>Results and recorded errors</li>
+  </ol>
+  <figcaption>Simplified stage dependency. It omits private prompts, customer inputs, and proprietary field definitions.</figcaption>
+</figure>
 
 The order is consequential. An attractive generated image is not independent confirmation of the analysis that follows it. If an early stage changes the apparent geometry, downstream stages can reinforce that interpretation. For validation I would want the source drawing and intermediate artifacts available together, rather than showing the final image as though it were ground truth.
 

@@ -32,7 +32,7 @@ describe('editorial Work contracts', () => {
     const { data, body } = record('designesto');
     expect(`${data.title} ${data.summary}`).not.toMatch(/Interior Company|Square Yards|launching in 2026/i);
     expect(data.context).toBe('Built as part of my current product leadership work');
-    expect(body).toMatch(/costing.*roadmap/i);
+    expect(body).toMatch(/Pricing and execution-ready output require structured product and project data/);
   });
 
   it('preserves Craft contribution credit without freezing current counts in the narrative', () => {

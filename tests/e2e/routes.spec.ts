@@ -163,7 +163,7 @@ test('Work and Notes openings include art-directed, responsive media', async ({ 
   await expect(page.locator('.route-opening--work[data-motion-scope]')).toHaveCount(1);
   await expect(workMedia.getByRole('link')).toHaveCount(3);
   await expect(workMedia.locator('[data-motion-reveal]')).toHaveCount(3);
-  for (const [index, label] of ['IRA VR', 'HomeLane SpaceCraft Pro', 'Designesto'].entries()) {
+  for (const [index, label] of ['Blocks', 'Designesto', 'PropVR AI to Craft'].entries()) {
     const link = workMedia.getByRole('link', { name: new RegExp(label, 'i') });
     await expect(link).toHaveCount(1);
     await expect(link.locator('source[type="image/avif"]')).toHaveCount(1);
