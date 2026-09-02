@@ -2,14 +2,13 @@ import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 import { SITE } from '../data/site';
+import { getPublishedNotes } from '../data/notes';
 
 export async function GET(context: APIContext) {
-  const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
-  );
+  const notes = getPublishedNotes(await getCollection('notes'));
 
   return rss({
-    title: 'Pranshul Chandhok — Notes',
+    title: 'Pranshul Chandhok | Notes',
     description: 'Field notes on production AI, real-time 3D, browser-native systems, and product reliability.',
     site: context.site ?? SITE.url,
     customData: '<language>en-IN</language>',

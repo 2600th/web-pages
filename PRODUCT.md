@@ -8,7 +8,7 @@ web
 
 ## Users
 
-The primary visitors are founders, executives, and senior product or technology leaders evaluating Pranshul Chandhok for strategic advisory, founder collaboration, difficult 0-to-1 product work, or selective VP/CTO-level opportunities. Secondary visitors include journalists, event organizers, technical peers, and potential collaborators looking for credible expertise in generative AI, agentic systems, real-time 3D, XR, and spatial computing.
+The primary visitors are technical peers, founders, and product or technology leaders exploring Pranshul Chandhok's work and judgment. Secondary visitors include journalists, event organizers and potential collaborators. Contact copy invites questions and exchange of ideas while remaining compatible with his current employment. The site does not solicit advisory or competing consulting engagements.
 
 Visitors usually arrive from LinkedIn, X, GitHub, a referral, or a branded search. They need to understand quickly what Pranshul builds, what makes his experience unusual, what evidence supports it, and how to start a relevant conversation.
 
@@ -16,11 +16,11 @@ Visitors usually arrive from LinkedIn, X, GitHub, a referral, or a branded searc
 
 2600th.com is Pranshul Chandhok's personal portfolio, professional presence, and experimental lab. It should turn public work, career depth, technical judgment, and current experiments into high-quality inbound conversations without reading like a job-seeker portfolio or a development agency.
 
-Success means that qualified visitors can identify Pranshul as a hands-on product and engineering operator, find relevant proof, remember the compound AI-plus-real-time-3D advantage, and confidently initiate a conversation about a difficult product problem.
+Success means that visitors can identify Pranshul as a hands-on product and technology leader, find relevant proof, understand his contribution to team products, and start a relevant conversation.
 
 ## Positioning
 
-Pranshul repeatedly turns emerging AI and spatial technologies into products that survive production. His differentiator is the combination of 15-plus years in real-time 3D, games, XR, robotics, and performance engineering with current 0-to-1 leadership in generative AI, multimodal systems, agentic workflows, and consumer product development.
+Pranshul is VP Product & Technology, Interior Company at Square Yards. His 14+ years span games, XR, design software, AI and realtime 3D. The portfolio distinguishes professional team leadership, personally built foundations, current team development and independent experiments. Blocks and Designesto are separate cases. The initial PropVR AI MVP is credited to Pranshul and later Craft development to PropVR's Technology team.
 
 ## Operating Context
 
@@ -40,7 +40,7 @@ The work spans product strategy, technical architecture, applied AI, evaluation 
 - The primary human and searchable identity is **Pranshul Chandhok**.
 - **2600th** is the experimental identity, maker signature, and lab world rather than a replacement for the real name.
 - The domain remains `2600th.com`.
-- The professional surface may use a light/dark mode relationship, with playful transitions and elements connecting the two identities.
+- The professional surface is the approved dark Velvet Reveal editorial system. Preserve its restrained grid, particles, character and keyboard-accessible hotspots, with a reduced-motion static composition.
 - The existing site demonstrates a taste for interactive, technical, game-like experiences, but its green CRT terminal aesthetic is evidence and an anti-reference for the redesign rather than a visual system to preserve literally.
 - The voice should be technically credible, direct, curious, occasionally playful, and free of inflated futurist language.
 
@@ -49,7 +49,7 @@ The work spans product strategy, technical architecture, applied AI, evaluation 
 - Public LinkedIn profile, experience, recommendations, posts, and featured work.
 - Public X profile and recent project demonstrations.
 - Public GitHub repositories including Kinema, Web Ocean 3D, ComfyUI workflows, and browser-native 3D experiments.
-- Publicly announced work involving Blocks, INCO-AI, Virtual Experience Center, conversational property search, and related AI or spatial products.
+- Publicly announced work and approved contribution descriptions for Blocks, Designesto, PropVR AI → Craft and related AI or spatial products.
 - Public patent reference for a humanoid robot control system and media in the supplied Google Drive archive.
 - GreyKernel archive covering showreels, robotics, platforms, entertainment, training and simulation, real estate, games, collaborative learning, medical work, analytics, and presentations.
 - Public awards, leadership history, and professional recommendations.
@@ -66,4 +66,8 @@ Evidence must be attributed accurately. Missing outcomes, customer claims, bench
 
 ## Accessibility & Inclusion
 
-Target WCAG 2.2 AA. Provide keyboard access, visible focus, semantic landmarks, sufficient contrast in both themes, reduced-motion alternatives, captions or transcripts for meaningful video, descriptive text for imagery, and explicit opt-in audio with persistent mute controls. No essential information may depend on color, motion, sound, hover, or a high-performance GPU.
+Target WCAG 2.2 AA. Provide keyboard access, visible focus, semantic landmarks, sufficient contrast, reduced-motion alternatives, descriptive text for imagery and explicit opt-in playback. No essential information may depend on color, motion, sound, hover, or a high-performance GPU. Automated checks are evidence, not a claim of a complete screen-reader or compliance audit.
+
+## Public information architecture
+
+Home / Work / Notes / Lab / About. Work lists 19 public records and keeps the old combined Blocks/INCO-AI URL as a useful off-archive compatibility page. Eight Notes use Field Note, Technical Teardown or Essay types. Lab includes independent builds and the unofficial Dwarkesh × Jensen Huang companion. Ghost Terminal is a noindex archive. Private drafts, Agent Skills showcases, and unsupported Gaussian-splatting or Hinglish-voice benchmark work are not published. Local source completion does not mean deployment.

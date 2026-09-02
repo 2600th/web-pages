@@ -1,27 +1,29 @@
 ---
-title: Technology is useful when agency expands
+title: Making tools easier to steer
 slug: technology-and-human-agency
-summary: "A reflection on the principle connecting games, immersive learning, robotics, design tools, and AI: the best systems expand a person’s ability to understand and act."
+type: field-note
+relatedWork: [designesto, ira-vr]
+ogImage: /media/social/technology-and-human-agency.webp
+summary: In design software and AI tools, I keep coming back to a practical question. Can someone change the result without having to start over?
 publishedAt: 2026-08-23
+updatedAt: 2026-09-02
 topics:
   - Human agency
   - Product design
   - Immersive systems
 canonicalUrl: https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild
-sourceAttribution: Companion reflection to an authored Substack career retrospective by Pranshul Chandhok
+sourceAttribution: A follow-up to my career retrospective, From Pixels to Metaverse.
 draft: false
 ---
 
-The projects I remember most clearly gave someone a new kind of agency.
+An AI-generated room can look convincing and still be difficult to work with. A designer might like the room but want to change the sofa. A homeowner might want the same layout with different materials. Starting again from a prompt can lose the parts they wanted to keep.
 
-In a game, agency is immediate: movement, timing, consequence. In immersive learning, it includes attention and presence, but also the instructor’s ability to organize a session and understand what happened. In robotics, tracked motion becomes a way to control a physical system. In design software, an idea becomes a space that can be explored, specified, priced, and changed. In AI products, intent can move through many possible outputs at unusual speed.
+That is one of the problems we’re working through with Designesto. I want people to be able to develop an idea over several revisions, compare directions, and keep track of how they arrived at a choice.
 
-The technology is different in each case. The product test is surprisingly stable: does the system help a person form an intention, act on it, read the result, and act again with greater understanding?
+The level of control needs to suit the person using it. A professional designer may want precise choices that would make a homeowner’s first attempt unnecessarily complicated. I don’t think one crowded screen solves both needs.
 
-This is why spectacle is a poor substitute for interaction. A striking demonstration can earn attention, but a useful product makes cause and effect legible. It gives people enough control to build a mental model without requiring them to understand every layer underneath.
+I’ve run into related questions in other work. In IRA VR, the student’s experience was only part of the product. The teacher also needed to choose content, manage a lesson, and understand what students had done. Giving the teacher useful controls changed how the experience could be used in a classroom.
 
-Agency also creates responsibility. A more powerful system needs clearer recovery, better evidence, and honest boundaries. People should know when an output is uncertain, when a constraint has been applied, and how to revise or reject what happened. Reliability is not only an engineering concern; it determines whether the user can act with confidence.
+For AI tools, I pay particular attention to recovery. Someone should be able to reject a result, return to an earlier version, or change one detail without wondering what else will disappear.
 
-I now see this principle across the full career arc. The recurring ambition was never simply to work with the newest medium. It was to discover the interaction model that lets the medium become someone else’s capability.
-
-That is the standard I want to keep: not technology that asks people to admire its intelligence, but tools and experiences that leave them more capable than they were before.
+Those features can look ordinary beside the first generated image. They matter a great deal when someone is trying to finish a piece of work.

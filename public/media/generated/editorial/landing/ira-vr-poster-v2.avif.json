@@ -1,0 +1,11 @@
+{
+  "createdAt": "2026-09-01T23:36:40+05:30",
+  "generator": "OpenAI built-in image generation",
+  "classification": "generated editorial illustration",
+  "evidenceUse": false,
+  "sourceInput": "/media/career/ira-vr/newton-poster.webp",
+  "sourceGeneration": "_media-source/generated/landing/ira-vr-poster-v2.png",
+  "generationReceipt": "exec-8abd16ae-aba0-42fa-886b-91665ef7ce22",
+  "prompt": "Remove only the adult VR learner, headset, hands, and controllers from the lower-left foreground of the enhanced Newton scene. Reconstruct the courtyard floor naturally. Keep Newton, the architecture, windows, bench, books, stools, foliage, lighting, cobalt force trajectories, warm-gold physics nodes, viewpoint, crop, and all other composition details unchanged. No people added, text, logos, labels, watermark, dashboards, or extra objects.",
+  "derivation": "The project frame was first enhanced as an editorial mixed-reality scene, then the foreground learner was removed in a targeted edit. This is the final 1600 by 900 AVIF derivative at quality 55; generated PNG source preserved separately."
+}

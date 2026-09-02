@@ -1,30 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PositiveNegativeHero from '../components/home/PositiveNegativeHero.astro';
-import SignalWork from '../components/home/SignalWork.astro';
-import ProofLine from '../components/home/ProofLine.astro';
-import PublicBuild from '../components/home/PublicBuild.astro';
-import RecentThinking from '../components/home/RecentThinking.astro';
-import ConversationClose from '../components/home/ConversationClose.astro';
+import VelvetHero from '../components/home/VelvetHero.astro';
+import VelvetHomeSections from '../components/home/VelvetHomeSections.astro';
+import { getFeaturedWork } from '../data/work-order';
+import { getHomepageNotes } from '../data/notes';
 
-const selectedSlugs = ['blocks-inco-ai', 'ira-vr', 'enterprise-immersive-systems'];
-const allWork = await getCollection('work');
-const selectedWork = selectedSlugs
-  .map((slug) => allWork.find((entry) => entry.data.slug === slug))
-  .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
-const notes = await getCollection('notes', ({ data }) => !data.draft);
+const selectedWork = getFeaturedWork(await getCollection('work'));
+const notes = getHomepageNotes(await getCollection('notes'));
 ---
 
 <BaseLayout
   bodyClass="home-page"
-  title="Pranshul Chandhok — Operator, advisor, and builder"
-  description="Pranshul Chandhok builds emerging technology into useful products across applied AI, real-time 3D, XR, games, simulation, and design technology."
+  title="Pranshul Chandhok (2600th) | Product, AI and Realtime Systems"
+  description="Product and technology leader building applied AI, realtime 3D, design software, XR, and game systems. Selected work, technical teardowns, and independent experiments."
 >
-  <PositiveNegativeHero />
-  <SignalWork work={selectedWork} />
-  <ProofLine />
-  <PublicBuild />
-  <RecentThinking notes={notes} />
-  <ConversationClose />
+  <VelvetHero />
+  <VelvetHomeSections work={selectedWork} notes={notes} />
 </BaseLayout>

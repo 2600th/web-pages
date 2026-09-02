@@ -1,6 +1,7 @@
 ---
 import SiteFooter from '../components/shared/SiteFooter.astro';
 import SiteHeader from '../components/shared/SiteHeader.astro';
+import BackToTop from '../components/shared/BackToTop.astro';
 import { PERSON, SITE, SOCIAL_LINKS } from '../data/site';
 import '../styles/global.css';
 
@@ -19,13 +20,13 @@ interface Props {
 }
 
 const {
-  title = `${PERSON.name} — Product, AI, and real-time 3D`,
+  title = `${PERSON.name} | Product, AI, and real-time 3D`,
   description = SITE.description,
   canonical = Astro.url.pathname,
   image = '/media/social/career-atlas.webp',
   imageAlt = `${PERSON.name} portfolio and career atlas`,
-  imageWidth = 1600,
-  imageHeight = 900,
+  imageWidth = 1200,
+  imageHeight = 630,
   robots = 'index,follow,max-image-preview:large',
   ogType = 'website',
   jsonLd = [],
@@ -34,7 +35,7 @@ const {
 
 const canonicalUrl = new URL(canonical, SITE.url).toString();
 const imageUrl = new URL(image, SITE.url).toString();
-const pageTitle = title.includes(PERSON.name) ? title : `${title} — ${PERSON.name}`;
+const pageTitle = title.includes(PERSON.name) ? title : `${title} | ${PERSON.name}`;
 const globalJsonLd = [
   {
     '@context': 'https://schema.org',
@@ -67,18 +68,18 @@ const globalJsonLd = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f1f0ea" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#080908" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#030405" />
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="describedby" href="/llms.txt" type="text/plain" />
     <link rel="preload" href="/fonts/mona-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="alternate" type="application/rss+xml" title="Pranshul Chandhok — Notes" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Pranshul Chandhok | Notes" href="/rss.xml" />
     <title>{pageTitle}</title>
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
@@ -96,15 +97,6 @@ const globalJsonLd = [
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="twitter:creator" content="@2600th" />
-    <script is:inline>
-      (() => {
-        const stored = localStorage.getItem('2600th-theme');
-        const valid = stored === 'light' || stored === 'dark';
-        const theme = valid ? stored : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.style.colorScheme = theme;
-      })();
-    </script>
     <script is:inline type="application/ld+json" set:html={JSON.stringify(globalJsonLd)} />
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-XR0S4Q293G"></script>
     <script is:inline>
@@ -115,23 +107,30 @@ const globalJsonLd = [
     </script>
   </head>
   <body class={bodyClass}>
-    <!--
-    THESIS: Pranshul is the accountable operator; 2600th is the public lab, and the interface makes that positive/negative relationship tangible without obscuring the work.
-    OWN-WORLD: Warm optical white and near-black exchange roles around one cobalt signal; large editorial type, exact rules, authentic media apertures, and visible source states replace card grids and technology theatre.
-    STORY: Identify the operator, inspect one strong signal at a time, follow the evidence into the public build, then start a useful conversation.
-    FIRST VIEWPORT: Pranshul Chandhok crosses the positive/negative field with one positioning sentence, one work action, one contact action, and the eclipse control.
-    FORM: Positive / Negative leads, Single Signal carries selected work, Public Build reveals the lab, and the evidence-rich case archive remains intact.
-    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
-    -->
     <a class="skip-link" href="#main-content">Skip to content</a>
     <SiteHeader />
     <main id="main-content">
       <slot />
     </main>
     <SiteFooter />
+    <BackToTop />
     <script>
       import { initAnalyticsEvents } from '../scripts/analytics';
       initAnalyticsEvents();
+    </script>
+    <script>
+      let disposeSiteMotion: () => void = () => undefined;
+
+      const bootSiteMotion = async () => {
+        disposeSiteMotion();
+        if (!document.querySelector('[data-motion-scope]')) return;
+        const { initSiteMotion } = await import('../scripts/site-motion');
+        disposeSiteMotion = initSiteMotion();
+      };
+
+      void bootSiteMotion();
+      document.addEventListener('astro:before-swap', () => disposeSiteMotion());
+      document.addEventListener('astro:after-swap', () => void bootSiteMotion());
     </script>
   </body>
 </html>

@@ -1,5 +1,7 @@
 # Evidence Cinema Implementation Plan
 
+> Historical document. Retained for design and implementation history; checklists, counts, and code paths below describe the work at that time. Do not treat them as current instructions or a pending backlog. Use [current documentation](../../README.md) and [DESIGN.md](../../../DESIGN.md) for maintenance.
+
 > **Execution:** Use subagent-driven research for independent source discovery and local TDD for implementation. Verify every externally sourced claim and media item before publication.
 
 **Goal:** Turn the approved Career Atlas into a richer, motion-led portfolio using authentic evidence, clear editorial illustrations, stronger recognition proof, complete metadata, and a clean GitHub Pages repository.

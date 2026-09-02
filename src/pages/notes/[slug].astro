@@ -4,10 +4,11 @@ import Breadcrumbs from '../../components/shared/Breadcrumbs.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../data/site';
+import { getPublishedNotes, getNoteReadingTime, getOriginalSource, NOTE_TYPES } from '../../data/notes';
 import '../../styles/content-pages.css';
 
 export async function getStaticPaths() {
-  const notes = await getCollection('notes', ({ data }) => !data.draft);
+  const notes = getPublishedNotes(await getCollection('notes'));
   return notes.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
 }
 
@@ -18,6 +19,8 @@ interface Props {
 const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
+const relatedWork = (await getCollection('work')).filter((work) => data.relatedWork.includes(work.data.slug));
+const originalSource = getOriginalSource(data.canonicalUrl, data.slug);
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(date);
 const jsonLd = [{
   '@context': 'https://schema.org',
@@ -28,7 +31,7 @@ const jsonLd = [{
   dateModified: (data.updatedAt ?? data.publishedAt).toISOString(),
   mainEntityOfPage: `${SITE.url}/notes/${data.slug}/`,
   url: `${SITE.url}/notes/${data.slug}/`,
-  image: new URL(data.heroMedia?.src ?? '/media/social/career-atlas.webp', SITE.url).toString(),
+  image: new URL(data.ogImage, SITE.url).toString(),
   author: { '@id': `${SITE.url}/#person` },
   publisher: { '@id': `${SITE.url}/#person` },
   keywords: data.topics.join(', '),
@@ -47,10 +50,10 @@ const jsonLd = [{
   title={data.title}
   description={data.summary}
   canonical={`/notes/${data.slug}/`}
-  image={data.heroMedia?.src}
-  imageAlt={data.heroMedia?.alt ?? `${data.title} by Pranshul Chandhok`}
-  imageWidth={data.heroMedia?.width ?? 1600}
-  imageHeight={data.heroMedia?.height ?? 900}
+  image={data.ogImage}
+  imageAlt={`${data.title} by Pranshul Chandhok`}
+  imageWidth={1200}
+  imageHeight={630}
   ogType="article"
   jsonLd={jsonLd}
 >
@@ -61,22 +64,44 @@ const jsonLd = [{
         <h1>{data.title}</h1>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">Field note · {formatDate(data.publishedAt)}</p>
+        <p class="route-opening__context">{NOTE_TYPES[data.type]} · {formatDate(data.publishedAt)}</p>
         <p class="article-shell__summary">{data.summary}</p>
       </div>
     </header>
     <aside class="article-shell__meta">
-      <p><time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time></p>
+      <p>Published <time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time>{data.updatedAt && data.updatedAt.valueOf() !== data.publishedAt.valueOf() && <><br />Updated <time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></>}</p>
       <p>{data.topics.join(' · ')}</p>
-      <p>About {Math.max(1, Math.round((entry.body ?? '').split(/\s+/).length / 220))} min read</p>
+      <p>{getNoteReadingTime(entry.body ?? '')} min read</p>
     </aside>
     <div class="article-shell__content">
       {data.heroMedia && <ProjectMedia media={data.heroMedia} label="Article image" priority />}
       <div class="prose"><Content /></div>
+      {(relatedWork.length > 0 || data.relatedLab.length > 0) && <nav class="article-shell__related" aria-label="Related work and experiments">
+        <h2>From the work</h2>
+        <ul>
+          {relatedWork.map((work) => <li><a href={`/work/${work.data.slug}/`}>{work.data.title}</a></li>)}
+          {data.relatedLab.map((lab) => <li><a href={lab.href}>{lab.title}</a></li>)}
+        </ul>
+      </nav>}
       <footer class="article-shell__source">
         <strong>{data.sourceAttribution}</strong>
-        <p><a href={data.canonicalUrl} target="_blank" rel="noreferrer">Read the original post ↗</a></p>
+        {originalSource && <p><a href={originalSource} target="_blank" rel="noopener noreferrer">Read the original post ↗</a></p>}
       </footer>
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .article-shell__related { margin-block-start: 3rem; padding-block-start: 1.5rem; border-top: 1px solid var(--line); }
+  .article-shell__related ul { display: flex; flex-wrap: wrap; gap: 0.8rem 1.8rem; padding: 0; list-style: none; }
+  .article-shell__related a { display: inline-block; padding-block: 0.5rem; }
+  .article-shell :global(.prose h2) { margin-block: 2.8rem 1rem; font-size: clamp(1.55rem, 3vw, 3rem); max-width: 28ch; }
+  .article-shell :global(.prose table) { width: 100%; table-layout: fixed; border-collapse: collapse; margin-block: 2rem; font-size: 1rem; line-height: 1.5; }
+  .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.8rem 0.55rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+  .article-shell :global(.prose th) { color: var(--warm); }
+  .article-shell :global(.prose pre) { max-width: 100%; overflow-x: auto; padding: 1.2rem; font-size: 1rem; line-height: 1.65; }
+  .article-shell :global(.prose :not(pre) > code) { overflow-wrap: anywhere; }
+  @media (max-width: 40rem) {
+    .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.65rem 0.3rem; }
+  }
+</style>

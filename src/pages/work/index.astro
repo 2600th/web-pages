@@ -3,33 +3,62 @@ import { getCollection } from 'astro:content';
 import WorkList from '../../components/work/WorkList.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { CAREER_DOMAIN_META } from '../../data/career-domains';
+import { getPrioritizedWork } from '../../data/work-order';
 import type { CareerDomain } from '../../content/evidence';
 import '../../styles/content-pages.css';
 
-const work = (await getCollection('work')).sort((a, b) => a.data.careerOrder - b.data.careerOrder);
+const work = getPrioritizedWork(await getCollection('work'));
 const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
 ---
 
 <BaseLayout
-  title="Career work"
-  description="The public career archive of Pranshul Chandhok across games, XR, simulation, robotics, design technology, and applied AI."
+  title="Projects by Pranshul Chandhok"
+  description="Projects from my work in game development, immersive training, and design software, alongside my own AI and browser graphics experiments."
   canonical="/work/"
 >
   <div class="page-shell work-archive" data-work-archive>
-    <header class="route-opening route-opening--work" data-route-opening>
+    <header class="route-opening route-opening--work" data-route-opening data-motion-scope>
       <div class="route-opening__positive" data-polarity="positive">
-        <h1>Career work</h1>
-        <p class="route-opening__statement">A public record of systems made real: games, immersive learning, robotics, design technology, and applied AI.</p>
+        <h1>Projects</h1>
+        <p class="route-opening__statement">Products, platforms, and experiments I helped take from an unclear problem to a working system.</p>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">Public-first evidence · {work.length} records</p>
-        <p><strong>{work.length} public records</strong> across the recurring systems, products, and questions that shaped the practice.</p>
-        <p>Full cases go deep. Evidence notes stay deliberately concise where the public record is lighter.</p>
+        <div class="route-opening__work-reel" data-work-opening-media aria-label="Selected work in motion">
+          <a href="/work/ira-vr/" aria-label="Explore IRA VR" data-motion-reveal>
+            <picture>
+              <source type="image/avif" srcset="/media/routes/work/ira-vr-v2-640.avif 640w, /media/routes/work/ira-vr-v2-960.avif 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
+              <source type="image/webp" srcset="/media/routes/work/ira-vr-v2-640.webp 640w, /media/routes/work/ira-vr-v2-960.webp 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
+              <img src="/media/routes/work/ira-vr-v2-960.webp" width="960" height="540" loading="eager" fetchpriority="high" decoding="async" alt="Newton in the virtual courtyard from IRA VR’s interactive lesson" />
+            </picture>
+            <span><b>01</b> IRA VR</span>
+          </a>
+          <a href="/work/homelane-spacecraft-pro/" aria-label="Explore HomeLane SpaceCraft Pro" data-motion-reveal>
+            <picture>
+              <source type="image/avif" srcset="/media/routes/work/spacecraft-pro-640.avif 640w, /media/routes/work/spacecraft-pro-960.avif 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
+              <source type="image/webp" srcset="/media/routes/work/spacecraft-pro-640.webp 640w, /media/routes/work/spacecraft-pro-960.webp 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
+              <img src="/media/routes/work/spacecraft-pro-960.webp" width="960" height="540" loading="lazy" decoding="async" alt="HomeLane SpaceCraft Pro room editor showing live material and price changes" />
+            </picture>
+            <span><b>02</b> SpaceCraft Pro</span>
+          </a>
+          <a href="/work/designesto/" aria-label="Explore Designesto" data-motion-reveal>
+            <picture>
+              <source type="image/avif" srcset="/media/routes/work/designesto-ai-640.avif 640w, /media/routes/work/designesto-ai-960.avif 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
+              <source type="image/webp" srcset="/media/routes/work/designesto-ai-640.webp 640w, /media/routes/work/designesto-ai-960.webp 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
+              <img src="/media/routes/work/designesto-ai-960.webp" width="960" height="540" loading="lazy" decoding="async" alt="Before-and-after room transformation from designesto.ai" />
+            </picture>
+            <span><b>03</b> Designesto</span>
+          </a>
+        </div>
+        <div class="route-opening__copy">
+          <p class="route-opening__context">{work.length} projects</p>
+          <p>The archive spans applied AI, realtime 3D, design software, XR, games, and robotics.</p>
+          <p>Start with the selected systems, browse by domain, or switch to a chronological view.</p>
+        </div>
       </div>
     </header>
 
     <nav class="domain-filter" aria-label="Filter work by domain">
-      <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="The complete public record." aria-current="page">All domains</a>
+      <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="Selected systems first, followed by the earlier archive." aria-current="page">All domains</a>
       {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description}>{domain.label}</a>)}
     </nav>
     <noscript>
@@ -50,8 +79,9 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
     <section class="work-list-region" aria-labelledby="work-list-heading">
       <header>
         <div><h2 id="work-list-heading" data-work-heading>All work</h2><span class="work-list-region__count" data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
-        <p data-work-description>The complete public record.</p>
+        <p data-work-description>Selected systems first, followed by the earlier archive.</p>
       </header>
+      <label class="work-order" hidden><span>Project order</span><select data-work-order><option value="priority">Selected systems first</option><option value="chronological">Chronological, earliest first</option></select></label>
       <WorkList work={work} />
     </section>
   </div>
@@ -65,12 +95,30 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
       const links = [...root.querySelectorAll<HTMLAnchorElement>('[data-domain-link]')];
       const items = [...root.querySelectorAll<HTMLElement>('[data-work-item]')];
       const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
+      const order = root.querySelector<HTMLSelectElement>('[data-work-order]');
+      const priority = new Map(items.map((item, index) => [item, index]));
+      let activeDomain = 'all';
+      const sortItems = () => {
+        const chronological = order?.value === 'chronological';
+        const sorted = [...items].sort((a, b) => chronological
+          ? Number(a.dataset.workYear) - Number(b.dataset.workYear) || Number(a.dataset.workCareerOrder) - Number(b.dataset.workCareerOrder)
+          : priority.get(a)! - priority.get(b)!);
+        const list = root.querySelector('.work-list');
+        sorted.forEach((item, index) => {
+          list?.append(item);
+          const number = item.querySelector('.work-list__number');
+          if (number) number.textContent = String(index + 1).padStart(2, '0');
+        });
+        const description = root.querySelector<HTMLElement>('[data-work-description]');
+        if (description && activeDomain === 'all') description.textContent = chronological
+          ? 'From the earliest projects to current work.' : 'Selected systems first, followed by the earlier archive.';
+      };
 
       const render = () => {
         const pathDomain = location.pathname.match(/^\/work\/domain\/([^/]+)\/?$/)?.[1];
         const requested = pathDomain ?? new URLSearchParams(location.search).get('domain');
         const activeLink = links.find((link) => link.dataset.domainLink === requested) ?? links[0];
-        const activeDomain = activeLink.dataset.domainLink ?? 'all';
+        activeDomain = activeLink.dataset.domainLink ?? 'all';
         if (select) select.value = activeDomain;
         let visible = 0;
 
@@ -103,6 +151,18 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         root.querySelector<HTMLElement>('.domain-filter-select')?.removeAttribute('hidden');
       }
       render();
+      if (order) {
+        order.value = new URLSearchParams(location.search).get('order') === 'chronological' ? 'chronological' : 'priority';
+        order.addEventListener('change', () => {
+          const url = new URL(location.href);
+          if (order.value === 'chronological') url.searchParams.set('order', order.value);
+          else url.searchParams.delete('order');
+          history.replaceState(null, '', url);
+          sortItems();
+        });
+        order.closest('label')?.removeAttribute('hidden');
+        sortItems();
+      }
     });
   };
   initWorkArchive();
@@ -123,11 +183,14 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
   .work-list-region header p { max-width: 34ch; margin: 0; color: var(--text-muted); font-size: 0.85rem; }
   [data-work-item][hidden] { display: none; }
 
-  @media (max-width: 46rem) {
+  @media (max-width: 64rem) {
     .domain-filter { display: none; }
     .domain-filter-select { display: grid; gap: 0.4rem; padding: 1rem 0; border-block: 1px solid var(--line); }
     .domain-filter-select span { color: var(--text-muted); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
     .domain-filter-select select { width: 100%; min-height: 3rem; padding: 0.6rem 2.5rem 0.6rem 0.75rem; border: 1px solid var(--line-strong); border-radius: 0; background: var(--surface); color: var(--text); }
+  }
+
+  @media (max-width: 46rem) {
     .work-list-region > header { grid-template-columns: 1fr; }
   }
 </style>

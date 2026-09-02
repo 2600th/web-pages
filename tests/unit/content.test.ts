@@ -25,7 +25,7 @@ describe('portfolio content', () => {
       expect(work.slug).toBe(basename(filename, '.md'));
       expect(work.sources[0]?.url).toMatch(/^https:\/\//);
       expect(work.seo.description.length).toBeGreaterThan(60);
-      if (work.recordType !== 'evidence-note') {
+      if (work.recordType === 'feature' || work.recordType === 'case') {
         expect(work.out.thesis.length).toBeGreaterThan(30);
         expect(work.heroMedia.alt.length).toBeGreaterThan(20);
       }
@@ -39,7 +39,7 @@ describe('portfolio content', () => {
     for (const { filename, data } of entries) {
       const note = noteSchema.parse(data);
       expect(note.slug).toBe(basename(filename, '.md'));
-      expect(note.canonicalUrl).toMatch(/^https:\/\//);
+      if (note.canonicalUrl) expect(note.canonicalUrl).toMatch(/^https:\/\//);
       expect(note.draft).toBe(false);
     }
   });

@@ -1,0 +1,27 @@
+<a class="back-to-top" href="#page-top" aria-label="Back to top" title="Back to top">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+    <path d="M12 20V4M5 11l7-7 7 7" />
+  </svg>
+</a>
+<script is:inline data-astro-rerun>
+  // Initialize before first paint; without JavaScript the native link stays available.
+  (() => {
+    const link = document.currentScript.previousElementSibling;
+    if (!(link instanceof HTMLAnchorElement)) return;
+
+    const update = () => {
+      const hidden = window.scrollY <= 300;
+      if (link.hidden !== hidden) link.hidden = hidden;
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    window.addEventListener('pageshow', update);
+    document.addEventListener('astro:before-swap', () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+      window.removeEventListener('pageshow', update);
+    }, { once: true });
+  })();
+</script>

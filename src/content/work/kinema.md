@@ -1,7 +1,7 @@
 ---
 title: Kinema
 slug: kinema
-summary: A browser-native third-person gameplay lab that combines a playable runtime, WebGPU-first rendering, physics, and an in-browser level editor in one TypeScript codebase.
+summary: I’m building Kinema to explore game development in the browser, with third-person gameplay, physics, and a level editor in the same TypeScript application.
 yearStart: 2026
 status: Active open-source experiment
 role: Creator and engineer
@@ -22,35 +22,41 @@ publicClaims:
   - The public repository and live build support the visible product and technical description.
 engagementPath: product-collaboration
 heroMedia: &hero
-  src: /media/work/kinema/hero.webp
+  src: /media/generated/editorial/enhanced/kinema-hero-v2.webp
+  avif: /media/generated/editorial/enhanced/kinema-hero-v2.avif
+  label: Kinema · The menu for playing levels and opening the editor.
   alt: Kinema browser gameplay scene inside its procedural showcase corridor
   width: 1600
   height: 900
 out:
-  thesis: A serious gameplay prototyping environment can live entirely in the browser without separating the editor from the thing being played.
+  thesis: Build a level and play it in the same browser tab.
   audience: Developers exploring browser-native gameplay, rendering, and level workflows.
   outcome: A public MIT-licensed lab with a playable showcase, fourteen feature stations, and a level editor that can move directly into play-testing.
   media: *hero
 near:
-  experience: Players move through a procedural showcase, test movement and interactions, enter vehicles, and jump directly to feature stations. F1 opens the editor; a second shortcut starts play-testing.
-  contribution: Designed and built the product surface, gameplay architecture, editor workflow, rendering paths, input systems, and test harness.
+  experience: Try the gameplay, then open the editor and change the level.
+  contribution: I designed and built Kinema’s gameplay systems, browser editor, and rendering paths. I also work on input support and the tests used to check changes.
   system: TypeScript and Three.js coordinate Rapier physics, WebGPU-first rendering with WebGL compatibility, keyboard/gamepad/touch input, runtime systems, and a lazy-loaded browser editor.
   media:
-    src: /media/work/kinema/editor.webp
+    src: /media/generated/editorial/enhanced/kinema-editor-v2.webp
+    avif: /media/generated/editorial/enhanced/kinema-editor-v2.avif
+    label: Kinema · Editing a level while keeping the game in view.
     alt: Kinema in-browser level editor with scene tools and a live gameplay viewport
     width: 1600
     height: 900
 inside:
   decisions:
-    - Keep building and play-testing in one application so iteration does not cross a tooling boundary.
-    - Treat WebGL and Safari behavior as a maintained compatibility path rather than an afterthought.
-    - Organize the showcase as named feature stations so individual systems can be reviewed and debugged directly.
+    - Keep the editor and play-testing in the same application so changes can be tried immediately.
+    - Maintain a WebGL compatibility path alongside WebGPU and test browser-specific behaviour, including Safari.
+    - Give the showcase named feature stations so I can go straight to the system I’m testing.
   constraints:
     - The same project must remain useful across desktop gameplay, mobile validation, and browser rendering differences.
   evidence:
-    - The repository documents the architecture, controls, compatibility behavior, unit tests, Playwright coverage, and production build workflow.
+    - Kinema is an active experiment. The MIT-licensed repository includes setup instructions and tests for anyone who wants to work with it.
   media:
-    src: /media/work/kinema/inside.webp
+    src: /media/generated/editorial/enhanced/kinema-inside-v2.webp
+    avif: /media/generated/editorial/enhanced/kinema-inside-v2.avif
+    label: Kinema · A target arena for testing gameplay and visual effects.
     alt: Kinema target arena station demonstrating gameplay systems and visual effects
     width: 1600
     height: 900
@@ -67,8 +73,8 @@ seo:
   socialImage: /media/work/kinema/hero.webp
 ---
 
-Kinema asks a practical question: how much of a modern gameplay-development loop can happen at a URL?
+I started Kinema to see how much of game development I could bring into the browser. I wanted to be able to build a level and play it without moving between separate applications.
 
-The answer is deliberately larger than a rendering demo. The repository joins a third-person controller, interactions, vehicles, hazards, collectibles, rendering profiles, input across device classes, and an editor with brushes, gizmos, hierarchy, inspector, undo/redo, import, and play-test mode.
+The current showcase includes a third-person controller, vehicles, hazards, and collectibles. F1 opens the editor, where you can use brushes and transform tools, inspect objects, undo changes, and enter play-test mode. Fourteen feature stations provide quick ways to try individual systems.
 
-The public repository is the evidence record. It includes an architectural map, compatibility notes, development entry points, verification commands, asset credits, and an MIT license.
+I’m still working on it. The repository has an architecture overview, compatibility notes, and commands for running the checks locally if you want to explore or extend it.

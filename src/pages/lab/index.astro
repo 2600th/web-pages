@@ -4,15 +4,21 @@ import '../../styles/content-pages.css';
 
 const builds = [
   {
+    state: 'Companion',
+    title: 'Dwarkesh × Jensen',
+    description: 'An unofficial reading companion to the interview: 92 terms across eight sections, with searchable explanations and links to the original timestamps.',
+    href: '/lab/dwarkesh-jensen/index.html',
+  },
+  {
     state: 'Active',
     title: 'Kinema',
-    description: 'A browser-native third-person gameplay lab joining runtime, rendering, physics, and level editing in one TypeScript codebase.',
+    description: 'A third-person game with a level editor in the same browser tab. I’m using it to explore gameplay, graphics, and editing tools.',
     href: '/work/kinema/',
   },
   {
     state: 'Shipped',
     title: 'Web Ocean 3D',
-    description: 'A public real-time ocean experiment whose most useful chapter began when real devices exposed its limits.',
+    description: 'An interactive ocean with changing weather and a boat to pilot. I’m also working on how it loads and runs across devices.',
     href: '/work/web-ocean-3d/',
   },
   {
@@ -29,27 +35,27 @@ const builds = [
   },
   {
     state: 'Archived',
-    title: '2600th console archive',
-    description: 'The original command-line portfolio preserved as an interactive artifact: same character, new address.',
+    title: 'Ghost Terminal',
+    description: 'My earlier portfolio, built as a command-line interface. You can still explore it here.',
     href: '/lab/terminal/index.html',
   },
 ] as const;
 ---
 
 <BaseLayout
-  title="Experiments with a public edge"
-  description="The 2600th lab: public browser-native game, graphics, AI, and interaction experiments by Pranshul Chandhok, plus the archived original console portfolio."
+  title="Experiments by Pranshul Chandhok"
+  description="Games, browser graphics, and AI experiments I’m building to learn. Try the demos, read the code, or explore my earlier console portfolio."
   canonical="/lab/"
 >
   <div class="lab-page">
     <header class="route-opening route-opening--lab lab-hero" data-route-opening>
       <div class="route-opening__positive" data-polarity="positive">
-        <h1>Experiments with a public edge</h1>
-        <p class="route-opening__statement">Small worlds, useful probes, and unfinished questions made concrete enough to enter.</p>
+        <h1>Things I’m trying.</h1>
+        <p class="route-opening__statement">Games, browser graphics, and ideas I wanted to test for myself.</p>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">2600th / public build ledger</p>
-        <p>2600th is the negative to the operator’s positive: a place to publish the system while the question is still alive.</p>
+        <p class="route-opening__context">2600th / experiments</p>
+        <p>I use these projects to learn a technology by working with it. Some are still rough. You can try them and look through the code.</p>
         <figure class="lab-hero__figure">
           <picture>
             <source media="(max-width: 42rem)" srcset="/media/work/kinema/inside-mobile.webp" />
@@ -62,8 +68,8 @@ const builds = [
 
     <section class="build-index" aria-labelledby="build-index-title" data-build-ledger>
       <header>
-        <h2 id="build-index-title">Built in public.</h2>
-        <p>Open the case, inspect the source, or enter the preserved first version.</p>
+        <h2 id="build-index-title">Try them yourself.</h2>
+        <p>Open a hands-on experiment, explore a reading companion, or follow the code.</p>
       </header>
       <ol>
         {builds.map((build) => (

@@ -1,35 +1,116 @@
 {
-  "createdAt": "2026-08-27",
-  "generator": "OpenAI GPT Image",
+  "createdAt": "2026-09-01",
+  "generator": "OpenAI built-in image generation",
   "classification": "generated editorial illustration",
   "evidenceUse": false,
-  "artDirectionReferences": [
-    ".impeccable/mocks/clarity-round/31-single-signal.png",
-    ".impeccable/mocks/clarity-round/32-positive-negative.png",
-    ".impeccable/mocks/clarity-round/33-public-build.png"
-  ],
   "assets": [
     {
-      "file": "work-aperture.webp",
-      "route": "/work/",
-      "purpose": "Optical editorial aperture expressing ambiguous technology becoming an operable system.",
-      "sourceAsset": "exec-86229836-d6d6-4c84-97f8-a4d347737829.png",
-      "prompt": "Wide modern retro-futurist editorial image for a Work archive: one architectural prototype gallery split between warm optical white and near-black, physical model tables becoming translucent spatial-system planes, a single cobalt registration beam, anonymous distant scale figure, restrained premium design-studio realism; no text, logos, terminals, cyberpunk clutter, or factual project claims."
+      "files": [
+        "defense-systems-atlas-v2.webp",
+        "defense-systems-atlas-v2.avif"
+      ],
+      "route": "/work/defense-simulation-systems/",
+      "purpose": "Conceptual simulation-systems atlas used as editorial framing; never client documentation or proof of a shipped defense platform.",
+      "sourceGeneration": "_media-source/generated/defense-systems-atlas-v2.png",
+      "prompt": "Create a premium cinematic editorial illustration for a portfolio case-study hero, wide 16:9 landscape. Show a grounded industrial simulation-systems atlas as a physical studio-scale cutaway on a deep black velvet stage: a rugged instructor console, partial simulator cab with physical controls, an inanimate human-performance mannequin rig, IMU motion-tracking arch, sensor and communications units, and an evaluation workstation. Connect the tangible modules with thin cobalt-blue pathways and sparse warm-gold node lights. Reserve genuinely dark negative space across the upper-left and left third for webpage typography; place the strongest detail center-right and lower-right. Use realistic tactile graphite metal, matte polymer, subtle wear, braided cables, machined fasteners, restrained practical light, controlled contrast, and deep blacks. No text, labels, numbers, logos, watermarks, flags, maps, uniforms, people, weapons, ammunition, identifiable military platforms, proprietary interfaces, floating holographic panels, neon grids, purple gradients, or franchise resemblance. The result must read as conceptual editorial art, not documentary project evidence.",
+      "derivation": "The 1672 by 941 generated PNG source was preserved in _media-source/generated and converted to visually reviewed 1600 by 900 AVIF and WebP derivatives."
     },
     {
-      "file": "notes-aperture.webp",
+      "files": [
+        "defense-systems-diorama.webp"
+      ],
+      "route": "/work/defense-simulation-systems/",
+      "purpose": "Conceptual systems-training illustration used as editorial framing; never client documentation or proof of a shipped defense platform.",
+      "sourceGeneration": "exec-7ed4034d-94aa-4650-8f13-ebea01d930e7.png",
+      "prompt": "Use case: stylized-concept. Asset type: disclosed editorial illustration for a portfolio case-study thumbnail. Primary request: create a premium abstract systems-training diorama that communicates simulation architecture without depicting any real client documentation or identifiable defense platform. Scene: a dark circular instructor table at the center, surrounded by modular simulator stations, motion-tracking arcs, small sensor nodes, human-performance mannequin silhouette, communication console, evaluation screen planes, and transparent pathway lines connecting hardware input to simulation core to instructor controls to trainee evaluation. Style: cinematic realistic editorial 3D diorama, sophisticated industrial design, modern retro-futurism, precise and calm rather than militaristic. Composition: wide 16:9 three-quarter view, strong readable central silhouette, clean negative space, suitable for a small portfolio thumbnail. Lighting: black velvet environment, cobalt-blue system paths and sparse warm solar-gold evidence markers. Constraints: no text, no labels, no logos, no people, no weapons, no ammunition, no identifiable tanks, aircraft, artillery, uniforms, flags, maps, proprietary UI, client insignia, watermark, or franchise resemblance. The result must read unmistakably as conceptual editorial art, not documentary evidence.",
+      "derivation": "The generated source was resized to a 1600 by 900 WebP derivative and visually inspected against the Velvet Reveal surfaces."
+    },
+    {
+      "files": [
+        "landing/blocks-designesto-poster-v2.webp",
+        "landing/blocks-designesto-poster-v2.avif"
+      ],
+      "route": "/#selected-work",
+      "purpose": "Cinematic editorial poster for the Blocks and designesto.ai selected-work card; the original local product clip remains the playback and proof layer.",
+      "sourceInput": "/media/work/blocks-inco-ai/designesto-edit-room-poster.webp",
+      "sourceGeneration": "_media-source/generated/landing/blocks-designesto-poster-v2.png",
+      "generationReceipt": "exec-3b0dcb63-17a9-4118-8cdc-81f5e90ce31b",
+      "prompt": "Preserve the exact room layout and recognizable orange sofa, teal coffee table, yellow shelving, window, rug, artwork, and architectural proportions from the source. Re-render the same room as a premium cinematic interior-design product scene with realistic materials, natural daylight, controlled shadows, subtle cobalt spatial-analysis traces, and one restrained solar-gold design-selection glow. Keep the same viewpoint and furniture arrangement. No people, logos, text, labels, watermark, UI, extra furniture, or impossible architecture.",
+      "derivation": "The generated PNG source was preserved separately and converted to 1600 by 900 WebP and AVIF derivatives."
+    },
+    {
+      "files": [
+        "landing/ira-vr-poster-v2.webp",
+        "landing/ira-vr-poster-v2.avif"
+      ],
+      "route": "/#selected-work",
+      "purpose": "Cinematic editorial poster for the IRA VR selected-work card; the original local Newton clip remains the playback and proof layer.",
+      "sourceInput": "/media/career/ira-vr/newton-poster.webp",
+      "sourceGeneration": "_media-source/generated/landing/ira-vr-poster-v2.png",
+      "generationReceipt": "exec-8abd16ae-aba0-42fa-886b-91665ef7ce22",
+      "prompt": "Remove only the adult VR learner, headset, hands, and controllers from the lower-left foreground of the enhanced Newton scene. Reconstruct the courtyard floor naturally. Keep Newton, the architecture, windows, bench, books, stools, foliage, lighting, cobalt force trajectories, warm-gold physics nodes, viewpoint, crop, and all other composition details unchanged. No people added, text, logos, labels, watermark, dashboards, or extra objects.",
+      "derivation": "The source frame was enhanced as an editorial mixed-reality scene, then the foreground learner was removed in a targeted edit. The final generated PNG source was preserved separately and converted to 1600 by 900 WebP and AVIF derivatives."
+    },
+    {
+      "files": [
+        "landing/enterprise-xr-poster-v2.webp",
+        "landing/enterprise-xr-poster-v2.avif"
+      ],
+      "route": "/#selected-work",
+      "purpose": "Cinematic editorial poster shared by the Enterprise XR selected-work card and its case-study facility-tour section; the original local production-facility immersive clip remains the playback and proof layer.",
+      "sourceInput": "/media/work/enterprise-immersive-systems/facility-poster.webp",
+      "sourceGeneration": "_media-source/generated/landing/enterprise-xr-poster-v2.png",
+      "generationReceipt": "exec-ca50a915-c2cf-47d6-8aa7-22db0fab5238",
+      "prompt": "Preserve the recognizable clean electronics production facility from the source: the bright rectilinear room, ceiling-light grid, white equipment lines, machine geometry, signal towers, foreground operator, and deep production-floor perspective. Re-render the same facility as a premium cinematic enterprise-XR editorial frame with improved material clarity and depth, a subtle cobalt spatial route, and sparse warm solar-gold orientation nodes. Do not invent client identity or outcomes. No logos, readable machine labels, text, watermark, dashboards, floating screens, or sci-fi holograms.",
+      "derivation": "The generated PNG source was preserved separately and converted to 1600 by 900 WebP and AVIF derivatives."
+    },
+    {
+      "files": [
+        "cycling-without-age-empathy-v2.webp",
+        "cycling-without-age-empathy-v2.avif"
+      ],
+      "route": "/work/enterprise-immersive-systems/",
+      "purpose": "Human-centred editorial framing for the Cycling Without Age Singapore empathy-training section; never presented as documentary programme footage or project proof.",
+      "sourceInput": "/media/work/enterprise-immersive-systems/ageing-simulation-map.svg",
+      "sourceGeneration": "_media-source/generated/cycling-without-age-empathy-v2.png",
+      "generationReceipt": "exec-30a889f7-ad43-44ae-8af6-fdbf705df342",
+      "prompt": "Reimagine the three verified Cycling Without Age Singapore empathy-training environments as one cohesive cinematic spatial triptych: a living room with a remote just beyond easy reach, a pressured street crossing, and a supermarket aisle and payment moment. Connect the environments with a restrained cobalt path and sparse warm solar-gold reflection nodes. Use humane, realistic editorial 3D visualization without caricaturing older people, adding ageing makeup, medical imagery, readable text, logos, dashboards, or invented interfaces.",
+      "derivation": "The generated PNG source was preserved separately and converted to visually reviewed 1600 by 900 WebP and AVIF derivatives."
+    },
+    {
+      "files": [
+        "cycling-without-age-empathy-v3.webp",
+        "cycling-without-age-empathy-v3.avif"
+      ],
+      "route": "/work/enterprise-immersive-systems/",
+      "purpose": "Reader-facing editorial framing for the three verified Cycling Without Age Singapore empathy-training scenarios; never documentary programme footage or project proof.",
+      "sourceInput": "/media/generated/editorial/cycling-without-age-empathy-v2.webp",
+      "sourceGeneration": "_media-source/generated/cycling-without-age-empathy-v3.png",
+      "generationReceipt": "exec-1be7f7b1-5033-438c-813f-ca5fb94c04f0",
+      "prompt": "Create a respectful cinematic 16:9 editorial triptych of a living room, Singapore street crossing, and supermarket, connected by subtle cobalt pathways and sparse warm-gold decision points. Preserve the three verified scenario types. Do not add readable UI, logos, medical imagery, ageing caricatures, or unsupported programme claims.",
+      "derivation": "The generated master was preserved and converted to visually reviewed 1600 by 900 WebP and AVIF derivatives."
+    },
+    {
+      "files": [
+        "enhanced/*.webp",
+        "enhanced/*.avif"
+      ],
+      "route": "/work/*/",
+      "purpose": "Versioned editorial enhancements for approved portfolio media. Originals remain preserved; generated candidates with changed UI copy, labels, or factual details were rejected and not referenced by content.",
+      "sourceGeneration": "_media-source/generated/enhanced/",
+      "prompt": "Preserve the source subject, camera, geometry, identity, project details, and readable UI while improving clarity, lighting, material detail, depth, color balance, and cinematic cohesion. Do not invent claims, interfaces, logos, labels, people, or product behavior.",
+      "derivation": "Visually accepted masters were preserved and converted to consistent 1600 by 900 WebP and AVIF case-study derivatives. Generation receipts are recorded per asset in src/data/media-provenance.ts."
+    },
+    {
+      "files": [
+        "notes-aperture.webp"
+      ],
       "route": "/notes/",
-      "purpose": "Optical workbench still life for observations and field notes.",
-      "sourceAsset": "exec-eda0a39e-809e-4b0f-8577-147da0e29d61.png",
-      "prompt": "Wide modern retro-futurist optical workbench still life split between warm drafting light and a precise darkroom: sketches, translucent material samples, a lens, and a physical model connected by one cobalt trace; tactile, calm, legible, premium; no readable text, logos, laptops, terminals, or factual claims."
-    },
-    {
-      "file": "about-aperture.webp",
-      "route": "/about/",
-      "purpose": "Three-act editorial installation representing a compounding operating practice.",
-      "sourceAsset": "exec-d5ef7fd1-4434-4297-a6c2-6751fef93df3.png",
-      "prompt": "Wide modern retro-futurist three-zone spatial installation for an About page: warm physical making, a luminous spatial-computing passage, and an AI-native generative interior surface joined as one continuous practice; one cobalt optical beam, restrained human scale, elegant and comprehensible; no text, logos, robots, headsets, terminals, or factual career claims."
+      "purpose": "Editorial workbench metaphor for the Notes index; never presented as documentary project evidence.",
+      "sourceGeneration": "Existing generated asset in the portfolio working tree; original generation receipt unavailable.",
+      "prompt": "The exact generation prompt was not retained with the source export; no prompt text has been reconstructed or invented.",
+      "derivation": "Responsive 16:9 AVIF and WebP copies are created by scripts/build-route-opening-media.mjs."
     }
   ],
-  "constraint": "These images are identity and editorial media only. They must not be presented as project, client, product, or career evidence."
+  "constraint": "Generated editorial media is visibly disclosed and excluded from all evidence claims and counts."
 }

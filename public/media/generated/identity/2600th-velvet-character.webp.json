@@ -1,0 +1,4 @@
+{
+  "prompt": "Use case: precise-object-edit. Asset type: chroma-key source for a production website character cutout. Primary request: replace only the entire checkerboard background behind the 2600th character with one perfectly flat, uniform, fully opaque chroma green color #00FF66 from edge to edge. Constraints: change only the background. Preserve the character's face, thick black hair, beard, rectangular glasses, expression, body, exact standing pose, coat, straps, hands, boots, lighting, colors, scale, and complete uncropped silhouette. Keep crisp natural subject edges and no green spill on the subject. Avoid: checkerboard, transparency preview, gradient, texture, floor, shadow, glow, halo, scenery, text, logo, watermark, extra objects, and any alteration to the character.",
+  "createdAt": "2026-08-31T18:22:41.664Z"
+}

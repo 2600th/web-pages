@@ -1,0 +1,9 @@
+{
+  "generator": "OpenAI built-in image generation",
+  "classification": "generated editorial illustration",
+  "evidenceUse": false,
+  "sourceInput": "/media/generated/editorial/cycling-without-age-empathy-v2.webp",
+  "generationReceipt": "exec-1be7f7b1-5033-438c-813f-ca5fb94c04f0",
+  "prompt": "Create a respectful cinematic 16:9 editorial triptych of a living room, Singapore street crossing, and supermarket, connected by subtle cobalt pathways and sparse warm-gold decision points. Preserve the three verified scenario types. Do not add readable UI, logos, medical imagery, ageing caricatures, or unsupported programme claims.",
+  "derivation": "The generated master is preserved in _media-source/generated and converted to a visually reviewed 1600 by 900 WebP derivative."
+}

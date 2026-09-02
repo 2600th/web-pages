@@ -15,13 +15,13 @@
     "media:career:build": "node scripts/prepare-career-media.mjs --build",
     "media:social:build": "node scripts/create-social-assets.mjs",
     "media:icons:build": "node scripts/create-icons.mjs",
-    "verify": "npm run check && npm test && npm run test:e2e && npm run build && npm run test:build",
-    "deploy": "npm run verify && gh-pages -d dist -b gh-pages --dotfiles"
+    "verify": "npm run check && npm test && npm run test:e2e && npm run build && npm run test:build"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.3",
     "astro": "7.2.7",
+    "gsap": "3.15.0",
     "zod": "4.4.3"
   },
   "devDependencies": {

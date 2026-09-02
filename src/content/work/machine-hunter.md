@@ -1,9 +1,9 @@
 ---
 title: Machine Hunter
 slug: machine-hunter
-summary: A 2017 virtual-reality game and mixed-reality showcase that translated physical bow interaction into a compact real-time arena experience.
+summary: A VR archery game we built at GreyKernel in 2017, using tracked hand movements to draw a bow and shoot targets in an arena.
 yearStart: 2017
-status: Historical VR game
+status: VR game · 2017
 role: Founder, product and technology lead
 disciplines: [Virtual reality, Games, Mixed-reality capture]
 visibility: public
@@ -18,37 +18,63 @@ publicClaims:
   - Machine Hunter is identified as a 2017 mixed-reality project in Pranshul's public career narrative.
   - The reviewed archive video visibly supports the bow interaction and arena-game description.
 engagementPath: product-collaboration
-heroMedia: &hero
-  src: /media/career/machine-hunter/poster-1280.webp
+heroMedia:
+  src: /media/generated/editorial/enhanced/machine-hunter-hero-v2.webp
+  avif: /media/generated/editorial/enhanced/machine-hunter-hero-v2.avif
+  label: Machine Hunter · Bow-and-arrow combat in the VR arena.
   mp4: /media/career/machine-hunter/clip.mp4
   webm: /media/career/machine-hunter/clip.webm
   alt: Bow-and-arrow gameplay inside the Machine Hunter virtual-reality arena
-  width: 1150
-  height: 720
+  width: 1600
+  height: 900
 out:
-  thesis: A convincing VR game can emerge from one understandable physical verb when interaction, feedback, and arena pacing reinforce each other.
-  audience: Game, XR, and experiential teams exploring embodied real-time interaction.
-  outcome: A compact virtual-reality arena experience documented through public first-person writing and reviewed mixed-reality footage.
-  media: *hero
+  thesis: A VR arena built around the feel of a bow.
+  audience: VR players using tracked hand controllers.
+  outcome: An arena game with bow-and-arrow interaction and waves of targets, presented through gameplay and mixed-reality footage.
+  media:
+    src: /media/generated/editorial/enhanced/machine-hunter-draw-v2.webp
+    avif: /media/generated/editorial/enhanced/machine-hunter-draw-v2.avif
+    label: Machine Hunter · Drawing the bow with tracked hand controllers.
+    mp4: /media/career/machine-hunter/clip.mp4
+    webm: /media/career/machine-hunter/clip.webm
+    alt: The player draws a bow inside the Machine Hunter virtual-reality arena
+    width: 1600
+    height: 900
 near:
-  experience: The player reaches for arrows, draws a virtual bow, tracks incoming targets, and responds through an immediately legible embodied control loop.
-  contribution: Led the product and technology direction within the GreyKernel founder chapter, connecting interaction design, real-time implementation, and demonstration.
-  system: The reviewed footage shows tracked hand interaction, bow-and-arrow mechanics, target waves, health feedback, and a contained VR arena.
-  media: *hero
+  experience: Reach for an arrow, draw the bow, and aim at an incoming target.
+  contribution: I led product and technology direction at GreyKernel, working with the team on the interaction and real-time implementation.
+  system: Tracked hand movement drives the virtual bow. Target waves and health feedback give the player a reason to move and aim within the arena.
+  media:
+    src: /media/generated/editorial/enhanced/machine-hunter-aim-v2.webp
+    avif: /media/generated/editorial/enhanced/machine-hunter-aim-v2.avif
+    label: Machine Hunter · Aiming at a target inside the arena.
+    mp4: /media/career/machine-hunter/clip.mp4
+    webm: /media/career/machine-hunter/clip.webm
+    alt: The player aims at a target portal inside the Machine Hunter arena
+    width: 1600
+    height: 900
 inside:
   decisions:
-    - Build the experience around a physical action that reads clearly both inside the headset and in mixed-reality capture.
-    - Use a short reviewed action excerpt instead of publishing the full historical source video or unsupported production claims.
+    - Centre the game on drawing and releasing a bow, an action the player can understand through movement.
+    - Use a contained arena and waves of targets to keep the player focused on aiming and responding to threats.
   constraints:
-    - The retrospective can describe only what public writing and visible reviewed footage directly support.
+    - Hand movement, the virtual bow, and the response to a shot need to feel connected inside the headset.
   evidence:
-    - A six-second silent derivative preserves the functioning interaction while keeping the page payload below one megabyte.
-  media: *hero
+    - Mixed-reality footage shows the player’s physical movements alongside the virtual arena, making the interaction easier to follow outside the headset.
+  media:
+    src: /media/generated/editorial/enhanced/machine-hunter-release-v2.webp
+    avif: /media/generated/editorial/enhanced/machine-hunter-release-v2.avif
+    label: Machine Hunter · Releasing an arrow towards a target.
+    mp4: /media/career/machine-hunter/clip.mp4
+    webm: /media/career/machine-hunter/clip.webm
+    alt: The released arrow resolves into visible feedback in the Machine Hunter arena
+    width: 1600
+    height: 900
 sources:
   - label: From Pixels to Metaverse
     url: https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild
     type: authored-post
-  - label: Reviewed Machine Hunter archive video
+  - label: Machine Hunter mixed-reality gameplay video
     url: https://drive.google.com/file/d/11fcukwZFUa42Ave95czc0izYyuhsdmxE/view
     type: shared-archive
 seo:
@@ -57,4 +83,6 @@ seo:
   socialImage: /media/career/machine-hunter/poster-1280.webp
 ---
 
-Machine Hunter is useful evidence because the interaction is visible. The selected excerpt shows the relationship between physical input, virtual equipment, targets, and immediate state feedback without requiring a reconstructed narrative.
+Machine Hunter gave us a focused interaction to work on. The player reaches for an arrow, draws the bow, and releases it towards an incoming machine. The game depends on how those movements connect to the response in the headset.
+
+For me, it was a chance to work on the physical side of game controls. Mixed-reality capture also let people watching the game see what the player was doing with their hands.

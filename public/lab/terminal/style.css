@@ -2674,6 +2674,21 @@ body.fx-muted .quote-panel {
         bottom: auto;
         left: auto;
         z-index: 42;
-        margin: 0.75rem 1rem 0;
+        display: flex;
+        width: calc(100% - 2rem);
+        min-height: 3rem;
+        margin: 0.75rem 1rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+
+    .archive-return > [aria-hidden="true"] {
+        flex: none;
+    }
+
+    .archive-return__label {
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 }

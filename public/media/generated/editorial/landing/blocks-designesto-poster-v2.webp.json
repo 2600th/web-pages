@@ -1,0 +1,11 @@
+{
+  "createdAt": "2026-09-01T23:33:23+05:30",
+  "generator": "OpenAI built-in image generation",
+  "classification": "generated editorial illustration",
+  "evidenceUse": false,
+  "sourceInput": "/media/work/blocks-inco-ai/designesto-edit-room-poster.webp",
+  "sourceGeneration": "_media-source/generated/landing/blocks-designesto-poster-v2.png",
+  "generationReceipt": "exec-3b0dcb63-17a9-4118-8cdc-81f5e90ce31b",
+  "prompt": "Preserve the exact room layout and recognizable orange sofa, teal coffee table, yellow shelving, window, rug, artwork, and architectural proportions from the source. Re-render the same room as a premium cinematic interior-design product scene with realistic materials, natural daylight, controlled shadows, subtle cobalt spatial-analysis traces, and one restrained solar-gold design-selection glow. Keep the same viewpoint and furniture arrangement. No people, logos, text, labels, watermark, UI, extra furniture, or impossible architecture.",
+  "derivation": "1600 by 900 WebP derivative; quality 82; generated PNG source preserved separately."
+}

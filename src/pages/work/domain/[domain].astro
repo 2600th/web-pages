@@ -4,6 +4,7 @@ import Breadcrumbs from '../../../components/shared/Breadcrumbs.astro';
 import WorkList from '../../../components/work/WorkList.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { CAREER_DOMAIN_META } from '../../../data/career-domains';
+import { getPrioritizedWork } from '../../../data/work-order';
 import type { CareerDomain } from '../../../content/evidence';
 import '../../../styles/content-pages.css';
 
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
     params: { domain },
     props: {
       domain,
-      work: work.filter((entry) => entry.data.domains.includes(domain)).sort((a, b) => a.data.careerOrder - b.data.careerOrder),
+      work: getPrioritizedWork(work.filter((entry) => entry.data.domains.includes(domain))),
     },
   }));
 }
@@ -31,8 +32,8 @@ const domainMeta = CAREER_DOMAIN_META[domain];
 ---
 
 <BaseLayout
-  title={`${domainMeta.label} · Career work`}
-  description={`${domainMeta.description} Browse the ${domainMeta.label.toLowerCase()} work record of Pranshul Chandhok.`}
+  title={`${domainMeta.label} · Projects`}
+  description={`${domainMeta.description} Explore my projects in this area and read about my contribution to each.`}
   canonical={`/work/domain/${domain}/`}
 >
   <div class="page-shell work-archive" data-work-archive data-static-domain={domain}>
@@ -43,9 +44,9 @@ const domainMeta = CAREER_DOMAIN_META[domain];
         <p class="route-opening__statement">{domainMeta.description}</p>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">Filtered public record · {work.length} records</p>
-        <p><strong>{work.length} public records</strong> where {domainMeta.label.toLowerCase()} shaped the work.</p>
-        <p>Each row returns to its canonical case record; the full archive remains available through Work.</p>
+        <p class="route-opening__context">{work.length} relevant projects</p>
+        <p>My work in {domainMeta.label.toLowerCase()}, including the product and technical decisions behind each project.</p>
+        <p>Choose a project below, or browse <a href="/work/">all my work</a>.</p>
       </div>
     </header>
 

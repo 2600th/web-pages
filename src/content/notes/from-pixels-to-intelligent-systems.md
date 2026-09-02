@@ -1,25 +1,29 @@
 ---
-title: From pixels to intelligent systems
+title: Why I still build things myself
 slug: from-pixels-to-intelligent-systems
-summary: A current reflection on the career arc from game programming through immersive platforms and design technology to production AI—and what remained constant underneath.
+type: field-note
+relatedWork: [greykernel, homelane-spacecraft-pro]
+ogImage: /media/social/from-pixels-to-intelligent-systems.webp
+summary: I’ve moved from game programming to leading product and technology teams. Making things myself still helps me understand what to ask of a product and the people building it.
 publishedAt: 2026-08-21
+updatedAt: 2026-09-02
 topics:
   - Career reflections
   - Product engineering
   - Emerging technology
 canonicalUrl: https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild
-sourceAttribution: Companion reflection to an authored Substack career retrospective by Pranshul Chandhok
+sourceAttribution: A follow-up to my career retrospective, From Pixels to Metaverse.
 draft: false
 ---
 
-The work looks discontinuous when reduced to labels: games, XR, robotics, interior-design software, generative AI. From inside the work, the continuity is easier to see.
+I started as a game programmer. These days I lead Product and Technology for Interior Company at Square Yards. In between, I co-founded GreyKernel and worked on immersive learning, simulation, robotics, and design software.
 
-I have repeatedly been drawn to a new medium at the awkward point between possibility and product. The first version can usually demonstrate the magic. The harder question is what must surround that moment so another person can use it, understand it, and return to it.
+I still spend a lot of time making small things myself. Recently that has included a browser ocean, a flight game, and experiments with locally generated video. Sometimes an idea is useful for work. Sometimes I just want to know whether I can make it run.
 
-Games taught me that feedback, timing, and performance are not technical aftercare; they are the experience. Building GreyKernel made the boundary larger. An immersive application also needed content, session operations, deployment, assessment, reporting, and a team capable of learning across disciplines. Design technology added commercial workflows, catalogs, specifications, and the consequences of changing a tool used in real work.
+Games taught me to care about what happens when someone presses a button. A small delay or an awkward camera can undo a lot of otherwise good work. At GreyKernel, I had to think about the people around the experience too. A classroom VR product needed a way for a teacher to run the lesson, not just something interesting for a student to look at.
 
-Production AI is the newest expression of the same pattern. A generated answer, image, or scene is only the visible moment. The product includes how context is assembled, how quality is evaluated, how people steer and correct the system, how failure is handled, and where the output goes next.
+Working on interior-design software added another set of concerns. A change to a room could affect its price, material choices, and what would eventually be made. That is different from building a scene that only needs to look good on screen.
 
-That is why I resist separating strategy too far from implementation. The system reveals facts that the plan cannot. The product reveals constraints that the model does not. Useful direction emerges from moving between them.
+Building prototypes helps me ask better questions before a team commits to an approach. It gives me a feel for what is promising, what is fragile, and where an estimate might be hiding a difficult assumption. I don’t need to write every part myself, but I want to understand the work well enough to discuss it properly.
 
-The Career Atlas on this site is an attempt to show that accumulation honestly: not a victory lap, and not a resume rendered as a timeline, but a set of public evidence points connected by a recurring operating instinct.
+I like being close to both the product decision and the implementation. Often, trying to build the thing changes my mind about what it should be.

@@ -2,18 +2,31 @@
 import { CONTACT_EMAIL, SOCIAL_LINKS } from '../../data/site';
 ---
 
-<footer class="site-footer" data-closing-plane="split">
-  <div class="site-footer__identity" data-polarity="positive">
-    <strong>Pranshul Chandhok</strong>
-    <span>Operator / advisor · Product, AI, and spatial systems.</span>
-  </div>
-  <nav aria-label="Footer navigation" data-polarity="positive">
-    <a href="/about/">About</a>
-    {SOCIAL_LINKS.map((item) => <a href={item.href} target="_blank" rel="me noopener">{item.label}</a>)}
-    <a href="/lab/terminal/index.html">Console archive</a>
-  </nav>
-  <div class="site-footer__contact" data-polarity="negative">
-    <a href={`mailto:${CONTACT_EMAIL}`} data-event="contact_start" data-event-context="footer">{CONTACT_EMAIL}</a>
-    <span>© {new Date().getFullYear()}</span>
+<footer class="site-footer" data-closing-plane="velvet">
+  <div class="site-footer__signal" aria-hidden="true"><span>2600</span><i></i></div>
+  <section class="site-footer__invitation" id="contact" aria-labelledby="contact-title" tabindex="-1">
+    <h2 id="contact-title">
+      <a href={`mailto:${CONTACT_EMAIL}`} data-event="contact_start" data-event-context="footer" aria-label="Let’s compare notes">
+        <span class="site-footer__invitation-line">Let’s compare</span>
+        <span class="site-footer__invitation-line">notes.<span class="site-footer__invitation-arrow" aria-hidden="true">↗</span></span>
+      </a>
+    </h2>
+    <p>I enjoy exchanging ideas with people working on product development, AI, and real-time 3D. If something here sparked a question, say hello.</p>
+  </section>
+  <div class="site-footer__lower">
+    <div class="site-footer__identity">
+      <strong>Pranshul Chandhok</strong>
+      <span>Product and technology leadership · AI and real-time 3D</span>
+    </div>
+    <nav aria-label="Footer navigation">
+      <a href="/about/">About</a>
+      <a href="/lab/">Lab</a>
+      {SOCIAL_LINKS.map((item) => <a href={item.href} target="_blank" rel="me noopener">{item.label}</a>)}
+      <a href="/lab/terminal/index.html">Ghost Terminal</a>
+    </nav>
+    <div class="site-footer__contact">
+      <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+      <span>© {new Date().getFullYear()} · Gurugram, India</span>
+    </div>
   </div>
 </footer>

@@ -1,5 +1,7 @@
 # Velvet Reveal Portfolio Redesign Specification
 
+> Historical document. Retained for design and implementation history; checklists, counts, and code paths below describe the work at that time. Do not treat them as current instructions or a pending backlog. Use [current documentation](../../README.md) and [DESIGN.md](../../../DESIGN.md) for maintenance.
+
 ## Outcome
 
 Rebuild the 2600th portfolio as a premium, cinematic Operator–Advisor experience. The approved `54-velvet-reveal-2600th.webp` concept is the first-viewport art-direction authority; the finished site must remain clearer, faster, more accessible, and more evidence-led than a literal image reproduction.

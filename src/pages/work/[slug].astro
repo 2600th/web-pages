@@ -3,8 +3,12 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Breadcrumbs from '../../components/shared/Breadcrumbs.astro';
 import EvidenceSources from '../../components/work/EvidenceSources.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
+import CraftEvolution from '../../components/work/CraftEvolution.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../data/site';
+import sharp from 'sharp';
+import { join } from 'node:path';
+import { getNotesForWork, NOTE_TYPES } from '../../data/notes';
 import '../../styles/content-pages.css';
 
 export async function getStaticPaths() {
@@ -18,16 +22,21 @@ interface Props {
 
 const { entry } = Astro.props;
 const { data } = entry;
+const socialImageMetadata = await sharp(join(process.cwd(), 'public', data.seo.socialImage)).metadata();
 const { Content } = await render(entry);
+const relatedWork = (await getCollection('work')).filter((candidate) => (data.relatedWork ?? []).includes(candidate.data.slug));
+const relatedNotes = getNotesForWork(await getCollection('notes'), data.slug);
+const caseVariant = data.slug === 'defense-simulation-systems' ? 'systems-atlas' : undefined;
 const jsonLd = [{
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
-  name: data.title,
-  description: data.summary,
+  name: `${data.title} | Case study`,
+  description: `${data.summary} My role: ${data.role}.`,
+  genre: 'Portfolio case study',
+  about: { '@type': 'Thing', name: data.title },
   url: `${SITE.url}/work/${data.slug}/`,
   image: new URL(data.seo.socialImage, SITE.url).toString(),
-  creator: { '@id': `${SITE.url}/#person` },
-  dateCreated: String(data.yearStart),
+  author: { '@id': `${SITE.url}/#person` },
   keywords: data.disciplines.join(', '),
   citation: data.sources.map((source) => source.url),
 }, {
@@ -46,88 +55,127 @@ const jsonLd = [{
   description={data.seo.description}
   canonical={`/work/${data.slug}/`}
   image={data.seo.socialImage}
-  imageAlt={data.heroMedia?.alt ?? `${data.title} by Pranshul Chandhok`}
-  imageWidth={data.heroMedia?.width ?? 1600}
-  imageHeight={data.heroMedia?.height ?? 900}
+  imageAlt={`${data.title} | Case study by Pranshul Chandhok`}
+  imageWidth={socialImageMetadata.width}
+  imageHeight={socialImageMetadata.height}
   ogType="article"
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: data.title }]} />
-  <header class:list={['case-hero route-opening route-opening--case', { 'case-hero--long': data.title.length > 36 }]} data-route-opening>
+  <header
+    class:list={['case-hero route-opening route-opening--case', { 'case-hero--long': data.title.length > 36 }]}
+    data-route-opening
+    data-case-variant={caseVariant}
+    data-motion-scope={caseVariant ? true : undefined}
+  >
     <div class="case-hero__positive" data-polarity="positive">
       <h1>{data.title}</h1>
     </div>
     <div class="case-hero__negative" data-polarity="negative">
-      <p class="case-hero__context">{data.yearStart} · {data.status}</p>
+      <p class="case-hero__context">
+        {caseVariant === 'systems-atlas' ? `${data.yearStart}–${data.yearEnd} · GreyKernel` : `${data.yearStart} · ${data.status}`}
+      </p>
       <p class="case-hero__summary">{data.summary}</p>
       <dl class="case-hero__meta">
-        <div><dt>Role</dt><dd>{data.role}</dd></div>
+        <div><dt>My role</dt><dd>{data.role}</dd></div>
         <div><dt>Period</dt><dd>{data.yearStart}{data.yearEnd ? `–${data.yearEnd}` : ''}</dd></div>
         <div><dt>Status</dt><dd>{data.status}</dd></div>
-        <div><dt>Visibility</dt><dd>{data.visibility.replace('-', ' ')}</dd></div>
+        {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
       </dl>
+      {data.slug === 'propvr-ai-craft' && <p><a href="https://craft.propvr.ai/" target="_blank" rel="noopener noreferrer">Visit Craft<span class="sr-only"> (external site, opens in a new tab)</span></a></p>}
     </div>
-    {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroLabel ?? `${data.title} · public result`} priority /></div>}
+    {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroMedia.label ?? data.heroLabel ?? data.title} priority /></div>}
   </header>
 
-  {data.recordType !== 'evidence-note' ? (
+  {data.recordType === 'narrative' ? (
+    <div class="project-story work-narrative">
+      <section class="project-story__frame project-story__section" aria-label="Case study">
+        <div class="project-story__marker"><span>Project story</span><strong>THE WORK</strong></div>
+        <div class="project-story__body">
+          <div class="prose"><Content /></div>
+          {data.slug === 'propvr-ai-craft' && <CraftEvolution />}
+          {relatedWork.length > 0 && <nav aria-label="Related work"><h2>Related work</h2><ul>{relatedWork.map((related) => <li><a href={`/work/${related.data.slug}/`}>{related.data.title}</a></li>)}</ul></nav>}
+        </div>
+      </section>
+      <EvidenceSources sources={data.sources} />
+    </div>
+  ) : data.recordType !== 'evidence-note' ? (
     <div class="project-story">
       <section class="project-story__frame project-story__section" data-case-part="thesis" aria-labelledby="thesis-title">
-        <div class="project-story__marker"><span>Case structure</span><strong>THESIS</strong></div>
+        <div class="project-story__marker"><span>Overview</span><strong>THE PROJECT</strong></div>
         <div class="project-story__body">
-          <div><h2 id="thesis-title">{data.out.thesis}</h2></div>
+          <div><h2 class="project-story__lead" id="thesis-title">{data.out.thesis}</h2></div>
           <dl class="fact-grid">
             <div><dt>For</dt><dd>{data.out.audience}</dd></div>
-            <div><dt>Public result</dt><dd>{data.out.outcome}</dd></div>
+            <div><dt>Outcome</dt><dd>{data.out.outcome}</dd></div>
           </dl>
-          <ProjectMedia media={data.out.media} label="Out · result" />
+          <ProjectMedia media={data.out.media} label={data.out.media.label} />
         </div>
       </section>
 
       <section class="project-story__frame project-story__section" data-case-part="contribution" aria-labelledby="contribution-title">
-        <div class="project-story__marker"><span>Case structure</span><strong>CONTRIBUTION</strong></div>
+        <div class="project-story__marker"><span>The experience</span><strong>IN USE</strong></div>
         <div class="project-story__body">
-          <div><h2 id="contribution-title">{data.near.experience}</h2></div>
+          <div><h2 class="project-story__lead" id="contribution-title">{data.near.experience}</h2></div>
           <dl class="fact-grid">
-            <div><dt>Contribution</dt><dd>{data.near.contribution}</dd></div>
+            <div><dt>My contribution</dt><dd>{data.near.contribution}</dd></div>
           </dl>
-          <ProjectMedia media={data.near.media} label="Near · experience" />
+          <ProjectMedia media={data.near.media} label={data.near.media.label} />
         </div>
       </section>
 
       <section class="project-story__frame project-story__section" data-case-part="system" aria-labelledby="system-title">
-        <div class="project-story__marker"><span>Case structure</span><strong>SYSTEM</strong></div>
+        <div class="project-story__marker"><span>Technical details</span><strong>BUILD CHOICES</strong></div>
         <div class="project-story__body">
-          <div><h2 id="system-title">What had to be true underneath.</h2></div>
+          <div><h2 id="system-title">How it works.</h2></div>
           <dl class="fact-grid">
             <div><dt>System</dt><dd>{data.near.system}</dd></div>
             <div><dt>Key decisions</dt><dd><ul>{data.inside.decisions.map((item) => <li>{item}</li>)}</ul></dd></div>
             <div><dt>Constraints</dt><dd><ul>{data.inside.constraints.map((item) => <li>{item}</li>)}</ul></dd></div>
           </dl>
-          <ProjectMedia media={data.inside.media} label="Inside · system" />
+          <ProjectMedia media={data.inside.media} label={data.inside.media.label} />
         </div>
       </section>
 
-      <section class="project-story__frame project-story__section" data-case-part="evidence" aria-labelledby="evidence-record-title">
-        <div class="project-story__marker"><span>Case structure</span><strong>EVIDENCE</strong></div>
+      <section class="project-story__frame project-story__section" data-case-part="story" aria-labelledby="operating-reality-title">
+        <div class="project-story__marker"><span>Looking back</span><strong>PROJECT NOTES</strong></div>
         <div class="project-story__body">
-          <div class="project-story__evidence"><h2 id="evidence-record-title">Evidence record</h2><ul>{data.inside.evidence.map((item) => <li>{item}</li>)}</ul></div>
+          <div class="project-story__evidence"><h2 id="operating-reality-title">Notes from the project.</h2><ul>{data.inside.evidence.map((item) => <li>{item}</li>)}</ul></div>
           <div class="prose"><Content /></div>
         </div>
       </section>
 
-      <div data-case-part="sources"><EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} /></div>
+      <div data-case-part="sources"><EvidenceSources sources={data.sources} /></div>
     </div>
   ) : (
     <div class="project-story">
-      <section class="project-story__frame project-story__section" data-case-part="evidence" aria-labelledby="evidence-note-title">
-        <div class="project-story__marker"><span>Case structure</span><strong>EVIDENCE</strong></div>
+      <section class="project-story__frame project-story__section" data-case-part="story" aria-labelledby="project-story-title">
+        <div class="project-story__marker"><span>Project brief</span><strong>{data.storyLabel ?? 'WHAT WAS BUILT'}</strong></div>
         <div class="project-story__body">
-          <div><h2 id="evidence-note-title">{data.title}, in the public record.</h2></div>
+          <div><h2 class="project-story__lead" id="project-story-title">{data.storyHeading ?? `${data.title}, in context.`}</h2></div>
           <div class="prose"><Content /></div>
         </div>
       </section>
-      <div data-case-part="sources"><EvidenceSources sources={data.sources} reviewedEvidence={data.reviewedEvidence} /></div>
+      <div data-case-part="sources"><EvidenceSources sources={data.sources} /></div>
     </div>
   )}
+  {relatedNotes.length > 0 && <nav class="project-story related-notes" aria-label="Related notes">
+    <div class="project-story__frame project-story__section">
+      <div class="project-story__marker"><span>Further reading</span><strong>NOTES</strong></div>
+      <div class="project-story__body"><ul>{relatedNotes.map((note) => <li><span>{NOTE_TYPES[note.data.type]}</span><a href={`/notes/${note.data.slug}/`}>{note.data.title}</a></li>)}</ul></div>
+    </div>
+  </nav>}
 </BaseLayout>
+
+<style>
+  .related-notes ul { margin: 0; padding: 0; list-style: none; }
+  .related-notes li { display: grid; gap: 0.4rem; padding-block: 1.2rem; border-top: 1px solid var(--line); }
+  .related-notes li span { color: var(--muted); font-size: 1rem; }
+  .related-notes a { width: fit-content; padding-block: 0.4rem; font-size: clamp(1rem, 0.32vw + 0.93rem, 1.16rem); }
+  .work-narrative :global(.prose table) { width: 100%; border-collapse: collapse; margin-block: 2rem; font-size: 0.94rem; }
+  .work-narrative :global(.prose th), .work-narrative :global(.prose td) { padding: 0.85rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  .work-narrative :global(.prose th) { background: var(--inverse-surface); color: var(--inverse-text); }
+  .work-narrative nav { margin-top: 3rem; }
+  .work-narrative nav ul { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; padding: 0; list-style: none; }
+  @media (max-width: 40rem) { .work-narrative :global(.prose table) { font-size: 0.8rem; } .work-narrative :global(.prose th), .work-narrative :global(.prose td) { padding: 0.45rem; overflow-wrap: anywhere; } }
+</style>

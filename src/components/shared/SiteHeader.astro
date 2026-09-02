@@ -1,18 +1,16 @@
 ---
 import { NAVIGATION } from '../../data/site';
-import ThemeControl from './ThemeControl.astro';
 
 const pathname = Astro.url.pathname;
-const isCurrent = (href: string) => href.startsWith('/#') ? false : pathname.startsWith(href);
+const isCurrent = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href);
 ---
 
-<header class="site-header" data-site-header>
-  <a class="site-signature" href="/" aria-label="Pranshul Chandhok — home">
-    <span class="site-signature__full">Pranshul Chandhok</span>
-    <span class="site-signature__compact" aria-hidden="true">PC</span>
-    <span aria-hidden="true">/ 2600th</span>
+<header id="page-top" class="site-header" data-site-header tabindex="-1">
+  <a class="site-signature" href="/" aria-label="Pranshul Chandhok, home">
+    <strong>2600TH</strong>
+    <span aria-hidden="true">/</span>
+    <span>Pranshul Chandhok</span>
   </a>
-  <ThemeControl />
   <nav class="site-nav" aria-label="Primary navigation">
     {NAVIGATION.map((item) => (
       <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>

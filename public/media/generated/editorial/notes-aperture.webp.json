@@ -1,0 +1,9 @@
+{
+  "classification": "generated editorial illustration",
+  "evidenceUse": false,
+  "route": "/notes/",
+  "purpose": "Editorial workbench metaphor for the Notes index; not presented as documentary project media.",
+  "source": "Existing generated asset in the portfolio working tree",
+  "prompt": "The exact generation prompt was not retained with the source export; no prompt text has been reconstructed or invented.",
+  "derivatives": "Responsive 16:9 AVIF and WebP copies are created by scripts/build-route-opening-media.mjs."
+}

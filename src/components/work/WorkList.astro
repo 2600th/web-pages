@@ -10,7 +10,7 @@ const { work } = Astro.props;
 
 <ol class="work-list">
   {work.map((entry, index) => (
-    <li data-work-item data-work-domains={entry.data.domains.join(' ')}>
+    <li data-work-item data-work-year={entry.data.yearStart} data-work-career-order={entry.data.careerOrder} data-work-domains={entry.data.domains.join(' ')}>
       <a href={`/work/${entry.data.slug}/`}>
         <span class="work-list__number">{String(index + 1).padStart(2, '0')}</span>
         {entry.data.heroMedia ? (
@@ -103,8 +103,8 @@ const { work } = Astro.props;
   .work-list__body strong {
     font-size: clamp(1.7rem, 3.2vw, 3.4rem);
     font-stretch: 92%;
-    letter-spacing: -0.045em;
-    line-height: 0.95;
+    letter-spacing: -0.035em;
+    line-height: 1;
   }
 
   .work-list__body > span:not(.work-list__meta, .work-list__disciplines) {

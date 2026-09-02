@@ -1,6 +1,14 @@
 # Pranshul Chandhok / 2600th
 
-The source for [www.2600th.com](https://www.2600th.com): a static Astro portfolio for Pranshul Chandhok’s product, AI, real-time 3D, and spatial-systems work.
+The static Astro portfolio source for Pranshul Chandhok’s product, AI, real-time 3D, and spatial-systems work. The configured public URL is [www.2600th.com](https://www.2600th.com); this README describes the source checkout, not a verified live deployment.
+
+## Current site
+
+The homepage uses `VelvetHero` and `VelvetHomeSections`: a dark cinematic introduction, two actions, four proof links, five selected projects, a product-workflow thesis, recent writing, and “Let’s compare notes” contact. Pranshul is presented as a product and technology leader and hands-on builder. The introduction replays on reload. Escape settles it, and reduced-motion or unavailable-canvas conditions use a settled/static presentation. Its grid and particles remain as ambient detail after the normal reveal. Domain labels appear on hover, focus, or activation.
+
+Primary navigation is Home / Work / Notes / Lab / About. Work has 19 visible records, selected systems first, with domain browsing and an optional chronological order. The old combined `/work/blocks-inco-ai/` is a self-canonical compatibility page, not a main archive item. Separate cases cover Blocks, Designesto and PropVR AI → Craft, distinguishing the initial MVP from the PropVR Technology team's later work. Notes has eight articles: four Field Notes, three Technical Teardowns and one Essay. Videos start only after a user playback request. Shared pages have one contact invitation and a floating Back to top link after 300px of scrolling. Native links remain available without JavaScript.
+
+The original console is preserved separately at `/lab/terminal/index.html` with `noindex,follow` and a return link. Lab also hosts the self-contained, unofficial interview companion at `/lab/dwarkesh-jensen/index.html`. Use that exact file URL, not an unserved development directory alias.
 
 ## Local development
 
@@ -9,38 +17,44 @@ npm ci
 npm run dev
 ```
 
-`npm run verify` runs Astro diagnostics, unit tests, browser journeys, the production build, and generated-artifact checks.
+Use `npm run build` followed by `npm run preview` for a local production preview. `npm run verify` runs Astro diagnostics, unit tests, Playwright browser journeys, the production build, and generated-artifact checks. The browser suite targets Chromium at `http://127.0.0.1:4321`; ensure any existing server on that port belongs to this checkout. If its browser binary is missing, install it with `npx playwright install chromium`.
+
+Passing checks establish local build/test status, not live deployment or approval to publish. Inspect changed pages in the browser as part of review.
 
 ## Career content and media
 
-Career records live in `src/content/work/`. Every record requires a public source, evidence status, era, domain, role, and public claim. Use `recordType: evidence-note` when the available evidence does not justify a full case study; never manufacture depth to fill the template.
+Career records live in `src/content/work/`; writing lives in `src/content/notes/`. The content contracts are in `src/content/schemas.ts` and `src/content/evidence.ts`. Work records carry sources, evidence status, era, domains, role, and supported public claims. Use `recordType: evidence-note` when the available material does not justify a full case study; never manufacture depth to fill the template.
 
-Reviewed Drive downloads, public-video masters, browser captures, and generated-image masters belong only in the gitignored `_media-source/` directory. The repository publishes optimized poster frames and short, muted loops—not raw source files.
+For a Note, supply its stable slug, honest `type`, original `publishedAt`, `draft` flag, summary, topics, source attribution and unique 1200×630 `ogImage`. Use `updatedAt` only for a significant editorial update. `canonicalUrl` is an optional original external publication, not the local article canonical. Add `relatedWork` slugs or local `relatedLab` links only when relevant. Reciprocal Work links derive from the published Note, and reading time derives from its body. Drafts stay out of routes, indexes, RSS, sitemap and the LLM guide. Keep private code, customer material, invented measurements and proposed features out of statements of completed work.
 
-Every published media path must have an entry in `src/data/media-provenance.ts` or be generated from a record in `src/data/career-media.ts`. Editorial illustrations are labelled as such in the work record; they must never be presented as product screenshots.
+Current implementation and source boundaries are documented in [the editorial update report](docs/editorial-update-report.md). `scripts/sitemap-metadata.mjs` uses explicit modification dates or clean, tracked file history. Dirty, untracked or aggregate pages without a trustworthy content date omit `lastmod`, never use the build clock.
 
-The media workflow is:
+Reviewed downloads, public-video masters, browser captures, and generated-image masters belong in the gitignored `_media-source/` directory. Preserve originals. Publish only reviewed, optimized derivatives in `public/media/`, with provenance in `src/data/media-provenance.ts` and `src/data/career-media.ts`.
+
+Authentic video sources remain distinct from generated editorial/enhanced posters. Generated provenance and `evidenceUse: false` remain internal metadata; reader-facing captions explain the project or depicted scene without turning illustration into proof of shipped work.
+
+Media regeneration is a separate maintenance task, not a prerequisite for ordinary development or deployment. Run only the applicable commands after reviewing their input/output scope:
 
 ```powershell
 npm run media:career:inspect
 npm run media:career:build
+node scripts/build-route-opening-media.mjs
 npm run media:social:build
 npm run media:icons:build
 npm run verify
 ```
 
-`scripts/capture-first-party-media.mjs` records a short first-party browser session for later editing. Final clips should be MP4/H.264, muted, short, and configured with `preload="none"`; poster images should be WebP. See [docs/media.md](docs/media.md) for the evidence and performance rules.
-
-The homepage now includes 17 evidence-backed career records, a six-clip motion ledger, precisely labelled recognition and coverage, and the original console preserved at `/lab/terminal/`.
+The career builder requires local source masters and regenerates only configured recipes; it is not a complete rebuild of all curated media. See [the media workflow](docs/media.md) for capture, responsive formats, approval boundaries, and provenance maintenance.
 
 ## Publishing
 
-The site remains compatible with a free GitHub account. Source lives on a source branch; the locally generated `dist/` directory is published to the repository’s `gh-pages` branch.
+`main` is the source and default branch. Pushing reviewed changes to `main` triggers `.github/workflows/pages.yml`: locked dependency installation, Astro/unit/browser checks, production build, output validation, then GitHub Pages deployment of `dist/` only.
 
 ```powershell
-npm run deploy
+npm run verify
+git push origin main
 ```
 
-That command pushes generated files. Do not run it for a preview. See [docs/deployment.md](docs/deployment.md) for the first-release branch migration, GitHub Pages settings, verification, and rollback procedure.
+The workflow can also be started with **Run workflow** on GitHub Actions for `main`. GitHub Pages uses the GitHub Actions publishing source and retains `www.2600th.com`; no generated-output branch is required. The previous `npm run deploy` branch-publishing shortcut was removed so it cannot recreate `gh-pages`. Push to `main` only with release approval, never for a preview.
 
-The original console portfolio is preserved at `/lab/terminal/` and marked `noindex,follow`.
+See [deployment and rollback](docs/deployment.md), [current design guidance](DESIGN.md), and [the documentation index](docs/README.md). Dated specs and plans are historical decision records, not the current operating instructions.

@@ -1,0 +1,41 @@
+{
+  "createdAt": "2026-08-31",
+  "generator": "OpenAI built-in image generation",
+  "classification": "generated identity illustration",
+  "evidenceUse": false,
+  "reference": "User-provided 2600th identity reference; original retained privately.",
+  "assets": [
+    {
+      "files": [
+        "2600th-velvet-character.webp",
+        "2600th-velvet-character-640.webp"
+      ],
+      "route": "/",
+      "purpose": "Disclosed 2600th identity artwork for the Velvet Reveal hero; never project, client, award, or career evidence.",
+      "sourceGeneration": "exec-898a1453-352d-4755-9ffe-bda1380fd0ac.png",
+      "prompt": "Use case: precise-object-edit. Asset type: chroma-key source for a production website character cutout. Primary request: replace only the entire checkerboard background behind the 2600th character with one perfectly flat, uniform, fully opaque chroma green color #00FF66 from edge to edge. Constraints: change only the background. Preserve the character's face, thick black hair, beard, rectangular glasses, expression, body, exact standing pose, coat, straps, hands, boots, lighting, colors, scale, and complete uncropped silhouette. Keep crisp natural subject edges and no green spill on the subject. Avoid: checkerboard, transparency preview, gradient, texture, floor, shadow, glow, halo, scenery, text, logo, watermark, extra objects, and any alteration to the character.",
+      "derivation": "The generated opaque green plate was chroma-keyed locally, despilled, trimmed, resized, and encoded to alpha WebP. The matte was visually checked against #030405 and #edeae2 plates."
+    },
+    {
+      "files": [
+        "2600th-operator-diorama.webp"
+      ],
+      "route": "/about/",
+      "purpose": "Disclosed 2600th character-and-equipment identity artwork for the About operating atlas; never project, client, award, or career evidence.",
+      "sourceGeneration": "exec-560170e9-2c42-4cc5-ad72-0b043602deb1.png",
+      "prompt": "Use case: stylized-concept. Asset type: premium portfolio About-page identity artwork. Input image: Image 1 is the identity, wardrobe, material, and silhouette reference. Primary request: create a cinematic miniature operator workshop diorama featuring the same recognizable Indian man from Image 1, preserving his tall swept black hair, full beard, bold rectangular black glasses, broad build, calm intelligent expression, layered matte-black technical coat, black trousers and boots, and restrained cobalt-blue accents. Scene: he stands calmly beside a modular dark workbench with an unbranded VR headset, spatial controller, compact rugged field case, small tracking sensors, black notebook, stylus, cable modules, and a restrained workstation light. Style: premium realistic editorial 3D/photographic diorama, sophisticated and tactile, not toy-like. Composition: wide landscape, full figure on the right half, equipment and generous negative space on the left for website copy, clean complete silhouette, no cropping. Lighting: black velvet environment, warm solar-gold practical light and precise cobalt rim light, cinematic but readable. Constraints: no text, no logos, no weapons, no armor, no masks, no franchise resemblance, no client UI, no product claims, no watermark, no extra people.",
+      "derivation": "The generated source was resized to a 1600 by 900 WebP derivative and visually inspected against the Velvet Reveal surfaces."
+    },
+    {
+      "files": [
+        "2600th-equipment-inventory.webp"
+      ],
+      "route": "/",
+      "purpose": "Disclosed equipment-world identity artwork for supporting cinematic sections; never project, client, award, or career evidence.",
+      "sourceGeneration": "exec-01183ce7-faf2-4eba-91f4-5b6e58ca0d84.png",
+      "prompt": "Use case: stylized-concept. Asset type: premium portfolio equipment-inventory artwork. Input image: Image 1 provides the black technical material language and restrained cobalt accent color only; do not include the person. Primary request: create a meticulous top-down modular equipment inventory arranged on one continuous black velvet surface: an unbranded VR headset, two spatial controllers, compact rugged field case, four small tracking sensors, foldable keyboard, black notebook, stylus, slim tablet with its screen off, coiled cables, adapters, and a small handheld depth sensor. Style: premium realistic editorial product photography with tactile matte-black technical materials, engineered precision, sophisticated rather than militaristic. Composition: wide landscape with each object clearly separated, generous empty space between groups, subtle grid alignment but no labels. Lighting: restrained cobalt edge light and tiny warm solar-gold highlights, deep velvet shadows, every object legible. Constraints: no person, no text, no logos, no weapons, no ammunition, no armor, no fake interfaces, no watermark, no franchise resemblance.",
+      "derivation": "The generated source was resized to a 1600 by 900 WebP derivative and visually inspected against the Velvet Reveal surfaces."
+    }
+  ],
+  "constraint": "Generated identity media is visibly disclosed on the homepage and excluded from all evidence claims and counts."
+}

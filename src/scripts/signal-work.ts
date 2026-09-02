@@ -7,7 +7,7 @@ export function initSignalWork() {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   const syncControl = (video: HTMLVideoElement, playing = !video.paused) => {
-    const media = video.closest<HTMLElement>('.signal-case__media');
+    const media = video.closest<HTMLElement>('[data-signal-case]');
     const control = media?.querySelector<HTMLButtonElement>('[data-signal-motion-toggle]');
     if (!control) return;
     const title = (control.dataset.motionTitle ?? control.getAttribute('aria-label') ?? '')
@@ -25,24 +25,31 @@ export function initSignalWork() {
   };
 
   for (const video of videos) {
-    const media = video.closest<HTMLElement>('.signal-case__media');
-    const control = media?.querySelector<HTMLButtonElement>('[data-signal-motion-toggle]');
+    const media = video.closest<HTMLElement>('[data-signal-case]');
     video.addEventListener('play', () => syncControl(video));
     video.addEventListener('pause', () => syncControl(video));
-    control?.addEventListener('click', () => {
-      const controlShowsPlayback = control.getAttribute('aria-pressed') === 'true';
-      if (!controlShowsPlayback) {
-        video.dataset.motionPreference = 'play';
-        syncControl(video, true);
-        void video.play().catch(() => syncControl(video, false));
-      } else {
-        video.dataset.motionPreference = 'pause';
-        video.pause();
-        syncControl(video, false);
-      }
-    });
+    if (!media) continue;
     syncControl(video);
   }
+
+  root.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    const control = target?.closest<HTMLButtonElement>('[data-signal-motion-toggle]');
+    if (!control || !root.contains(control)) return;
+    const video = control.closest<HTMLElement>('[data-signal-case]')?.querySelector<HTMLVideoElement>('[data-signal-video]');
+    if (!video) return;
+    const controlShowsPlayback = control.getAttribute('aria-pressed') === 'true';
+    if (!controlShowsPlayback) {
+      video.dataset.motionPreference = 'play';
+      syncControl(video, true);
+      video.load();
+      void video.play().catch(() => syncControl(video, false));
+    } else {
+      video.dataset.motionPreference = 'pause';
+      video.pause();
+      syncControl(video, false);
+    }
+  });
 
   const pauseAll = (clearPreference = false) => videos.forEach((video) => {
     if (clearPreference) delete video.dataset.motionPreference;

@@ -1,7 +1,7 @@
 ---
 title: Web Ocean 3D
 slug: web-ocean-3d
-summary: A real-time spectral ocean and tropical island rendered in the browser with WebGPU, physically motivated water optics, responsive weather, buoyancy, wakes, and a measured fallback path.
+summary: I built an interactive ocean in the browser, with changing weather, underwater views, and a boat that responds to the waves. The project also explores graphics performance across devices.
 yearStart: 2026
 status: Active open-source experiment
 role: Creator and graphics engineer
@@ -22,36 +22,42 @@ publicClaims:
   - The public repository and live build support the visible rendering, interaction, and compatibility description.
 engagementPath: product-collaboration
 heroMedia: &hero
-  src: /media/work/web-ocean-3d/hero.webp
+  src: /media/generated/editorial/enhanced/web-ocean-hero-v2.webp
+  avif: /media/generated/editorial/enhanced/web-ocean-hero-v2.avif
+  label: Web Ocean 3D · Sailing towards an island in the browser ocean.
   alt: Web Ocean 3D boat moving across a spectral ocean toward a tropical island
   width: 1600
   height: 900
 out:
-  thesis: Browser graphics become convincing when ocean motion, light, weather, optics, physics, and performance are designed as one system rather than stacked as isolated effects.
+  thesis: An ocean I could explore in the browser.
   audience: Graphics developers, technical artists, and product teams exploring high-fidelity browser experiences.
-  outcome: A public real-time ocean environment with nine coordinated presets, boat and camera modes, underwater transitions, reproducible visual captures, and a WebGL2 fallback.
+  outcome: An open-source ocean environment with nine presets, boat and camera modes, underwater views, and a WebGL2 fallback for browsers without WebGPU support.
   media: *hero
 near:
-  experience: Visitors can orbit, fly, pilot a boat, enter an authored cinematic tour, change weather and sea conditions, and cross the waterline into a complete underwater state.
-  contribution: Built the rendering, simulation, asset, interaction, measurement, and reproducible capture systems as a coherent browser product.
-  system: Three spectral cascades drive the ocean while depth, refraction, reflection, foam persistence, buoyancy, wake deposition, atmosphere, lens behavior, and quality tiers share a measured real-time pipeline.
+  experience: Take a boat out, change the weather, or look beneath the surface.
+  contribution: I built the rendering and simulation, along with the controls, asset tools, and performance checks. I also added repeatable captures to compare changes to the graphics.
+  system: Three spectral wave layers drive the ocean. The renderer combines reflection and refraction with foam and underwater effects. The same wave simulation feeds the boat’s buoyancy and wake.
   media:
-    src: /media/work/web-ocean-3d/clip-poster.webp
+    src: /media/generated/editorial/enhanced/web-ocean-clip-v2.webp
+    avif: /media/generated/editorial/enhanced/web-ocean-clip-v2.avif
+    label: Web Ocean 3D · Waves moving around the island environment.
     mp4: /media/work/web-ocean-3d/clip.mp4
     alt: Live Web Ocean 3D browser capture showing spectral waves moving around the island environment
-    width: 1280
-    height: 720
+    width: 1600
+    height: 900
 inside:
   decisions:
-    - Regenerate the complete README gallery from the current renderer so visual evidence cannot silently drift from the code.
-    - Maintain the WebGPU and WebGL2 paths from the same shader source to keep compatibility work observable.
-    - Move raw source assets outside the public build and optimize only the models and textures that actually ship.
+    - Use repeatable visual captures to compare rendering changes under the same conditions.
+    - Maintain WebGPU and WebGL2 paths from the same shader source to reduce differences between them.
+    - Keep unused source assets out of the download and optimise the models and textures that the browser actually needs.
   constraints:
     - High-fidelity water and island scenes must remain interactive across widely different GPU and browser capabilities.
   evidence:
-    - The repository documents algorithms, controls, asset licensing, capture automation, performance reasoning, and the live static deployment.
+    - When people tried the ocean on their own devices, some managed to crash it. I went back to the loading and memory use, and the next build worked on more devices.
   media:
-    src: /media/work/web-ocean-3d/inside.webp
+    src: /media/generated/editorial/enhanced/web-ocean-inside-v2.webp
+    avif: /media/generated/editorial/enhanced/web-ocean-inside-v2.avif
+    label: Web Ocean 3D · Ocean settings and the probes used to inspect boat buoyancy.
     alt: Web Ocean 3D interface showing ocean controls, HUD, and buoyancy probes
     width: 1600
     height: 900
@@ -71,6 +77,6 @@ seo:
   socialImage: /media/work/web-ocean-3d/hero.webp
 ---
 
-Web Ocean 3D treats the browser as a serious graphics target. Its sea state, weather, atmosphere, water optics, island, boat response, camera, and photographic treatment change together so each preset reads as a place rather than a filter.
+I’ve always enjoyed graphics work, and an ocean is a good way to get absorbed in it. The light, waves, and weather all affect how the scene feels. Then there is the boat: it needs to react to the same water the player is looking at.
 
-The less visible work matters equally: a compatibility renderer, deterministic visual capture, license-aware asset tooling, and a build that stopped shipping hundreds of megabytes of unused source material.
+Getting it to run on more devices became a substantial part of the project. I worked through the loading path, reduced memory use, and removed unused source assets from the public build. The repository includes the rendering code and capture tools if you want to see how it works.

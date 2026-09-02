@@ -1,29 +1,37 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedNotes, getNoteReadingTime, NOTE_TYPES } from '../../data/notes';
 import '../../styles/content-pages.css';
 
-const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
-);
+const notes = getPublishedNotes(await getCollection('notes'));
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
 ---
 
 <BaseLayout
   title="Notes from the workbench"
-  description="Notes by Pranshul Chandhok on production AI, creative control, browser-native 3D, product reliability, and building emerging technologies into useful systems."
+  description="What I’m learning while building AI products, experimenting with browser graphics, and trying new tools. Notes by Pranshul Chandhok."
   canonical="/notes/"
 >
   <div class="page-shell notes-page">
-    <header class="route-opening route-opening--notes" data-route-opening>
+    <header class="route-opening route-opening--notes" data-route-opening data-motion-scope>
       <div class="route-opening__positive" data-polarity="positive">
         <h1>Notes from the workbench</h1>
-        <p class="route-opening__statement">Observations from the distance between a promising demo and a system people can actually use.</p>
+        <p class="route-opening__statement">What I’m learning as I build, test, and occasionally break things.</p>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">Field observations · {notes.length} notes</p>
-        <p>Short observations from building, breaking, and improving AI and spatial products in public.</p>
-        <p><a href="/rss.xml">Follow via RSS ↗</a></p>
+        <figure class="route-opening__notes-visual" data-notes-opening-media data-motion-reveal>
+          <picture>
+            <source type="image/avif" srcset="/media/routes/notes/notes-aperture-640.avif 640w, /media/routes/notes/notes-aperture-960.avif 960w" sizes="(max-width: 54rem) 100vw, 50vw" />
+            <source type="image/webp" srcset="/media/routes/notes/notes-aperture-640.webp 640w, /media/routes/notes/notes-aperture-960.webp 960w" sizes="(max-width: 54rem) 100vw, 50vw" />
+            <img src="/media/routes/notes/notes-aperture-960.webp" width="960" height="540" loading="eager" fetchpriority="high" decoding="async" alt="A split light-and-shadow workbench with sketches, models, lenses, and a blue systems trace" />
+          </picture>
+        </figure>
+        <div class="route-opening__copy">
+          <p class="route-opening__context">{notes.length} notes</p>
+          <p>Field Notes capture one observation. Technical Teardowns examine implementation choices and tradeoffs. Essays develop a product argument from the work.</p>
+          <p><a href="/rss.xml">Follow via RSS ↗</a></p>
+        </div>
       </div>
     </header>
     <ol class="notes-list">
@@ -34,6 +42,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-di
             <span>
               <strong>{note.data.title}</strong>
               <p>{note.data.summary}</p>
+              <span class="notes-list__topics">{NOTE_TYPES[note.data.type]} · {getNoteReadingTime(note.body ?? '')} min read</span><br />
               <span class="notes-list__topics">{note.data.topics.join(' · ')}</span>
             </span>
             <span class="notes-list__arrow" aria-hidden="true">↗</span>

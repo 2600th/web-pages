@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
   <title id="title">Defense simulation systems map</title>
-  <desc id="desc">An authored diagram connecting eight named training systems to a shared simulation, sensing, instructor, and evaluation core.</desc>
+  <desc id="desc">An authored diagram connecting seven named defense training systems to a shared simulation, sensing, instructor, and evaluation core.</desc>
   <defs>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0H0V40" fill="none" stroke="#262626" stroke-width="1"/>
@@ -17,12 +17,12 @@
     <path d="M252 218H560L690 350"/><path d="M615 218H660L735 342"/>
     <path d="M985 218H940L865 342"/><path d="M1348 218H1040L910 350"/>
     <path d="M252 682H560L690 550"/><path d="M615 682H660L735 558"/>
-    <path d="M985 682H940L865 558"/><path d="M1348 682H1040L910 550"/>
+    <path d="M985 682H940L865 558"/>
   </g>
 
   <g font-family="Arial, sans-serif">
     <text x="64" y="70" fill="#86a0ff" font-size="20" font-weight="700" letter-spacing="4">DEFENSE TECHNOLOGY / 2019—2021</text>
-    <text x="64" y="122" fill="#faf9f5" font-size="46" font-weight="700">Eight programs. One systems discipline.</text>
+    <text x="64" y="122" fill="#faf9f5" font-size="46" font-weight="700">Seven programs. One systems discipline.</text>
     <text x="64" y="158" fill="#a7a6a0" font-size="19">Hardware, sensing, simulation, instruction and evaluation designed as one training loop.</text>
 
     <g transform="translate(520 250)">
@@ -44,7 +44,6 @@
       <g transform="translate(64 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">T-90</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">ARMOURED SYSTEMS</text></g>
       <g transform="translate(430 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">ADVANCED MANNEQUIN</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">HUMAN FACTORS</text></g>
       <g transform="translate(840 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">RADIO TELEPHONY</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">COMMUNICATIONS</text></g>
-      <g transform="translate(1206 634)"><rect width="330" height="76" rx="2" fill="#11110f" stroke="#3c3c39"/><text x="24" y="33">TATA SAFARI</text><text x="24" y="57" fill="#8d8c86" font-size="12" letter-spacing="1.5">VEHICLE TRAINING</text></g>
     </g>
 
     <g transform="translate(64 802)" font-size="13" font-weight="700" letter-spacing="1.7">

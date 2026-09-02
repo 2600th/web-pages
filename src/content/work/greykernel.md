@@ -1,10 +1,10 @@
 ---
 title: GreyKernel — founder and CTO
 slug: greykernel
-summary: Co-founding GreyKernel created six years of shipped games, XR, enterprise production, defense, robotics, and simulation—including work with JPMorgan Chase, Anglian Water, Voxel, and Nazara.
+summary: I co-founded GreyKernel and led technology for six years, building immersive products and games alongside client work for companies including JPMorgan Chase and Anglian Water.
 yearStart: 2015
 yearEnd: 2021
-status: Founder-era company building
+status: Co-founded in 2015
 role: Co-founder and CTO
 disciplines: [Company building, XR, Simulation, Product engineering]
 visibility: public
@@ -17,8 +17,10 @@ relationships: [ira-vr, machine-hunter, mysticmojo, enterprise-immersive-systems
 evidenceStatus: public-corroborated
 publicClaims:
   - The founding relationship, broad practice areas, leadership scope, and named client and product examples are described in Pranshul's first-person career narrative and career archive.
-engagementPath: operator-advisory
-heroLabel: Reviewed founder-era showreel excerpt
+engagementPath: product-leadership
+storyLabel: BUILDING THE COMPANY
+storyHeading: From game systems to a multidisciplinary product studio.
+heroLabel: Founder-era showreel excerpt
 heroMedia:
   src: /media/career/greykernel/showreel-poster.webp
   mp4: /media/career/greykernel/showreel-loop.mp4
@@ -35,6 +37,8 @@ seo:
   socialImage: /media/career/greykernel/showreel-poster.webp
 ---
 
-GreyKernel was where an engineering practice became an operating practice. The work expanded from individual game systems into teams, products, a direct JPMorgan Chase VR/360 engagement, paid Anglian Water training software, Voxel's Apple release pipeline, defense programs, robotics, and a Nazara-distributed Chhota Bheem game.
+I co-founded GreyKernel in 2015. Over the next six years, we built products such as IRA VR and worked on enterprise training, simulation, and robotics. Our game studio, MysticMojo, also developed mobile and AR titles, including a Chhota Bheem game released through Nazara.
 
-The archive treats GreyKernel as an era and connective tissue. Individual systems carry the detailed evidence.
+As CTO, I worked on product definition and systems architecture while leading the technical teams. For JPMorgan Chase, we helped set up an immersive lab in its Mumbai office with gamified onboarding, cybersecurity and social-engineering experiences, and training applications. We also built training software for Anglian Water and worked on Voxel’s Apple release pipeline.
+
+Building the company widened what I had to think about. The technical approach had to fit the client’s needs and the team’s ability to deliver it. You can read more about [IRA VR](/work/ira-vr/), our [enterprise projects](/work/enterprise-immersive-systems/), and [MysticMojo](/work/mysticmojo/) on their project pages.

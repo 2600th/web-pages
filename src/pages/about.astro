@@ -1,93 +1,137 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { CONTACT_EMAIL } from '../data/site';
+import { PERSON } from '../data/site';
 import '../styles/content-pages.css';
 ---
 
 <BaseLayout
-  title="Three acts, one operating instinct"
-  description="Pranshul Chandhok is a hands-on product and technology operator whose work spans games, immersive systems, robotics, design technology, and production AI."
+  title="About Pranshul Chandhok"
+  description="I lead Product and Technology for Interior Company at Square Yards. My background spans game development, founding GreyKernel, and building design software."
   canonical="/about/"
 >
-  <div class="page-shell about-page" data-operating-dossier>
+  <div class="page-shell about-page" data-operating-dossier data-motion-scope>
     <header class="route-opening route-opening--about" data-route-opening>
       <div class="route-opening__positive" data-polarity="positive">
-        <h1>Three acts. One operating instinct.</h1>
-        <p class="route-opening__statement">Product strategy and implementation stay close enough to change each other.</p>
+        <h1>I learn by building.</h1>
+        <p class="route-opening__statement">I’m drawn to ideas that sound interesting but might not quite work yet. Building something is how I find out.</p>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">Pranshul Chandhok / 2600th</p>
-        <p>I work where product strategy and implementation are still close enough to change each other.</p>
-        <p>Currently VP Product & Technology at Square Yards, based in Gurugram.</p>
+        <div class="about-opening__copy">
+          <p class="route-opening__context">Pranshul Chandhok / 2600th</p>
+          <p>I’m {PERSON.jobTitle}.</p>
+          <p>I work across AI and real-time 3D, and stay hands-on with the software we build. I’m based in Gurugram.</p>
+        </div>
+        <figure class="about-opening__diorama" data-about-diorama>
+          <img src="/media/generated/identity/2600th-operator-diorama.webp" width="1600" height="900" alt="Pranshul beside a modular spatial-computing workbench" />
+        </figure>
       </div>
     </header>
 
-    <section class="career-acts" aria-labelledby="career-acts-title">
-      <header><h2 id="career-acts-title">The medium changed. The questions compounded.</h2></header>
+    <section class="career-acts operating-atlas" aria-labelledby="career-acts-title" data-operating-atlas>
+      <header>
+        <div>
+          <h2 id="career-acts-title">How I got here.</h2>
+        </div>
+        <figure class="career-acts__inventory" data-equipment-inventory data-motion-reveal>
+          <img src="/media/generated/identity/2600th-equipment-inventory.webp" width="1600" height="900" loading="lazy" alt="Spatial-computing and prototyping equipment arranged as a working inventory" />
+        </figure>
+      </header>
       <ol>
-        <li>
-          <span>Act I · Programmer</span>
-          <h3>Make the idea playable.</h3>
-          <p>The career began in games: turning design intent into responsive systems, learning the discipline of real-time performance, and shipping work across changing platforms.</p>
+        <li data-motion-reveal>
+          <span>Game development</span>
+          <h3>Starting with games.</h3>
+          <p>I started as a game programmer. Working on mobile games taught me to care about how software feels: the controls, the feedback, and whether it runs well on the device someone actually owns. Later, at Merkur, I worked on cross-platform Unity development.</p>
           <p><a href="/work/the-brutal-spy/">The Brutal Spy</a> · <a href="/work/alphaman/">Alphaman</a> · <a href="/work/merkur-magie/">Merkur Magie</a></p>
         </li>
-        <li>
-          <span>Act II · Founder</span>
-          <h3>Make the new medium useful.</h3>
-          <p>GreyKernel widened the frame from games to company-building, immersive learning, simulation, robotics, direct enterprise production for JPMorgan Chase and Anglian Water, and a Nazara-distributed Chhota Bheem release.</p>
+        <li data-motion-reveal>
+          <span>Co-founder and CTO</span>
+          <h3>Building GreyKernel.</h3>
+          <p>I co-founded GreyKernel in 2015 and led its technology work for six years. We built immersive learning systems and games, helped set up JPMorgan Chase’s Mumbai immersive lab, and developed training software for Anglian Water. I also learned how much of a founder’s work happens outside the code.</p>
           <p><a href="/work/greykernel/">GreyKernel</a> · <a href="/work/enterprise-immersive-systems/">Enterprise XR</a> · <a href="/work/mysticmojo/">MysticMojo + Nazara</a></p>
         </li>
-        <li>
-          <span>Act III · Operator</span>
-          <h3>Make emerging technology survive production.</h3>
-          <p>Design software, real-time visualization, and production AI brought the earlier instincts together: connect the technical possibility to a real workflow, a team, and a system that can be operated.</p>
-          <p><a href="/work/homelane-spacecraft-pro/">SpaceCraft Pro</a> · <a href="/work/blocks-inco-ai/">Blocks + designesto.ai</a> · <a href="/work/kinema/">Kinema</a></p>
+        <li data-motion-reveal>
+          <span>Product and technology</span>
+          <h3>Working on design software.</h3>
+          <p>At HomeLane, I worked on SpaceCraft Pro as principal software architect. Today I lead product and technology work on Blocks with our product, engineering and design teams. Designesto focuses on visual exploration and revision, with deeper costing and execution integration still on the roadmap. I also built the initial PropVR AI MVP that PropVR’s team developed into Craft. Outside work, I keep experimenting with browser graphics, games and local AI.</p>
+          <p><a href="/work/homelane-spacecraft-pro/">SpaceCraft Pro</a> · <a href="/work/blocks/">Blocks</a> · <a href="/work/designesto/">Designesto</a> · <a href="/work/propvr-ai-craft/">PropVR AI → Craft</a></p>
         </li>
       </ol>
+    </section>
+
+    <section class="about-grid" aria-labelledby="contribution-title">
+      <div><h2 id="contribution-title">What I mean by building.</h2></div>
+      <div class="prose">
+        <p>My work moves between product direction, technical architecture, prototypes and implementation. The balance changes with the project. Leading a team does not mean I wrote every part of its software, and a prototype I built is not the same thing as the production platform a team developed from it.</p>
+        <p>I name those boundaries on the Work pages. My independent projects in the <a href="/lab/">Lab</a> are where I can try an idea, inspect the result and share the code.</p>
+        <p>2600th is an old handle from my college-era interest in hacker and phreaking culture. It stuck.</p>
+      </div>
+    </section>
+
+    <section class="about-grid tools-in-use" aria-labelledby="tools-title">
+      <div><h2 id="tools-title">Tools in use.</h2></div>
+      <dl>
+        <div><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
+        <div><dt>Applied AI</dt><dd>OpenAI and Gemini for <a href="/notes/ai-floorplan-parsing/">floorplan interpretation</a>, with ComfyUI for repeatable <a href="/notes/ai-video-control/">image and video experiments</a>.</dd></div>
+        <div><dt>Product prototypes</dt><dd>Next.js, Tailwind CSS, AI SDK and fal.ai formed part of the initial <a href="/work/propvr-ai-craft/">PropVR AI MVP</a>. That describes the foundation I built, not the current Craft platform’s stack.</dd></div>
+      </dl>
     </section>
 
     <section class="about-grid" aria-labelledby="patent-title">
       <div><h2 id="patent-title">Humanoid Robot Control System</h2></div>
       <div class="prose">
-        <p>Indian Patent No. 395331 was granted on 25 April 2022 for work filed on 14 February 2019. The invention concerns translating tracked human motion into humanoid robot control.</p>
-        <p>The patent is held by GreyKernel Technologies India Pvt Ltd and names Pranshul Chandhok with Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh as inventors.</p>
-        <p><a href="/work/humanoid-robot-control-system/">Open the public patent record ↗</a></p>
+        <p>At GreyKernel, I co-invented a system for controlling a humanoid robot using tracked human movement. Indian Patent No. 395331 was filed on 14 February 2019 and granted on 25 April 2022.</p>
+        <p>My co-inventors are Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh. GreyKernel Technologies India Pvt Ltd holds the patent.</p>
+        <p><a href="/work/humanoid-robot-control-system/">Read about the robot control system ↗</a></p>
       </div>
     </section>
 
     <section class="about-grid" aria-labelledby="principles-title">
-      <div><h2 id="principles-title">Four durable preferences.</h2></div>
+      <div><h2 id="principles-title">How I work.</h2></div>
       <ol class="principles">
-        <li><span><strong>Make the claim testable.</strong><br />A product story gets stronger when the evidence is easy to inspect.</span></li>
-        <li><span><strong>Keep strategy close to implementation.</strong><br />The fastest way to improve a plan is often to encounter the system it depends on.</span></li>
-        <li><span><strong>Treat reliability as product design.</strong><br />Performance, evaluation, fallbacks, and operational clarity shape the experience.</span></li>
-        <li><span><strong>Use the new medium on its own terms.</strong><br />AI and spatial systems need native interaction models, not an old interface with new vocabulary.</span></li>
+        <li><span><strong>Try the idea.</strong><br />I often build a small prototype to answer a question. It gives the team something concrete to discuss.</span></li>
+        <li><span><strong>Stay close to implementation.</strong><br />I test tools and read the code before recommending them. Their limits matter as much as their capabilities.</span></li>
+        <li><span><strong>Pay attention when it breaks.</strong><br />Slow responses, memory limits, and confusing controls tell me where more work is needed.</span></li>
+        <li><span><strong>Use AI where it helps.</strong><br />Sometimes a deterministic rule or a database query is the better choice. Some decisions still need a person.</span></li>
       </ol>
     </section>
 
-    <section class="about-grid" aria-labelledby="conversation-title">
-      <div><h2 id="conversation-title">Bring the awkward problem.</h2></div>
-      <div class="prose">
-        <p>Operator and advisory work, product collaboration, selective leadership opportunities, speaking, writing, or a serious technical conversation.</p>
-        <p><a class="button-link button-link--primary" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Opportunity for Pranshul Chandhok')}`}>Discuss an opportunity ↗</a></p>
-      </div>
-    </section>
   </div>
 </BaseLayout>
 
 <style>
   .career-acts { padding-block: clamp(4rem, 9vw, 8rem); border-top: 1px solid var(--line); }
-  .career-acts > header { display: grid; grid-template-columns: 1fr; margin-bottom: clamp(3rem, 7vw, 6rem); }
+  .about-opening__copy { position: relative; z-index: 3; max-width: 34rem; }
+  .about-opening__copy p:not(.route-opening__context) { max-width: 34ch; color: var(--warm); font-size: clamp(1rem, 1.5vw, 1.3rem); line-height: 1.45; text-shadow: 0 2px 30px #030405; }
+  .about-opening__diorama { position: absolute; inset: 0; z-index: 0; margin: 0; overflow: hidden; }
+  .about-opening__diorama::after { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(3 4 5 / 0.04) 25%, rgb(3 4 5 / 0.88) 82%), linear-gradient(90deg, rgb(3 4 5 / 0.15), rgb(3 4 5 / 0.6)); content: ''; }
+  .about-opening__diorama img { display: block; width: 100%; height: 108%; object-fit: cover; object-position: 52% center; filter: saturate(0.88) contrast(1.06); }
+  .route-opening--about .route-opening__negative { isolation: isolate; overflow: hidden; }
+
+  .career-acts > header { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(20rem, 0.72fr); align-items: end; gap: clamp(2rem, 6vw, 7rem); margin-bottom: clamp(3rem, 7vw, 6rem); }
   .career-acts h2 { max-width: 13ch; font-size: clamp(2.8rem, 6vw, 5.5rem); }
+  .career-acts__inventory { position: relative; margin: 0; border: 1px solid var(--line); background: #06080b; overflow: hidden; }
+  .career-acts__inventory::before { position: absolute; inset: 0; z-index: 1; border: 1px solid rgb(49 94 245 / 0.22); content: ''; pointer-events: none; }
+  .career-acts__inventory img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
   .career-acts ol { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
-  .career-acts li { display: grid; padding: clamp(2rem, 5vw, 4rem) 0; grid-template-columns: 0.32fr 0.75fr 1fr; gap: clamp(1.5rem, 4vw, 5rem); border-bottom: 1px solid var(--line); }
+  .career-acts li { position: relative; display: grid; padding: clamp(2rem, 5vw, 4rem) 0; grid-template-columns: 0.32fr 0.75fr 1fr; gap: clamp(1.5rem, 4vw, 5rem); border-bottom: 1px solid var(--line); }
+  .career-acts li::before { position: absolute; top: -4px; left: 0; width: 7px; height: 7px; border: 1px solid var(--cobalt-bright); border-radius: 50%; background: var(--velvet); box-shadow: 0 0 18px rgb(49 94 245 / 0.55); content: ''; }
   .career-acts li > span { color: var(--signal); font-size: 0.72rem; font-weight: 720; }
   .career-acts h3 { margin: 0; font-size: clamp(1.7rem, 3.5vw, 3.3rem); }
   .career-acts li p { max-width: 55ch; color: var(--text-muted); font-size: 0.9rem; }
   .career-acts li p:last-child { grid-column: 3; margin: 0; }
+  .tools-in-use dl { margin: 0; }
+  .tools-in-use dl > div { padding-block: 1.25rem; border-top: 1px solid var(--line); }
+  .tools-in-use dt { margin-bottom: 0.5rem; color: var(--warm); font-weight: 700; }
+  .tools-in-use dd { max-width: 60ch; margin: 0; color: var(--muted); line-height: 1.6; }
+  .tools-in-use a { color: var(--warm); text-underline-offset: 0.2em; }
+  @media (max-width: 64rem) {
+    .about-opening__diorama img { object-position: 52% top; }
+  }
   @media (max-width: 50rem) {
     .career-acts > header,
     .career-acts li { grid-template-columns: 1fr; }
     .career-acts li p:last-child { grid-column: 1; }
+    .about-opening__diorama img { object-position: 46% top; }
   }
+
 </style>

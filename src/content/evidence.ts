@@ -1,4 +1,4 @@
-export const RECORD_TYPES = ['feature', 'case', 'evidence-note'] as const;
+export const RECORD_TYPES = ['feature', 'case', 'narrative', 'evidence-note'] as const;
 export const EVIDENCE_STATUSES = [
   'public-approved',
   'public-corroborated',
@@ -14,7 +14,7 @@ export const CAREER_DOMAINS = [
   'applied-ai',
 ] as const;
 export const ENGAGEMENT_PATHS = [
-  'operator-advisory',
+  'product-leadership',
   'product-collaboration',
   'speaking-writing',
 ] as const;

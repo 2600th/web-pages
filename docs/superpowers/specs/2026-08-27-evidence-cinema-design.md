@@ -1,5 +1,7 @@
 # Evidence Cinema Design Specification
 
+> Historical document. Retained for design and implementation history; checklists, counts, and code paths below describe the work at that time. Do not treat them as current instructions or a pending backlog. Use [current documentation](../../README.md) and [DESIGN.md](../../../DESIGN.md) for maintenance.
+
 **Status:** Approved for implementation
 
 **Date:** 2026-08-27

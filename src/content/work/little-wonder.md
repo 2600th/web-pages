@@ -1,7 +1,7 @@
 ---
 title: Little Wonder
 slug: little-wonder
-summary: A playful AI storybook generator that turns a child’s ideas and drawings into a personal illustrated story, designed as a small product for a real family need.
+summary: I built Little Wonder to help a child turn ideas and drawings into an illustrated storybook, with a cover and a printable PDF.
 yearStart: 2025
 yearEnd: 2026
 status: Public personal product
@@ -22,12 +22,16 @@ evidenceStatus: public-approved
 publicClaims:
   - The public product, authored launch post, and authored technical article support this description.
 engagementPath: product-collaboration
+storyLabel: PERSONAL PRODUCT
+storyHeading: Make the child the hero, not the prompt engineer.
 heroLabel: Live first-party product
 heroMedia:
-  src: /media/work/little-wonder/hero.webp
+  src: /media/generated/editorial/enhanced/little-wonder-hero-v2.webp
+  avif: /media/generated/editorial/enhanced/little-wonder-hero-v2.avif
+  label: Little Wonder · A storybook workspace for a child’s ideas and drawings.
   alt: Little Wonder storybook generator landing screen with a child character and floating creative tools
-  width: 1280
-  height: 720
+  width: 1600
+  height: 900
 sources:
   - label: Live Little Wonder product
     url: https://little-wonder.vercel.app/
@@ -44,6 +48,6 @@ seo:
   socialImage: /media/work/little-wonder/hero.webp
 ---
 
-Little Wonder began with a specific audience and a specific person: a child who wanted to make stories, not learn a prompt interface. The product wraps generative AI in a playful creative process built around choosing, drawing, imagining, and seeing a story take shape.
+I built Little Wonder around a child’s wish to make stories. It turns classic public-domain tales into personalised illustrated books with the child as the hero. The book includes a custom cover and comic-style pages, and can be downloaded as a print-ready PDF from the browser.
 
-It is intentionally small, personal, and public. That combination makes it useful evidence of a broader product instinct: start with the human ritual, then make the AI disappear into the experience.
+I wanted the choices to feel familiar to a child. Behind those choices, the software has to coordinate the text and illustrations while keeping the character recognisable from page to page. That consistency is a much more useful test than the quality of any single image.

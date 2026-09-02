@@ -1,25 +1,29 @@
 ---
-title: Revisiting an AI-native game development thesis
+title: What I’m revisiting in my 2023 essay on AI and games
 slug: ai-native-game-development-reflection
-summary: A 2026 reflection on a 2023 essay about language models, generated assets, NeRFs, AI animation, adaptive music, and in-engine tools for game production.
+type: field-note
+relatedWork: [kinema, ai-native-game-thesis]
+ogImage: /media/social/ai-native-game-development-reflection.webp
+summary: I wrote about AI in game development in 2023. Building with these tools has since made me more interested in revision, consistency, and what happens inside the editor.
 publishedAt: 2026-08-22
+updatedAt: 2026-09-02
 topics:
   - Applied AI
   - Game development
   - Production systems
 canonicalUrl: https://2600th.substack.com/p/revolutionizing-realms-how-ai-is
-sourceAttribution: Revisits an authored March 2023 Substack essay by Pranshul Chandhok
+sourceAttribution: A follow-up to my March 2023 essay on AI in game development.
 draft: false
 ---
 
-In March 2023 I wrote about language-model narratives, generated assets, NeRFs, AI animation, adaptive music, and assistance inside game-development tools. The useful part of revisiting that essay is not asking whether every prediction scored a point. It is seeing where the difficult product work moved.
+In March 2023, I wrote about ways AI might fit into game development, from dialogue and generated assets to animation and tools inside the engine. I was excited by how much more a small team might be able to attempt.
 
-Generation became ordinary faster than integration did. Producing an image, line of dialogue, animation fragment, or code suggestion is now the easy-to-demonstrate step. A production system still has to preserve intent across iterations, respect constraints, expose control at the right level, keep provenance legible, and deliver an asset that survives the next tool in the pipeline.
+I’m still excited by that. But after spending more time building with AI, I pay much more attention to the second change someone asks for. Can I alter one part of a scene without losing the rest? Can I get back to a version I liked? Does the generated asset behave properly once it is in the engine?
 
-The most important unit is therefore not the model output. It is the loop between a person, the model, the editor, and the rest of production.
+Those are familiar development problems with some new failure modes. A character needs to stay recognisable across shots. A texture has to fit the material. Code that looks plausible still needs to run with the rest of the project.
 
-That changes how I think about AI-native tools. They should not merely place a prompt box beside an old workflow. They can help people work at different levels of abstraction: directing a world, inspecting a system, changing a local detail, comparing alternatives, and returning to a known state. But each new layer of agency also needs better evaluation and clearer boundaries.
+This is part of what I’m exploring with Kinema: keeping the game, editor, and scripting tools together in a browser. I want to make it easier to try a change and see what it does. It is an active experiment, not a finished answer to AI-assisted game development.
 
-My current browser experiments reinforce this. Even when AI accelerates implementation, the final experience is governed by movement, frame time, input, composition, compatibility, and dozens of decisions that only become visible through use. AI changes the economics of making; it does not eliminate the craft of finishing.
+My ocean and flight experiments have been useful reminders too. AI helped me build quickly, but I still had to work on controls, performance, loading, and how the experience felt on different devices.
 
-The 2023 essay captured the direction. The present question is more demanding: how do we build creative systems that remain controllable, inspectable, and genuinely worth using after the demonstration ends?
+If I were writing the essay today, I would spend less time listing what models could generate and more time on how a developer could keep editing the result.

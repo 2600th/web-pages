@@ -3,42 +3,34 @@ import type { WorkEntry } from '../../content/schemas';
 
 interface Props {
   sources: WorkEntry['sources'];
-  reviewedEvidence?: WorkEntry['reviewedEvidence'];
 }
 
-const { sources, reviewedEvidence = [] } = Astro.props;
+const { sources } = Astro.props;
+const sourceTypeLabels: Record<WorkEntry['sources'][number]['type'], string> = {
+  repository: 'Code',
+  'live-demo': 'Try it',
+  'authored-post': 'My write-up',
+  'employer-post': 'Company post',
+  'shared-archive': 'Project media',
+  press: 'Press coverage',
+  'official-source': 'Official source',
+  'company-profile': 'Company profile',
+  'app-directory': 'App listing',
+};
 ---
 
-<section class="evidence-sources" data-evidence-surface aria-labelledby="evidence-title">
+<section class="evidence-sources" data-project-sources aria-labelledby="project-sources-title">
   <div class="evidence-sources__heading">
-    <p class="evidence-sources__label">Source ledger</p>
-    <h2 id="evidence-title">{reviewedEvidence.length > 0 ? 'Evidence, with boundaries' : 'Public evidence'}</h2>
+    <p class="evidence-sources__label">Go deeper</p>
+    <h2 id="project-sources-title">Sources and links</h2>
   </div>
-  {reviewedEvidence.length > 0 && (
-    <div class="evidence-sources__reviewed">
-      <header>
-        <h3>Privately reviewed evidence</h3>
-        <p>Claim-specific records were reviewed for this portfolio. They are described here without exposing correspondence, commercial terms, or private links.</p>
-      </header>
-      <ol>
-        {reviewedEvidence.map((evidence) => (
-          <li>
-            <div><strong>{evidence.title}</strong><span>{evidence.organization} · {evidence.date.toISOString().slice(0, 10)}</span></div>
-            <small>{evidence.type}</small>
-            <p>{evidence.note}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  )}
-  {reviewedEvidence.length > 0 && <h3 class="evidence-sources__public-title">Public corroboration</h3>}
   <ul>
     {sources.map((source, index) => (
       <li>
         <a href={source.url} target="_blank" rel="noreferrer">
           <span>{String(index + 1).padStart(2, '0')}</span>
           <strong>{source.label}</strong>
-          <small>{source.type.replaceAll('-', ' ')}</small>
+          <small>{sourceTypeLabels[source.type]}</small>
           <span aria-hidden="true">↗</span>
         </a>
       </li>
@@ -60,43 +52,6 @@ const { sources, reviewedEvidence = [] } = Astro.props;
   .evidence-sources h2 {
     max-width: none;
   }
-
-  .evidence-sources__reviewed {
-    display: grid;
-    grid-template-columns: minmax(14rem, 0.7fr) 1.5fr;
-    gap: clamp(1.5rem, 4vw, 4rem);
-    margin: 2rem 0 3rem;
-    padding: clamp(1.25rem, 3vw, 2rem) 0;
-    border: 1px solid rgba(255, 255, 255, 0.48);
-    border-color: var(--line-strong);
-  }
-
-  .evidence-sources__reviewed h3,
-  .evidence-sources__reviewed p { margin: 0; }
-
-  .evidence-sources__reviewed header > p {
-    margin-top: 0.75rem;
-    color: var(--text-muted);
-    font-size: 0.82rem;
-  }
-
-  .evidence-sources__reviewed ol { margin: 0; padding: 0; list-style: none; }
-
-  .evidence-sources__reviewed li {
-    display: grid;
-    grid-template-columns: minmax(12rem, 0.8fr) auto 1.2fr;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-top: 1px solid var(--line);
-  }
-
-  .evidence-sources__reviewed li:first-child { border-top: 0; padding-top: 0; }
-  .evidence-sources__reviewed li > div { display: grid; gap: 0.2rem; }
-  .evidence-sources__reviewed li span,
-  .evidence-sources__reviewed li small { color: var(--text-muted); font-size: 0.68rem; }
-  .evidence-sources__reviewed li > p { font-size: 0.78rem; }
-
-  .evidence-sources__public-title { margin: 0 0 0.9rem; font-size: 1rem; }
 
   .evidence-sources ul {
     padding: 0;
@@ -124,9 +79,6 @@ const { sources, reviewedEvidence = [] } = Astro.props;
   }
 
   @media (max-width: 40rem) {
-    .evidence-sources__reviewed { grid-template-columns: 1fr; }
-    .evidence-sources__reviewed li { grid-template-columns: 1fr; gap: 0.4rem; }
-
     .evidence-sources a {
       grid-template-columns: 2rem 1fr auto;
     }

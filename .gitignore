@@ -5,6 +5,17 @@ dist/
 coverage/
 playwright-report/
 test-results/
+.superpowers/
+docs/research/
+.impeccable/.impeccable/
+.cache/
+.vite/
+*.tsbuildinfo
+*.log
+playwright.*.local.config.*
+.env
+.env.*
+!.env.example
 public/lab/terminal/ico/Thumbs.db
 _media-source/*
 !_media-source/.gitkeep

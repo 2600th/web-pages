@@ -1,7 +1,7 @@
 ---
 title: Safed Sagar
 slug: safed-sagar
-summary: A browser-native fictional reconnaissance flight experience inspired in tone by Operation Safed Sagar, built as a compact experiment in authored atmosphere, flight systems, and AI-assisted production.
+summary: I built a fictional MiG-21-inspired reconnaissance flight for the browser, with mountain terrain, flight instruments, and a photography mission. It uses AI-assisted development.
 yearStart: 2026
 status: Public browser experiment
 role: Creator and engineer
@@ -22,35 +22,41 @@ publicClaims:
   - The public repository and authored launch material support the visible product and technical description.
 engagementPath: product-collaboration
 heroMedia: &hero
-  src: /media/work/safed-sagar/hero.webp
+  src: /media/generated/editorial/enhanced/safed-sagar-hero-v2.webp
+  avif: /media/generated/editorial/enhanced/safed-sagar-hero-v2.avif
+  label: Safed Sagar · Flying above the mountains in a fictional reconnaissance mission.
   alt: Safed Sagar MiG-21 flying through a snowy high-altitude mountain environment
   width: 1600
   height: 900
 out:
-  thesis: A compact browser experience can carry flight, atmosphere, mission structure, and historical respect without requiring an install or a conventional game-engine download.
-  audience: Players and builders interested in authored real-time experiences delivered directly through the web.
+  thesis: A reconnaissance flight you can try in a browser.
+  audience: Players interested in flight experiences, and developers exploring browser games.
   outcome: A public fictional reconnaissance sortie where the player navigates mountain terrain and photographs positions from a MiG-21-inspired aircraft.
   media: *hero
 near:
-  experience: The player flies through snowy terrain, reads flight instruments, searches broad sectors, frames reconnaissance photographs, and completes a seeded sortie with keyboard, gamepad, or touch controls.
-  contribution: Directed and built the browser experience, flight and mission systems, terrain and atmosphere pipeline, adaptive quality behavior, interaction design, and verification tools.
-  system: A Three.js application combines a flight model, assist modes, GPU effects, geometric terrain, volumetric atmosphere, mission scoring, adaptive resolution, and a testable development harness.
+  experience: Fly through the mountains and photograph the mission’s targets.
+  contribution: I designed and built the flight experience, including the mission systems, terrain, controls, and adaptive graphics settings. I used AI-assisted development and added tools to test the result.
+  system: The Three.js application combines a flight model with procedural terrain and atmospheric effects. It supports keyboard, gamepad, and touch controls, with assist modes and adaptive resolution for different devices.
   media:
-    src: /media/work/safed-sagar/near.webp
+    src: /media/generated/editorial/enhanced/safed-sagar-near-v2.webp
+    avif: /media/generated/editorial/enhanced/safed-sagar-near-v2.avif
+    label: Safed Sagar · Finding a mission target through the reconnaissance camera.
     alt: Safed Sagar reconnaissance optic framing a target in snowy mountain terrain
     width: 1600
     height: 900
 inside:
   decisions:
     - Make objective positions discoverable through sectors and range bands instead of exposing exact bearings before visual acquisition.
-    - Tie adaptive resolution and quality tiers to measured cost so lower-power devices retain the experience rather than a frozen visual target.
+    - Adjust resolution and visual quality according to rendering cost so the flight remains responsive on lower-power devices.
     - Keep remembrance separate from scoring and state clearly that the work is fictional and not affiliated with India’s armed forces.
   constraints:
     - The experience must communicate respectfully while using fictional callsigns, positions, events, and no official insignia.
   evidence:
-    - The public repository documents the architecture, accessibility modes, performance target, test count, credits, changelog, and historical disclaimer.
+    - The project is available to play in the browser. Its repository includes controls, accessibility options, development instructions, and asset credits.
   media:
-    src: /media/work/safed-sagar/inside.webp
+    src: /media/generated/editorial/enhanced/safed-sagar-inside-v2.webp
+    avif: /media/generated/editorial/enhanced/safed-sagar-inside-v2.avif
+    label: Safed Sagar · Flight instruments and controls over the mountain landscape.
     alt: Safed Sagar cockpit interface with flight instruments over the mountain landscape
     width: 1600
     height: 900
@@ -67,6 +73,8 @@ seo:
   socialImage: /media/work/safed-sagar/hero.webp
 ---
 
-Safed Sagar began with a tight creative constraint: open a browser and fly a reconnaissance mission through a high-altitude landscape. The build treats controls, mission legibility, terrain light, performance, and sound as one authored experience.
+After watching *Operation Safed Sagar*, I wanted to try building a high-altitude reconnaissance flight in the browser. Within a few days, I had an experiment running. The player flies a MiG-21-inspired aircraft through mountain terrain and uses a camera to photograph positions.
+
+I spent time on the controls and on making the search understandable. Targets are described through sectors and range bands, so the player has to look for them. Graphics settings adapt to the device rather than assuming everyone has the same GPU.
 
 The project is explicitly a work of fiction. It is not affiliated with or endorsed by the Indian Air Force, Indian Army, Ministry of Defence, or any broadcaster. Its public documentation keeps remembrance separate from score.

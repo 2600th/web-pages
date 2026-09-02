@@ -1,0 +1,11 @@
+{
+  "createdAt": "2026-09-01T23:33:23+05:30",
+  "generator": "OpenAI built-in image generation",
+  "classification": "generated editorial illustration",
+  "evidenceUse": false,
+  "sourceInput": "/media/work/enterprise-immersive-systems/facility-poster.webp",
+  "sourceGeneration": "_media-source/generated/landing/enterprise-xr-poster-v2.png",
+  "generationReceipt": "exec-ca50a915-c2cf-47d6-8aa7-22db0fab5238",
+  "prompt": "Preserve the recognizable clean electronics production facility from the source: the bright rectilinear room, ceiling-light grid, white equipment lines, machine geometry, signal towers, foreground operator, and deep production-floor perspective. Re-render the same facility as a premium cinematic enterprise-XR editorial frame with improved material clarity and depth, a subtle cobalt spatial route, and sparse warm solar-gold orientation nodes. Do not invent client identity or outcomes. No logos, readable machine labels, text, watermark, dashboards, floating screens, or sci-fi holograms.",
+  "derivation": "1600 by 900 WebP derivative; quality 82; generated PNG source preserved separately. The authentic facility walkthrough remains the playback layer."
+}

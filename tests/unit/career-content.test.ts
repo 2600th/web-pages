@@ -51,6 +51,56 @@ function readWorkRecords() {
 }
 
 describe('career work model', () => {
+  it('accepts independent press as a public evidence source', () => {
+    const entry = workSchema.parse({
+      ...evidenceNote,
+      sources: [
+        {
+          label: 'Independent product coverage',
+          url: 'https://example.com/product-coverage',
+          type: 'press',
+        },
+      ],
+    });
+
+    expect(entry.sources[0].type).toBe('press');
+  });
+
+  it('accepts first-party institutional records as official sources', () => {
+    const entry = workSchema.parse({
+      ...evidenceNote,
+      sources: [
+        {
+          label: 'Official programme report',
+          url: 'https://example.org/annual-report.pdf',
+          type: 'official-source',
+        },
+      ],
+    });
+
+    expect(entry.sources[0].type).toBe('official-source');
+  });
+
+  it('distinguishes company profiles and app directories from independent press', () => {
+    const entry = workSchema.parse({
+      ...evidenceNote,
+      sources: [
+        {
+          label: 'Company profile',
+          url: 'https://example.com/company-profile',
+          type: 'company-profile',
+        },
+        {
+          label: 'Archived app directory',
+          url: 'https://example.com/app-directory',
+          type: 'app-directory',
+        },
+      ],
+    });
+
+    expect(entry.sources.map((source) => source.type)).toEqual(['company-profile', 'app-directory']);
+  });
+
   it('accepts a sourced evidence note without invented case-study depth', () => {
     const entry = workSchema.parse(evidenceNote);
 
@@ -88,5 +138,24 @@ describe('career work model', () => {
     );
     expect(new Set(records.map((entry) => entry.careerOrder)).size).toBe(records.length);
     expect(records.every((entry) => entry.sources.length > 0)).toBe(true);
+  });
+
+  it('gives the first three historical records authentic public media', () => {
+    const records = readWorkRecords();
+    const requiredArchiveMedia = new Map([
+      ['the-brutal-spy', '/media/work/the-brutal-spy/trailer-poster.webp'],
+      ['alphaman', '/media/work/alphaman/gameplay-poster.webp'],
+      ['merkur-magie', '/media/work/merkur-magie/store-poster.webp'],
+    ]);
+
+    for (const [slug, expectedPath] of requiredArchiveMedia) {
+      const record = records.find((entry) => entry.slug === slug);
+      expect(record?.heroMedia?.src, slug).toBe(expectedPath);
+      expect(record?.sources.some((source) => /youtube\.com|play\.google\.com/.test(source.url)), slug).toBe(true);
+    }
+
+    const spacecraft = records.find((entry) => entry.slug === 'homelane-spacecraft-pro');
+    expect(spacecraft?.heroMedia?.src).toBe('/media/work/homelane-spacecraft-pro/public-demo-poster.webp');
+    expect(spacecraft?.sources.some((source) => source.url === 'https://www.youtube.com/watch?v=yDFFZskBKaA')).toBe(true);
   });
 });

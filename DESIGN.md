@@ -1,203 +1,180 @@
 ---
 name: Pranshul Chandhok / 2600th
-description: A positive-negative evidence system for an operator, advisor, and public builder.
+description: Velvet Reveal, a dark editorial portfolio for product and technology work.
+colors:
+  velvet: "#030405"
+  velvet-raised: "#0a0c0f"
+  velvet-soft: "#111419"
+  warm: "#edeae2"
+  muted: "#a8a7a1"
+  dim: "#898b85"
+  cobalt: "#315ef5"
+  cobalt-bright: "#6f8dff"
+  signal-blue-dark: "#244bd1"
+  gold: "#d6a248"
+  line: "rgb(237 234 226 / 0.16)"
+  line-strong: "rgb(237 234 226 / 0.32)"
+typography:
+  display:
+    fontFamily: "Mona Sans, sans-serif"
+    fontSize: "clamp(3.1rem, 8vw, 7rem)"
+    fontWeight: 730
+    lineHeight: 1.04
+    letterSpacing: "-0.035em"
+  headline:
+    fontFamily: "Mona Sans, sans-serif"
+    fontSize: "clamp(2.5rem, 5.4vw, 5.8rem)"
+    fontWeight: 730
+    lineHeight: 1.04
+    letterSpacing: "-0.035em"
+  title:
+    fontFamily: "Mona Sans, sans-serif"
+    fontSize: "clamp(1.55rem, 3vw, 3rem)"
+    fontWeight: 730
+    lineHeight: 1.04
+    letterSpacing: "-0.035em"
+  body:
+    fontFamily: "Mona Sans, sans-serif"
+    fontSize: "clamp(1rem, 0.32vw + 0.93rem, 1.16rem)"
+    fontWeight: 400
+    lineHeight: 1.58
+  navigation:
+    fontFamily: "Mona Sans, sans-serif"
+    fontSize: "0.67rem"
+    fontWeight: 680
+    letterSpacing: "0.1em"
+rounded:
+  square: "0"
+  circle: "50%"
+spacing:
+  page-gutter: "clamp(1rem, 3.2vw, 3.75rem)"
+  action: "0.7rem 1rem"
+components:
+  button-primary:
+    backgroundColor: "{colors.cobalt}"
+    textColor: "#fff"
+    rounded: "{rounded.square}"
+    padding: "{spacing.action}"
+  button-secondary:
+    backgroundColor: "transparent"
+    textColor: "{colors.warm}"
+    rounded: "{rounded.square}"
+    padding: "{spacing.action}"
+  back-to-top:
+    backgroundColor: "{colors.velvet}"
+    textColor: "{colors.warm}"
+    rounded: "{rounded.square}"
+    width: "3rem"
+    height: "3rem"
+  back-to-top-hover:
+    textColor: "{colors.gold}"
 ---
 
-<!--
-THESIS: One optical split turns Pranshul Chandhok's identity into the interface, then lets authentic work carry the argument.
-OWN-WORLD: Warm mineral paper, optical black, one cobalt signal, monumental Mona Sans, documentary media, and hard editorial planes.
-STORY: Identity -> operating thesis -> three decisive cases -> evidence trail -> public build -> notes -> conversation.
-FIRST VIEWPORT: A 50/50 positive-negative field, an image-filled PRANSHUL CHANDHOK crossing the boundary, a cobalt exposure line and handle, one lower-left action, and a visible generated-identity disclosure.
-FORM: Modern retro-futurism through optical systems and exposure, with hacker culture expressed as inspectable evidence rather than terminal decoration.
--->
+# Design system: Velvet Reveal
 
-# Design system: Positive / Negative
+## Overview
 
-## Creative north star
+**Creative North Star: "Velvet Reveal"**
 
-The site is an evidence-led identity system, not a resume grid and not a themed terminal. Its central gesture is a photographic positive/negative split: warm editorial paper on the left, optical black on the right, and a precise cobalt exposure line between them. Pranshul's name crosses that boundary as the largest object in the interface.
+A continuous velvet-black environment, warm editorial type, cobalt traces, and small gold accents frame the work. The opening character and short reveal establish the identity; project descriptions, images, and original recordings do the explaining.
 
-The result should feel engineered and authored at once—clear enough for an executive scan, unusual enough to be memorable, and deep enough for technical scrutiny. Retro-futurism comes from optical machinery, exposure, typography, and measured motion. Hacker culture comes from source-visible public work, factual ledgers, reproducible artifacts, and preserved archives.
+This is a personal portfolio, not a dashboard or a service-sales page. Reading and navigation remain available before animation starts. Motion adds atmosphere without becoming a gate.
 
-The approved visual authority is `.impeccable/mocks/clarity-round/32-positive-negative.png`. The production screenshots in `.impeccable/review/desktop.png`, `user-946.png`, and `mobile.png` document the implemented interpretation.
+**Key Characteristics:**
 
-## Experience principles
+- A continuous dark surface from header through footer.
+- Large readable headings, restrained labels, and generous image fields.
+- Square controls, thin rules, and a few circular character markers.
+- Optional motion over complete static content.
+- Scroll entrances must not hide text or links from the accessibility tree or keyboard navigation; use movement rather than visibility-based reveals for reading content.
+- Project-specific imagery and plain-language captions.
 
-1. **Identity is immediate.** The first viewport states the person, operating posture, and route into the work without requiring interaction.
-2. **Evidence does the persuasion.** Authentic media, precise claims, dates, sources, and public artifacts outrank decorative technology language.
-3. **One signal is enough.** Cobalt identifies exposure, focus, active state, or a compact primary action. It never becomes a large decorative surface.
-4. **Polarity creates rhythm.** Warm and black planes alternate deliberately; they are not generic cards placed on a background.
-5. **Depth remains inspectable.** Every interactive or cinematic presentation has semantic text, direct case links, and usable controls.
-6. **Play follows clarity.** The 2600th signature and console archive are present, but the operator proposition is always legible first.
+This document describes the current implementation. [Global styles](src/styles/global.css) and the active components are the implementation reference; update these tokens and [.impeccable/design.json](.impeccable/design.json) together when that implementation changes. Older [specs and plans](docs/superpowers/) retain historical decisions, not current instructions.
 
-## Palette and material
+## Colors
 
-The canonical tokens live in `src/styles/global.css`.
+### Primary
 
-- **Positive** `#f1f0ea`: the main warm-paper plane.
-- **Positive raised** `#fbfaf5`: a quiet highlight plane.
-- **Negative** `#080908`: the main optical-black plane.
-- **Negative raised** `#111210`: subtle depth on black.
-- **Signal cobalt** `#2457ff`: exposure line, focus, selected state, and compact action.
-- **Signal cobalt dark** `#173dcc`: pressed or strengthened signal.
-- **Graphite** `#4f514c`: secondary copy on positive planes.
-- **Fog** `#bfc0b9`: metadata and quiet lines on negative planes.
+Cobalt is the cool system accent. Cobalt bright supports focus and small interactive details; signal blue dark is a stronger state color. Keep these as accents rather than large page fills.
 
-Authentic project color is not normalized to the brand palette. Media is allowed to supply orange, aqua, skin tones, game color, and environmental texture. Avoid cobalt washes, gradient fog, glass panels, purple AI glow, and large blue footers.
+### Secondary
 
-Small text on negative planes uses warm white or fog for contrast. Cobalt remains a non-text marker unless the text size and contrast are demonstrably safe.
+Solar gold marks active underlines, small highlights, and hover feedback. It supplies warmth without becoming a second surface theme.
+
+### Neutral
+
+Velvet, raised velvet, and soft velvet provide quiet tonal separation. Warm is the main text color; muted supports paragraphs and dim supports low-emphasis metadata. Hairlines use the two line tokens. Project imagery keeps its own colors.
 
 ## Typography
 
-Use the locally hosted variable subset of **Mona Sans** for the complete system.
+Mona Sans is locally hosted with variable weight and width. The frontmatter records the shared heading and body defaults. Headings use an 88% stretch by default; signature lockups have their own responsive sizes and stretch settings. Do not apply one display setting indiscriminately to every section.
 
-- Display settings are wide, heavy, tightly tracked, and compact in line-height.
-- The hero name is monumental and may cross or crop against the viewport, but both names must remain recognizable.
-- Section statements use editorial scale and short measures rather than generic centered marketing headings.
-- Body copy is plain, direct, and measure-limited; utility labels are compact uppercase only where they aid scanning.
-- Do not add faux-code monospace or nostalgic pixel fonts to manufacture “hacker” atmosphere.
+Shared headings have a short measure (up to 22ch), balanced wrapping, and enough line height to keep letters separate. Body text stays left-aligned, with a reading measure up to 68ch. Do not fully justify paragraphs or use negative spacing to force text into a narrow column. Monospace is limited to short dates, indices, and utility labels.
 
-The mobile hero is independently composed as two large stacked lines. It is not a uniformly scaled desktop lockup.
+## Layout
 
-## Global layout
+The responsive gutter frames a maximum content width of 110rem. Wide pages use image and reading planes rather than a wall of equal cards. Long-form content uses a narrower measure.
 
-The page gutter is responsive, and wide layouts use the full editorial field rather than a narrow centered container. Hairlines and plane changes do most of the grouping; rounded card chrome and drop-shadow stacks are avoided.
+The homepage places copy and character in one stage. Interior openings stack as space tightens; image crops, metadata, and captions must remain inside their own layout cells. Homepage details live in the [surface brief](.impeccable/surfaces/velvet-reveal.md).
 
-### Desktop and wide screens
+The implementation has component-specific breakpoints. Interior layouts commonly change at 64rem; the shared header becomes two rows at 46rem. Work filters become a labeled native select in the compact layout. Verify desktop, intermediate widths, 390px, and 320px; include full-screen widths when changing hero geometry.
 
-- The homepage opens with an exact 50/50 split.
-- The name crosses the boundary and dominates the first viewport.
-- Positioning and the single **Explore the work** action sit in the lower-left positive plane.
-- Navigation remains peripheral on the negative plane.
-- Project chapters alternate copy and decisive media at cinematic scale.
-- The evidence trail, public build ledger, notes, and conversation close gradually reduce spectacle and increase scan density.
+## Elevation & Depth
 
-### 946px working viewport
+Depth comes primarily from tonal planes, photography, illustrations, and faint line work. Most interface containers stay flat. The shared plane shadow is reserved for elements that need separation, not every section. Hero grid lines and particles remain a low-contrast background after the opening reveal; they must not cover reading text or disappear because the viewport changes.
 
-This is a first-class composition, not a desktop afterthought. The split remains legible, the name retains scale, project media stays decisive, and ledger content remains readable without horizontal overflow.
+## Shapes
 
-### 390px and 320px
+Actions and reading planes are square, with thin borders or underlines. Circular shapes belong to the character hotspots and large background arcs. Do not introduce a rounded-card system or ornamental pills. Interactive hit areas should reach 44px where practical; the floating up arrow is 48px square.
 
-- The split hero remains a composed positive-negative field.
-- The generated-identity disclosure stays visible and contained.
-- Project chapters stack media and copy with no tiny desktop remnants.
-- Work filtering becomes a labeled native select.
-- All essential controls remain at least 44 CSS pixels where practical.
-- No action depends on hover, horizontal drag, landscape orientation, or pointer precision.
+## Components
 
-## Homepage sequence
+### Navigation and actions
 
-### PositiveNegativeHero
+Primary navigation is Home, Work, Notes, Lab, and About. Gold underlines indicate the active page and hover state. Social links and the preserved console remain footer destinations. The hero has exactly two actions, selected work and technical notes. Buttons use primary cobalt or a transparent secondary treatment, a subtle hover lift, and a visible cobalt-bright focus ring.
 
-The hero is the primary identity artifact. A cobalt boundary and eclipse-like handle suggest an exposure instrument. The image-filled name may respond to pointer, touch, or keyboard input, but the resting composition must already look finished. The label **Generated identity study** is mandatory wherever generated imagery contributes to the identity treatment.
+### Favicon
 
-There is one primary action in the first viewport: **Explore the work**. Additional conversation prompts belong later in the page.
+The approved 26 ligature pairs warm numerals sharing a diagonal with a cobalt slash on a square velvet field. It is a static identity mark, optically enlarged for browser tabs, with no font or external asset dependencies. `public/favicon.svg` is canonical; the existing icon builder derives the 32px ICO and 180px Apple icon. Keep the historical console's independent icon unchanged.
 
-### Operating thesis
+### Hero and hotspots
 
-“From ambiguity to an operable system.” is the bridge between identity and proof. It is intentionally quieter and gives the first project chapter room to arrive.
+The intro replays on full refresh; no visible Skip Intro control is rendered. Escape can settle the reveal. Grid and particles continue as ambient effects while the hero is visible, pause offscreen or when the document is hidden, and resume on return. Reduced-motion users receive the settled static composition.
 
-### Featured work
+Numbered character markers remain visible. Labels appear on hover or keyboard focus and can be pinned by click/tap. Anchor markers to the character, keep the first marker away from the face, and constrain labels at every supported width. Preserve the small 2600 line ornament. Current positioning is product and technology leader / builder.
 
-The three lead chapters are:
+### Project media and filters
 
-1. **Blocks + designesto.ai** — current product direction, always described as launching in 2026.
-2. **IRA VR** — classroom platform and immersive education evidence, using authentic Dalton/Newton material.
-3. **Enterprise XR** — production, training, simulation, hotel 360, research/water-solution, shipping training, and intergenerational learning where supported by evidence.
+Five selected-work cards use a dedicated media wrapper so play controls stay on the image when the layout stacks. Blocks and Craft use stills. Designesto, SpaceCraft Pro and Enterprise XR have original project recordings. Playback is explicit, silent, and backed by a poster. Approved editorial stills remain distinct from product evidence. The archive action reserves clearance from the floating up arrow, and role copy stays at least 13px.
 
-Media is user-controlled. Play controls are explicit; meaningful stills remain available; reduced motion never removes the underlying case link or explanation.
+Work filtering exposes links on larger screens and a labeled select on compact screens. Archive and domain lists prioritise selected current systems, then historical work. The archive has 19 visible records and an optional chronological sort. The useful old combined route stays outside primary lists. Case-study figures need a useful project or scene caption. Images already attached directly to a named card or introduction do not need redundant captions. Responsive WebP/AVIF derivatives keep consistent aspect ratios within each section.
 
-### Evidence, public build, and notes
+### Route openings and reading sections
 
-The proof index is a compact trail of dated work. The public-build section pairs designesto.ai positioning with a black source-visible ledger for Kinema, Web Ocean 3D, Safed Sagar, GitHub, and the console archive. Notes uses a reading-first index rather than article cards.
+Work, About, Notes, domain pages, and project pages share dark editorial planes. Image and text occupy separate space; metadata must not collapse into tiny parallel columns. About's portrait should retain headroom. Case-study copy explains the project, contribution, decisions, and result; internal provenance terminology is not a visitor-facing section scheme.
 
-### Conversation close
+### Contact and footer
 
-The close returns to a large positive/negative split. It names the kinds of problems Pranshul can help with and keeps email visible. The footer continues the same neutral system; it must never become a cobalt slab.
+The invitation is “Let’s compare notes.” Render it once in the shared footer, not again at the end of Home or About. Every primary page owns a native `#contact` destination and direct email link. Keep the conversational paragraph compatible with current employment, without soliciting competing consulting work. The footer continues the dark surface, contains the email and secondary links, and reserves clearance for the up arrow. Footer navigation links have at least 44px of width and height and wrap rather than crowding their neighbors.
 
-## Interior surfaces
+### Back to top
 
-### Work index
+The shared layout supplies a fixed bottom-right up arrow on primary pages. It appears after 300px of scrolling, not only in the footer. It uses a native `#page-top` link, safe-area offsets, warm default color, gold hover, and the shared focus ring. Without JavaScript it stays available; reduced motion uses immediate scrolling; print hides it. The historical console keeps its own interface.
 
-Work is an inspectable 17-record editorial archive. Desktop uses numbered rows, documentary thumbnails, precise status/year/domain metadata, and direct links. Below-fold media is lazy-loaded and must reveal cleanly under real scrolling. Mobile keeps the same records and uses a native domain select.
+## Do's and Don'ts
 
-### Case studies
+### Do
 
-Every case follows an explicit sequence:
+- Do preserve complete semantic content, direct links, and static posters without JavaScript.
+- Do verify keyboard interaction, reduced motion, readable contrast, and 320px containment.
+- Do preserve original media and record generated derivatives in internal provenance.
+- Do use first-person, factual copy and specific image captions.
+- Do keep the design documentation synchronized with the active components.
 
-1. Thesis
-2. Contribution
-3. System
-4. Evidence
-5. Sources
+### Don't
 
-Claims retain evidence boundaries and source provenance. Evidence areas are planar neutral surfaces, never full-cobalt panels. Generated media is not used as proof of shipped work.
-
-### Notes
-
-Notes is reading-first: strong title, date, compact summary, source attribution, narrow article measure, and a quiet path back to the archive.
-
-### About
-
-About is an operating dossier, not a generic biography. It connects enterprise immersive systems, product/operator work, public building, patents or recognition where verified, and a clear conversation route.
-
-### Lab and console archive
-
-Lab is a public-build ledger with source-visible experiments and authentic media. The former terminal site remains available at `/lab/terminal/index.html` as a preserved, noindex archive. Archive return actions must not obscure mobile content.
-
-### 404
-
-The error page is a concise split surface with an immediate return path. It should feel part of the system without becoming a novelty interaction.
-
-## Motion and interaction
-
-Motion behaves like a controlled optical instrument:
-
-- exposure shifts, local image reveals, and short plane transitions;
-- direct, fast feedback for play, theme, filter, and focus states;
-- no smooth-scroll hijacking, cursor replacement, inertial page chrome, or autoplay audio;
-- no animation may delay navigation or reading.
-
-With `prefers-reduced-motion: reduce`, remove spatial interpolation, parallax, and non-essential transform motion. Preserve static posters, semantic content, native controls, and short state feedback.
-
-## Media and provenance
-
-- Prefer original/public screenshots, product recordings, footage, diagrams, and approved archives.
-- Preserve originals; web assets are optimized derivatives with explicit dimensions and modern formats.
-- Meaningful images have useful alt text. Decorative identity layers are hidden from assistive technology.
-- Videos use posters and remain user-controlled.
-- Source, evidence status, and local derivative provenance live with the content records.
-- Generated imagery may support identity or illustration only when authentic media is unavailable or inappropriate. It must be labeled and must never imply a shipped product result.
-
-## Accessibility
-
-Target WCAG 2.2 AA.
-
-- Semantic landmarks and one descriptive `h1` per page.
-- Keyboard-complete navigation, media, theme, filtering, and disclosure behavior.
-- A visible skip link and high-contrast focus treatment.
-- Sufficient contrast on both polarities; no meaning conveyed by cobalt alone.
-- 320px containment and readable zoom behavior.
-- Static HTML retains the argument and every essential destination without JavaScript.
-
-## SEO and credibility
-
-The visual system is progressive enhancement over crawlable static pages. Preserve canonical metadata, sitemap, RSS, robots rules, social metadata, and structured data for the person, site, creative work, articles, and breadcrumbs. Public claims must remain factual, dated where relevant, and linked to sources. Do not invent metrics, clients, awards, testimonials, or launch status.
-
-## Performance
-
-- Static HTML is the baseline.
-- Use the local variable-font subset.
-- Keep below-fold media lazy and provide dimensions to protect layout stability.
-- Use responsive images, WebP/AVIF where useful, efficient MP4 loops, and poster fallbacks.
-- Hydrate only behavior that materially improves the experience.
-- Protect p75 targets: LCP below 2.5s, INP below 200ms, CLS below 0.1.
-
-## Anti-goals
-
-- No generic YC landing-page shell, bento resume grid, SaaS card wall, or skill meters.
-- No nostalgic CRT treatment on the primary portfolio.
-- No large blue footer or evidence panel.
-- No purple-blue AI gradients, blobs, excessive glass, or floating chrome.
-- No invented evidence, hidden contact route, pointer-only navigation, autoplay audio, or scroll-jacking.
-- No preservation of an old structure merely because it already exists; every surface must serve clarity, proof, and the approved positive-negative world.
+- Don't revive the retired theme switch, optical split hero, or interactive Career Atlas.
+- Don't add overlapping display letters, scroll-jacking, autoplay audio, or navigation delays.
+- Don't use generic gradients, decorative terminal logs, or an unrelated blue footer.
+- Don't present generated imagery as an authentic product screenshot or invent project claims.
+- Don't add internal labels such as “not project evidence” to visitor-facing images.

@@ -1,10 +1,10 @@
 ---
 title: Defense technology and simulation
 slug: defense-simulation-systems
-summary: At GreyKernel, Pranshul led defense training platforms spanning armoured vehicles, artillery, air defence, communications, and human-performance simulation.
+summary: At GreyKernel, I led the product and technical work on defense-training systems that combined simulation software with physical controls and instructor tools.
 yearStart: 2019
 yearEnd: 2021
-status: Selected defense-systems record
+status: Program portfolio
 role: Co-founder and CTO
 disciplines: [Defense technology, Training simulation, Real-time 3D, Hardware-software integration]
 visibility: public
@@ -16,10 +16,12 @@ careerOrder: 58
 relationships: [greykernel, enterprise-immersive-systems, humanoid-robot-control-system]
 evidenceStatus: public-corroborated
 publicClaims:
-  - The program portfolio included BLT T-72, Tunguska, LLLR, M777, T-90, Advanced Mannequin System, Radio Telephony, and Tata Safari simulation systems.
+  - The defense program portfolio included BLT T-72, Tunguska, LLLR, M777, T-90, Advanced Mannequin System, and Radio Telephony simulation systems.
   - The technical contribution connected custom hardware, IMU-driven tracking, sensor fusion, real-time sensor pipelines, VR and AR devices, instructor controls, and trainee evaluation.
   - Pranshul led product and systems architecture across simulation software, physical interfaces, domain workflows, and cross-functional delivery as GreyKernel's co-founder and CTO.
 engagementPath: product-collaboration
+storyLabel: SYSTEMS PROGRAM
+storyHeading: Training platforms where every subsystem had to behave as one.
 sources:
   - label: GreyKernel experience on LinkedIn
     url: https://www.linkedin.com/in/pranshulchandhok/details/experience/
@@ -27,30 +29,31 @@ sources:
   - label: From Pixels to Metaverse
     url: https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild
     type: authored-post
-heroLabel: Author's reconstruction from public career records · not client documentation
+heroLabel: Defense training systems atlas
 heroMedia:
-  src: /media/career/defense-simulation-systems/system-map.svg
-  alt: Author's visual reconstruction grouping eight defense programs around the recurring simulation and sensing capabilities described in public career records
+  src: /media/generated/editorial/defense-systems-atlas-v2.webp
+  avif: /media/generated/editorial/defense-systems-atlas-v2.avif
+  alt: Conceptual editorial cutaway of a simulator cab, instructor console, tracking rig, mannequin system, sensors, and evaluation station
   width: 1600
   height: 900
 seo:
   title: Defense technology and simulation — GreyKernel work
   description: Pranshul Chandhok's defense simulation work across T-72, T-90, M777, Tunguska, custom hardware, IMU tracking, sensors, XR, and instructor systems.
-  socialImage: /media/career/defense-simulation-systems/system-map.webp
+  socialImage: /media/generated/editorial/defense-systems-atlas-v2.webp
 ---
 
-At GreyKernel, defense technology became a serious systems practice rather than a sequence of headset demos. The work connected real-time simulation, physical controls, tracking and sensor input, instructor operations, and trainee assessment into complete training platforms.
+Our defense-training work at GreyKernel combined real-time simulation with physical controls and tracking hardware. Instructors needed to set up scenarios, run a session, and evaluate the trainee’s response. That shaped both the software and the equipment around it.
 
 ### Named programs
 
-- **Armoured and vehicle systems:** BLT T-72, T-90, and Tata Safari.
+- **Armoured systems:** BLT T-72 and T-90.
 - **Artillery and air-defence systems:** M777, Tunguska, and LLLR.
 - **Human-performance and communications systems:** Advanced Mannequin System and Radio Telephony.
 
-### The systems contribution
+### Connecting the hardware and software
 
-The technical layer joined custom hardware and physical interfaces with IMU-driven tracking, sensor fusion, real-time sensor pipelines, VR and AR devices, simulation runtimes, instructor controls, scenario workflows, and trainee evaluation. Reliability and repeatability mattered as much as visual fidelity because every subsystem had to behave as one training product.
+The systems used custom hardware, inertial motion tracking (IMU), and sensor data to drive the simulation. VR and AR devices were part of some setups. Instructor controls and evaluation tools sat alongside the trainee’s experience, so the response on screen had to stay consistent with the physical input.
 
-### Leadership scope
+### My role
 
-As co-founder and CTO, Pranshul worked across product definition, systems architecture, technical direction, hardware-software integration, real-time 3D delivery, and coordination with domain stakeholders. The recurring challenge was translating specialist training requirements into software and physical interfaces that instructors and trainees could operate coherently.
+As co-founder and CTO, I worked on product definition and systems architecture, led technical delivery, and coordinated with domain specialists. A large part of the job was understanding their training requirements well enough to turn them into usable software and physical interfaces.

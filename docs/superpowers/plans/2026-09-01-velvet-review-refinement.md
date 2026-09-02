@@ -1,5 +1,7 @@
 # Velvet Reveal Adversarial Review Refinement Implementation Plan
 
+> Historical document. Retained for design and implementation history; checklists, counts, and code paths below describe the work at that time. Do not treat them as current instructions or a pending backlog. Use [current documentation](../../README.md) and [DESIGN.md](../../../DESIGN.md) for maintenance.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Close the browser-review gaps with authentic archive media, disclosed editorial artwork, a responsive footer, visitor-facing copy, and one accessible GSAP motion system.

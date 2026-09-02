@@ -1,6 +1,6 @@
 ---
 interface Props {
-  media: { src: string; alt: string; width: number; height: number; mp4?: string; webm?: string };
+  media: { src: string; avif?: string; alt: string; width: number; height: number; mp4?: string; webm?: string };
   label: string;
   priority?: boolean;
 }
@@ -15,7 +15,14 @@ const { media, label, priority = false } = Astro.props;
       <source src={media.mp4} type="video/mp4" />
     </video>
   ) : (
-    <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
+    media.avif ? (
+      <picture>
+        <source type="image/avif" srcset={media.avif} />
+        <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
+      </picture>
+    ) : (
+      <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
+    )
   )}
   <figcaption>
     <span>{label}</span>
@@ -62,6 +69,8 @@ const { media, label, priority = false } = Astro.props;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
+
+  .project-media picture { display: block; }
 
   .project-media figcaption span { display: block; }
 

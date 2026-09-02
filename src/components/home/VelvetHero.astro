@@ -1,0 +1,321 @@
+---
+const domains = [
+  { label: 'AI products', target: 'glasses' },
+  { label: 'Immersive systems', target: 'harness' },
+  { label: 'Real-time 3D', target: 'boots' },
+];
+---
+
+<section class="velvet-hero" data-velvet-hero data-motion-scope data-cinematic-state="settled" aria-labelledby="velvet-title">
+  <div class="velvet-hero__atmosphere" aria-hidden="true"></div>
+  <div class="velvet-hero__copy">
+    <p class="velvet-hero__identity"><span>Product &amp; technology leader / builder</span></p>
+    <h1 id="velvet-title"><span data-hero-title-line>Make the uncertain</span><em data-hero-title-line>operable.</em></h1>
+    <p class="velvet-hero__thesis">I’m Pranshul Chandhok. I build product systems where applied AI, realtime 3D, and professional workflows meet. For 14+ years I’ve worked across games, XR, design software, and AI, leading teams while staying close to the systems themselves.</p>
+    <div class="velvet-hero__actions">
+      <a class="velvet-hero__action" href="#selected-work">View selected work <span aria-hidden="true">↘</span></a>
+      <a class="velvet-hero__action velvet-hero__action--secondary" href="/notes/">Read technical notes <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <div class="velvet-hero__figure-field" data-figure-art>
+    <div class="velvet-hero__figure" aria-hidden="true">
+      <div class="velvet-hero__halo"></div>
+      <picture>
+        <source media="(max-width: 640px)" srcset="/media/generated/identity/2600th-velvet-character-640.webp" />
+        <img src="/media/generated/identity/2600th-velvet-character.webp" width="960" height="1440" alt="" fetchpriority="high" />
+      </picture>
+    </div>
+
+    <ol class="velvet-hero__domains" aria-label="Operating domains">
+      {domains.map((domain, index) => (
+        <li data-domain-trace={domain.target}>
+          <details name="operating-domain">
+            <summary data-domain-marker={domain.target} role="button" aria-label={domain.label}>
+              <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            </summary>
+          </details>
+          <strong>{domain.label}</strong>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <div class="velvet-hero__status" aria-hidden="true"><span>2600</span><i></i></div>
+</section>
+
+<script>
+  import { initCinematicIntro } from '../../scripts/cinematic-intro';
+  let dispose = initCinematicIntro();
+  document.addEventListener('astro:before-swap', () => dispose(), { once: true });
+  document.addEventListener('astro:after-swap', () => { dispose = initCinematicIntro(); });
+</script>
+
+<style>
+  .velvet-hero {
+    position: relative;
+    display: grid;
+    min-height: max(46rem, 100svh);
+    grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
+    isolation: isolate;
+    overflow: hidden;
+    background: #030405;
+    color: #edeae2;
+  }
+
+  .velvet-hero::before {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(circle at 76% 48%, rgb(49 94 245 / 0.15), transparent 29rem),
+      linear-gradient(90deg, #030405 0 46%, rgb(3 4 5 / 0.9) 60%, #030405 100%);
+    content: '';
+  }
+
+  .velvet-hero::after {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: linear-gradient(90deg, transparent 0 54%, rgb(3 4 5 / 0.2) 72%, rgb(3 4 5 / 0.72) 100%);
+    content: '';
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  :global(canvas[data-cinematic-canvas]) {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .velvet-hero__atmosphere {
+    position: absolute;
+    inset: -15%;
+    z-index: -2;
+    opacity: 0.55;
+    background-image: radial-gradient(circle, rgb(214 162 72 / 0.38) 0 0.7px, transparent 0.9px);
+    background-size: 31px 31px;
+    mask-image: radial-gradient(circle at 70% 48%, #000, transparent 48%);
+  }
+
+  .velvet-hero__copy {
+    position: relative;
+    z-index: 6;
+    display: flex;
+    max-width: 62rem;
+    padding: clamp(8rem, 15vh, 12rem) 2rem clamp(5rem, 8vh, 7rem) var(--page-gutter);
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .velvet-hero__identity {
+    display: flex;
+    width: min(100%, 32rem);
+    align-items: center;
+    gap: 1.1rem;
+    margin: 0 0 clamp(1.75rem, 4vh, 3rem);
+    color: #a8a7a1;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .velvet-hero__identity::after { height: 1px; flex: 1; background: linear-gradient(90deg, rgb(237 234 226 / 0.35), transparent); content: ''; }
+  .velvet-hero__identity strong { color: #edeae2; font-weight: 720; }
+  .velvet-hero__identity span { color: #d6a248; }
+
+  .velvet-hero h1 {
+    max-width: 10ch;
+    margin: 0;
+    font-size: clamp(4.2rem, 6.9vw, 7rem);
+    font-stretch: 84%;
+    font-weight: 730;
+    letter-spacing: -0.03em;
+    line-height: var(--leading-display);
+    text-wrap: balance;
+  }
+
+  .velvet-hero h1 [data-hero-title-line] { display: block; }
+  .velvet-hero h1 em { color: transparent; font-style: normal; -webkit-text-stroke: 1px rgb(237 234 226 / 0.82); }
+
+  .velvet-hero__thesis {
+    max-width: 48ch;
+    margin: clamp(1.5rem, 4vh, 2.5rem) 0 0;
+    color: #a8a7a1;
+    font-size: clamp(1rem, 1.15vw, 1.15rem);
+    line-height: 1.58;
+  }
+
+  .velvet-hero__actions { display: flex; flex-wrap: wrap; gap: 0.6rem 1.8rem; margin-top: clamp(1.5rem, 4vh, 2.5rem); }
+  .velvet-hero__action {
+    display: inline-flex;
+    width: max-content;
+    min-height: 3rem;
+    align-items: center;
+    gap: 1.1rem;
+    border-bottom: 1px solid #d6a248;
+    color: #edeae2;
+    font-size: 0.7rem;
+    font-weight: 740;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .velvet-hero__action--secondary { border-bottom-color: rgb(237 234 226 / 0.32); }
+
+  .velvet-hero__action span { color: #d6a248; font-size: 1rem; transition: transform 180ms ease; }
+  .velvet-hero__action:hover span, .velvet-hero__action:focus-visible span { transform: translate(0.2rem, 0.2rem); }
+
+  .velvet-hero__figure-field {
+    position: absolute;
+    right: clamp(2rem, 6vw, 5.5rem);
+    bottom: -4.5rem;
+    height: min(92svh, 58rem);
+    aspect-ratio: 2 / 3;
+    transform-origin: 55% 100%;
+  }
+
+  .velvet-hero__figure { position: absolute; z-index: 2; inset: 0; transform-origin: 55% 100%; }
+  .velvet-hero__figure picture, .velvet-hero__figure img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
+  .velvet-hero__figure img { filter: drop-shadow(-2rem 1.4rem 3.8rem rgb(0 0 0 / 0.75)) saturate(0.82) contrast(1.08); }
+  .velvet-hero__halo { position: absolute; inset: 15% 5% 8% 10%; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgb(49 94 245 / 0.22), rgb(214 162 72 / 0.08) 35%, transparent 68%); filter: blur(26px); }
+
+  .velvet-hero__domains {
+    position: absolute;
+    z-index: 7;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    color: #a8a7a1;
+    font-size: 0.66rem;
+    font-weight: 670;
+    letter-spacing: 0.11em;
+    list-style: none;
+    pointer-events: none;
+    text-transform: uppercase;
+  }
+
+  .velvet-hero__domains li {
+    position: absolute;
+    z-index: 1;
+    width: 2.75rem;
+    height: 2.75rem;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+  }
+  .velvet-hero__domains li[data-domain-trace='glasses'] { top: 18%; left: 28%; }
+  .velvet-hero__domains li[data-domain-trace='harness'] { top: 34%; left: 40%; }
+  .velvet-hero__domains li[data-domain-trace='boots'] { top: 86%; left: 51%; }
+  .velvet-hero__domains details { position: relative; width: 100%; height: 100%; }
+
+  .velvet-hero__domains summary {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    place-items: center;
+    color: #edeae2;
+    cursor: pointer;
+    list-style: none;
+    opacity: 0.82;
+    touch-action: manipulation;
+  }
+
+  .velvet-hero__domains summary::-webkit-details-marker { display: none; }
+  .velvet-hero__domains summary::before {
+    position: absolute;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: 1px solid rgb(214 162 72 / 0.9);
+    border-radius: 50%;
+    background: #315ef5;
+    box-shadow: 0 0 0 0.28rem rgb(49 94 245 / 0.15), 0 0 1.3rem rgb(214 162 72 / 0.55);
+    content: '';
+  }
+
+  .velvet-hero__domains summary span { position: relative; z-index: 1; font-family: ui-monospace, monospace; font-size: 0.42rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .velvet-hero__domains summary:focus-visible { outline: 1px solid #d6a248; outline-offset: 0.15rem; }
+
+  .velvet-hero__domains li > strong {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    right: calc(100% + 0.6rem);
+    width: max-content;
+    max-width: min(12rem, calc(100vw - 3rem));
+    padding: 0.45rem 0.65rem;
+    border-top: 1px solid rgb(49 94 245 / 0.72);
+    background: rgb(3 4 5 / 0.94);
+    color: #edeae2;
+    font: inherit;
+    line-height: 1.2;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(0.55rem, -50%);
+    transition: opacity 180ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1), visibility 180ms;
+    visibility: hidden;
+    white-space: nowrap;
+  }
+
+  .velvet-hero__domains li > strong::after { position: absolute; top: -1px; left: 100%; width: 0.65rem; height: 1px; background: linear-gradient(90deg, rgb(49 94 245 / 0.72), rgb(214 162 72 / 0.35)); content: ''; }
+  .velvet-hero__domains details:hover + strong,
+  .velvet-hero__domains details:focus-within + strong,
+  .velvet-hero__domains details[open] + strong { opacity: 1; transform: translate(0, -50%); visibility: visible; }
+
+  .velvet-hero__status { position: absolute; z-index: 7; bottom: 2rem; left: var(--page-gutter); display: flex; width: min(20rem, 35vw); align-items: center; gap: 0.8rem; color: #686965; font-family: ui-monospace, monospace; font-size: 0.56rem; letter-spacing: 0.1em; }
+  .velvet-hero__status i { height: 1px; flex: 1; background: rgb(237 234 226 / 0.16); }
+
+  [data-cinematic-state='playing'] .velvet-hero__copy { animation: velvet-copy 1500ms 450ms both cubic-bezier(0.2, 0.75, 0.2, 1); }
+  [data-cinematic-state='playing'] .velvet-hero__figure { animation: velvet-figure 1900ms 700ms both cubic-bezier(0.16, 1, 0.3, 1); }
+  [data-cinematic-state='playing'] .velvet-hero__domains { animation: velvet-traces 900ms 1900ms both ease-out; }
+  @keyframes velvet-copy { from { opacity: 0; transform: translateY(1.5rem); filter: blur(8px); } }
+  @keyframes velvet-figure { from { opacity: 0; transform: translateX(4rem) scale(1.04); filter: blur(12px); } }
+  @keyframes velvet-traces { from { opacity: 0; transform: translateX(1rem); } }
+
+  @media (max-width: 64rem) {
+    .velvet-hero { min-height: max(44rem, 100svh); grid-template-columns: 1fr; }
+    .velvet-hero__copy { z-index: 6; width: 62%; justify-content: flex-start; padding-top: clamp(8rem, 14vh, 10rem); }
+    .velvet-hero h1 { max-width: 9ch; font-size: clamp(3.6rem, 9.5vw, 6rem); }
+    .velvet-hero__figure-field { right: -10rem; height: min(80svh, 48rem); }
+    .velvet-hero__figure { opacity: 0.72; }
+  }
+
+  @media (max-width: 42rem) {
+    .velvet-hero { min-height: 49rem; }
+    .velvet-hero::after { background: linear-gradient(180deg, transparent 55%, rgb(3 4 5 / 0.25) 100%); }
+    .velvet-hero__copy { width: auto; padding: 8.5rem var(--page-gutter) 28rem; justify-content: flex-start; }
+    .velvet-hero__identity { max-width: 34ch; gap: 0.65rem; margin-bottom: 1.75rem; font-size: 0.65rem; line-height: 1.5; }
+    .velvet-hero__identity::after { display: none; }
+    .velvet-hero h1 { max-width: 8ch; font-size: clamp(3.35rem, 16vw, 4.75rem); }
+    .velvet-hero__thesis { max-width: 39ch; font-size: 1rem; }
+    .velvet-hero__figure-field { right: -5rem; bottom: -1rem; height: 30rem; }
+    .velvet-hero__figure { opacity: 0.85; }
+    .velvet-hero__domains { font-size: 0.52rem; }
+    .velvet-hero__domains li[data-domain-trace='glasses'] { left: 58%; }
+    .velvet-hero__domains li > strong { right: auto; left: 50%; }
+    .velvet-hero__domains li[data-domain-trace='boots'] > strong { top: auto; bottom: calc(100% + 0.55rem); transform: translate(-50%, 0.4rem); }
+    .velvet-hero__domains li[data-domain-trace='harness'] > strong { top: calc(100% + 0.55rem); bottom: auto; left: calc(50% + 1.6rem); transform: translate(-50%, -0.4rem); }
+    .velvet-hero__domains li[data-domain-trace='glasses'] > strong { top: auto; right: -0.6rem; bottom: calc(100% + 0.55rem); left: auto; padding: 0.35rem 0.25rem; transform: translateY(0.4rem); }
+    .velvet-hero__domains li > strong::after { left: 50%; width: 1px; height: 0.55rem; background: linear-gradient(180deg, rgb(49 94 245 / 0.72), rgb(214 162 72 / 0.35)); }
+    .velvet-hero__domains li[data-domain-trace='boots'] > strong::after { top: 100%; }
+    .velvet-hero__domains li[data-domain-trace='harness'] > strong::after { top: auto; bottom: 100%; left: 30%; }
+    .velvet-hero__domains li[data-domain-trace='glasses'] > strong::after { top: 100%; right: 0.6rem; bottom: auto; left: auto; width: 1px; height: 0.55rem; background: linear-gradient(180deg, rgb(49 94 245 / 0.72), rgb(214 162 72 / 0.35)); }
+    .velvet-hero__domains details:hover + strong,
+    .velvet-hero__domains details:focus-within + strong,
+    .velvet-hero__domains details[open] + strong { transform: translate(-50%, 0); }
+    .velvet-hero__domains li[data-domain-trace='glasses'] details:hover + strong,
+    .velvet-hero__domains li[data-domain-trace='glasses'] details:focus-within + strong,
+    .velvet-hero__domains li[data-domain-trace='glasses'] details[open] + strong { transform: translateY(0); }
+    .velvet-hero__status { bottom: 1.35rem; display: flex; width: 10rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .velvet-hero *, .velvet-hero *::before, .velvet-hero *::after { animation: none !important; transition: none !important; }
+  }
+</style>
