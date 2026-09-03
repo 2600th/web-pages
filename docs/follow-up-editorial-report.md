@@ -47,3 +47,22 @@ Once the owner signs in:
 **Genuine media — deferred, not fabricated.** No new publication-approved source assets were supplied for the original 30-second AI-video experiment, its three-frame continuity sheet, a sanitized H3 graph screenshot, or a genuinely matched broken/corrected Ocean render pair. Existing text-only limitations remain. Add these only when tied to the described run or revision and cleared for publication.
 
 The prior deployed `17fb536` Pages artifact was preserved outside the repository and its SHA-256 matched GitHub's recorded digest before the new release. No repository settings, branches or worktrees were removed in this follow-up.
+
+## Final factual corrections — 3 September 2026
+
+Scope: the reviewer's *AI Game Thesis Final Corrections and Editorial Handoff*, based on deployed `99a291705ea2880c47733776152c18b8a872a7cc`. Only the reassessment, its claim ledger and this release record changed. No layout, navigation, media, historical Work body, Field Note or unrelated article was changed.
+
+- **Project Genie:** retained January's adult US Google AI Ultra context and added the [19 May official update](https://deepmind.google/blog/simulate-real-world-places-with-project-genie-and-street-view/): gradual global rollout to eligible adult Ultra subscribers, still an experimental research prototype. The [model page](https://deepmind.google/models/genie/), checked on 3 September, supports the retained action-space and interaction-duration limits. Global rollout is not described as unrestricted access or production readiness.
+- **NeRF:** replaced the project-site citation with the [original paper](https://arxiv.org/abs/2003.08934), narrowed the sentence to novel-view synthesis and removed the mesh-extraction implication. The rendered-view versus gameplay distinction and the original photogrammetry-caption context remain intact.
+- **Coding agents:** inserted both supplied paragraphs verbatim, apart from linking the repository reading/editing/testing/failure-handling capability clause to [Anthropic's introduction](https://www.anthropic.com/news/claude-3-7-sonnet). No consolidation was needed. The passage remains vendor-neutral and the second-edit criterion is personal judgment, not a productivity benchmark.
+- **Ledger:** updated both factual rows and added the coding-source boundary in the same patch as the public article. Independent review found no actionable issues and confirmed the supplied prose matches after removing link markup.
+
+Verification for this correction patch:
+
+- `git diff --check` passed. No formatter or lint command is configured; existing Markdown conventions were retained without unrelated reformatting.
+- `npm run verify` passed: Astro checked 83 files with zero errors, warnings or hints; all 65 unit and 160 browser tests passed. The build checks verified 57 production artifacts, 41 indexable pages, 20 Work routes, six domain routes and nine Notes. Test counts were not reduced and no prose-only snapshot tests were introduced.
+- Production-preview Chromium inspection of `/notes/ai-native-game-development-three-years-later/` at **360, 768, 1280 and 1600px** found no horizontal/prose overflow, broken main-content media or page/console errors. Automated WCAG A/AA checks of the article surface found no violations at all four widths. Rendered opening, scorecard and corrected paragraphs were inspected. The updated article has **2,359 visible body words** and remains **11 min read**.
+- Canonical, parsed JSON-LD, article metadata and the dedicated social-card reference remain intact. The social image returned HTTP 200. The essay appears once in each expected homepage, Notes-index, RSS and sitemap location. Both historical follow-up links and all four related-project links remain present; the Field Note's original 22 August date is unchanged.
+- The current `99a2917` Pages artifact was preserved outside the repository before release; SHA-256 `c754bb1e06685486a37d83945f3c689fc7ecd942887af0a4f965a4638cc7c0ec` matches GitHub's recorded digest. Deployment and live-build parity are verified separately after the correction commit is published, not inferred from this local receipt.
+
+The earlier Search Console authentication dependency and four genuine-media dependencies remain outside this narrow correction patch. No indexing requests, synthetic substitutes or unrelated expansions were made. All requested editorial changes were implemented.

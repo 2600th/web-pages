@@ -28,7 +28,7 @@ My [original essay, published on 21 March 2023](https://2600th.substack.com/p/re
 
 Some distinctions were too loose. In the music section, I treated procedural sound as an example of generative AI. [Hello Games' account of the No Man's Sky soundtrack](https://www.nomanssky.com/2016/04/no-mans-sky-music-for-an-infinite-universe/) describes procedural sound and credits 65daysofstatic. That does not establish learned generation of the kind I was discussing elsewhere.
 
-I also moved too easily between scene capture and playable geometry. The [original NeRF research](https://www.matthewtancik.com/nerf) represents a scene for view synthesis. It can support mesh extraction, but a convincing view does not supply collision rules, editable objects or gameplay meaning. My own caption identified the accompanying video as photogrammetry; the surrounding argument should have been equally careful.
+I also moved too easily between scene capture and playable geometry. The [original NeRF research](https://arxiv.org/abs/2003.08934) represents a scene for novel-view synthesis. A convincing rendered view does not by itself supply collision rules, editable objects or gameplay meaning. My own caption identified the accompanying video as photogrammetry; the surrounding argument should have been equally careful.
 
 The 2023 article stays where it was published. It records my thinking then, including those loose connections. This is a new assessment, not a corrected copy wearing its old date.
 
@@ -58,13 +58,17 @@ I would separate a proposed change from an accepted one. A generator could sugge
 
 Integration is the third constraint. An output needs to survive import, version control, a clean build and another person's checkout. If a generated script works only beside an unrecorded local dependency, it is not ready to share. If a texture looks correct only with the wrong colour-space setting, approving the screenshot has hidden a defect.
 
+Coding assistance changed more than autocomplete. Current coding agents can [inspect a repository, edit several files, run tests and work through failures](https://www.anthropic.com/news/claude-3-7-sonnet). That makes integration part of the generation loop instead of something that always happens afterwards. It also increases the cost of weak verification. A plausible change can affect controls, rendering, asset loading and build configuration at the same time.
+
+My useful measure is not how much code an agent produced. It is whether the change survived the project’s tests, another machine and the next revision. That is the same second-edit test applied to software rather than an image.
+
 These requirements suggest a different way to assess an AI tool. Start with a working scene, ask for a bounded edit, then inspect both what changed and what should not have changed. Measure the repair work as well as the generation. The attractive first sample remains useful; it just cannot answer the whole question.
 
 ## World models are a research path, not a general engine replacement
 
 DeepMind's [5 August 2025 Genie 3 announcement](https://deepmind.google/blog/genie-3-a-new-frontier-for-world-models/) reported interactive generated environments at 720p and 24 frames per second, with consistency over a few minutes. It launched as a limited research preview. That is a meaningful step beyond watching a fixed video.
 
-Access subsequently broadened through Project Genie. Google's [January 2026 recap](https://blog.google/innovation-and-ai/products/google-ai-updates-january-2026/) described access for adult US Google AI Ultra subscribers; that is a dated rollout description, not a complete account of today's eligibility. The [model page checked on 3 September](https://deepmind.google/models/genie/) still calls Project Genie an experimental research prototype and lists limits in interaction duration and action space.
+Access subsequently broadened through Project Genie. Google’s [January 2026 recap](https://blog.google/innovation-and-ai/products/google-ai-updates-january-2026/) described access for adult US Google AI Ultra subscribers. On [19 May 2026](https://deepmind.google/blog/simulate-real-world-places-with-project-genie-and-street-view/), Google said Project Genie was gradually rolling out to eligible adult Google AI Ultra subscribers globally, while remaining an experimental research prototype. The [model page checked on 3 September](https://deepmind.google/models/genie/) still lists limited action space and interaction duration.
 
 Microsoft's [February 2025 Muse research](https://www.microsoft.com/en-us/research/blog/introducing-muse-our-first-generative-ai-model-designed-for-gameplay-ideation/) approached gameplay ideation through a model trained on Bleeding Edge. The published work used 300×180 visuals and explored generated images and controller actions. Open weights and a concept demonstrator made the research available for experimentation.
 
