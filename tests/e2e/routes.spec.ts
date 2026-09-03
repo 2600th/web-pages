@@ -23,6 +23,7 @@ const workSlugs = [
 ] as const;
 
 const noteSlugs = [
+  'ai-native-game-development-three-years-later',
   'ai-native-game-development-reflection',
   'ai-video-control',
   'technology-and-human-agency',
@@ -287,7 +288,7 @@ test('main website and every published Note omit forbidden visitor-facing copy',
   }
 });
 
-test('all eight note routes remain reading surfaces with truthful original-source links', async ({ page }) => {
+test('all published note routes remain reading surfaces with truthful original-source links', async ({ page }) => {
   await page.goto('/notes/');
   await expect(page.locator('.notes-list > li')).toHaveCount(noteSlugs.length);
 
@@ -295,7 +296,7 @@ test('all eight note routes remain reading surfaces with truthful original-sourc
     await page.goto(`/notes/${slug}/`);
     await expect(page.locator('[data-reading-surface]')).toHaveCount(1);
     await expect(page.locator('main h1')).toHaveCount(1);
-    await expect(page.locator('.article-shell__source a')).toHaveCount(['ai-floorplan-parsing', 'generative-and-deterministic-systems'].includes(slug) ? 0 : 1);
+    await expect(page.locator('.article-shell__source a')).toHaveCount(['ai-floorplan-parsing', 'generative-and-deterministic-systems', 'ai-native-game-development-three-years-later'].includes(slug) ? 0 : 1);
   }
 });
 

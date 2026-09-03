@@ -101,6 +101,7 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
   ...Object.fromEntries([
     'ocean-reliability', 'ai-floorplan-parsing', 'ai-video-control',
     'generative-and-deterministic-systems', 'ai-native-game-development-reflection',
+    'ai-native-game-development-three-years-later',
     'browser-flight-experiment', 'from-pixels-to-intelligent-systems',
     'technology-and-human-agency', 'propvr-ai-craft',
   ].map((slug) => [`/media/social/${slug}.webp`, {

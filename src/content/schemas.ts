@@ -23,6 +23,8 @@ const caseMediaSchema = mediaSchema.extend({
 
 const sourceSchema = z.object({
   label: z.string().min(2),
+  description: z.string().min(10).optional(),
+  contextLabel: z.string().min(2).optional(),
   url: z.url(),
   type: z.enum([
     'repository',

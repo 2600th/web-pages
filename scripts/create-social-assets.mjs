@@ -31,6 +31,7 @@ const cards = [
   { slug: 'ai-video-control', lines: ['AI video got good.', 'Directing a sequence', 'is still hard.'], type: 'TECHNICAL TEARDOWN', cue: 'sequence' },
   { slug: 'generative-and-deterministic-systems', lines: ['Generative systems.', 'Deterministic systems.', 'Where is the boundary?'], type: 'ESSAY', image: 'work/blocks-inco-ai/designesto-before-after.webp', crop: { left: 52, top: 186, width: 1496, height: 633 } },
   { slug: 'ai-native-game-development-reflection', lines: ['Revisiting my', '2023 essay on', 'AI and games'], type: 'FIELD NOTE', image: 'work/kinema/editor.webp' },
+  { slug: 'ai-native-game-development-three-years-later', lines: ['AI-native game', 'development,', 'three years later'], type: 'ESSAY', image: 'work/kinema/inside.webp' },
   { slug: 'browser-flight-experiment', lines: ['From a documentary', 'to a browser', 'flight experiment'], type: 'FIELD NOTE', image: 'work/safed-sagar/hero.webp' },
   { slug: 'from-pixels-to-intelligent-systems', lines: ['Why I still', 'build things', 'myself'], type: 'FIELD NOTE', image: 'work/homelane-spacecraft-pro/hero.webp' },
   { slug: 'technology-and-human-agency', lines: ['Making tools', 'easier to steer'], type: 'FIELD NOTE', image: 'work/blocks-inco-ai/designesto-after.webp' },

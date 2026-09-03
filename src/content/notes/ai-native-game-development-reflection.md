@@ -6,7 +6,7 @@ relatedWork: [kinema, ai-native-game-thesis]
 ogImage: /media/social/ai-native-game-development-reflection.webp
 summary: I wrote about AI in game development in 2023. Building with these tools has since made me more interested in revision, consistency, and what happens inside the editor.
 publishedAt: 2026-08-22
-updatedAt: 2026-09-02
+updatedAt: 2026-09-03
 topics:
   - Applied AI
   - Game development
@@ -27,3 +27,5 @@ This is part of what I’m exploring with Kinema: keeping the game, editor, and 
 My ocean and flight experiments have been useful reminders too. AI helped me build quickly, but I still had to work on controls, performance, loading, and how the experience felt on different devices.
 
 If I were writing the essay today, I would spend less time listing what models could generate and more time on how a developer could keep editing the result.
+
+This Field Note became the starting point for a [longer 2026 reassessment](/notes/ai-native-game-development-three-years-later/) of the original thesis.

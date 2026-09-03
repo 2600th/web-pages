@@ -31,6 +31,11 @@ sources:
   - label: Revolutionizing Realms
     url: https://2600th.substack.com/p/revolutionizing-realms-how-ai-is
     type: authored-post
+  - label: AI-native game development, three years later
+    url: https://www.2600th.com/notes/ai-native-game-development-three-years-later/
+    type: authored-post
+    contextLabel: 2026 follow-up
+    description: My 2026 reassessment of what held up, what changed, and why revision matters more than the first generated result.
 seo:
   title: AI-native game development — Pranshul Chandhok's 2023 thesis
   description: Pranshul Chandhok's March 2023 essay connected generative AI, language models, NeRFs, animation, adaptive music, and in-engine tools for game production.

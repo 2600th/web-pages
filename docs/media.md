@@ -14,7 +14,7 @@ Private email, Drive records, and internal archives may corroborate dates, scope
 
 ## Current presentation and playback
 
-The homepage presents five selected projects through `VelvetHomeSections`. Blocks and Craft use stills. Designesto, SpaceCraft Pro and Enterprise XR use authentic MP4 sources with separately attributed posters. The original recordings are unchanged. Other project imagery and clips are supplied by work frontmatter and `ProjectMedia`. Each of the eight Notes and Craft has a distinct 1200×630 social card, not an inferred rendering or measurement of the described system.
+The homepage presents five selected projects through `VelvetHomeSections`. Blocks and Craft use stills. Designesto, SpaceCraft Pro and Enterprise XR use authentic MP4 sources with separately attributed posters. The original recordings are unchanged. Other project imagery and clips are supplied by work frontmatter and `ProjectMedia`. Each of the nine Notes and Craft has a distinct 1200×630 social card, not an inferred rendering or measurement of the described system.
 
 Images use WebP, with AVIF alternatives where supplied. Preserve the intended aspect ratio, explicit dimensions, descriptive alternative text, and eager/high-priority loading only for important opening images. Work and Notes opening media use 640px and 960px responsive AVIF/WebP derivatives with `srcset` and `sizes`.
 

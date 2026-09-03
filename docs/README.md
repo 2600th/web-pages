@@ -9,6 +9,8 @@ Start with the maintained guides:
 - [Deployment](deployment.md): explicit release approval, verification, and recoverable rollback.
 - [Editorial update report](editorial-update-report.md): implemented routes, article/source boundaries, exclusions, measured verification and remaining manual steps.
 - [Live-audit update report](live-audit-update-report.md): reviewer fixes, measured content lengths, responsive figures and conditional follow-ups.
+- [Follow-up editorial report](follow-up-editorial-report.md): the September 2026 reassessment, historical-source preservation, release checks and owner-only follow-ups.
+- [AI-game thesis claim ledger](ai-game-thesis-claim-ledger.md): the original 2023 claims, primary-source research and pre-draft review boundaries for the new essay.
 
 The current implementation is the final check for behavior: `src/pages/index.astro` composes `VelvetHero` and `VelvetHomeSections`; shared layout, content schemas, scripts, and tests define the rest of the running site. Documentation is not proof of a live deployment or a passing test run.
 

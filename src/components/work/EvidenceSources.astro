@@ -29,8 +29,8 @@ const sourceTypeLabels: Record<WorkEntry['sources'][number]['type'], string> = {
       <li>
         <a href={source.url} target="_blank" rel="noreferrer">
           <span>{String(index + 1).padStart(2, '0')}</span>
-          <strong>{source.label}</strong>
-          <small>{sourceTypeLabels[source.type]}</small>
+          <strong>{source.label}{source.description && <span class="evidence-sources__description">{source.description}</span>}</strong>
+          <small>{source.contextLabel ?? sourceTypeLabels[source.type]}</small>
           <span aria-hidden="true">↗</span>
         </a>
       </li>
@@ -51,6 +51,15 @@ const sourceTypeLabels: Record<WorkEntry['sources'][number]['type'], string> = {
 
   .evidence-sources h2 {
     max-width: none;
+  }
+
+  .evidence-sources__description {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.58;
+    color: var(--muted);
   }
 
   .evidence-sources ul {

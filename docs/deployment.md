@@ -36,7 +36,7 @@ Verify the deployed release separately from the local build:
 - Video remains poster-first until Play; keyboard navigation and reduced-motion presentation remain usable.
 - `/lab/terminal/index.html` opens the preserved console, retains `noindex,follow`, and its return link works.
 - `/lab/dwarkesh-jensen/index.html` opens the unofficial companion, with search, keyboard navigation, timestamp links and a return to Lab. The exact file URL is its canonical and sole sitemap entry.
-- Separate Blocks, Designesto and Craft pages retain truthful contribution boundaries. The old combined URL remains useful and self-canonical but does not reappear in the main archive or LLM project guide. Eight typed Notes retain dates, source links and reciprocal Work navigation.
+- Separate Blocks, Designesto and Craft pages retain truthful contribution boundaries. The old combined URL remains useful and self-canonical but does not reappear in the main archive or LLM project guide. Nine typed Notes retain dates, source links and reciprocal Work navigation.
 - `/robots.txt`, `/llms.txt`, `/rss.xml`, `/sitemap-index.xml`, and the referenced child sitemap resolve with appropriate content types, and metadata refers to the intended custom domain. See [discovery.md](discovery.md) for policy and generation details.
 - GitHub Pages reports the expected deployment, custom domain, and HTTPS state. Check asset responses and caches if live output differs from the approved build.
 

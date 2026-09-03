@@ -70,4 +70,4 @@ Target WCAG 2.2 AA. Provide keyboard access, visible focus, semantic landmarks, 
 
 ## Public information architecture
 
-Home / Work / Notes / Lab / About. Work lists 19 public records and keeps the old combined Blocks/INCO-AI URL as a useful off-archive compatibility page. Eight Notes use Field Note, Technical Teardown or Essay types. Lab includes independent builds and the unofficial Dwarkesh × Jensen Huang companion. Ghost Terminal is a noindex archive. Private drafts, Agent Skills showcases, and unsupported Gaussian-splatting or Hinglish-voice benchmark work are not published. Local source completion does not mean deployment.
+Home / Work / Notes / Lab / About. Work lists 19 public records and keeps the old combined Blocks/INCO-AI URL as a useful off-archive compatibility page. Nine Notes use Field Note, Technical Teardown or Essay types. Lab includes independent builds and the unofficial Dwarkesh × Jensen Huang companion. Ghost Terminal is a noindex archive. Private drafts, Agent Skills showcases, and unsupported Gaussian-splatting or Hinglish-voice benchmark work are not published. Local source completion does not mean deployment.

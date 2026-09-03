@@ -32,7 +32,7 @@ test('robots and RSS expose the canonical public site', async ({ request }) => {
   const xml = await feed.text();
   expect(xml).toContain('<title>Pranshul Chandhok | Notes</title>');
   expect(xml).toContain('https://www.2600th.com/notes/ai-video-control/');
-  expect((xml.match(/<item>/g) ?? []).length).toBe(8);
+  expect((xml.match(/<item>/g) ?? []).length).toBe(9);
 });
 
 test('the identity icon set and web manifest are published and linked', async ({ page, request }) => {
