@@ -32,7 +32,7 @@ test('work listings follow the chronological order they promise', async ({ page 
   for (const route of ['/work/?order=chronological']) {
     await page.goto(route);
     const labels = await page.locator('.work-list__meta').allTextContents();
-    const years = labels.map((label) => Number.parseInt(label, 10));
+    const years = labels.map((label) => Number(label.match(/\b20\d{2}\b/)?.[0]));
     expect(years.length).toBeGreaterThan(1);
     for (let index = 1; index < years.length; index += 1) {
       expect(years[index], `${route}: ${labels[index]}`).toBeGreaterThanOrEqual(years[index - 1]);

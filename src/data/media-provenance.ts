@@ -18,6 +18,12 @@ const CAREER_MEDIA_PROVENANCE = Object.fromEntries(
 const ROUTE_OPENING_MEDIA_PROVENANCE = Object.fromEntries(
   [
     {
+      stem: '/media/routes/work/blocks',
+      sourceUrl: 'generated://openai/imagegen/exec-827f03a5-b295-4bea-bf7f-2571b59e7dd1',
+      status: 'generated-editorial',
+      evidenceUse: false,
+    },
+    {
       stem: '/media/routes/work/ira-vr-v2',
       sourceUrl: 'generated://openai/imagegen/exec-705c02d8-2d4e-4a1c-bb0e-9ae925fa9d24',
       status: 'generated-editorial',
@@ -115,6 +121,16 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
   },
   ...ROUTE_OPENING_MEDIA_PROVENANCE,
   ...ENHANCED_EDITORIAL_PROVENANCE,
+  '/media/generated/editorial/blocks-design-production-v2.webp': {
+    sourceUrl: 'generated://openai/imagegen/exec-827f03a5-b295-4bea-bf7f-2571b59e7dd1',
+    status: 'generated-editorial',
+    evidenceUse: false,
+  },
+  '/media/generated/editorial/blocks-design-production-v2.avif': {
+    sourceUrl: 'generated://openai/imagegen/exec-827f03a5-b295-4bea-bf7f-2571b59e7dd1',
+    status: 'generated-editorial',
+    evidenceUse: false,
+  },
   '/media/generated/editorial/blocks-design-production-v1.webp': {
     sourceUrl: 'generated://openai/imagegen/exec-b4375d06-c7b4-4960-8be7-a130269002dc',
     status: 'generated-editorial',

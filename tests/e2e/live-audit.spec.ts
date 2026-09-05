@@ -9,7 +9,8 @@ test('Work labels do not repeat the year and editorial order survives chronologi
   await page.goto('/work/');
   const links = page.locator('[data-work-item] > a');
   const slugs = await links.evaluateAll(items => items.map(item => item.getAttribute('href')));
-  expect(slugs.slice(9, 12)).toEqual(['/work/safed-sagar/', '/work/little-wonder/', '/work/ai-native-game-thesis/']);
+  const safedSagarIndex = slugs.indexOf('/work/safed-sagar/');
+  expect(slugs.slice(safedSagarIndex, safedSagarIndex + 3)).toEqual(['/work/safed-sagar/', '/work/little-wonder/', '/work/ai-native-game-thesis/']);
   const labels = await page.locator('.work-list__meta').allTextContents();
   for (const label of labels) {
     const years = label.match(/\b(?:19|20)\d{2}\b/g) ?? [];
@@ -21,12 +22,12 @@ test('Work labels do not repeat the year and editorial order survives chronologi
   expect(await links.evaluateAll(items => items.map(item => item.getAttribute('href')))).toEqual(slugs);
 });
 
-test('Work collage links its images to the three current flagship cases', async ({ page }) => {
+test('Work gallery features Blocks with Designesto and IRA VR using loaded responsive images', async ({ page }) => {
   await page.goto('/work/');
-  expect(await page.locator('[data-work-opening-media] a').evaluateAll(items => items.map(item => item.getAttribute('href')))).toEqual([
-    '/work/blocks/', '/work/designesto/', '/work/propvr-ai-craft/',
+  expect(await page.locator('[data-gallery-role="lead"], [data-gallery-role="support"]').evaluateAll(items => items.map(item => item.querySelector('a')?.getAttribute('href')))).toEqual([
+    '/work/blocks/', '/work/designesto/', '/work/ira-vr/',
   ]);
-  const images = page.locator('[data-work-opening-media] img');
+  const images = page.locator('[data-gallery-role="lead"] img, [data-gallery-role="support"] img');
   await images.last().scrollIntoViewIfNeeded();
   expect(await images.evaluateAll(items => items.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
 });

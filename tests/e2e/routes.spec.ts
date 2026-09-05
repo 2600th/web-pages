@@ -152,30 +152,25 @@ test('interior route openings use the velvet editorial system with generated art
     });
     expect(colors.opening).not.toBe('rgb(36, 87, 255)');
     expect(colors.positiveText).toBe('rgb(237, 234, 226)');
-    expect(colors.negativeText).toBe('rgb(237, 234, 226)');
+    expect(colors.negativeText).toBe(path === '/work/' ? 'rgb(168, 167, 161)' : 'rgb(237, 234, 226)');
     expect(colors.positive).not.toBe('rgb(241, 240, 234)');
     expect(colors.negative).not.toBe('rgb(241, 240, 234)');
   }
 });
 
-test('Work and Notes openings include art-directed, responsive media', async ({ page }) => {
+test('Work gallery and Notes opening include art-directed, responsive media', async ({ page }) => {
   await page.goto('/work/');
-  const workMedia = page.locator('[data-work-opening-media]');
-  await expect(page.locator('.route-opening--work[data-motion-scope]')).toHaveCount(1);
-  await expect(workMedia.getByRole('link')).toHaveCount(3);
-  await expect(workMedia.locator('[data-motion-reveal]')).toHaveCount(3);
-  for (const [index, label] of ['Blocks', 'Designesto', 'PropVR AI to Craft'].entries()) {
-    const link = workMedia.getByRole('link', { name: new RegExp(label, 'i') });
+  const workMedia = page.locator('[data-gallery-role="lead"], [data-gallery-role="support"]');
+  await expect(workMedia).toHaveCount(3);
+  for (const [index, label] of ['Blocks', 'Designesto', 'IRA VR'].entries()) {
+    const link = page.locator('[data-work-gallery]').getByRole('link', { name: label, exact: true });
     await expect(link).toHaveCount(1);
     await expect(link.locator('source[type="image/avif"]')).toHaveCount(1);
-    await expect(link.locator('source[type="image/webp"]')).toHaveCount(1);
+    if (label !== 'Blocks') await expect(link.locator('img')).toHaveAttribute('srcset', /\.webp 320w/);
     await expect(link.locator('img')).toHaveAttribute('loading', index === 0 ? 'eager' : 'lazy');
     if (index === 0) await expect(link.locator('img')).toHaveAttribute('fetchpriority', 'high');
     await expect(link.locator('img')).toHaveAttribute('decoding', 'async');
-    await expect(link.locator('img')).toHaveAttribute('width', '960');
-    await expect(link.locator('img')).toHaveAttribute('height', '540');
   }
-  await expect(workMedia.locator('img[src*="/media/generated/"]')).toHaveCount(0);
 
   await page.goto('/notes/');
   const notesMedia = page.locator('[data-notes-opening-media]');
@@ -194,18 +189,18 @@ test('Work and Notes openings include art-directed, responsive media', async ({ 
 
 test('reduced motion keeps route-opening media in its static composition', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  for (const path of ['/work/', '/notes/']) {
-    await page.goto(path);
-    await expect(page.locator('[data-route-opening]')).toHaveAttribute('data-motion-state', 'static');
-  }
+  await page.goto('/work/');
+  expect(await page.locator('[data-work-gallery] img').first().evaluate(image => Number.parseFloat(getComputedStyle(image).transitionDuration))).toBeLessThan(0.001);
+  await page.goto('/notes/');
+  await expect(page.locator('[data-route-opening]')).toHaveAttribute('data-motion-state', 'static');
 });
 
-test('Work and Notes opening media stay contained and clear their copy at every supported review width', async ({ page }) => {
+test('Work gallery and Notes opening media stay contained at every supported review width', async ({ page }) => {
   for (const width of [320, 390, 878, 946, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const path of ['/work/', '/notes/']) {
       await page.goto(path);
-      const selector = path === '/work/' ? '[data-work-opening-media]' : '[data-notes-opening-media]';
+      const selector = path === '/work/' ? '[data-work-gallery]' : '[data-notes-opening-media]';
       const media = page.locator(selector);
       await expect(media).toBeVisible();
       const box = await media.boundingBox();
@@ -215,8 +210,9 @@ test('Work and Notes opening media stay contained and clear their copy at every 
       const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       expect(scrollWidth, `${path} document at ${width}px`).toBeLessThanOrEqual(width);
 
-      const geometry = await page.locator('[data-route-opening]').evaluate((opening, routePath) => {
-        const mediaElement = opening.querySelector(routePath === '/work/' ? '[data-work-opening-media]' : '[data-notes-opening-media]');
+      if (path === '/work/') continue;
+      const geometry = await page.locator('[data-route-opening]').evaluate((opening) => {
+        const mediaElement = opening.querySelector('[data-notes-opening-media]');
         const copyElement = opening.querySelector('.route-opening__copy');
         const mediaBox = mediaElement?.getBoundingClientRect();
         const copyBox = copyElement?.getBoundingClientRect();
@@ -227,7 +223,7 @@ test('Work and Notes opening media stay contained and clear their copy at every 
           copyTop: copyBox?.top ?? Number.POSITIVE_INFINITY,
           frameBottoms: frames.map((frame) => frame.bottom),
         };
-      }, path);
+      });
       expect(geometry.dividerContent, `${path} has no decorative rule over the media plane at ${width}px`).toBe('none');
       expect(geometry.mediaBottom, `${path} media clears copy at ${width}px`).toBeLessThanOrEqual(geometry.copyTop - 8);
       for (const frameBottom of geometry.frameBottoms) {
@@ -330,6 +326,21 @@ test('shared route-opening headings keep readable line spacing and stack before 
     await page.setViewportSize({ width, height: 912 });
     for (const path of ['/about/', '/work/', '/notes/']) {
       await page.goto(path);
+      if (path === '/work/') {
+        const opening = page.locator('.work-gallery-opening');
+        const heading = opening.locator('h1');
+        const intro = opening.locator('p');
+        const [openingBox, headingBox, introBox] = await Promise.all([opening.boundingBox(), heading.boundingBox(), intro.boundingBox()]);
+        expect(openingBox, `${path} compact opening at ${width}px`).not.toBeNull();
+        expect((openingBox?.x ?? -1) >= 0 && (openingBox?.x ?? 0) + (openingBox?.width ?? width + 1) <= width + 1, `${path} compact opening is contained at ${width}px`).toBe(true);
+        if (width <= 736) expect(introBox?.y ?? -1, `${path} intro stacks after its heading at ${width}px`).toBeGreaterThanOrEqual((headingBox?.y ?? 0) + (headingBox?.height ?? 0) - 1);
+        const typeMetrics = await heading.evaluate((element) => {
+          const style = getComputedStyle(element);
+          return { fontSize: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
+        });
+        expect(typeMetrics.lineHeight / typeMetrics.fontSize, `${path} heading keeps a readable line box at ${width}px`).toBeGreaterThanOrEqual(1.03);
+        continue;
+      }
       const opening = page.locator('.route-opening');
       const positive = opening.locator('.route-opening__positive');
       const negative = opening.locator('.route-opening__negative');
@@ -466,7 +477,7 @@ test('About diorama keeps the operator portrait inside the stacked opening crop'
 
 test('work archive renders one canonical list and supports link filters', async ({ page }) => {
   await page.goto('/work/');
-  await expect(page.getByText('19 projects', { exact: true })).toBeVisible();
+  await expect(page.locator('[data-visible-count]')).toHaveText('19');
   await expect(page.locator('[data-work-item]')).toHaveCount(19);
   await page.getByRole('link', { name: 'XR and spatial computing', exact: true }).first().click();
   await expect(page).toHaveURL(/\/work\/domain\/xr\/$/);
@@ -478,7 +489,7 @@ test('work archive opening speaks to visitors instead of publication mechanics',
   await page.goto('/work/');
 
   await expect(page.getByText(/Full cases go deep/i)).toHaveCount(0);
-  await expect(page.getByText('Start with the selected systems, browse by domain, or switch to a chronological view.')).toBeVisible();
+  await expect(page.getByText('Products, platforms, and experiments I helped define, build, and put into use.')).toBeVisible();
 });
 
 test('footer invitation is a contained two-line lockup at every review width', async ({ page }) => {
@@ -533,7 +544,7 @@ test('defense work names the full program and systems contribution', async ({ pa
   await expect(opening.locator('.case-hero__context')).toHaveText('2019–2021 · GreyKernel');
   await expect(opening.locator('.case-hero__media picture source[type="image/avif"]')).toHaveAttribute(
     'srcset',
-    '/media/generated/editorial/defense-systems-atlas-v2.avif',
+    /defense-systems-atlas-v2-[a-f0-9]+-320\.avif 320w/,
   );
   await expect(opening.locator('.case-hero__media img')).toHaveAttribute(
     'src',
@@ -584,7 +595,7 @@ test('enterprise immersive work includes the wider client and domain record', as
     '/media/generated/editorial/cycling-without-age-empathy-v3.webp',
   );
   await expect(page.getByRole('heading', { name: 'Sources and links' })).toBeVisible();
-  await expect(page.locator('.prose p').filter({ hasText: /immersive lab.*Mumbai office/i })).toBeVisible();
+  await expect(page.locator('[data-case-part="thesis"]')).toContainText(/immersive lab.*Mumbai office/i);
 });
 
 test('enterprise facility preview uses the AI-enhanced poster while playback keeps the original tour', async ({ page }) => {

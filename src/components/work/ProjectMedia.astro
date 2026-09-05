@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from '../shared/ResponsiveImage.astro';
 interface Props {
   media: { src: string; avif?: string; alt: string; width: number; height: number; mp4?: string; webm?: string };
   label: string;
@@ -15,14 +16,7 @@ const { media, label, priority = false } = Astro.props;
       <source src={media.mp4} type="video/mp4" />
     </video>
   ) : (
-    media.avif ? (
-      <picture>
-        <source type="image/avif" srcset={media.avif} />
-        <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
-      </picture>
-    ) : (
-      <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
-    )
+    <ResponsiveImage src={media.src} avif={media.avif} alt={media.alt} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} />
   )}
   <figcaption>
     <span>{label}</span>
@@ -46,7 +40,7 @@ const { media, label, priority = false } = Astro.props;
     background: var(--ink);
   }
 
-  .project-media img,
+  .project-media :global(img),
   .project-media video {
     display: block;
     width: 100%;
@@ -64,10 +58,9 @@ const { media, label, priority = false } = Astro.props;
     border-top: 1px solid var(--signal);
     background: var(--inverse-surface);
     color: var(--inverse-text);
-    font-size: 0.72rem;
-    font-weight: 720;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 580;
+    line-height: 1.5;
   }
 
   .project-media picture { display: block; }

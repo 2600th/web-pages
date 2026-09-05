@@ -17,22 +17,22 @@ colors:
 typography:
   display:
     fontFamily: "Mona Sans, sans-serif"
-    fontSize: "clamp(3.1rem, 8vw, 7rem)"
+    fontSize: "clamp(3.1rem, 7vw, 6rem)"
     fontWeight: 730
-    lineHeight: 1.04
-    letterSpacing: "-0.035em"
+    lineHeight: 1.08
+    letterSpacing: "-0.02em"
   headline:
     fontFamily: "Mona Sans, sans-serif"
-    fontSize: "clamp(2.5rem, 5.4vw, 5.8rem)"
+    fontSize: "clamp(2.2rem, 4.5vw, 4.5rem)"
     fontWeight: 730
-    lineHeight: 1.04
-    letterSpacing: "-0.035em"
+    lineHeight: 1.08
+    letterSpacing: "-0.02em"
   title:
     fontFamily: "Mona Sans, sans-serif"
-    fontSize: "clamp(1.55rem, 3vw, 3rem)"
+    fontSize: "clamp(1.55rem, 2.8vw, 2.7rem)"
     fontWeight: 730
-    lineHeight: 1.04
-    letterSpacing: "-0.035em"
+    lineHeight: 1.08
+    letterSpacing: "-0.02em"
   body:
     fontFamily: "Mona Sans, sans-serif"
     fontSize: "clamp(1rem, 0.32vw + 0.93rem, 1.16rem)"
@@ -40,7 +40,7 @@ typography:
     lineHeight: 1.58
   navigation:
     fontFamily: "Mona Sans, sans-serif"
-    fontSize: "0.67rem"
+    fontSize: "0.8125rem"
     fontWeight: 680
     letterSpacing: "0.1em"
 rounded:
@@ -89,7 +89,7 @@ This is a personal portfolio, not a dashboard or a service-sales page. Reading a
 - Scroll entrances must not hide text or links from the accessibility tree or keyboard navigation; use movement rather than visibility-based reveals for reading content.
 - Project-specific imagery and plain-language captions.
 
-This document describes the current implementation. [Global styles](src/styles/global.css) and the active components are the implementation reference; update these tokens and [.impeccable/design.json](.impeccable/design.json) together when that implementation changes. Older [specs and plans](docs/superpowers/) retain historical decisions, not current instructions.
+This document describes the current implementation. [Global styles](src/styles/global.css) and the active components are the implementation reference; keep these tokens synchronized when implementation changes. Older [specs and plans](docs/superpowers/) retain historical decisions, not current instructions.
 
 ## Colors
 
@@ -107,7 +107,7 @@ Velvet, raised velvet, and soft velvet provide quiet tonal separation. Warm is t
 
 ## Typography
 
-Mona Sans is locally hosted with variable weight and width. The frontmatter records the shared heading and body defaults. Headings use an 88% stretch by default; signature lockups have their own responsive sizes and stretch settings. Do not apply one display setting indiscriminately to every section.
+Mona Sans is locally hosted with variable weight and width. Shared headings use a more open width and -0.02em tracking; the signature hero retains its 84% width. Display sizes stop at 6rem. Do not apply the condensed signature setting indiscriminately to every section.
 
 Shared headings have a short measure (up to 22ch), balanced wrapping, and enough line height to keep letters separate. Body text stays left-aligned, with a reading measure up to 68ch. Do not fully justify paragraphs or use negative spacing to force text into a narrow column. Monospace is limited to short dates, indices, and utility labels.
 
@@ -115,13 +115,13 @@ Shared headings have a short measure (up to 22ch), balanced wrapping, and enough
 
 The responsive gutter frames a maximum content width of 110rem. Wide pages use image and reading planes rather than a wall of equal cards. Long-form content uses a narrower measure.
 
-The homepage places copy and character in one stage. Interior openings stack as space tightens; image crops, metadata, and captions must remain inside their own layout cells. Homepage details live in the [surface brief](.impeccable/surfaces/velvet-reveal.md).
+The homepage places copy and character in one stage. Interior openings stack as space tightens; image crops, metadata, and captions must remain inside their own layout cells. Homepage details live in the [surface brief](docs/design/velvet-reveal.md), tracked with the project rather than local-only tool state.
 
 The implementation has component-specific breakpoints. Interior layouts commonly change at 64rem; the shared header becomes two rows at 46rem. Work filters become a labeled native select in the compact layout. Verify desktop, intermediate widths, 390px, and 320px; include full-screen widths when changing hero geometry.
 
 ## Elevation & Depth
 
-Depth comes primarily from tonal planes, photography, illustrations, and faint line work. Most interface containers stay flat. The shared plane shadow is reserved for elements that need separation, not every section. Hero grid lines and particles remain a low-contrast background after the opening reveal; they must not cover reading text or disappear because the viewport changes.
+Depth comes primarily from tonal planes, photography, illustrations, and faint line work. Most interface containers stay flat. The shared plane shadow is reserved for elements that need separation, not every section. Hero orbital arcs and particles remain a low-contrast background after the opening reveal; they must not cover reading text or disappear because the viewport changes. On mobile, measure the portrait bounds to place the orbit behind the character.
 
 ## Shapes
 
@@ -139,7 +139,9 @@ The approved 26 ligature pairs warm numerals sharing a diagonal with a cobalt sl
 
 ### Hero and hotspots
 
-The intro replays on full refresh; no visible Skip Intro control is rendered. Escape can settle the reveal. Grid and particles continue as ambient effects while the hero is visible, pause offscreen or when the document is hidden, and resume on return. Reduced-motion users receive the settled static composition.
+The intro replays on full refresh when ambient motion is enabled; no Skip Intro control is rendered. Escape settles the reveal. Persistent orbital geometry carries a restrained moving gold detail. Orbits and particles pause offscreen or when the document is hidden and resume on return. The Motion control remembers an explicit preference between pages. Reduced-motion and coarse-pointer devices receive a settled static canvas, not a missing composition. Preference changes apply immediately.
+
+Fine-pointer navigation and artwork have a soft cobalt cursor halo that warms to gold over actions. It never replaces the native cursor, captures pointer events, or lights long-form prose. Its position updates only after pointer movement, not in a continuous render loop. Touch, reduced motion and Motion off suppress it. The approved halo and bounded hero gradients are deliberate exceptions to generic decoration warnings, not a reason to introduce glowing cards across the site.
 
 Numbered character markers remain visible. Labels appear on hover or keyboard focus and can be pinned by click/tap. Anchor markers to the character, keep the first marker away from the face, and constrain labels at every supported width. Preserve the small 2600 line ornament. Current positioning is product and technology leader / builder.
 
@@ -152,6 +154,8 @@ Work filtering exposes links on larger screens and a labeled select on compact s
 ### Route openings and reading sections
 
 Work, About, Notes, domain pages, and project pages share dark editorial planes. Image and text occupy separate space; metadata must not collapse into tiny parallel columns. About's portrait should retain headroom. Case-study copy explains the project, contribution, decisions, and result; internal provenance terminology is not a visitor-facing section scheme.
+
+Work opens with a compact introduction and filters, followed directly by the image-led gallery. The selected layout features Blocks with Designesto and IRA VR; other projects continue in two columns, or one on mobile. Filtered and chronological views use uniform cards. Project openings group the title, summary, metadata and image without fixed-height empty planes. Long Notes and projects provide native section navigation derived from actual headings. Tables retain native headers inside labelled, keyboard-scrollable regions rather than compressing paragraphs into narrow columns. Editorial images are captioned as editorial; technical examples use original captures where available. Conceptual worked examples must say so and never imply unpublished product behavior or results.
 
 ### Contact and footer
 

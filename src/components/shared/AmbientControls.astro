@@ -1,0 +1,21 @@
+<div class="cursor-halo" data-cursor-halo aria-hidden="true"></div>
+<button class="motion-toggle" type="button" data-motion-toggle aria-label="Ambient motion" aria-pressed="false" hidden>
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 10h3l2-5 4 10 2-5h5" /></svg>
+  <span data-motion-label>Motion off</span>
+</button>
+<style is:global>
+  .cursor-halo { position: fixed; z-index: 30; top: 0; left: 0; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 200ms ease; }
+  .cursor-halo::before { position: absolute; width: 17rem; height: 17rem; inset: -8.5rem; border-radius: 50%; background: radial-gradient(circle, rgb(49 94 245 / 0.13), rgb(49 94 245 / 0.04) 35%, transparent 68%); content: ''; }
+  .cursor-halo[data-interactive='true']::before { background: radial-gradient(circle, rgb(214 162 72 / 0.12), rgb(214 162 72 / 0.025) 36%, transparent 65%); }
+  .cursor-halo[data-active='true'] { opacity: 1; }
+  .motion-toggle { position: fixed; z-index: 40; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); display: flex; min-height: 44px; align-items: center; gap: .5rem; padding: .65rem .8rem; border: 1px solid var(--line-strong); background: var(--velvet); color: var(--muted); font: inherit; font-size: .75rem; cursor: pointer; }
+  .motion-toggle[hidden] { display: none; }
+  .motion-toggle[aria-pressed='true'] svg { color: var(--cobalt-bright); }
+  .motion-toggle:hover:not(:disabled), .motion-toggle:focus-visible { color: var(--gold); border-color: var(--gold); }
+  .motion-toggle:disabled { cursor: default; }
+  html[data-ambient-motion='off'] { scroll-behavior: auto; }
+  html[data-ambient-motion='off'] [data-velvet-hero] *, html[data-ambient-motion='off'] [data-velvet-hero] *::before { animation: none !important; transition: none !important; }
+  html[data-ambient-motion='off'] .cursor-halo { display: none; }
+  @media (pointer: coarse) { .cursor-halo, .motion-toggle { display: none; } }
+  @media print { .cursor-halo, .motion-toggle { display: none; } }
+</style>

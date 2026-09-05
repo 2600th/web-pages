@@ -1,0 +1,904 @@
+{
+  "/media/career/celeste-ar/poster-1280.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/poster-1280-f5f20b889f-320.webp",
+      "avif": "/media/responsive/poster-1280-f5f20b889f-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/poster-1280-f5f20b889f-640.webp",
+      "avif": "/media/responsive/poster-1280-f5f20b889f-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/poster-1280-f5f20b889f-960.webp",
+      "avif": "/media/responsive/poster-1280-f5f20b889f-960.avif"
+    },
+    {
+      "width": 1102,
+      "webp": "/media/responsive/poster-1280-f5f20b889f-1102.webp",
+      "avif": "/media/responsive/poster-1280-f5f20b889f-1102.avif"
+    }
+  ],
+  "/media/career/chhota-bheem-jungle-rescue/concept-screens.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/concept-screens-5550e82112-320.webp",
+      "avif": "/media/responsive/concept-screens-5550e82112-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/concept-screens-5550e82112-640.webp",
+      "avif": "/media/responsive/concept-screens-5550e82112-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/concept-screens-5550e82112-960.webp",
+      "avif": "/media/responsive/concept-screens-5550e82112-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/concept-screens-5550e82112-1600.webp",
+      "avif": "/media/responsive/concept-screens-5550e82112-1600.avif"
+    }
+  ],
+  "/media/career/greykernel/showreel-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/showreel-poster-5f44794315-320.webp",
+      "avif": "/media/responsive/showreel-poster-5f44794315-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/showreel-poster-5f44794315-640.webp",
+      "avif": "/media/responsive/showreel-poster-5f44794315-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/showreel-poster-5f44794315-960.webp",
+      "avif": "/media/responsive/showreel-poster-5f44794315-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/showreel-poster-5f44794315-1280.webp",
+      "avif": "/media/responsive/showreel-poster-5f44794315-1280.avif"
+    }
+  ],
+  "/media/career/ira-vr/classroom-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/classroom-poster-945831c855-320.webp",
+      "avif": "/media/responsive/classroom-poster-945831c855-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/classroom-poster-945831c855-640.webp",
+      "avif": "/media/responsive/classroom-poster-945831c855-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/classroom-poster-945831c855-960.webp",
+      "avif": "/media/responsive/classroom-poster-945831c855-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/classroom-poster-945831c855-1280.webp",
+      "avif": "/media/responsive/classroom-poster-945831c855-1280.avif"
+    }
+  ],
+  "/media/career/ira-vr/poster-1280.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/poster-1280-d03051de9b-320.webp",
+      "avif": "/media/responsive/poster-1280-d03051de9b-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/poster-1280-d03051de9b-640.webp",
+      "avif": "/media/responsive/poster-1280-d03051de9b-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/poster-1280-d03051de9b-960.webp",
+      "avif": "/media/responsive/poster-1280-d03051de9b-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/poster-1280-d03051de9b-1280.webp",
+      "avif": "/media/responsive/poster-1280-d03051de9b-1280.avif"
+    }
+  ],
+  "/media/generated/editorial/blocks-design-production-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/blocks-design-production-v2-7501e87684-320.webp",
+      "avif": "/media/responsive/blocks-design-production-v2-7501e87684-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/blocks-design-production-v2-7501e87684-640.webp",
+      "avif": "/media/responsive/blocks-design-production-v2-7501e87684-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/blocks-design-production-v2-7501e87684-960.webp",
+      "avif": "/media/responsive/blocks-design-production-v2-7501e87684-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/blocks-design-production-v2-7501e87684-1600.webp",
+      "avif": "/media/responsive/blocks-design-production-v2-7501e87684-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/cycling-without-age-empathy-v3.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-320.webp",
+      "avif": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-640.webp",
+      "avif": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-960.webp",
+      "avif": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-1600.webp",
+      "avif": "/media/responsive/cycling-without-age-empathy-v3-7e6a431da8-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/defense-systems-atlas-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-320.webp",
+      "avif": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-640.webp",
+      "avif": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-960.webp",
+      "avif": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-1600.webp",
+      "avif": "/media/responsive/defense-systems-atlas-v2-7d9e523adb-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/ai-native-game-thesis-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-320.webp",
+      "avif": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-640.webp",
+      "avif": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-960.webp",
+      "avif": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-1600.webp",
+      "avif": "/media/responsive/ai-native-game-thesis-hero-v2-afa9b0a4a0-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/enterprise-xr-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-320.webp",
+      "avif": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-640.webp",
+      "avif": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-960.webp",
+      "avif": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-1600.webp",
+      "avif": "/media/responsive/enterprise-xr-hero-v2-7087e81bd6-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/humanoid-robot-control-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/humanoid-robot-control-v2-522d5218f3-320.webp",
+      "avif": "/media/responsive/humanoid-robot-control-v2-522d5218f3-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/humanoid-robot-control-v2-522d5218f3-640.webp",
+      "avif": "/media/responsive/humanoid-robot-control-v2-522d5218f3-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/humanoid-robot-control-v2-522d5218f3-960.webp",
+      "avif": "/media/responsive/humanoid-robot-control-v2-522d5218f3-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/humanoid-robot-control-v2-522d5218f3-1600.webp",
+      "avif": "/media/responsive/humanoid-robot-control-v2-522d5218f3-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/ira-lab-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/ira-lab-v2-69e4cb4a6f-320.webp",
+      "avif": "/media/responsive/ira-lab-v2-69e4cb4a6f-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/ira-lab-v2-69e4cb4a6f-640.webp",
+      "avif": "/media/responsive/ira-lab-v2-69e4cb4a6f-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/ira-lab-v2-69e4cb4a6f-960.webp",
+      "avif": "/media/responsive/ira-lab-v2-69e4cb4a6f-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/ira-lab-v2-69e4cb4a6f-1600.webp",
+      "avif": "/media/responsive/ira-lab-v2-69e4cb4a6f-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/ira-newton-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/ira-newton-v2-3851d5cfb4-320.webp",
+      "avif": "/media/responsive/ira-newton-v2-3851d5cfb4-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/ira-newton-v2-3851d5cfb4-640.webp",
+      "avif": "/media/responsive/ira-newton-v2-3851d5cfb4-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/ira-newton-v2-3851d5cfb4-960.webp",
+      "avif": "/media/responsive/ira-newton-v2-3851d5cfb4-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/ira-newton-v2-3851d5cfb4-1600.webp",
+      "avif": "/media/responsive/ira-newton-v2-3851d5cfb4-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/kinema-editor-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/kinema-editor-v2-4770ff63a9-320.webp",
+      "avif": "/media/responsive/kinema-editor-v2-4770ff63a9-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/kinema-editor-v2-4770ff63a9-640.webp",
+      "avif": "/media/responsive/kinema-editor-v2-4770ff63a9-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/kinema-editor-v2-4770ff63a9-960.webp",
+      "avif": "/media/responsive/kinema-editor-v2-4770ff63a9-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/kinema-editor-v2-4770ff63a9-1600.webp",
+      "avif": "/media/responsive/kinema-editor-v2-4770ff63a9-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/kinema-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/kinema-hero-v2-3b6afea311-320.webp",
+      "avif": "/media/responsive/kinema-hero-v2-3b6afea311-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/kinema-hero-v2-3b6afea311-640.webp",
+      "avif": "/media/responsive/kinema-hero-v2-3b6afea311-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/kinema-hero-v2-3b6afea311-960.webp",
+      "avif": "/media/responsive/kinema-hero-v2-3b6afea311-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/kinema-hero-v2-3b6afea311-1600.webp",
+      "avif": "/media/responsive/kinema-hero-v2-3b6afea311-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/little-wonder-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/little-wonder-hero-v2-6ba6819416-320.webp",
+      "avif": "/media/responsive/little-wonder-hero-v2-6ba6819416-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/little-wonder-hero-v2-6ba6819416-640.webp",
+      "avif": "/media/responsive/little-wonder-hero-v2-6ba6819416-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/little-wonder-hero-v2-6ba6819416-960.webp",
+      "avif": "/media/responsive/little-wonder-hero-v2-6ba6819416-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/little-wonder-hero-v2-6ba6819416-1600.webp",
+      "avif": "/media/responsive/little-wonder-hero-v2-6ba6819416-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/machine-hunter-aim-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/machine-hunter-aim-v2-05d7386003-320.webp",
+      "avif": "/media/responsive/machine-hunter-aim-v2-05d7386003-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/machine-hunter-aim-v2-05d7386003-640.webp",
+      "avif": "/media/responsive/machine-hunter-aim-v2-05d7386003-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/machine-hunter-aim-v2-05d7386003-960.webp",
+      "avif": "/media/responsive/machine-hunter-aim-v2-05d7386003-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/machine-hunter-aim-v2-05d7386003-1600.webp",
+      "avif": "/media/responsive/machine-hunter-aim-v2-05d7386003-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/machine-hunter-draw-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/machine-hunter-draw-v2-386ff96910-320.webp",
+      "avif": "/media/responsive/machine-hunter-draw-v2-386ff96910-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/machine-hunter-draw-v2-386ff96910-640.webp",
+      "avif": "/media/responsive/machine-hunter-draw-v2-386ff96910-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/machine-hunter-draw-v2-386ff96910-960.webp",
+      "avif": "/media/responsive/machine-hunter-draw-v2-386ff96910-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/machine-hunter-draw-v2-386ff96910-1600.webp",
+      "avif": "/media/responsive/machine-hunter-draw-v2-386ff96910-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/machine-hunter-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/machine-hunter-hero-v2-841115bffa-320.webp",
+      "avif": "/media/responsive/machine-hunter-hero-v2-841115bffa-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/machine-hunter-hero-v2-841115bffa-640.webp",
+      "avif": "/media/responsive/machine-hunter-hero-v2-841115bffa-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/machine-hunter-hero-v2-841115bffa-960.webp",
+      "avif": "/media/responsive/machine-hunter-hero-v2-841115bffa-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/machine-hunter-hero-v2-841115bffa-1600.webp",
+      "avif": "/media/responsive/machine-hunter-hero-v2-841115bffa-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/machine-hunter-release-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/machine-hunter-release-v2-f44a28e34f-320.webp",
+      "avif": "/media/responsive/machine-hunter-release-v2-f44a28e34f-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/machine-hunter-release-v2-f44a28e34f-640.webp",
+      "avif": "/media/responsive/machine-hunter-release-v2-f44a28e34f-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/machine-hunter-release-v2-f44a28e34f-960.webp",
+      "avif": "/media/responsive/machine-hunter-release-v2-f44a28e34f-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/machine-hunter-release-v2-f44a28e34f-1600.webp",
+      "avif": "/media/responsive/machine-hunter-release-v2-f44a28e34f-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/oye-tippa-run-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/oye-tippa-run-v2-2e697a45a3-320.webp",
+      "avif": "/media/responsive/oye-tippa-run-v2-2e697a45a3-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/oye-tippa-run-v2-2e697a45a3-640.webp",
+      "avif": "/media/responsive/oye-tippa-run-v2-2e697a45a3-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/oye-tippa-run-v2-2e697a45a3-960.webp",
+      "avif": "/media/responsive/oye-tippa-run-v2-2e697a45a3-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/oye-tippa-run-v2-2e697a45a3-1600.webp",
+      "avif": "/media/responsive/oye-tippa-run-v2-2e697a45a3-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/safed-sagar-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-320.webp",
+      "avif": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-640.webp",
+      "avif": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-960.webp",
+      "avif": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-1600.webp",
+      "avif": "/media/responsive/safed-sagar-hero-v2-8b15d5f264-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/spacecraft-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-320.webp",
+      "avif": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-640.webp",
+      "avif": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-960.webp",
+      "avif": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-1600.webp",
+      "avif": "/media/responsive/spacecraft-hero-v2-e4dc4d3024-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/spacecraft-workflow-editorial-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-320.webp",
+      "avif": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-640.webp",
+      "avif": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-960.webp",
+      "avif": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-1600.webp",
+      "avif": "/media/responsive/spacecraft-workflow-editorial-v2-2b9aec4362-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/web-ocean-clip-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-320.webp",
+      "avif": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-640.webp",
+      "avif": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-960.webp",
+      "avif": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-1600.webp",
+      "avif": "/media/responsive/web-ocean-clip-v2-ec6aecf91c-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/enhanced/web-ocean-hero-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-320.webp",
+      "avif": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-640.webp",
+      "avif": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-960.webp",
+      "avif": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-1600.webp",
+      "avif": "/media/responsive/web-ocean-hero-v2-f0c05c6ef4-1600.avif"
+    }
+  ],
+  "/media/generated/editorial/landing/enterprise-xr-poster-v2.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-320.webp",
+      "avif": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-640.webp",
+      "avif": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-960.webp",
+      "avif": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-1600.webp",
+      "avif": "/media/responsive/enterprise-xr-poster-v2-d0842e747d-1600.avif"
+    }
+  ],
+  "/media/work/alphaman/gameplay-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/gameplay-poster-306969869d-320.webp",
+      "avif": "/media/responsive/gameplay-poster-306969869d-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/gameplay-poster-306969869d-640.webp",
+      "avif": "/media/responsive/gameplay-poster-306969869d-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/gameplay-poster-306969869d-960.webp",
+      "avif": "/media/responsive/gameplay-poster-306969869d-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/gameplay-poster-306969869d-1280.webp",
+      "avif": "/media/responsive/gameplay-poster-306969869d-1280.avif"
+    }
+  ],
+  "/media/work/blocks-inco-ai/designesto-before-after.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/designesto-before-after-c7ef426bcc-320.webp",
+      "avif": "/media/responsive/designesto-before-after-c7ef426bcc-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/designesto-before-after-c7ef426bcc-640.webp",
+      "avif": "/media/responsive/designesto-before-after-c7ef426bcc-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/designesto-before-after-c7ef426bcc-960.webp",
+      "avif": "/media/responsive/designesto-before-after-c7ef426bcc-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/designesto-before-after-c7ef426bcc-1600.webp",
+      "avif": "/media/responsive/designesto-before-after-c7ef426bcc-1600.avif"
+    }
+  ],
+  "/media/work/homelane-spacecraft-pro/public-demo-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/public-demo-poster-c326492085-320.webp",
+      "avif": "/media/responsive/public-demo-poster-c326492085-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/public-demo-poster-c326492085-640.webp",
+      "avif": "/media/responsive/public-demo-poster-c326492085-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/public-demo-poster-c326492085-960.webp",
+      "avif": "/media/responsive/public-demo-poster-c326492085-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/public-demo-poster-c326492085-1280.webp",
+      "avif": "/media/responsive/public-demo-poster-c326492085-1280.avif"
+    }
+  ],
+  "/media/work/homelane-spacecraft-pro/room-editor-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/room-editor-poster-dac1d15d78-320.webp",
+      "avif": "/media/responsive/room-editor-poster-dac1d15d78-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/room-editor-poster-dac1d15d78-640.webp",
+      "avif": "/media/responsive/room-editor-poster-dac1d15d78-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/room-editor-poster-dac1d15d78-960.webp",
+      "avif": "/media/responsive/room-editor-poster-dac1d15d78-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/room-editor-poster-dac1d15d78-1280.webp",
+      "avif": "/media/responsive/room-editor-poster-dac1d15d78-1280.avif"
+    }
+  ],
+  "/media/work/kinema/hero.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/hero-a6e275f16a-320.webp",
+      "avif": "/media/responsive/hero-a6e275f16a-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/hero-a6e275f16a-640.webp",
+      "avif": "/media/responsive/hero-a6e275f16a-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/hero-a6e275f16a-960.webp",
+      "avif": "/media/responsive/hero-a6e275f16a-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/hero-a6e275f16a-1600.webp",
+      "avif": "/media/responsive/hero-a6e275f16a-1600.avif"
+    }
+  ],
+  "/media/work/kinema/inside.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/inside-015712b5b1-320.webp",
+      "avif": "/media/responsive/inside-015712b5b1-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/inside-015712b5b1-640.webp",
+      "avif": "/media/responsive/inside-015712b5b1-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/inside-015712b5b1-960.webp",
+      "avif": "/media/responsive/inside-015712b5b1-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/inside-015712b5b1-1600.webp",
+      "avif": "/media/responsive/inside-015712b5b1-1600.avif"
+    }
+  ],
+  "/media/work/merkur-magie/store-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/store-poster-4db614c5f3-320.webp",
+      "avif": "/media/responsive/store-poster-4db614c5f3-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/store-poster-4db614c5f3-640.webp",
+      "avif": "/media/responsive/store-poster-4db614c5f3-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/store-poster-4db614c5f3-960.webp",
+      "avif": "/media/responsive/store-poster-4db614c5f3-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/store-poster-4db614c5f3-1280.webp",
+      "avif": "/media/responsive/store-poster-4db614c5f3-1280.avif"
+    }
+  ],
+  "/media/work/propvr-ai-craft/craft-public-home-20260902.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/craft-public-home-20260902-f01a443505-320.webp",
+      "avif": "/media/responsive/craft-public-home-20260902-f01a443505-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/craft-public-home-20260902-f01a443505-640.webp",
+      "avif": "/media/responsive/craft-public-home-20260902-f01a443505-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/craft-public-home-20260902-f01a443505-960.webp",
+      "avif": "/media/responsive/craft-public-home-20260902-f01a443505-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/craft-public-home-20260902-f01a443505-1600.webp",
+      "avif": "/media/responsive/craft-public-home-20260902-f01a443505-1600.avif"
+    }
+  ],
+  "/media/work/safed-sagar/hero.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/hero-dd96e14841-320.webp",
+      "avif": "/media/responsive/hero-dd96e14841-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/hero-dd96e14841-640.webp",
+      "avif": "/media/responsive/hero-dd96e14841-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/hero-dd96e14841-960.webp",
+      "avif": "/media/responsive/hero-dd96e14841-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/hero-dd96e14841-1600.webp",
+      "avif": "/media/responsive/hero-dd96e14841-1600.avif"
+    }
+  ],
+  "/media/work/safed-sagar/inside.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/inside-5c5b6507a7-320.webp",
+      "avif": "/media/responsive/inside-5c5b6507a7-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/inside-5c5b6507a7-640.webp",
+      "avif": "/media/responsive/inside-5c5b6507a7-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/inside-5c5b6507a7-960.webp",
+      "avif": "/media/responsive/inside-5c5b6507a7-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/inside-5c5b6507a7-1600.webp",
+      "avif": "/media/responsive/inside-5c5b6507a7-1600.avif"
+    }
+  ],
+  "/media/work/safed-sagar/near.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/near-4c5eecc955-320.webp",
+      "avif": "/media/responsive/near-4c5eecc955-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/near-4c5eecc955-640.webp",
+      "avif": "/media/responsive/near-4c5eecc955-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/near-4c5eecc955-960.webp",
+      "avif": "/media/responsive/near-4c5eecc955-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/near-4c5eecc955-1600.webp",
+      "avif": "/media/responsive/near-4c5eecc955-1600.avif"
+    }
+  ],
+  "/media/work/the-brutal-spy/trailer-poster.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/trailer-poster-01c41b683e-320.webp",
+      "avif": "/media/responsive/trailer-poster-01c41b683e-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/trailer-poster-01c41b683e-640.webp",
+      "avif": "/media/responsive/trailer-poster-01c41b683e-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/trailer-poster-01c41b683e-960.webp",
+      "avif": "/media/responsive/trailer-poster-01c41b683e-960.avif"
+    },
+    {
+      "width": 1280,
+      "webp": "/media/responsive/trailer-poster-01c41b683e-1280.webp",
+      "avif": "/media/responsive/trailer-poster-01c41b683e-1280.avif"
+    }
+  ],
+  "/media/work/web-ocean-3d/hero.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/hero-76ff0b039b-320.webp",
+      "avif": "/media/responsive/hero-76ff0b039b-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/hero-76ff0b039b-640.webp",
+      "avif": "/media/responsive/hero-76ff0b039b-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/hero-76ff0b039b-960.webp",
+      "avif": "/media/responsive/hero-76ff0b039b-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/hero-76ff0b039b-1600.webp",
+      "avif": "/media/responsive/hero-76ff0b039b-1600.avif"
+    }
+  ],
+  "/media/work/web-ocean-3d/inside.webp": [
+    {
+      "width": 320,
+      "webp": "/media/responsive/inside-8628392ebd-320.webp",
+      "avif": "/media/responsive/inside-8628392ebd-320.avif"
+    },
+    {
+      "width": 640,
+      "webp": "/media/responsive/inside-8628392ebd-640.webp",
+      "avif": "/media/responsive/inside-8628392ebd-640.avif"
+    },
+    {
+      "width": 960,
+      "webp": "/media/responsive/inside-8628392ebd-960.webp",
+      "avif": "/media/responsive/inside-8628392ebd-960.avif"
+    },
+    {
+      "width": 1600,
+      "webp": "/media/responsive/inside-8628392ebd-1600.webp",
+      "avif": "/media/responsive/inside-8628392ebd-1600.avif"
+    }
+  ]
+}

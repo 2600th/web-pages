@@ -4,9 +4,9 @@ The static Astro portfolio source for Pranshul Chandhok’s product, AI, real-ti
 
 ## Current site
 
-The homepage uses `VelvetHero` and `VelvetHomeSections`: a dark cinematic introduction, two actions, four proof links, five selected projects, a product-workflow thesis, recent writing, and “Let’s compare notes” contact. Pranshul is presented as a product and technology leader and hands-on builder. The introduction replays on reload. Escape settles it, and reduced-motion or unavailable-canvas conditions use a settled/static presentation. Its grid and particles remain as ambient detail after the normal reveal. Domain labels appear on hover, focus, or activation.
+The homepage uses `VelvetHero` and `VelvetHomeSections`: a dark cinematic introduction, two actions, four proof links, five selected projects, a product-workflow thesis, recent writing, and “Let’s compare notes” contact. The introduction replays on reload when motion is enabled. Escape settles it. The approved Orbital composition surrounds the character with restrained cobalt arcs and a moving gold detail; its mobile geometry follows the portrait. Fine pointers receive a restrained halo outside reading content. Motion can be paused across pages. Touch and reduced-motion devices receive static detail. Domain labels appear on hover, focus, or activation.
 
-Primary navigation is Home / Work / Notes / Lab / About. Work has 19 visible records, selected systems first, with domain browsing and an optional chronological order. The old combined `/work/blocks-inco-ai/` is a self-canonical compatibility page, not a main archive item. Separate cases cover Blocks, Designesto and PropVR AI → Craft, distinguishing the initial MVP from the PropVR Technology team's later work. Notes has nine articles: four Field Notes, three Technical Teardowns and two Essays. Videos start only after a user playback request. Shared pages have one contact invitation and a floating Back to top link after 300px of scrolling. Native links remain available without JavaScript.
+Primary navigation is Home / Work / Notes / Lab / About. Work is an image-led gallery of 19 projects: Blocks leads the selected view, with Designesto and IRA VR alongside it. Domain browsing and chronological order use a uniform gallery; compact screens use a single column. Project pages group their introduction, metadata and image, followed by bounded reading content and section navigation where useful. The old combined `/work/blocks-inco-ai/` is a self-canonical compatibility page, not a main archive item. Separate cases cover Blocks, Designesto and PropVR AI → Craft, distinguishing the initial MVP from the PropVR Technology team's later work. Notes has nine articles: four Field Notes, three Technical Teardowns and two Essays. Videos start only after a user playback request. Shared pages have one contact invitation and a floating Back to top link after 300px of scrolling. Native links remain available without JavaScript.
 
 The original console is preserved separately at `/lab/terminal/index.html` with `noindex,follow` and a return link. Lab also hosts the self-contained, unofficial interview companion at `/lab/dwarkesh-jensen/index.html`. Use that exact file URL, not an unserved development directory alias.
 
@@ -33,6 +33,8 @@ Reviewed downloads, public-video masters, browser captures, and generated-image 
 
 Authentic video sources remain distinct from generated editorial/enhanced posters. Generated provenance and `evidenceUse: false` remain internal metadata; reader-facing captions explain the project or depicted scene without turning illustration into proof of shipped work.
 
+Shared image rendering uses a checked-in responsive manifest and AVIF/WebP candidates for Work thumbnails, still homepage cards and case figures. After changing content image sources, run `npm run media:responsive:build`; this creates content-hashed delivery derivatives without replacing originals. The manifest and `public/media/responsive/` outputs ship together. No source-master download or image generation is required for this command.
+
 Media regeneration is a separate maintenance task, not a prerequisite for ordinary development or deployment. Run only the applicable commands after reviewing their input/output scope:
 
 ```powershell
@@ -41,6 +43,7 @@ npm run media:career:build
 node scripts/build-route-opening-media.mjs
 npm run media:social:build
 npm run media:icons:build
+npm run media:responsive:build
 npm run verify
 ```
 

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>2600th · Hero direction</title>
+<style>
+@font-face{font-family:Mona;src:url('/assets/fonts/mona-sans-latin.woff2') format('woff2');font-weight:200 900;font-stretch:75% 125%;font-display:swap}
+*{box-sizing:border-box}body{margin:0;background:#030405;color:#edeae2;font-family:Mona,sans-serif}a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible{outline:2px solid #6f8dff;outline-offset:5px}::selection{background:#315ef5;color:white}header{position:absolute;z-index:5;top:0;left:0;right:0;display:flex;padding:26px 3.2%;align-items:center;justify-content:space-between;border-bottom:1px solid #edeae221;font-size:13px;font-weight:680;letter-spacing:.07em}.brand span{color:#d6a248;margin:0 10px}.brand small{font-size:12px;color:#a8a7a1}nav{display:flex;gap:28px;font-size:12px}nav a:hover{color:#d6a248}.hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:100svh;background:#030405}.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#030405 0%,#030405e0 28%,#03040510 57%,transparent);pointer-events:none;z-index:1}.glow{position:absolute;inset:0;background:radial-gradient(ellipse at 76% 50%,#315ef523,transparent 52%);z-index:0}canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}.copy{position:relative;z-index:4;width:53%;padding:140px 0 110px 5%;display:flex;min-height:100%;justify-content:center;flex-direction:column}h1{font-size:clamp(64px,7.1vw,96px);font-stretch:84%;font-weight:730;line-height:1.08;letter-spacing:-.03em;margin:0;max-width:10ch;text-wrap:balance}h1 em{display:block;color:transparent;-webkit-text-stroke:1px #edeae2ca;font-style:normal}.copy p{max-width:44ch;font-size:clamp(16px,1.18vw,18px);line-height:1.65;color:#a8a7a1;margin:30px 0 0}.actions{display:flex;gap:24px;flex-wrap:wrap;margin-top:28px}.actions a{display:flex;align-items:center;gap:14px;min-height:48px;font-size:12px;font-weight:740;letter-spacing:.065em;border-bottom:1px solid #d6a248}.actions a+ a{border-color:#edeae24d}.actions svg{width:15px;height:15px;stroke:#d6a248;fill:none;stroke-width:1.6}.portrait{position:absolute;z-index:3;right:2%;bottom:0;height:90%;aspect-ratio:2/3}.portrait img{height:100%;width:100%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 20px 28px #0009)}.marker{position:absolute;min-width:44px;min-height:44px;border:0;background:transparent;color:#edeae2;font:inherit;cursor:pointer;padding:0}.marker b{display:grid;place-items:center;width:24px;height:24px;margin:auto;border:1px solid #6f8dff;background:#244bd1b0;border-radius:50%;font-size:9px;font-weight:600}.marker span{position:absolute;bottom:46px;left:50%;transform:translateX(-50%);background:#080b11;border-bottom:1px solid #d6a248;padding:10px 12px;font-size:12px;white-space:nowrap;opacity:0;pointer-events:none}.marker:hover span,.marker:focus-visible span,.marker[aria-expanded=true] span{opacity:1}.m1{top:19%;left:19%}.m2{top:44%;left:40%}.m3{bottom:7%;left:67%}.signature{position:absolute;z-index:4;bottom:30px;left:5%;display:flex;gap:18px;align-items:center;color:#898b85;font-size:10px;letter-spacing:.1em}.signature::after{content:'';height:1px;width:140px;background:linear-gradient(90deg,#edeae24d,transparent)}
+.marker b{font-size:11px}nav a{display:flex;min-height:44px;align-items:center}
+.short-label{display:none}
+@media(max-width:700px){
+  .hero{height:auto;min-height:0;padding:0 20px 28px}
+  header{position:relative;inset:auto;margin:0 -20px;padding:12px 20px;gap:8px;align-items:center;font-size:13px}
+  .brand small,.brand span{display:none}
+  nav{gap:2px;font-size:11px;letter-spacing:.02em}
+  nav a{min-width:44px;justify-content:center}
+  .copy{display:contents}
+  h1{position:relative;z-index:4;width:62%;max-width:none;min-height:320px;margin:32px 0 0;font-size:clamp(38px,11.8vw,54px);line-height:1.08;letter-spacing:-.025em;text-wrap:initial}
+  .copy p{position:relative;z-index:4;max-width:none;margin:12px 0 0;font-size:16px;line-height:1.6}
+  .portrait{top:88px;bottom:auto;right:-10px;height:330px}
+  canvas,.glow{top:76px;bottom:auto;height:352px}
+  .glow{background:radial-gradient(ellipse at 76% 58%,#315ef526,transparent 67%)}
+  .hero::after{inset:76px 0 auto;height:352px;background:linear-gradient(90deg,#030405e8 0%,#030405b8 34%,transparent 65%)}
+  .actions{position:relative;z-index:4;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .actions a{min-height:48px;gap:8px;font-size:13px;letter-spacing:.02em;justify-content:space-between}
+  .actions svg{flex-shrink:0}
+  .full-label{display:none}.short-label{display:inline}
+  .signature{top:398px;bottom:auto;left:20px;font-size:10px}.signature::after{width:56px}
+  .m1{top:51%;left:0%}.m2{top:47%;left:35%}.m3{bottom:5%;left:67%}
+  .marker span{font-size:12px;max-width:190px;white-space:normal;width:max-content;text-align:center}
+  .m1 span,.m2 span{bottom:auto;top:46px}
+  .m3 span{left:auto;right:0;transform:none}
+}
+</style></head><body>
+<main class="hero"><div class="glow"></div><canvas aria-hidden="true"></canvas>
+<header><a class="brand" href="http://127.0.0.1:4321/" target="_top">2600TH<span>/</span><small>PRANSHUL CHANDHOK</small></a><nav aria-label="Primary navigation"><a href="http://127.0.0.1:4321/work/" target="_top">WORK</a><a href="http://127.0.0.1:4321/notes/" target="_top">NOTES</a><a href="http://127.0.0.1:4321/lab/" target="_top">LAB</a><a href="http://127.0.0.1:4321/about/" target="_top">ABOUT</a></nav></header>
+<div class="copy"><h1>Make the uncertain <em>operable.</em></h1><p>I’m Pranshul Chandhok. I lead product and technology for Interior Company at Square Yards, and stay hands-on with AI and real-time 3D. My work spans games, immersive training and design software.</p><div class="actions"><a href="http://127.0.0.1:4321/#selected-work" target="_top" aria-label="View selected work"><span class="full-label">VIEW SELECTED WORK</span><span class="short-label">View work</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3 12 12M5 12h7V5"/></svg></a><a href="http://127.0.0.1:4321/notes/" target="_top" aria-label="Read technical notes"><span class="full-label">READ TECHNICAL NOTES</span><span class="short-label">Read notes</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 12 4M5 4h7v7"/></svg></a></div></div>
+<div class="portrait"><img src="/assets/media/generated/identity/2600th-velvet-character.webp" width="960" height="1440" alt=""><button class="marker m1" aria-label="AI products" aria-expanded="false"><b aria-hidden="true">01</b><span>AI products</span></button><button class="marker m2" aria-label="Immersive systems" aria-expanded="false"><b aria-hidden="true">02</b><span>Immersive systems</span></button><button class="marker m3" aria-label="Real-time 3D" aria-expanded="false"><b aria-hidden="true">03</b><span>Real-time 3D</span></button></div><div class="signature" aria-hidden="true">2600</div>
+</main>
+<script>
+const kind=new URLSearchParams(location.search).get('variant')||'C';document.title='2600th · '+kind;
+const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d');let w=0,h=0,raf=0,active=true,strength=1,time=0,last=0,inView=true,portraitBounds;const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+const line=(points,color,width=1)=>{ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke()};
+function draw(t){ctx.clearRect(0,0,w,h);const mobile=w<=700;const cx=w*.76,floor=h*.94,hy=h*(mobile?.46:.57);ctx.globalAlpha=strength;
+ if(kind==='A'){
+  const gradient=ctx.createLinearGradient(0,hy,0,h);gradient.addColorStop(0,'#315ef500');gradient.addColorStop(.3,'#315ef520');gradient.addColorStop(1,'#6f8dff58');
+  for(let i=-7;i<=8;i++){const bx=cx+i*w*.19;line([[cx+(bx-cx)*.025,hy],[bx,h+30]],gradient)}
+  for(let i=0;i<12;i++){const depth=((i+t*.12)%12)/12;const y=hy+Math.pow(depth,2.3)*(h-hy+90);line([[-w,y],[w*2,y]],gradient)}
+  const light=ctx.createRadialGradient(cx,floor,0,cx,floor,w*.35);light.addColorStop(0,'#315ef518');light.addColorStop(1,'#315ef500');ctx.fillStyle=light;ctx.fillRect(0,hy,w,h-hy);
+ }else if(kind==='B'){
+  for(let j=0;j<32;j++){const pts=[];for(let i=0;i<=110;i++){const x=w*(.28+i/110*.9),u=i/110;const arch=Math.sin(u*Math.PI)*h*.24;const y=h*.99-j*h*.009-arch+Math.sin(u*9+j*.09+t*.12)*h*.035;pts.push([x,y])}const alpha=Math.round(22+Math.sin(j/32*Math.PI)*38).toString(16).padStart(2,'0');line(pts,(j===18?'#d6a248':'#6f8dff')+alpha,j===18?1.3:.8)}
+ }else{
+  // On phones the orbit belongs to the portrait, not the whole viewport.
+  const ox=mobile?portraitBounds.x+portraitBounds.width/2:cx;
+  const radius=mobile?Math.min(portraitBounds.width*.43,ox-12,w-ox-12):w*.34;
+  const oy=mobile?portraitBounds.y+portraitBounds.height*.53:h*.56;
+  const ry=mobile?portraitBounds.height*.4:h*.35;
+  const rx=mobile?radius:w*.2;
+  const ground=mobile?Math.min(portraitBounds.y+portraitBounds.height-10,h-26):floor;
+  for(let i=0;i<5;i++){ctx.beginPath();ctx.ellipse(ox,ground,mobile?radius*(.48+i*.13):w*(.12+i*.055),mobile?7+i*2.5:h*(.025+i*.018),0,0,Math.PI*2);ctx.strokeStyle=i===1?'#6f8dff65':'#315ef530';ctx.lineWidth=1;ctx.stroke()}
+  ctx.beginPath();ctx.ellipse(ox,oy,rx,ry,-.14,Math.PI*.95,Math.PI*2.8);ctx.strokeStyle='#6f8dff35';ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(ox,oy,rx,ry,-.14,t*.08,t*.08+.16);ctx.strokeStyle='#d6a248b0';ctx.lineWidth=1.5;ctx.stroke();
+  for(let i=0;i<12;i++){const a=i*Math.PI/6;line([[ox+Math.cos(a)*(mobile?radius*.88:w*.228),ground+Math.sin(a)*(mobile?14:h*.06)],[ox+Math.cos(a)*(mobile?radius*.96:w*.24),ground+Math.sin(a)*(mobile?16:h*.065)]],'#315ef555')}
+ }
+ for(let i=0;i<22;i++){const x=w*(.38+((Math.sin(i*29.7)+1)/2)*.62),y=h*(.18+((i*.071+t*.003)% .78));ctx.fillStyle=i%5===0?'#d6a24870':'#6f8dff40';ctx.beginPath();ctx.arc(x,y,i%5===0?1.4:.8,0,Math.PI*2);ctx.fill()}
+ ctx.globalAlpha=1;
+}
+function loop(now){raf=0;if(!active||reduce.matches||document.hidden||!inView)return;if(!last)last=now;time+=Math.min((now-last)/1000,.05);last=now;draw(time);raf=requestAnimationFrame(loop)}
+function restart(){cancelAnimationFrame(raf);last=0;draw(time);if(active&&!reduce.matches&&!document.hidden&&inView)raf=requestAnimationFrame(loop)}
+new ResizeObserver(()=>{w=canvas.clientWidth;h=canvas.clientHeight;const visual=document.querySelector('.portrait').getBoundingClientRect(),box=canvas.getBoundingClientRect();portraitBounds={x:visual.left-box.left,y:visual.top-box.top,width:visual.width,height:visual.height};const dpr=Math.min(devicePixelRatio,1.5);canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);restart()}).observe(canvas);
+new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;restart()}).observe(canvas);document.addEventListener('visibilitychange',restart);reduce.addEventListener('change',restart);
+window.addEventListener('message',event=>{if(event.origin!==location.origin||event.data?.type!=='preview-settings')return;active=Boolean(event.data.motion);strength=Math.max(.3,Math.min(1.5,Number(event.data.strength)||1));restart()});
+document.querySelectorAll('.marker').forEach(button=>button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')!=='true';document.querySelectorAll('.marker').forEach(b=>b.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded',String(open))}));
+// Fit the preview to its contents instead of creating a second scroll area.
+new ResizeObserver(()=>parent.postMessage({type:'preview-height',height:Math.ceil(document.querySelector('.hero').getBoundingClientRect().height)},location.origin)).observe(document.querySelector('.hero'));
+</script></body></html>

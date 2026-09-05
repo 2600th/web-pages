@@ -9,12 +9,17 @@ const domains = [
 <section class="velvet-hero" data-velvet-hero data-motion-scope data-cinematic-state="settled" aria-labelledby="velvet-title">
   <div class="velvet-hero__atmosphere" aria-hidden="true"></div>
   <div class="velvet-hero__copy">
-    <p class="velvet-hero__identity"><span>Product &amp; technology leader / builder</span></p>
     <h1 id="velvet-title"><span data-hero-title-line>Make the uncertain</span>{' '}<em data-hero-title-line>operable.</em></h1>
-    <p class="velvet-hero__thesis">I’m Pranshul Chandhok. I build product systems where applied AI, realtime 3D, and professional workflows meet. For 14+ years I’ve worked across games, XR, design software, and AI, leading teams while staying close to the systems themselves.</p>
+    <p class="velvet-hero__thesis">I’m Pranshul Chandhok. I lead product and technology for Interior Company at Square Yards, and stay hands-on with AI and real-time 3D. My work spans games, immersive training and design software.</p>
     <div class="velvet-hero__actions">
-      <a class="velvet-hero__action" href="#selected-work">View selected work <span aria-hidden="true">↘</span></a>
-      <a class="velvet-hero__action velvet-hero__action--secondary" href="/notes/">Read technical notes <span aria-hidden="true">↗</span></a>
+      <a class="velvet-hero__action" href="#selected-work" aria-label="View selected work">
+        <span class="velvet-hero__label velvet-hero__label--full">View selected work</span><span class="velvet-hero__label velvet-hero__label--short">View work</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3 12 12M5 12h7V5"></path></svg>
+      </a>
+      <a class="velvet-hero__action velvet-hero__action--secondary" href="/notes/" aria-label="Read technical notes">
+        <span class="velvet-hero__label velvet-hero__label--full">Read technical notes</span><span class="velvet-hero__label velvet-hero__label--short">Read notes</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 12 4M5 4h7v7"></path></svg>
+      </a>
     </div>
   </div>
 
@@ -46,6 +51,7 @@ const domains = [
 <script>
   import { initCinematicIntro } from '../../scripts/cinematic-intro';
   let dispose = initCinematicIntro();
+  document.addEventListener('portfolio:motion-change', () => { dispose(); dispose = initCinematicIntro(document, false); });
   document.addEventListener('astro:before-swap', () => dispose(), { once: true });
   document.addEventListener('astro:after-swap', () => { dispose = initCinematicIntro(); });
 </script>
@@ -110,26 +116,10 @@ const domains = [
     justify-content: center;
   }
 
-  .velvet-hero__identity {
-    display: flex;
-    width: min(100%, 32rem);
-    align-items: center;
-    gap: 1.1rem;
-    margin: 0 0 clamp(1.75rem, 4vh, 3rem);
-    color: #a8a7a1;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .velvet-hero__identity::after { height: 1px; flex: 1; background: linear-gradient(90deg, rgb(237 234 226 / 0.35), transparent); content: ''; }
-  .velvet-hero__identity strong { color: #edeae2; font-weight: 720; }
-  .velvet-hero__identity span { color: #d6a248; }
-
   .velvet-hero h1 {
     max-width: 10ch;
     margin: 0;
-    font-size: clamp(4.2rem, 6.9vw, 7rem);
+    font-size: clamp(4.2rem, 6.9vw, 6rem);
     font-stretch: 84%;
     font-weight: 730;
     letter-spacing: -0.03em;
@@ -157,22 +147,22 @@ const domains = [
     gap: 1.1rem;
     border-bottom: 1px solid #d6a248;
     color: #edeae2;
-    font-size: 0.7rem;
+    font-size: 0.8125rem;
     font-weight: 740;
     letter-spacing: 0.08em;
     text-decoration: none;
     text-transform: uppercase;
   }
   .velvet-hero__action--secondary { border-bottom-color: rgb(237 234 226 / 0.32); }
-
-  .velvet-hero__action span { color: #d6a248; font-size: 1rem; transition: transform 180ms ease; }
-  .velvet-hero__action:hover span, .velvet-hero__action:focus-visible span { transform: translate(0.2rem, 0.2rem); }
+  .velvet-hero__label--short { display: none; }
+  .velvet-hero__action svg { width: 1rem; height: 1rem; flex: 0 0 auto; fill: none; stroke: #d6a248; stroke-width: 1.6; transition: transform 180ms ease; }
+  .velvet-hero__action:hover svg, .velvet-hero__action:focus-visible svg { transform: translate(0.2rem, 0.2rem); }
 
   .velvet-hero__figure-field {
     position: absolute;
-    right: clamp(2rem, 6vw, 5.5rem);
-    bottom: -4.5rem;
-    height: min(92svh, 58rem);
+    right: 2%;
+    bottom: 0;
+    height: min(90svh, 58rem);
     aspect-ratio: 2 / 3;
     transform-origin: 55% 100%;
   }
@@ -189,7 +179,7 @@ const domains = [
     margin: 0;
     padding: 0;
     color: #a8a7a1;
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     font-weight: 670;
     letter-spacing: 0.11em;
     list-style: none;
@@ -274,7 +264,7 @@ const domains = [
   [data-cinematic-state='playing'] .velvet-hero__copy { animation: velvet-copy 1500ms 450ms both cubic-bezier(0.2, 0.75, 0.2, 1); }
   [data-cinematic-state='playing'] .velvet-hero__figure { animation: velvet-figure 1900ms 700ms both cubic-bezier(0.16, 1, 0.3, 1); }
   [data-cinematic-state='playing'] .velvet-hero__domains { animation: velvet-traces 900ms 1900ms both ease-out; }
-  @keyframes velvet-copy { from { opacity: 0; transform: translateY(1.5rem); filter: blur(8px); } }
+  @keyframes velvet-copy { from { opacity: 0.7; transform: translateY(0.5rem); } }
   @keyframes velvet-figure { from { opacity: 0; transform: translateX(4rem) scale(1.04); filter: blur(12px); } }
   @keyframes velvet-traces { from { opacity: 0; transform: translateX(1rem); } }
 
@@ -286,36 +276,47 @@ const domains = [
     .velvet-hero__figure { opacity: 0.72; }
   }
 
-  @media (max-width: 42rem) {
-    .velvet-hero { min-height: 49rem; }
-    .velvet-hero::after { background: linear-gradient(180deg, transparent 55%, rgb(3 4 5 / 0.25) 100%); }
-    .velvet-hero__copy { width: auto; padding: 8.5rem var(--page-gutter) 28rem; justify-content: flex-start; }
-    .velvet-hero__identity { max-width: 34ch; gap: 0.65rem; margin-bottom: 1.75rem; font-size: 0.65rem; line-height: 1.5; }
-    .velvet-hero__identity::after { display: none; }
-    .velvet-hero h1 { max-width: 8ch; font-size: clamp(3.35rem, 16vw, 4.75rem); }
-    .velvet-hero__thesis { max-width: 39ch; font-size: 1rem; }
-    .velvet-hero__figure-field { right: -5rem; bottom: -1rem; height: 30rem; }
-    .velvet-hero__figure { opacity: 0.85; }
-    .velvet-hero__domains { font-size: 0.52rem; }
+  @media (max-width: 43.75rem) {
+    :global(canvas[data-cinematic-canvas]) { inset: 4.75rem 0 auto; }
+    .velvet-hero { min-height: 0; padding: 0 var(--page-gutter) 1.75rem; }
+    .velvet-hero::before { background: radial-gradient(ellipse at 76% 28%, rgb(49 94 245 / 0.16), transparent 22rem); }
+    .velvet-hero::after { inset: 4.75rem 0 auto; height: 22rem; background: linear-gradient(90deg, rgb(3 4 5 / 0.91) 0%, rgb(3 4 5 / 0.72) 34%, transparent 65%); mix-blend-mode: normal; }
+    .velvet-hero__atmosphere { inset: 4.75rem 0 auto; height: 22rem; mask-image: radial-gradient(circle at 76% 58%, #000, transparent 67%); }
+    .velvet-hero__copy { display: grid; width: auto; max-width: none; padding: 6.5rem 0 0; grid-template-rows: 22rem auto auto; }
+    .velvet-hero h1 { position: relative; width: 62%; max-width: none; margin: 2rem 0 0; align-self: start; font-size: clamp(2.375rem, 11.8vw, 3.375rem); line-height: 1.08; text-wrap: initial; }
+    .velvet-hero__thesis { max-width: none; margin-top: 0.75rem; font-size: 1rem; line-height: 1.6; }
+    .velvet-hero__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .velvet-hero__action { width: 100%; min-height: 3rem; justify-content: space-between; gap: 0.5rem; font-size: 0.8125rem; letter-spacing: 0.02em; }
+    .velvet-hero__label--full { display: none; }
+    .velvet-hero__label--short { display: inline; }
+    .velvet-hero__figure-field { top: 5.5rem; right: -0.625rem; bottom: auto; height: 20.625rem; }
+    .velvet-hero__figure { opacity: 1; }
+    .velvet-hero__domains { font-size: 0.75rem; }
     .velvet-hero__domains li[data-domain-trace='glasses'] { left: 58%; }
     .velvet-hero__domains li > strong { right: auto; left: 50%; }
     .velvet-hero__domains li[data-domain-trace='boots'] > strong { top: auto; bottom: calc(100% + 0.55rem); transform: translate(-50%, 0.4rem); }
-    .velvet-hero__domains li[data-domain-trace='harness'] > strong { top: calc(100% + 0.55rem); bottom: auto; left: calc(50% + 1.6rem); transform: translate(-50%, -0.4rem); }
+    .velvet-hero__domains li[data-domain-trace='harness'] > strong { top: 50%; bottom: auto; left: calc(50% + 4rem); max-width: 6rem; font-size: 0.625rem; letter-spacing: 0.04em; text-align: center; transform: translate(-50%, -50%); white-space: normal; }
     .velvet-hero__domains li[data-domain-trace='glasses'] > strong { top: auto; right: -0.6rem; bottom: calc(100% + 0.55rem); left: auto; padding: 0.35rem 0.25rem; transform: translateY(0.4rem); }
     .velvet-hero__domains li > strong::after { left: 50%; width: 1px; height: 0.55rem; background: linear-gradient(180deg, rgb(49 94 245 / 0.72), rgb(214 162 72 / 0.35)); }
     .velvet-hero__domains li[data-domain-trace='boots'] > strong::after { top: 100%; }
-    .velvet-hero__domains li[data-domain-trace='harness'] > strong::after { top: auto; bottom: 100%; left: 30%; }
+    .velvet-hero__domains li[data-domain-trace='harness'] > strong::after { top: 50%; right: 100%; bottom: auto; left: auto; width: 4rem; height: 1px; background: linear-gradient(90deg, rgb(214 162 72 / 0.35), rgb(49 94 245 / 0.72)); }
     .velvet-hero__domains li[data-domain-trace='glasses'] > strong::after { top: 100%; right: 0.6rem; bottom: auto; left: auto; width: 1px; height: 0.55rem; background: linear-gradient(180deg, rgb(49 94 245 / 0.72), rgb(214 162 72 / 0.35)); }
     .velvet-hero__domains details:hover + strong,
     .velvet-hero__domains details:focus-within + strong,
     .velvet-hero__domains details[open] + strong { transform: translate(-50%, 0); }
+    .velvet-hero__domains li[data-domain-trace='harness'] details:hover + strong,
+    .velvet-hero__domains li[data-domain-trace='harness'] details:focus-within + strong,
+    .velvet-hero__domains li[data-domain-trace='harness'] details[open] + strong { transform: translate(-50%, -50%); }
     .velvet-hero__domains li[data-domain-trace='glasses'] details:hover + strong,
     .velvet-hero__domains li[data-domain-trace='glasses'] details:focus-within + strong,
     .velvet-hero__domains li[data-domain-trace='glasses'] details[open] + strong { transform: translateY(0); }
-    .velvet-hero__status { bottom: 1.35rem; display: flex; width: 10rem; }
+    .velvet-hero__status { top: 24.875rem; bottom: auto; left: 0; display: flex; width: 6.5rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .velvet-hero *, .velvet-hero *::before, .velvet-hero *::after { animation: none !important; transition: none !important; }
+  }
+  @media (pointer: fine) and (min-width: 43.751rem) {
+    .velvet-hero__status { bottom: 5rem; }
   }
 </style>

@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import sharp from 'sharp';
 import { expect, it } from 'vitest';
 
-it('builds every IRA opening format from the corrected Newton image, not the retired learner frame', async () => {
+it('builds IRA and Blocks openings from their corrected images in every format', async () => {
   const fixture = mkdtempSync(join(tmpdir(), 'route-media-'));
   try {
     const sources = [
@@ -15,6 +15,7 @@ it('builds every IRA opening format from the corrected Newton image, not the ret
       ['public/media/work/blocks-inco-ai/designesto-before-after.webp', '#0000ff'],
       ['public/media/generated/editorial/notes-aperture.webp', '#0000ff'],
       ['public/media/generated/editorial/blocks-design-production-v1.webp', '#0000ff'],
+      ['public/media/generated/editorial/blocks-design-production-v2.webp', '#00ff00'],
       ['public/media/work/propvr-ai-craft/craft-public-home-20260902.webp', '#0000ff'],
     ];
     for (const [relativePath, background] of sources) {
@@ -29,6 +30,13 @@ it('builds every IRA opening format from the corrected Newton image, not the ret
     for (const project of ['blocks', 'craft']) {
       const metadata = await sharp(readFileSync(join(output, `${project}-960.webp`))).metadata();
       expect([metadata.width, metadata.height]).toEqual([960, 540]);
+    }
+    for (const width of [640, 960]) {
+      for (const format of ['webp', 'avif']) {
+        const stats = await sharp(readFileSync(join(output, `blocks-${width}.${format}`))).stats();
+        expect(stats.channels[1].mean, 'Blocks must use the refreshed image in every opening format').toBeGreaterThan(245);
+        expect(stats.channels[2].mean, 'The retired Blocks composition must not leak into the reel').toBeLessThan(10);
+      }
     }
     for (const image of images) {
       const stats = await sharp(readFileSync(join(output, image))).stats();

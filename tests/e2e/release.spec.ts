@@ -170,8 +170,14 @@ test('interior index openings keep the cinematic velvet contract', async ({ page
     if (path === '/notes/') await expect(opening.locator('[data-notes-opening-media]')).toHaveCount(1);
     else await expect(opening.locator('img[src*="/media/generated/editorial/"]')).toHaveCount(0);
     const height = (await opening.boundingBox())?.height ?? 0;
-    expect(height, `${path} opening height`).toBeGreaterThanOrEqual(560);
-    expect(height, `${path} opening height`).toBeLessThanOrEqual(760);
+    if (path === '/work/') {
+      expect(height, `${path} compact opening height`).toBeGreaterThanOrEqual(150);
+      expect(height, `${path} compact opening height`).toBeLessThanOrEqual(260);
+      expect(await opening.locator('h1').evaluate((heading) => Number.parseFloat(getComputedStyle(heading).fontSize))).toBeGreaterThanOrEqual(60);
+    } else {
+      expect(height, `${path} opening height`).toBeGreaterThanOrEqual(560);
+      expect(height, `${path} opening height`).toBeLessThanOrEqual(760);
+    }
   }
 });
 

@@ -5,7 +5,7 @@ import sharp from 'sharp';
 const root = process.cwd();
 const variants = [
   {
-    source: 'public/media/generated/editorial/blocks-design-production-v1.webp',
+    source: 'public/media/generated/editorial/blocks-design-production-v2.webp',
     output: 'public/media/routes/work/blocks',
     position: 'centre',
   },

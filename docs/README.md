@@ -4,6 +4,8 @@ Start with the maintained guides:
 
 - [Repository README](../README.md): current site, local commands, and source layout.
 - [Design guidance](../DESIGN.md): current presentation and interaction rules.
+- [Approved layout integration](approved-layout-integration-report.md): Orbital hero, editorial gallery, project reading and release verification from 6 September 2026.
+- [Visual and content refinement report](visual-content-refinement-report.md): the September 2026 visual pass, review dispositions, verification and source-dependent follow-ups.
 - [Media and provenance](media.md): originals, generated versus authentic media, regeneration, and publication review.
 - [Search and AI discovery](discovery.md): robots policy, generated sitemaps, RSS, the optional LLM guide, and validation.
 - [Deployment](deployment.md): explicit release approval, verification, and recoverable rollback.

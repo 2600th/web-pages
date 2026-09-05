@@ -24,15 +24,20 @@ engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/generated/editorial/enhanced/kinema-hero-v2.webp
   avif: /media/generated/editorial/enhanced/kinema-hero-v2.avif
-  label: Kinema · The menu for playing levels and opening the editor.
-  alt: Kinema browser gameplay scene inside its procedural showcase corridor
+  label: Editorial visual based on Kinema’s browser gameplay lab.
+  alt: Editorial illustration of Kinema’s procedural showcase corridor
   width: 1600
   height: 900
 out:
   thesis: Build a level and play it in the same browser tab.
   audience: Developers exploring browser-native gameplay, rendering, and level workflows.
   outcome: A public MIT-licensed lab with a playable showcase, fourteen feature stations, and a level editor that can move directly into play-testing.
-  media: *hero
+  media:
+    src: /media/work/kinema/hero.webp
+    label: Original Kinema menu capture from the public repository.
+    alt: Kinema menu for entering the showcase and opening the editor
+    width: 1600
+    height: 900
 near:
   experience: Try the gameplay, then open the editor and change the level.
   contribution: I designed and built Kinema’s gameplay systems, browser editor, and rendering paths. I also work on input support and the tests used to check changes.
@@ -40,8 +45,8 @@ near:
   media:
     src: /media/generated/editorial/enhanced/kinema-editor-v2.webp
     avif: /media/generated/editorial/enhanced/kinema-editor-v2.avif
-    label: Kinema · Editing a level while keeping the game in view.
-    alt: Kinema in-browser level editor with scene tools and a live gameplay viewport
+    label: Editorial illustration of Kinema’s level-editing workflow.
+    alt: Editorial visualization of level-editing tools beside a gameplay viewport
     width: 1600
     height: 900
 inside:
@@ -54,9 +59,8 @@ inside:
   evidence:
     - Kinema is an active experiment. The MIT-licensed repository includes setup instructions and tests for anyone who wants to work with it.
   media:
-    src: /media/generated/editorial/enhanced/kinema-inside-v2.webp
-    avif: /media/generated/editorial/enhanced/kinema-inside-v2.avif
-    label: Kinema · A target arena for testing gameplay and visual effects.
+    src: /media/work/kinema/inside.webp
+    label: Original repository capture of the target arena used to try gameplay and visual effects.
     alt: Kinema target arena station demonstrating gameplay systems and visual effects
     width: 1600
     height: 900

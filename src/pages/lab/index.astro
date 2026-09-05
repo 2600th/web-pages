@@ -1,6 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 import '../../styles/content-pages.css';
+
+const work = await getCollection('work');
+const experimentActions = (slug: string) => {
+  const entry = work.find((entry) => entry.data.slug === slug);
+  const demo = entry?.data.sources.find((source) => source.type === 'live-demo');
+  const source = entry?.data.sources.find((source) => source.type === 'repository');
+  return [
+    ...(demo ? [{ label: 'Launch demo', href: demo.url }] : []),
+    { label: 'Read the build', href: `/work/${slug}/` },
+    ...(source ? [{ label: 'Source', href: source.url }] : []),
+  ];
+};
 
 const builds = [
   {
@@ -14,18 +27,24 @@ const builds = [
     title: 'Kinema',
     description: 'A third-person game with a level editor in the same browser tab. I’m using it to explore gameplay, graphics, and editing tools.',
     href: '/work/kinema/',
+    actions: experimentActions('kinema'),
+    guidance: 'F1 opens the level editor.',
   },
   {
     state: 'Shipped',
     title: 'Web Ocean 3D',
     description: 'An interactive ocean with changing weather and a boat to pilot. I’m also working on how it loads and runs across devices.',
     href: '/work/web-ocean-3d/',
+    actions: experimentActions('web-ocean-3d'),
+    guidance: 'Boat and camera modes; WebGL2 fallback available.',
   },
   {
     state: 'Shipped',
     title: 'Safed Sagar',
     description: 'A compact fictional reconnaissance experience built and released in days as a browser flight experiment.',
     href: '/work/safed-sagar/',
+    actions: experimentActions('safed-sagar'),
+    guidance: 'Keyboard, gamepad, and touch controls. Fictional flight experience.',
   },
   {
     state: 'Source',
@@ -74,15 +93,42 @@ const builds = [
       <ol>
         {builds.map((build) => (
           <li data-build-row>
-            <a href={build.href} target={build.href.startsWith('http') ? '_blank' : undefined} rel={build.href.startsWith('http') ? 'noopener' : undefined}>
+            {'actions' in build ? <article class="build-entry" aria-labelledby={`build-${build.title.toLowerCase().replaceAll(' ', '-')}`}>
+              <span class="build-entry__state">{build.state}</span>
+              <div class="build-entry__body">
+                <h3 id={`build-${build.title.toLowerCase().replaceAll(' ', '-')}`}>{build.title}</h3>
+                <p>{build.description}</p>
+                <p class="build-entry__guidance">{build.guidance}</p>
+                <div class="build-entry__actions">
+                  {build.actions.map((action) => <a href={action.href} target={action.href.startsWith('http') ? '_blank' : undefined} rel={action.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                    {action.label}{action.href.startsWith('http') && <><span aria-hidden="true"> ↗</span><span class="sr-only"> (opens in a new tab)</span></>}
+                  </a>)}
+                </div>
+              </div>
+            </article> : <a href={build.href} target={build.href.startsWith('http') ? '_blank' : undefined} rel={build.href.startsWith('http') ? 'noopener' : undefined}>
               <span>{build.state}</span>
               <strong>{build.title}</strong>
               <span>{build.description}</span>
               <span aria-hidden="true">↗</span>
-            </a>
+            </a>}
           </li>
         ))}
       </ol>
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  .build-entry { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.5rem; padding-block: 2rem; }
+  .build-entry__state { padding-top: 0.35rem; color: var(--gold); font-size: var(--type-label); text-transform: uppercase; }
+  .build-entry h3 { margin-bottom: 0.6rem; font-size: var(--type-article); }
+  .build-entry p { max-width: 64ch; margin-bottom: 0.65rem; color: var(--muted); }
+  .build-entry .build-entry__guidance { font-size: 0.875rem; }
+  .build-entry__actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
+  .build-entry .build-entry__actions a { display: inline-flex; min-height: 2.75rem; gap: 0.35rem; align-items: center; padding-block: 0.5rem; font-size: 0.9375rem; text-decoration: underline; }
+  .build-entry .build-entry__actions a > span { grid-column: auto; grid-row: auto; color: var(--gold); font-size: inherit; }
+  @media (max-width: 40rem) {
+    .build-entry { grid-template-columns: 1fr; gap: 0.5rem; }
+    .build-entry__actions { gap: 0.4rem 1.5rem; }
+  }
+</style>

@@ -74,7 +74,7 @@ const domainMeta = CAREER_DOMAIN_META[domain];
         <div><h2 id="work-list-heading" data-work-heading>{domainMeta.label}</h2><span class="work-list-region__count" data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
         <p data-work-description>{domainMeta.description}</p>
       </header>
-      <WorkList work={work} />
+      <WorkList work={work} uniform />
     </section>
   </div>
 </BaseLayout>

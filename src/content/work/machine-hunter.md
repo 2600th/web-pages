@@ -21,7 +21,7 @@ engagementPath: product-collaboration
 heroMedia:
   src: /media/generated/editorial/enhanced/machine-hunter-hero-v2.webp
   avif: /media/generated/editorial/enhanced/machine-hunter-hero-v2.avif
-  label: Machine Hunter · Bow-and-arrow combat in the VR arena.
+  label: Machine Hunter archery. Enhanced editorial poster; playback shows the original gameplay.
   mp4: /media/career/machine-hunter/clip.mp4
   webm: /media/career/machine-hunter/clip.webm
   alt: Bow-and-arrow gameplay inside the Machine Hunter virtual-reality arena
@@ -34,7 +34,7 @@ out:
   media:
     src: /media/generated/editorial/enhanced/machine-hunter-draw-v2.webp
     avif: /media/generated/editorial/enhanced/machine-hunter-draw-v2.avif
-    label: Machine Hunter · Drawing the bow with tracked hand controllers.
+    label: Drawing the bow. Enhanced editorial poster; playback shows the original gameplay.
     mp4: /media/career/machine-hunter/clip.mp4
     webm: /media/career/machine-hunter/clip.webm
     alt: The player draws a bow inside the Machine Hunter virtual-reality arena
@@ -47,7 +47,7 @@ near:
   media:
     src: /media/generated/editorial/enhanced/machine-hunter-aim-v2.webp
     avif: /media/generated/editorial/enhanced/machine-hunter-aim-v2.avif
-    label: Machine Hunter · Aiming at a target inside the arena.
+    label: Aiming inside the arena. Enhanced editorial poster; playback shows the original gameplay.
     mp4: /media/career/machine-hunter/clip.mp4
     webm: /media/career/machine-hunter/clip.webm
     alt: The player aims at a target portal inside the Machine Hunter arena
@@ -64,7 +64,7 @@ inside:
   media:
     src: /media/generated/editorial/enhanced/machine-hunter-release-v2.webp
     avif: /media/generated/editorial/enhanced/machine-hunter-release-v2.avif
-    label: Machine Hunter · Releasing an arrow towards a target.
+    label: Releasing an arrow. Enhanced editorial poster; playback shows the original gameplay.
     mp4: /media/career/machine-hunter/clip.mp4
     webm: /media/career/machine-hunter/clip.webm
     alt: The released arrow resolves into visible feedback in the Machine Hunter arena

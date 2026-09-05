@@ -1,0 +1,22 @@
+---
+import manifest from '../../data/responsive-media.json';
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  sizes?: string;
+  class?: string;
+  avif?: string;
+}
+const { src, alt, width, height, loading = 'lazy', fetchpriority = 'auto', sizes = '(max-width: 64rem) 100vw, 70vw', avif, ...attributes } = Astro.props;
+type Variant = { width: number; webp: string; avif: string };
+const variants = (manifest as Record<string, Variant[]>)[src];
+---
+<picture>
+  {variants ? <source type="image/avif" srcset={variants.map(item => `${item.avif} ${item.width}w`).join(', ')} sizes={sizes} /> : avif && <source type="image/avif" srcset={avif} />}
+  <img {...attributes} src={src} alt={alt} width={width} height={height} srcset={variants?.map(item => `${item.webp} ${item.width}w`).join(', ')} sizes={variants ? sizes : undefined} loading={loading} fetchpriority={fetchpriority} decoding="async" />
+</picture>
+<style>picture { display: contents; }</style>

@@ -26,7 +26,7 @@ The second request is different. “Keep the layout, but change the material” 
 
 That is why Designesto’s product work is not just a collection of model inputs. Restyling a room, developing a sketch and communicating a proposal begin with different source information. The workflow needs to make the requested change legible, so the result can be judged against it.
 
-I treat preservation as a requirement to design for, not a claim that any model follows every instruction perfectly. When a revision cannot reliably hold an important feature fixed, the interface should not conceal that uncertainty. The user needs to inspect the output and decide whether to accept it.
+Preservation is a requirement to design for. When a revision cannot reliably hold an important feature fixed, the interface should make that uncertainty visible. The user needs to inspect the output and decide whether to accept it.
 
 Designesto’s case covers concept exploration, revision and communication. Deeper costing and execution integration remain roadmap work unless separately confirmed. A generated panorama can communicate a direction. It cannot make that direction execution-ready merely by being immersive. Moving from a concept to a priced specification requires a different kind of information.
 
@@ -40,7 +40,7 @@ That does not mean the visual interaction becomes secondary. The designer still 
 
 The published InCo AI integration introduced a path from exploration into Blocks for pricing and specifications. It does not establish that every later visual product inherits those capabilities. Keeping that distinction clear is important both technically and in how I describe the work.
 
-My role is product and technology leadership alongside the teams building and delivering these systems. The point is not individual ownership of every rule. It is the shared architectural obligation to keep the visual design and its operational meaning from drifting apart.
+I lead product and technology alongside the teams building and delivering these systems. We need to keep the visual design and its operational meaning from drifting apart.
 
 ## PropVR AI to Craft: the boundary around a tool
 
@@ -48,9 +48,9 @@ The initial internal PropVR AI MVP posed another version of the problem. Archite
 
 I built 22 specialist tools across five workflow studios. Each tool established a task, an input contract and an output. Routing to a suitable model was part of that system, but it was not the whole interaction. The user also needed to know what to provide, what they were asking to change and what to do with the result.
 
-The scope boundary matters here too. The MVP used client-side state. Durable projects, production accounts and real billing were outside that implementation. The PropVR Technology team developed, productionized and expanded the foundation into the current Craft platform. I do not treat current platform capabilities as features I personally shipped in the MVP.
+The MVP used client-side state; durable projects, production accounts and real billing were outside its scope. The PropVR Technology team developed, productionized and expanded that foundation into the current Craft platform.
 
-The lesson I carry forward is about the controls around generation. A professional creative workflow needs project context, a plan for the work and a clear moment of approval before an output acquires downstream authority. That is an architectural principle, not a claim that a particular approval engine existed in the initial build.
+The lesson I carry forward is about the controls I would add around generation: project context, a plan for the work and a clear moment of approval before an output acquires downstream authority.
 
 Once a result becomes a selected project artifact, the next operation should know that it is selected rather than merely the latest output. Otherwise a new generation can silently replace a decision that a person thought was settled. The model may be free to propose. The product should decide how a proposal becomes part of the project.
 

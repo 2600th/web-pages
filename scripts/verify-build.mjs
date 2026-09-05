@@ -70,7 +70,7 @@ for (const route of htmlRoutes) {
 }
 
 const home = await readFile(join(output, 'index.html'), 'utf8');
-if (!home.includes('Pranshul Chandhok') || !home.includes('Make the uncertain') || !home.includes('Product &amp; technology leader / builder')) {
+if (!home.includes('Pranshul Chandhok') || !home.includes('Make the uncertain') || !home.includes('Interior Company at Square Yards')) {
   throw new Error('The generated homepage is missing its current identity or Velvet thesis.');
 }
 if ((home.match(/<article\b[^>]*\bdata-signal-case\b/g) ?? []).length !== 5 || home.includes('href="/work/blocks-inco-ai/"')) throw new Error('Homepage featured work is not the approved five-product selection.');

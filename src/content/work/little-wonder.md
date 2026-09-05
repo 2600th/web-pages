@@ -28,8 +28,8 @@ heroLabel: Live first-party product
 heroMedia:
   src: /media/generated/editorial/enhanced/little-wonder-hero-v2.webp
   avif: /media/generated/editorial/enhanced/little-wonder-hero-v2.avif
-  label: Little Wonder · A storybook workspace for a child’s ideas and drawings.
-  alt: Little Wonder storybook generator landing screen with a child character and floating creative tools
+  label: Editorial visual based on Little Wonder’s storybook workspace for children’s ideas and drawings.
+  alt: Editorial illustration of a child character and floating storybook creation tools
   width: 1600
   height: 900
 sources:

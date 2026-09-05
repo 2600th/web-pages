@@ -23,7 +23,7 @@ engagementPath: product-collaboration
 heroMedia:
   src: /media/generated/editorial/enhanced/ira-newton-v2.webp
   avif: /media/generated/editorial/enhanced/ira-newton-v2.avif
-  label: IRA VR · Exploring an interactive lesson with Newton.
+  label: Newton learning demonstration. Enhanced editorial poster; playback shows the original demonstration.
   mp4: /media/career/ira-vr/newton-loop.mp4
   alt: IRA VR Newton demonstration pairing a headset learner with a responsive virtual historical environment
   width: 1600
@@ -33,12 +33,12 @@ out:
   audience: Teachers and learners using virtual lessons and experiments.
   outcome: A learning platform with mobile and headset applications, curriculum content, teacher controls, and assessment reports. Later work explored virtual labs and multi-user learning.
   media:
-    src: /media/generated/editorial/enhanced/ira-panorama-v2.webp
-    avif: /media/generated/editorial/enhanced/ira-panorama-v2.avif
-    label: IRA VR · A guided lesson within an immersive landscape.
+    src: /media/career/ira-vr/poster-1280.webp
+    avif: /media/career/ira-vr/poster-1280.avif
+    label: Original IRA VR learning view, with a biology lesson inside a panoramic environment.
     alt: IRA VR learning module presented inside a panoramic immersive landscape
-    width: 1600
-    height: 900
+    width: 1280
+    height: 826
 near:
   experience: Enter a virtual lesson, then try an experiment yourself.
   contribution: I led product and technology across the mobile and headset applications, classroom controls, content structure, and reporting tools.
@@ -61,7 +61,7 @@ inside:
   media:
     src: /media/generated/editorial/enhanced/ira-lab-v2.webp
     avif: /media/generated/editorial/enhanced/ira-lab-v2.avif
-    label: IRA VR Lab · Learning about resistors by assembling a circuit.
+    label: Assembling a circuit in IRA VR Lab. Enhanced editorial poster; playback shows the original laboratory demonstration.
     mp4: /media/career/ira-vr/lab-loop.mp4
     alt: IRA VR virtual laboratory showing a learner assembling and testing an electrical circuit in an immersive lesson
     width: 1600

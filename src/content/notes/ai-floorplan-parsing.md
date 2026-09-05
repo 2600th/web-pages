@@ -2,7 +2,7 @@
 title: The hard part of AI floorplan parsing isn’t the model
 slug: ai-floorplan-parsing
 type: technical-teardown
-summary: "A source-grounded look at a floorplan pipeline: where structured output helps, how file-based resume can fail, and which validation mechanisms still belong in the next version."
+summary: "How a floorplan pipeline handles retries and cached results, where stale output can slip through, and the validation I’d add next."
 publishedAt: 2026-09-02
 updatedAt: 2026-09-03
 topics: [Applied AI, Spatial systems, Pipeline reliability]
@@ -16,7 +16,7 @@ Extracting a plausible room list from a floorplan is easy to demo. Producing str
 
 The floorplan pipeline I have worked with has staged processing, structured model responses, bounded retries and resumable files. Its next-version plan goes further, with hash-addressed outputs, spend limits and repeatable geometry evaluation. The useful engineering question is what each mechanism would let the next stage trust.
 
-This is an architecture review, not an accuracy benchmark. I did not run new model requests or measure latency, cost or geometry accuracy for this article. I am describing mechanisms visible in the implementation without publishing customer drawings, prompts or proprietary field definitions.
+This architecture review describes the implementation and the changes I would make next. It includes no new model runs or measurements of latency, cost or geometry accuracy.
 
 ## A drawing is not a clean scene description
 
@@ -24,13 +24,13 @@ A floorplan mixes geometry with symbols, dimensions and text. A number near a wa
 
 The model can return a confident interpretation even when the input does not determine a unique answer. I therefore separate three questions. Did the response parse? Does it satisfy the expected shape? Is the interpretation supported by the drawing? The first two are necessary for software integration. Neither answers the third.
 
-That distinction matters for a system such as Blocks, where geometry eventually constrains catalogue choices and production information. A valid JSON object is not permission to use a guessed dimension as a manufacturing fact. I am connecting the product problem here, not describing an integration with Blocks.
+That distinction also appears in [Blocks](/work/blocks/), where geometry constrains catalogue choices and production information. These are separate systems with a related problem: a valid JSON object cannot turn a guessed dimension into a manufacturing fact.
 
 ## The implemented stage dependency
 
 Processing begins with an isometric image stage, then proceeds through analysis, room detection and overlays, with optional room renders. Critical stage failures stop the relevant path. Failures in individual room work are accumulated so the result can retain partial progress and errors.
 
-The following is a simplified dependency diagram, not a reproduction of the private workflow or its field schema:
+The stages depend on one another in this order:
 
 <figure class="stage-flow" data-stage-flow aria-label="Floorplan processing stage dependency">
   <ol>
@@ -76,7 +76,7 @@ The implemented resume path reuses outputs when files exist. It reloads cached J
 
 Suppose I replace the source drawing while keeping its project location, or change the processing configuration. The old output can still look complete. Without binding that output to the source and configuration, existence alone cannot justify reuse. The existing hash mechanism supplies a seed, not a resume fingerprint.
 
-This is the conceptual contract I would want next. It is illustrative pseudocode, not copied production code or a claim of completed behaviour:
+The proposed resume contract, in illustrative pseudocode:
 
 ```text
 identity = fingerprint(source + relevant configuration)

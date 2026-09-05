@@ -23,8 +23,8 @@ heroLabel: Editorial illustration of the systems discussed in the 2023 essay
 heroMedia:
   src: /media/generated/editorial/enhanced/ai-native-game-thesis-hero-v2.webp
   avif: /media/generated/editorial/enhanced/ai-native-game-thesis-hero-v2.avif
-  label: AI and game development · A visual outline of tools for building a game world.
-  alt: Playable game world assembling from generated environments, animation rigs, narrative paths, and adaptive sound
+  label: Editorial illustration of the AI game-development ideas discussed in the essay.
+  alt: Conceptual game world assembling from environments, animation rigs, narrative paths and sound
   width: 1600
   height: 900
 sources:

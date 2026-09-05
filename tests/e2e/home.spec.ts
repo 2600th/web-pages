@@ -8,8 +8,8 @@ test('approved Velvet Reveal hero is semantic, sparse, and immediately actionabl
   await expect(hero).toBeVisible();
   await expect(hero.getByRole('heading', { level: 1, name: 'Make the uncertain operable.' })).toBeVisible();
   await expect(hero).toContainText('Pranshul Chandhok');
-  await expect(hero).toContainText('Product & technology leader / builder');
-  await expect(hero).toContainText('I build product systems where applied AI, realtime 3D, and professional workflows meet.');
+  await expect(hero).not.toContainText('Product & technology leader / builder');
+  await expect(hero).toContainText('Interior Company at Square Yards');
   await expect(hero.getByRole('link', { name: 'View selected work' })).toHaveAttribute('href', '#selected-work');
   await expect(hero.locator('[data-generated-identity]')).toHaveCount(0);
   await expect(hero.locator('.velvet-hero__status')).toContainText('2600');
@@ -145,7 +145,12 @@ test('reduced motion receives the final composition without a running canvas', a
   const hero = page.locator('[data-velvet-hero]');
 
   await expect(hero).toHaveAttribute('data-cinematic-state', 'settled');
-  await expect(hero.locator('canvas[data-cinematic-canvas]')).toHaveCount(0);
+  const canvas = hero.locator('canvas[data-cinematic-canvas]');
+  await expect(canvas).toBeVisible();
+  await expect(canvas).toHaveAttribute('data-field-active', 'false');
+  const staticFrame = await canvas.evaluate((node: HTMLCanvasElement) => node.toDataURL());
+  await page.waitForTimeout(150);
+  expect(await canvas.evaluate((node: HTMLCanvasElement) => node.toDataURL())).toBe(staticFrame);
   await expect(hero.locator('[data-cinematic-skip]')).toHaveCount(0);
   await expect(hero).not.toHaveAttribute('data-motion-enhanced', 'true');
 });
@@ -530,6 +535,46 @@ test('the homepage stays contained and actionable at supported widths', async ({
     const widths = await page.evaluate(() => ({ document: document.documentElement.scrollWidth, body: document.body.scrollWidth }));
     expect(widths.document, `${viewport.width}px document`).toBeLessThanOrEqual(viewport.width);
     expect(widths.body, `${viewport.width}px body`).toBeLessThanOrEqual(viewport.width);
+  }
+});
+
+test('mobile Orbital hero keeps the portrait beside the heading and actions after the full copy', async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 720 },
+    { width: 390, height: 844 },
+    { width: 430, height: 900 },
+    { width: 700, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+
+    const hero = page.locator('[data-velvet-hero]');
+    const heading = hero.getByRole('heading', { level: 1 });
+    const portrait = hero.locator('[data-figure-art]');
+    const canvas = hero.locator('[data-cinematic-canvas]');
+    const copy = hero.locator('.velvet-hero__thesis');
+    const actions = hero.locator('.velvet-hero__actions');
+    const [headingBox, portraitBox, canvasBox, copyBox, actionsBox] = await Promise.all([
+      heading.boundingBox(), portrait.boundingBox(), canvas.boundingBox(), copy.boundingBox(), actions.boundingBox(),
+    ]);
+
+    expect(headingBox).not.toBeNull();
+    expect(portraitBox).not.toBeNull();
+    expect(canvasBox).not.toBeNull();
+    expect(copyBox).not.toBeNull();
+    expect(actionsBox).not.toBeNull();
+    expect(portraitBox!.width, `${viewport.width}px portrait width`).toBeCloseTo(220, 0);
+    expect(portraitBox!.height, `${viewport.width}px portrait height`).toBeCloseTo(330, 0);
+    expect(portraitBox!.x, `${viewport.width}px portrait remains horizontally contained`).toBeGreaterThanOrEqual(0);
+    expect(portraitBox!.x + portraitBox!.width, `${viewport.width}px portrait remains horizontally contained`).toBeLessThanOrEqual(viewport.width + 11);
+    expect(portraitBox!.x).toBeGreaterThan(headingBox!.x);
+    expect(portraitBox!.y).toBeLessThan(headingBox!.y + headingBox!.height);
+    expect(copyBox!.y).toBeGreaterThanOrEqual(headingBox!.y + headingBox!.height - 1);
+    expect(canvasBox!.y + canvasBox!.height, `${viewport.width}px canvas clears the body copy`).toBeLessThanOrEqual(copyBox!.y);
+    expect(actionsBox!.y).toBeGreaterThanOrEqual(copyBox!.y + copyBox!.height - 1);
+    expect(await hero.locator('.velvet-hero__action').evaluateAll((links) => links.every((link) => link.getBoundingClientRect().height >= 44))).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
   }
 });
 

@@ -23,7 +23,7 @@ engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/generated/editorial/enhanced/oye-tippa-run-v2.webp
   avif: /media/generated/editorial/enhanced/oye-tippa-run-v2.avif
-  label: Oye Tippa Run · Collecting coins while running through an Indian city.
+  label: Oye Tippa Run. Enhanced editorial poster; playback shows the original city-running gameplay.
   mp4: /media/career/oye-tippa-run/clip.mp4
   alt: Oye Tippa Run character collecting coins across a colorful Indian city
   width: 1600
@@ -38,12 +38,12 @@ near:
   contribution: I helped establish the studio and led its technology work. For Chhota Bheem, I coordinated the alpha handoff and remaining work on sound, balancing, bug fixes, and performance on older devices.
   system: The team worked across mobile gameplay, character and environment production, and AR interaction. Chhota Bheem’s flight game used simple controls and water collection to support its fire-rescue objective.
   media:
-    src: /media/generated/editorial/enhanced/fruit-masti-v2.webp
-    avif: /media/generated/editorial/enhanced/fruit-masti-v2.avif
-    label: Fruit Masti · The start screen of the augmented-reality fruit game.
+    src: /media/career/celeste-ar/poster-1280.webp
+    avif: /media/career/celeste-ar/poster-1280.avif
+    label: Original promotional still of Fruit Masti’s start screen, from the Celeste AR work.
     alt: Fruit Masti augmented-reality game start screen from the Celeste AR work
-    width: 1600
-    height: 900
+    width: 1102
+    height: 620
 inside:
   decisions:
     - Keep the flight loop child-friendly through one-button controls, clear collection-and-rescue objectives, and readable progression.

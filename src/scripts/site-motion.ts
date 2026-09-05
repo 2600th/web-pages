@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ambientMotionEnabled } from './ambient-preference';
 
 export type MotionMode = 'none' | 'static' | 'enhanced';
 
@@ -16,7 +17,7 @@ export function resolveMotionMode({ reducedMotion, hasTargets }: MotionCondition
 
 export function initSiteMotion(root: ParentNode = document): () => void {
   const scopes = Array.from(root.querySelectorAll<HTMLElement>('[data-motion-scope]'));
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = document.documentElement.dataset.ambientMotion === 'off' || !ambientMotionEnabled();
   const mode = resolveMotionMode({ reducedMotion: reduceMotion, hasTargets: scopes.length > 0 });
 
   if (mode === 'none') return () => undefined;
@@ -41,7 +42,7 @@ export function initSiteMotion(root: ParentNode = document): () => void {
 
   const context = gsap.context(() => {
     root.querySelectorAll<HTMLElement>('[data-motion-reveal]').forEach((element, index) => {
-      const revealOffset = element.closest('[data-work-opening-media]') ? 0 : 28;
+      const revealOffset = element.closest('[data-route-opening]') ? 0 : 28;
       gsap.fromTo(
         element,
         // Keep offscreen text and links in the accessibility tree and tab order.
@@ -123,7 +124,12 @@ export function initSiteMotion(root: ParentNode = document): () => void {
     }
   }, contextRoot);
 
-  const onVisibilityChange = () => timelines.forEach((timeline) => (document.hidden ? timeline.pause() : timeline.resume()));
+  let heroInView = true;
+  const onVisibilityChange = () => timelines.forEach((timeline) => (document.hidden || !heroInView ? timeline.pause() : timeline.resume()));
+  const heroObserver = new IntersectionObserver(([entry]) => { heroInView = entry?.isIntersecting ?? false; onVisibilityChange(); });
+  const observedHero = root.querySelector('[data-velvet-hero]');
+  if (observedHero) heroObserver.observe(observedHero);
+  eventCleanups.push(() => heroObserver.disconnect());
   document.addEventListener('visibilitychange', onVisibilityChange);
   eventCleanups.push(() => document.removeEventListener('visibilitychange', onVisibilityChange));
 

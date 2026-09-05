@@ -26,30 +26,22 @@ heroLabel: Enterprise XR system map across production, training, and simulation
 heroMedia:
   src: /media/generated/editorial/enhanced/enterprise-xr-hero-v2.webp
   avif: /media/generated/editorial/enhanced/enterprise-xr-hero-v2.avif
-  label: Enterprise XR · A location-filming setup for a 360-degree production.
+  label: Editorial illustration of a 360-degree location-filming setup, part of GreyKernel’s wider production work.
   alt: Enterprise immersive workflow connecting a 360 camera, an industrial training site, and a virtual-reality learner
   width: 1600
   height: 900
 out:
-  thesis: Different jobs called for different kinds of XR.
-  audience: Learners and instructors, as well as people exploring a location remotely.
-  outcome: We delivered 360-degree productions and interactive training applications. The work ranged from filming real locations to simulating procedures and everyday situations.
-  media:
-    src: /media/generated/editorial/enhanced/enterprise-xr-swissotel-v2.webp
-    avif: /media/generated/editorial/enhanced/enterprise-xr-swissotel-v2.avif
-    label: Swissôtel Merchant Court · A 360-degree tour of the Singapore hotel.
-    mp4: /media/work/enterprise-immersive-systems/swissotel-loop.mp4
-    alt: Authentic Swissôtel Merchant Court 360 footage moving through the Singapore property's pool and hospitality environment
-    width: 1600
-    height: 900
+  thesis: JPMorgan Chase’s Mumbai immersive lab.
+  audience: Employees taking part in onboarding and training experiences.
+  outcome: At GreyKernel, we helped set up an immersive lab in JPMorgan Chase’s Mumbai office. It brought together gamified onboarding, cybersecurity and social-engineering experiences, and training applications. The task was to turn learning material into something employees could participate in.
 near:
-  experience: Explore a location remotely or practise a task in a simulated setting.
+  experience: 360-degree tours for exploring a real location remotely.
   contribution: As GreyKernel’s co-founder and CTO, I worked on product definition and application architecture, led technical delivery, and coordinated the work with production teams and domain specialists.
-  system: Some projects used filmed 360-degree environments with navigation. Others needed real-time simulations, guided tasks, and instructor controls. The software depended on what the participant was there to do.
+  system: The Swissôtel Merchant Court hotel experience and the electronics production-facility tour used filmed environments. Visitors could explore a place remotely; the camera and navigation served a different task from the guided interactions in our training applications.
   media:
     src: /media/generated/editorial/landing/enterprise-xr-poster-v2.webp
     avif: /media/generated/editorial/landing/enterprise-xr-poster-v2.avif
-    label: Enterprise XR · Exploring an electronics production facility through a virtual tour.
+    label: Electronics production-facility tour. Enhanced editorial poster; playback shows the original 360-degree footage.
     mp4: /media/work/enterprise-immersive-systems/facility-loop.mp4
     alt: Immersive production-facility tour showing a clean electronics manufacturing environment in rectilinear view
     width: 1600
@@ -66,7 +58,7 @@ inside:
   media:
     src: /media/generated/editorial/cycling-without-age-empathy-v3.webp
     avif: /media/generated/editorial/cycling-without-age-empathy-v3.avif
-    label: Cycling Without Age Singapore · Three everyday scenarios structured the VR ageing-empathy journey.
+    label: Editorial illustration of the living room, street crossing and supermarket scenarios in Cycling Without Age Singapore’s VR empathy journey.
     alt: Cinematic editorial visualization connecting a living room, street crossing, and supermarket in the Cycling Without Age Singapore empathy-training journey
     width: 1600
     height: 900
@@ -129,10 +121,26 @@ seo:
   socialImage: /media/work/enterprise-immersive-systems/hero.webp
 ---
 
-For JPMorgan Chase, we helped set up an immersive lab in its Mumbai office. The lab included gamified onboarding, cybersecurity and social-engineering experiences, and training applications.
+## Procedure training: Anglian Water
 
 For Anglian Water, we worked on a multi-module training application covering vehicle inspections, safe driving, and safe digging. The content and interactions had to suit the procedures being taught.
 
+## Empathy training: Cycling Without Age Singapore
+
 Cycling Without Age Singapore used VR exercises to help younger participants understand some of the difficulties older people face. The scenarios covered a living room, a street crossing, and a supermarket. They gave the learning experience a familiar setting and a basis for discussion afterwards.
+
+## Location tours: Swissôtel Merchant Court
+
+The hotel tour belongs to the location-production side of this work. Filming the property let people look around its hospitality spaces remotely.
+
+<figure>
+  <video controls muted playsinline preload="none" poster="/media/work/enterprise-immersive-systems/swissotel-poster.webp" width="1280" height="720" aria-label="Swissôtel Merchant Court original 360-degree tour footage">
+    <source src="/media/work/enterprise-immersive-systems/swissotel-loop.mp4" type="video/mp4" />
+    <a href="/media/work/enterprise-immersive-systems/swissotel-loop.mp4">Watch the Swissôtel Merchant Court tour clip</a>
+  </video>
+  <figcaption>Original Swissôtel Merchant Court tour footage, moving through the Singapore hotel’s pool and hospitality spaces.</figcaption>
+</figure>
+
+## Other technical-learning work
 
 Other work included maritime training for ships and lifeboats in 2021, and a Tata Safari technical-learning system with component overviews, service procedures, documentation, and an instructor mode. We also worked on the Voxel Worlds Apple release pipeline. In each case, my role was to help turn the client’s material and requirements into an application the intended audience could use.

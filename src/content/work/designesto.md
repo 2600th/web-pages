@@ -22,7 +22,7 @@ publicClaims:
 engagementPath: product-collaboration
 heroMedia:
   src: /media/work/blocks-inco-ai/designesto-before-after.webp
-  label: Designesto product preview. An empty interior and a furnished concept show a visual direction, not an execution-ready specification.
+  label: Designesto public product preview, comparing the input room with a furnished concept.
   alt: Designesto preview comparing an empty room with a furnished interior concept using the same underlying space
   width: 1600
   height: 900
@@ -54,18 +54,26 @@ The first output is rarely the end of the conversation. A designer may want anot
 
 I treat preservation as a design requirement. The product needs to make clear what the user is asking to change and what they expect to keep. A more impressive render is not a successful revision if it abandons the decision that had already been made.
 
+## One room, one revision
+
+The public preview above gives that requirement a concrete setting. The input is an empty room with a balcony opening and a doorway on the right. The result adds seating, plants, lighting and a ceiling treatment. The familiar openings help the viewer compare the proposal with the room they started with.
+
+Now consider a bounded follow-up: keep that furniture arrangement and try a cooler colour palette. This is an example brief, rather than a recorded customer request. I would make the requested change explicit, then judge the result against the arrangement and openings that were meant to stay fixed. Moving the doorway would be a failed revision even if the image looked attractive.
+
+That is why I organise the experience around focused tasks and revision. The visible outcome in the preview is a room direction someone can react to. The next interaction should help them refine that direction without starting the conversation again.
+
 ## Images, video and panoramic communication
 
 Images help compare directions. Video helps communicate a sequence or movement through a proposal. A panoramic experience lets someone look around rather than accept a single camera angle. These are related ways of communicating a space, with different constraints on consistency.
 
-The development work connects those outputs around the design task. It does not make an image, clip or panorama a substitute for measurements, site conditions or construction details.
+The development work connects those outputs around the design task, so the format serves the conversation.
 
 ## What the case covers today
 
-Designesto’s current public case covers concept exploration, revision, and visual communication. Pricing and execution-ready output require structured product and project data, so I keep them outside the claim until they ship.
+Designesto’s current public case covers concept exploration, revision, and visual communication. Pricing and execution-ready output require structured product and project data; deeper costing and execution integration remain on the roadmap.
 
 An image or panorama can help someone compare a direction. It cannot supply every measurement, site condition, or product fact needed to build the room.
 
 ## Relationship to Blocks
 
-Designesto helps people explore what a space could become. [Blocks](/work/blocks/) resolves the measurable room and product choices needed to price, validate, and hand that design forward. They support the same broader design process without claiming the same capabilities.
+Designesto helps people explore what a space could become. [Blocks](/work/blocks/) resolves the measurable room and product choices needed to price, validate, and hand that design forward.

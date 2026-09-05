@@ -41,6 +41,20 @@ The career inspect/build commands read every recipe in `scripts/career-media.con
 
 `scripts/build-route-opening-media.mjs` creates the Work and Notes opening derivatives from its four explicit sources. If a source or output stem changes, update the builder, page references, and route-opening entries in `src/data/media-provenance.ts` together. It does not regenerate the underlying editorial art or authentic poster masters.
 
+### Responsive delivery derivatives
+
+`npm run media:responsive:build` reads Work/Note media sources and writes 320, 640,
+960 and up-to-1600px AVIF/WebP variants, without upscaling. Source-content hashes
+version the filenames. It preserves every original and existing provenance entry;
+these are delivery-size conversions, not new editorial compositions.
+
+Commit `src/data/responsive-media.json` and its `public/media/responsive/` outputs
+together. `ResponsiveImage` consumes the manifest for archive thumbnails,
+homepage stills and case figures; video playback retains original clips and
+reviewed posters. Browser `sizes` values reflect each rendering context. Rebuild
+the manifest after changing content image sources. Do not replace authentic
+technical captures with generated interpretations merely to improve appearance.
+
 ### Favicon derivatives
 
 `public/favicon.svg` is the canonical, manually reconstructed vector for the approved concept A 26 ligature. `npm run media:icons:build` runs `scripts/create-icons.mjs` to derive `public/favicon.ico` (32px) and `public/apple-touch-icon.png` (180px) deterministically from it; no image generation is used for these derivatives. The Apple PNG carries an auxiliary origin note. Regeneration strips that metadata, so restore it when retaining embedded provenance; the SVG source comment remains the durable origin record. Keep the shared layout links and manifest sizes aligned with the outputs. The historical console's separate icon remains unchanged.

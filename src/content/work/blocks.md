@@ -22,10 +22,10 @@ publicClaims:
   - My role spans product direction and the real-time 3D engineering behind the design workflow.
 engagementPath: product-leadership
 heroMedia:
-  src: /media/generated/editorial/blocks-design-production-v1.webp
-  avif: /media/generated/editorial/blocks-design-production-v1.avif
-  label: Editorial illustration, not product UI. A kitchen concept, components and layout drawing show the design-to-production relationship.
-  alt: Kitchen concept beside cabinet components, a layout drawing and material samples, illustrating design-to-production dependencies
+  src: /media/generated/editorial/blocks-design-production-v2.webp
+  avif: /media/generated/editorial/blocks-design-production-v2.avif
+  label: Editorial illustration of a kitchen and an exploded cabinet assembly, connecting the finished design to its component parts.
+  alt: Oak and ivory kitchen with one drawer cabinet separated into aligned panels, drawers and worktop
   width: 1600
   height: 900
 sources:
@@ -41,14 +41,24 @@ sources:
 seo:
   title: Blocks | Design systems by Pranshul Chandhok
   description: Product and technology work on Blocks, a browser-based interior-design system connecting rooms, catalogues, pricing, validation and production handoffs.
-  socialImage: /media/generated/editorial/blocks-design-production-v1.webp
+  socialImage: /media/generated/editorial/blocks-design-production-v2.webp
 ---
 
 ## The operational problem
 
 A cabinet that looks right in a render may be the wrong size for the room. Changing it can affect its materials, hardware, price and production details. Blocks connects those decisions so that the visual design and the information used to build it can develop together.
 
-I lead product and technology work with our product, engineering and design teams. My focus is on the system behind the interaction: what a designer can change, which dependencies must update, and what the next team needs to receive. This is shared work, not a claim of individual ownership over the platform.
+I lead product and technology work with our product, engineering and design teams. My focus is on the system behind the interaction: what a designer can change, which dependencies must update, and what the next team needs to receive.
+
+## Follow one cabinet change
+
+Consider a cabinet that needs to become narrower to fit a room. This is a conceptual walkthrough of the dependencies I work on, using no customer project or internal configuration.
+
+1. **Start with the room.** The available space constrains the cabinet width. The visual change needs to refer to a dimension the system can use.
+2. **Resolve the configuration.** A new width can affect the cabinet’s components, materials and hardware. Those choices need to remain valid together.
+3. **Carry the decision forward.** Pricing and production information need to describe the revised configuration, so the next team can work from the same decision the designer sees.
+
+My product decision is to treat that change as a connected update to project information. The useful outcome is a design that can carry its dimensions and specification into the handoff. The [public Blocks launch](https://www.linkedin.com/feed/update/urn:li:activity:7347844333657628673/) introduces that design-to-production scope; this walkthrough explains the reasoning behind it.
 
 ## Why browser-native design mattered
 

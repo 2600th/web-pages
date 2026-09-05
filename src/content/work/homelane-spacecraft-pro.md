@@ -34,7 +34,7 @@ out:
   media:
     src: /media/generated/editorial/enhanced/spacecraft-hero-v2.webp
     avif: /media/generated/editorial/enhanced/spacecraft-hero-v2.avif
-    label: SpaceCraft Pro · An illustration connecting production drawings to a finished interior.
+    label: Editorial illustration connecting production drawings to a finished interior.
     alt: Editorial illustration of residential joinery moving from precise production drawings into a finished interior
     width: 1600
     height: 900
@@ -43,13 +43,12 @@ near:
   contribution: As principal software architect, I worked on the real-time editor and the connections between design, catalogue logic, pricing, CAD, and production workflows.
   system: The editor uses catalogue and pricing data alongside the room plan. A designer can move between 2D planning and a real-time 3D view, while the same design feeds quotes and production documentation.
   media:
-    src: /media/generated/editorial/enhanced/spacecraft-room-editor-v2.webp
-    avif: /media/generated/editorial/enhanced/spacecraft-room-editor-v2.avif
-    label: SpaceCraft Pro · Planning the layout and furnishings in the room editor.
+    src: /media/work/homelane-spacecraft-pro/room-editor-poster.webp
+    label: Original SpaceCraft Pro product demonstration, planning the layout and furnishings in the room editor.
     mp4: /media/work/homelane-spacecraft-pro/room-editor-loop.mp4
     alt: HomeLane SpaceCraft room editor showing an interior moving between design states in the production application
-    width: 1600
-    height: 900
+    width: 1280
+    height: 720
 inside:
   decisions:
     - Connect the visual editor to catalogue and pricing data so a design change can be understood in terms of both appearance and cost.
@@ -61,7 +60,7 @@ inside:
   media:
     src: /media/generated/editorial/enhanced/spacecraft-workflow-editorial-v2.webp
     avif: /media/generated/editorial/enhanced/spacecraft-workflow-editorial-v2.avif
-    label: HomeLane SpaceCraft Pro · From a room plan to material choices and production drawings.
+    label: Editorial illustration of the relationship between a room plan, material choices and production drawings.
     alt: Editorial workflow tableau connecting kitchen plans, material decisions, rendered interiors, and production outputs
     width: 1600
     height: 900

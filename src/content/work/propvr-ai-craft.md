@@ -21,7 +21,7 @@ publicClaims:
 engagementPath: product-collaboration
 heroMedia:
   src: /media/work/propvr-ai-craft/craft-public-home-20260902.webp
-  label: Craft, accessed September 2026. Public homepage capture. Current platform by the PropVR Technology team, not the initial MVP.
+  label: Craft public homepage, September 2026. The PropVR Technology team’s platform after the initial MVP handoff.
   alt: Craft public homepage presenting its AEC creative workflow and a waterfront development shown as massing and a finished render
   width: 1600
   height: 1000
@@ -53,6 +53,19 @@ A blank prompt box gives the model freedom and leaves the user responsible for t
 
 The studio structure made the lifecycle visible. A user could choose a stage, run a focused capability, inspect the result and carry it forward. The design intent was to make prompt construction an implementation detail rather than a prerequisite for using the product.
 
+## A tool contract, reconstructed
+
+Consider a material-editing task: start from a room image, identify the change, run the appropriate model and inspect the returned image. This is a conceptual reconstruction of the MVP’s tool structure, rather than a capture of its interface.
+
+| Moment | Product decision |
+|---|---|
+| Choose the task | Enter a specialist tool through its workflow studio |
+| Provide the input | Make the source image and requested operation clear |
+| Run the tool | Route the operation to a suitable model |
+| Inspect the result | Return an output the user can assess before choosing the next task |
+
+I separated those responsibilities so the team could extend a tool without redefining the whole product. The delivered result was a working foundation of 22 specialist tools across five studios, with task boundaries and model integrations ready for the handoff.
+
 ## The trade-offs
 
 | Choice | What it made possible | What it did not solve |
@@ -64,7 +77,7 @@ The studio structure made the lifecycle visible. A user could choose a stage, ru
 
 ## The handoff
 
-The MVP was handed to PropVR’s team as a foundation to extend. My contribution was the initial product system and implementation. The wider team developed, productionized and expanded that foundation into the current platform.
+PropVR’s Technology team developed, productionized and expanded the foundation into Craft. The public homepage above shows that later platform; the reconstruction describes the earlier MVP.
 
 **Initial PropVR AI MVP: Pranshul Chandhok. Current Craft platform: PropVR Technology team.**
 

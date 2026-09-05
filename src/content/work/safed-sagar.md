@@ -24,23 +24,27 @@ engagementPath: product-collaboration
 heroMedia: &hero
   src: /media/generated/editorial/enhanced/safed-sagar-hero-v2.webp
   avif: /media/generated/editorial/enhanced/safed-sagar-hero-v2.avif
-  label: Safed Sagar · Flying above the mountains in a fictional reconnaissance mission.
-  alt: Safed Sagar MiG-21 flying through a snowy high-altitude mountain environment
+  label: Editorial visual based on Safed Sagar’s fictional mountain reconnaissance mission.
+  alt: Editorial illustration of a MiG-21-inspired aircraft above snowy mountains
   width: 1600
   height: 900
 out:
   thesis: A reconnaissance flight you can try in a browser.
   audience: Players interested in flight experiences, and developers exploring browser games.
   outcome: A public fictional reconnaissance sortie where the player navigates mountain terrain and photographs positions from a MiG-21-inspired aircraft.
-  media: *hero
+  media:
+    src: /media/work/safed-sagar/hero.webp
+    label: Original gameplay capture from the Safed Sagar repository.
+    alt: Safed Sagar aircraft cruising above mountain terrain
+    width: 1600
+    height: 900
 near:
   experience: Fly through the mountains and photograph the mission’s targets.
   contribution: I designed and built the flight experience, including the mission systems, terrain, controls, and adaptive graphics settings. I used AI-assisted development and added tools to test the result.
   system: The Three.js application combines a flight model with procedural terrain and atmospheric effects. It supports keyboard, gamepad, and touch controls, with assist modes and adaptive resolution for different devices.
   media:
-    src: /media/generated/editorial/enhanced/safed-sagar-near-v2.webp
-    avif: /media/generated/editorial/enhanced/safed-sagar-near-v2.avif
-    label: Safed Sagar · Finding a mission target through the reconnaissance camera.
+    src: /media/work/safed-sagar/near.webp
+    label: Original gameplay capture of a mission target through the reconnaissance camera.
     alt: Safed Sagar reconnaissance optic framing a target in snowy mountain terrain
     width: 1600
     height: 900
@@ -54,16 +58,18 @@ inside:
   evidence:
     - The project is available to play in the browser. Its repository includes controls, accessibility options, development instructions, and asset credits.
   media:
-    src: /media/generated/editorial/enhanced/safed-sagar-inside-v2.webp
-    avif: /media/generated/editorial/enhanced/safed-sagar-inside-v2.avif
-    label: Safed Sagar · Flight instruments and controls over the mountain landscape.
-    alt: Safed Sagar cockpit interface with flight instruments over the mountain landscape
+    src: /media/work/safed-sagar/inside.webp
+    label: Original settings capture showing graphics quality, control modes and flight assists.
+    alt: Safed Sagar pause menu with graphics quality, audio, assisted or direct flight, sensitivity and auto-throttle controls
     width: 1600
     height: 900
 sources:
   - label: GitHub repository and technical README
     url: https://github.com/2600th/oss-web-3d
     type: repository
+  - label: Live browser build
+    url: https://oss-web-3d.vercel.app/
+    type: live-demo
   - label: Authored launch post and video
     url: https://x.com/2600th/status/2088580221041885561
     type: authored-post

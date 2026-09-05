@@ -1,7 +1,9 @@
 import { defineConfig } from 'astro/config';
+import { satteri } from '@astrojs/markdown-satteri';
 import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'node:url';
 import { loadDiscoveryMetadata } from './scripts/sitemap-metadata.mjs';
+import readingTables from './src/plugins/reading-tables.mjs';
 
 const discovery = loadDiscoveryMetadata(fileURLToPath(new URL('.', import.meta.url)));
 const companion = 'https://www.2600th.com/lab/dwarkesh-jensen/index.html';
@@ -9,6 +11,7 @@ const companion = 'https://www.2600th.com/lab/dwarkesh-jensen/index.html';
 export default defineConfig({
   site: 'https://www.2600th.com',
   output: 'static',
+  markdown: { processor: satteri({ hastPlugins: [readingTables] }) },
   integrations: [sitemap({
     customPages: [companion],
     filter: (page) => {

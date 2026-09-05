@@ -65,8 +65,8 @@ test('Work excludes compatibility records and supports priority and chronologica
   const items = page.locator('[data-work-item] > a');
   await expect(items).toHaveCount(19);
   expect((await items.evaluateAll(links => links.map(link => link.getAttribute('href')))).slice(0, 10)).toEqual([
-    '/work/blocks/', '/work/designesto/', '/work/propvr-ai-craft/', '/work/homelane-spacecraft-pro/', '/work/greykernel/',
-    '/work/enterprise-immersive-systems/', '/work/humanoid-robot-control-system/', '/work/web-ocean-3d/', '/work/kinema/', '/work/safed-sagar/',
+    '/work/blocks/', '/work/designesto/', '/work/ira-vr/', '/work/propvr-ai-craft/', '/work/homelane-spacecraft-pro/',
+    '/work/greykernel/', '/work/enterprise-immersive-systems/', '/work/humanoid-robot-control-system/', '/work/web-ocean-3d/', '/work/kinema/',
   ]);
   await page.getByLabel('Project order').selectOption('chronological');
   await expect(items.first()).toHaveAttribute('href', '/work/the-brutal-spy/');

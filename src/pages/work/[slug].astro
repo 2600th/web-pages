@@ -24,10 +24,25 @@ interface Props {
 const { entry } = Astro.props;
 const { data } = entry;
 const socialImageMetadata = await sharp(join(process.cwd(), 'public', data.seo.socialImage)).metadata();
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const relatedWork = (await getCollection('work')).filter((candidate) => (data.relatedWork ?? []).includes(candidate.data.slug));
 const relatedNotes = getNotesForWork(await getCollection('notes'), data.slug);
 const caseVariant = data.slug === 'defense-simulation-systems' ? 'systems-atlas' : undefined;
+const narrativeHeadings = headings.filter((heading) => heading.depth === 2).map((heading) => ({
+  label: heading.text,
+  id: heading.slug,
+}));
+const sectionLinks = data.recordType === 'narrative'
+  ? narrativeHeadings
+  : data.recordType === 'evidence-note'
+    ? narrativeHeadings
+    : [
+        { label: 'Overview', id: 'thesis-title' },
+        { label: 'The experience', id: 'contribution-title' },
+        { label: 'How it works', id: 'system-title' },
+        { label: 'Project notes', id: 'operating-reality-title' },
+      ];
+const showProjectContents = sectionLinks.length >= 3;
 const jsonLd = [{
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -66,28 +81,37 @@ const jsonLd = [{
   <header
     class:list={['case-hero route-opening route-opening--case', { 'case-hero--long': data.title.length > 36 }]}
     data-route-opening
+    data-project-opening
     data-case-variant={caseVariant}
     data-motion-scope={caseVariant ? true : undefined}
   >
-    <div class="case-hero__positive" data-polarity="positive">
-      <h1>{data.title}</h1>
-    </div>
-    <div class="case-hero__negative" data-polarity="negative">
-      <p class="case-hero__context">
-        {caseVariant === 'systems-atlas' ? `${data.yearStart}–${data.yearEnd} · GreyKernel` : `${data.yearStart} · ${data.status}`}
-      </p>
-      <p class="case-hero__summary">{data.summary}</p>
-      <dl class="case-hero__meta">
-        <div><dt>My role</dt><dd>{data.role}</dd></div>
-        <div><dt>Period</dt><dd>{data.yearStart}{data.yearEnd ? `–${data.yearEnd}` : ''}</dd></div>
-        <div><dt>Status</dt><dd>{data.status}</dd></div>
-        {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
-      </dl>
-      {data.slug === 'propvr-ai-craft' && <p><a href="https://craft.propvr.ai/" target="_blank" rel="noopener noreferrer">Visit Craft<span class="sr-only"> (external site, opens in a new tab)</span></a></p>}
+    <div class="case-hero__copy" data-project-opening-copy>
+      <div class="case-hero__positive" data-polarity="positive">
+        <h1>{data.title}</h1>
+      </div>
+      <div class="case-hero__negative" data-polarity="negative">
+        <p class="case-hero__context">
+          {data.metadataLabel ?? (caseVariant === 'systems-atlas' ? `${data.yearStart}–${data.yearEnd} · GreyKernel` : `${data.yearStart} · ${data.status}`)}
+        </p>
+        <p class="case-hero__summary">{data.summary}</p>
+        <dl class="case-hero__meta">
+          <div><dt>My role</dt><dd>{data.role}</dd></div>
+          <div><dt>Period</dt><dd>{data.yearStart}{data.yearEnd ? `–${data.yearEnd}` : ''}</dd></div>
+          <div><dt>Status</dt><dd>{data.status}</dd></div>
+          {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
+        </dl>
+        {data.slug === 'propvr-ai-craft' && <p><a href="https://craft.propvr.ai/" target="_blank" rel="noopener noreferrer">Visit Craft<span class="sr-only"> (external site, opens in a new tab)</span></a></p>}
+      </div>
     </div>
     {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroMedia.label ?? data.heroLabel ?? data.title} priority /></div>}
   </header>
 
+  <div class:list={['project-reading', { 'project-reading--with-contents': showProjectContents }]} data-project-reading>
+  {showProjectContents && <details class="project-contents" data-project-contents open>
+    <summary>On this page</summary>
+    <nav aria-label="On this page"><ol>{sectionLinks.map((section) => <li><a href={`#${section.id}`}>{section.label}</a></li>)}</ol></nav>
+  </details>}
+  <div class="project-reading__main">
   {data.recordType === 'narrative' ? (
     <div class="project-story work-narrative">
       <section class="project-story__frame project-story__section" aria-label="Case study">
@@ -110,7 +134,7 @@ const jsonLd = [{
             <div><dt>For</dt><dd>{data.out.audience}</dd></div>
             <div><dt>Outcome</dt><dd>{data.out.outcome}</dd></div>
           </dl>
-          <ProjectMedia media={data.out.media} label={data.out.media.label} />
+          {data.out.media && <ProjectMedia media={data.out.media} label={data.out.media.label} />}
         </div>
       </section>
 
@@ -167,6 +191,8 @@ const jsonLd = [{
       <div class="project-story__body"><ul>{relatedNotes.map((note) => <li><span>{NOTE_TYPES[note.data.type]}</span><a href={`/notes/${note.data.slug}/`}>{note.data.title}</a></li>)}</ul></div>
     </div>
   </nav>}
+  </div>
+  </div>
 </BaseLayout>
 
 <style>

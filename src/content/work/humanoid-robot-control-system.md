@@ -3,6 +3,7 @@ title: Humanoid Robot Control System
 slug: humanoid-robot-control-system
 summary: I co-invented a system at GreyKernel for translating tracked human movement into humanoid robot control, covered by Indian Patent 395331.
 yearStart: 2019
+metadataLabel: Filed 2019 · Granted 2022
 yearEnd: 2022
 status: Indian patent granted
 role: Co-inventor
@@ -26,8 +27,8 @@ heroLabel: Editorial illustration of human-to-humanoid motion control
 heroMedia:
   src: /media/generated/editorial/enhanced/humanoid-robot-control-v2.webp
   avif: /media/generated/editorial/enhanced/humanoid-robot-control-v2.avif
-  label: Humanoid robot control · Tracking human movement to control a robot.
-  alt: Human movement translated into matching humanoid robot joint positions through luminous tracking paths
+  label: Editorial illustration of tracked human movement controlling a humanoid robot.
+  alt: Editorial illustration connecting human movement to matching humanoid robot joint positions
   width: 1600
   height: 900
 sources:

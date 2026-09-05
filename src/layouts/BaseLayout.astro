@@ -2,6 +2,7 @@
 import SiteFooter from '../components/shared/SiteFooter.astro';
 import SiteHeader from '../components/shared/SiteHeader.astro';
 import BackToTop from '../components/shared/BackToTop.astro';
+import AmbientControls from '../components/shared/AmbientControls.astro';
 import { PERSON, SITE, SOCIAL_LINKS } from '../data/site';
 import '../styles/global.css';
 
@@ -114,23 +115,30 @@ const globalJsonLd = [
     </main>
     <SiteFooter />
     <BackToTop />
+    <AmbientControls />
     <script>
       import { initAnalyticsEvents } from '../scripts/analytics';
       initAnalyticsEvents();
     </script>
     <script>
+      import { initAmbientControls } from '../scripts/ambient-preference';
+      let disposeAmbient = initAmbientControls();
       let disposeSiteMotion: () => void = () => undefined;
+      let motionRevision = 0;
 
       const bootSiteMotion = async () => {
+        const revision = ++motionRevision;
         disposeSiteMotion();
         if (!document.querySelector('[data-motion-scope]')) return;
         const { initSiteMotion } = await import('../scripts/site-motion');
+        if (revision !== motionRevision) return;
         disposeSiteMotion = initSiteMotion();
       };
 
       void bootSiteMotion();
-      document.addEventListener('astro:before-swap', () => disposeSiteMotion());
-      document.addEventListener('astro:after-swap', () => void bootSiteMotion());
+      document.addEventListener('portfolio:motion-change', () => void bootSiteMotion());
+      document.addEventListener('astro:before-swap', () => { ++motionRevision; disposeAmbient(); disposeSiteMotion(); });
+      document.addEventListener('astro:after-swap', () => { disposeAmbient = initAmbientControls(); });
     </script>
   </body>
 </html>

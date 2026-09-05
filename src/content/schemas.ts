@@ -54,6 +54,7 @@ const workBaseSchema = z.object({
   yearStart: z.number().int().min(2000),
   yearEnd: z.number().int().min(2000).optional(),
   status: z.string().min(2),
+  metadataLabel: z.string().min(4).optional(),
   role: z.string().min(2),
   disciplines: z.array(z.string().min(2)).min(1),
   visibility: z.enum(['public', 'approval-enhanced']),
@@ -84,7 +85,7 @@ const outSchema = z.object({
   thesis: z.string().min(30),
   audience: z.string().min(10),
   outcome: z.string().min(20),
-  media: caseMediaSchema,
+  media: caseMediaSchema.optional(),
 });
 
 const nearSchema = z.object({

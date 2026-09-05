@@ -7,7 +7,12 @@ import { getPrioritizedWork } from '../../data/work-order';
 import type { CareerDomain } from '../../content/evidence';
 import '../../styles/content-pages.css';
 
-const work = getPrioritizedWork(await getCollection('work'));
+const prioritizedWork = getPrioritizedWork(await getCollection('work'));
+const galleryFeatured = ['blocks', 'designesto', 'ira-vr'];
+const work = [
+  ...galleryFeatured.map((slug) => prioritizedWork.find((entry) => entry.data.slug === slug)),
+  ...prioritizedWork.filter((entry) => !galleryFeatured.includes(entry.data.slug)),
+].filter((entry): entry is (typeof prioritizedWork)[number] => Boolean(entry));
 const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
 ---
 
@@ -17,44 +22,9 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
   canonical="/work/"
 >
   <div class="page-shell work-archive" data-work-archive>
-    <header class="route-opening route-opening--work" data-route-opening data-motion-scope>
-      <div class="route-opening__positive" data-polarity="positive">
-        <h1>Projects</h1>
-        <p class="route-opening__statement">Products, platforms, and experiments I helped define, build, and put into use.</p>
-      </div>
-      <div class="route-opening__negative" data-polarity="negative">
-        <div class="route-opening__work-reel" data-work-opening-media aria-label="Selected work in motion">
-          <a href="/work/blocks/" aria-label="Explore Blocks" data-motion-reveal>
-            <picture>
-              <source type="image/avif" srcset="/media/routes/work/blocks-640.avif 640w, /media/routes/work/blocks-960.avif 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
-              <source type="image/webp" srcset="/media/routes/work/blocks-640.webp 640w, /media/routes/work/blocks-960.webp 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
-              <img src="/media/routes/work/blocks-960.webp" width="960" height="540" loading="eager" fetchpriority="high" decoding="async" alt="Blocks editorial illustration linking a kitchen design with cabinet components and production drawings" />
-            </picture>
-            <span><b>01</b> Blocks</span>
-          </a>
-          <a href="/work/designesto/" aria-label="Explore Designesto" data-motion-reveal>
-            <picture>
-              <source type="image/avif" srcset="/media/routes/work/designesto-ai-640.avif 640w, /media/routes/work/designesto-ai-960.avif 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
-              <source type="image/webp" srcset="/media/routes/work/designesto-ai-640.webp 640w, /media/routes/work/designesto-ai-960.webp 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
-              <img src="/media/routes/work/designesto-ai-960.webp" width="960" height="540" loading="lazy" decoding="async" alt="Designesto product preview comparing an empty room with a furnished concept" />
-            </picture>
-            <span><b>02</b> Designesto</span>
-          </a>
-          <a href="/work/propvr-ai-craft/" aria-label="Explore PropVR AI to Craft" data-motion-reveal>
-            <picture>
-              <source type="image/avif" srcset="/media/routes/work/craft-640.avif 640w, /media/routes/work/craft-960.avif 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
-              <source type="image/webp" srcset="/media/routes/work/craft-640.webp 640w, /media/routes/work/craft-960.webp 960w" sizes="(max-width: 54rem) 76vw, 34vw" />
-              <img src="/media/routes/work/craft-960.webp" width="960" height="540" loading="lazy" decoding="async" alt="Craft public homepage, the current creative platform developed by the PropVR Technology team" />
-            </picture>
-            <span><b>03</b> PropVR AI → Craft</span>
-          </a>
-        </div>
-        <div class="route-opening__copy">
-          <p class="route-opening__context">{work.length} projects</p>
-          <p>The archive spans applied AI, realtime 3D, design software, XR, games, and robotics.</p>
-          <p>Start with the selected systems, browse by domain, or switch to a chronological view.</p>
-        </div>
-      </div>
+    <header class="work-gallery-opening" data-route-opening>
+      <h1 data-polarity="positive">Projects</h1>
+      <p data-polarity="negative">Products, platforms, and experiments I helped define, build, and put into use.</p>
     </header>
 
     <nav class="domain-filter" aria-label="Filter work by domain">
@@ -103,12 +73,11 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         const sorted = [...items].sort((a, b) => chronological
           ? Number(a.dataset.workYear) - Number(b.dataset.workYear) || Number(a.dataset.workCareerOrder) - Number(b.dataset.workCareerOrder)
           : priority.get(a)! - priority.get(b)!);
-        const list = root.querySelector('.work-list');
-        sorted.forEach((item, index) => {
+        const list = root.querySelector('[data-work-gallery]');
+        sorted.forEach((item) => {
           list?.append(item);
-          const number = item.querySelector('.work-list__number');
-          if (number) number.textContent = String(index + 1).padStart(2, '0');
         });
+        list?.setAttribute('data-gallery-layout', chronological || activeDomain !== 'all' ? 'uniform' : 'featured');
         const description = root.querySelector<HTMLElement>('[data-work-description]');
         if (description && activeDomain === 'all') description.textContent = chronological
           ? 'From the earliest projects to current work.' : 'Selected systems first, followed by the earlier archive.';
@@ -140,6 +109,7 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         if (description) description.textContent = activeLink.dataset.domainDescription ?? '';
         if (count) count.textContent = String(visible).padStart(2, '0');
         if (status) status.textContent = `${activeLink.dataset.domainLabel ?? 'All work'}, ${visible} ${visible === 1 ? 'project' : 'projects'}`;
+        root.querySelector('[data-work-gallery]')?.setAttribute('data-gallery-layout', activeDomain === 'all' && order?.value !== 'chronological' ? 'featured' : 'uniform');
       };
 
       if (select) {
@@ -170,6 +140,15 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
 </script>
 
 <style>
+  .work-gallery-opening { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; padding: clamp(2rem, 5vw, 3rem) 0 clamp(1.5rem, 4vw, 2rem); }
+  .work-gallery-opening h1 { margin: 0; color: var(--text); font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1.08; }
+  .work-gallery-opening p { max-width: 40ch; margin: 0; color: var(--text-muted); font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.6; }
+  .work-archive[data-work-archive] .work-list-region { padding-block: 1.5rem clamp(3rem, 6vw, 6rem); }
+  .work-archive[data-work-archive] .work-list-region > header { display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin-bottom: 0.75rem; }
+  .work-archive[data-work-archive] .work-list-region > header > div { align-items: center; gap: 0.75rem; }
+  .work-archive[data-work-archive] .work-list-region h2 { max-width: none; font-size: 1rem; font-weight: 650; letter-spacing: 0; }
+  .work-archive[data-work-archive] .work-list-region header p { max-width: none; }
+  .work-archive[data-work-archive] .work-order { justify-content: flex-end; margin-block: 0 1rem; }
   .domain-filter { display: flex; overflow-x: auto; border-block: 1px solid var(--line); scrollbar-width: thin; }
   .domain-filter a { min-width: max-content; min-height: 3rem; padding: 1rem 1.25rem; border-right: 1px solid var(--line); color: var(--text-muted); font-size: 0.76rem; font-weight: 680; text-decoration: none; }
   .domain-filter a[aria-current='page'] { background: var(--text); color: var(--surface); }
@@ -191,6 +170,8 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
   }
 
   @media (max-width: 46rem) {
-    .work-list-region > header { grid-template-columns: 1fr; }
+    .work-gallery-opening { grid-template-columns: 1fr; gap: 0.85rem; }
+    .work-archive[data-work-archive] .work-list-region { padding-top: 1rem; }
+    .work-archive[data-work-archive] .work-list-region > header { align-items: flex-start; }
   }
 </style>

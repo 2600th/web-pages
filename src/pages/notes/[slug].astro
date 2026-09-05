@@ -18,7 +18,9 @@ interface Props {
 
 const { entry } = Astro.props;
 const { data } = entry;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+const sections = headings.filter((heading) => heading.depth === 2);
+const showContents = data.type !== 'field-note' && sections.length >= 4;
 const relatedWork = (await getCollection('work')).filter((work) => data.relatedWork.includes(work.data.slug));
 const originalSource = getOriginalSource(data.canonicalUrl, data.slug);
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(date);
@@ -74,6 +76,12 @@ const jsonLd = [{
       <p>{getNoteReadingTime(entry.body ?? '')} min read</p>
     </aside>
     <div class="article-shell__content">
+      {showContents && <details class="article-contents">
+        <summary>On this page</summary>
+        <nav aria-label="On this page">
+          <ol>{sections.map((section) => <li><a href={`#${section.slug}`}>{section.text}</a></li>)}</ol>
+        </nav>
+      </details>}
       {data.heroMedia && <ProjectMedia media={data.heroMedia} label="Article image" priority />}
       <div class="prose"><Content /></div>
       {(relatedWork.length > 0 || data.relatedLab.length > 0) && <nav class="article-shell__related" aria-label="Related work and experiments">
@@ -95,13 +103,20 @@ const jsonLd = [{
   .article-shell__related { margin-block-start: 3rem; padding-block-start: 1.5rem; border-top: 1px solid var(--line); }
   .article-shell__related ul { display: flex; flex-wrap: wrap; gap: 0.8rem 1.8rem; padding: 0; list-style: none; }
   .article-shell__related a { display: inline-block; padding-block: 0.5rem; }
-  .article-shell :global(.prose h2) { margin-block: 2.8rem 1rem; font-size: clamp(1.55rem, 3vw, 3rem); max-width: 28ch; }
-  .article-shell :global(.prose table) { width: 100%; table-layout: fixed; border-collapse: collapse; margin-block: 2rem; font-size: 1rem; line-height: 1.5; }
-  .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.8rem 0.55rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+  .article-contents { margin-bottom: 2rem; padding-block: 0.75rem; border-block: 1px solid var(--line); }
+  .article-contents summary { width: fit-content; min-height: 2.75rem; padding-block: 0.5rem; color: var(--warm); cursor: pointer; font-weight: 650; }
+  .article-contents ol { margin: 0.5rem 0 0; padding-left: 1.5rem; }
+  .article-contents li { padding-left: 0.25rem; }
+  .article-contents a { display: inline-block; padding-block: 0.55rem; color: var(--muted); line-height: 1.45; }
+  .article-shell :global(.prose h2) { margin-block: 2.8rem 1rem; font-size: var(--type-article); max-width: 28ch; scroll-margin-top: 1.5rem; }
+  .article-shell :global(.prose .table-scroll) { margin-block: 2rem; padding-bottom: 0.5rem; scrollbar-color: var(--gold) var(--velvet-soft); }
+  .article-shell :global(.prose table) { width: 100%; table-layout: auto; border-collapse: collapse; margin-block: 0; font-size: 1rem; line-height: 1.5; }
+  .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.8rem 0.75rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: normal; }
   .article-shell :global(.prose th) { color: var(--warm); }
   .article-shell :global(.prose pre) { max-width: 100%; overflow-x: auto; padding: 1.2rem; font-size: 1rem; line-height: 1.65; }
   .article-shell :global(.prose :not(pre) > code) { overflow-wrap: anywhere; }
   @media (max-width: 40rem) {
-    .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.65rem 0.3rem; }
+    .article-shell :global(.prose .table-scroll table) { min-width: 42rem; }
+    .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.75rem; }
   }
 </style>

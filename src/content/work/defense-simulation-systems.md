@@ -33,6 +33,7 @@ heroLabel: Defense training systems atlas
 heroMedia:
   src: /media/generated/editorial/defense-systems-atlas-v2.webp
   avif: /media/generated/editorial/defense-systems-atlas-v2.avif
+  label: Conceptual editorial illustration of the software, physical controls and instructor systems involved in simulation work.
   alt: Conceptual editorial cutaway of a simulator cab, instructor console, tracking rig, mannequin system, sensors, and evaluation station
   width: 1600
   height: 900
