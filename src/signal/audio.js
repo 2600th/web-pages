@@ -95,6 +95,12 @@ export const sfx = {
     noise(0.12, { gain: 0.06, freq: 900, delay: 1.02 });
   },
   channel() { noise(0.22, { gain: 0.045, freq: 3200, q: 0.4 }); },
+  /** Switch-hook clunk, then the trunk falls idle and its 2600 Hz tone comes back. */
+  hangup() {
+    tones([140], { dur: 0.04, gain: 0.18, type: 'triangle' });
+    noise(0.06, { gain: 0.05, freq: 1400 });
+    tones([2600], { dur: 0.3, gain: 0.045, delay: 0.3 });
+  },
   denied() { tones([480, 620], { dur: 0.25, gain: 0.07 }); tones([480, 620], { dur: 0.25, gain: 0.07, delay: 0.5 }); },
   era(kind) {
     const map = { square: ['square', 330], sine: ['sine', 440], saw: ['sawtooth', 392], ai: ['triangle', 523] };

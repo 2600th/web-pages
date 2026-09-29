@@ -38,7 +38,7 @@ sources:
   - label: Project website
     url: https://2600th.github.io/dlss5-video-player/
     type: official-source
-    contextLabel: Project site
+    contextLabel: Site
   - label: Release v0.26.2
     description: Complete and core Windows packages, each with a checksum; the core package also has a build attestation.
     url: https://github.com/2600th/dlss5-video-player/releases/tag/dlss5-video-player-v0.26.2

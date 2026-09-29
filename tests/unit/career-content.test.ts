@@ -34,7 +34,7 @@ const evidenceNote = {
     title: 'The Brutal Spy — Early Game Work by Pranshul Chandhok',
     description:
       "An early game-programming milestone in Pranshul Chandhok's progression across games, immersive systems, design technology, and applied AI.",
-    socialImage: '/media/social/career-atlas.webp',
+    socialImage: '/media/social/2600th.webp',
   },
 };
 

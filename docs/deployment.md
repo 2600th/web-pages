@@ -24,15 +24,16 @@ Pushes to `main` and manual **Run workflow** requests trigger publication. The b
    git push origin main
    ```
 
-Watch **Verify and deploy portfolio** in GitHub Actions until both build and deployment succeed for the intended commit. To redeploy an unchanged commit, use **Run workflow** on `main`. The old `npm run deploy` shortcut was removed to prevent recreating `gh-pages`; the retained legacy publisher package is not invoked. Media regeneration is separate and should run only when required; see [media.md](media.md).
+Watch **Verify and deploy portfolio** in GitHub Actions until both build and deployment succeed for the intended commit. To redeploy an unchanged commit, use **Run workflow** on `main`. There is no branch-publishing shortcut, so nothing recreates `gh-pages`. Media regeneration is separate and should run only when required; see [media.md](media.md).
 
 ## Post-deploy checks
 
 Verify the deployed release separately from the local build:
 
-- The homepage shows the Velvet introduction, five selected projects, Home / Work / Notes / Lab / About navigation, and a working email contact path.
-- `/work/`, representative project pages such as `/work/ira-vr/` and `/work/homelane-spacecraft-pro/`, and `/work/domain/xr/` resolve with images and source links.
-- `/notes/`, a note detail page, `/about/`, and `/lab/` resolve. Check responsive opening media and Back to top behavior on a long page.
+- The homepage shows the Signal story (the point-cloud portrait, or its static poster with reduced motion), six selected systems, the Lab, the latest notes, the blue box and a working email contact path.
+- `/work/`, representative case pages such as `/work/dlss5-video-player/` and `/work/homelane-spacecraft-pro/`, and `/work/domain/xr/` resolve in the Signal design with images, endpoint rows where they apply, and source links.
+- `/notes/`, a note detail page, `/about/`, `/lab/` and a missing URL (404) resolve in the Signal design. Check Back to top, Hang up, the backtick console and the mobile Menu on a long page.
+- Shared links show the Signal social card (`/media/social/2600th.webp` by default).
 - Video remains poster-first until Play; keyboard navigation and reduced-motion presentation remain usable.
 - `/lab/terminal/index.html` opens the preserved console, retains `noindex,follow`, and its return link works.
 - `/lab/dwarkesh-jensen/index.html` opens the unofficial companion, with search, keyboard navigation, timestamp links and a return to Lab. The exact file URL is its canonical and sole sitemap entry.

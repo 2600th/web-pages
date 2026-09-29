@@ -80,27 +80,27 @@ Source of truth: `src/styles/signal/tokens.css` (tokens, fonts, base), `src/styl
 
 ## Typography
 
-Mona Sans at a wide stretch carries display and body. Doto, a dot-matrix face, sets exactly one accent word per display heading, plus years, counts and readouts. JetBrains Mono sets labels, paths, eyebrows and anything the visitor would type.
+Mona Sans at a wide stretch carries display and body. Doto, a dot-matrix face, sets at most one accent word per display heading (never more, and short enough to fit a 320px screen), plus years, counts and readouts. JetBrains Mono sets labels, paths, eyebrows and anything the visitor would type.
 
 ## Layout
 
 - Header with the mark, primary navigation, line status, and sound and motion chips. It is fixed over the homepage stage and sticky on interior pages. On phones a Menu button opens one panel holding the navigation and the sound and motion switches, so focus order matches what is on screen.
 - Interior pages open with a shell path (`guest@2600th: ~ / work / blocks`), a numbered eyebrow, a display title, a lede, a bracketed readout, and a waveform strip that differs per section (square for work, sine for notes, saw for about, noise for the lab, rising tones for 404). Index pages whose content is the list below (Work and its domain bands) use the compact opening so the first project shows in the first screen.
-- Case files pair the copy and readout with media in a monitor bezel, then a sticky contents rail, the story, sources, related notes and a previous/next line.
+- Case files and note articles open with the shell path, a gold context line (dates and type) in place of the numbered eyebrow, the title, a summary and the section's trace. Case files pair the copy, readout and endpoint rows with media in a monitor bezel, then a sticky contents rail, the story, sources, related notes and a previous/next line. On phones, article readout rows that repeat the context line are hidden so the reading starts sooner.
 - Reading measure stays near 68 characters.
 
 ## Components
 
 - **Readout**: label/value pairs in a panel with a cobalt corner bracket.
-- **Endpoints**: every build lists its links the same way, one row per link: kind, address, arrow. The featured build uses the same rows as the cards.
+- **Endpoints**: every build lists its links the same way, one row per link: kind, address, arrow (↗ leaves the site, → stays on it). The featured build, the cards and case pages all use the same rows. The kind says what is behind the link: LIVE for a running web app, SITE for a project or product site, SOURCE, NOTES, OPEN for a page on this site. Sources and links on case pages use the same words.
 - **Channel cards**: the work archive's image cards, with the year and role in the meta line and scanlines on hover. Nothing is laid over the project image.
 - **Transmissions**: notes as a call log with Doto dates.
-- **Console**: a terminal window opened with the backtick key on every page, with a title bar, aligned output and a scrim.
+- **Console**: a modal terminal window opened with the backtick key or the footer's Console switch on every page: a title bar, aligned output and a scrim. While open the page behind is inert; Esc, backtick, Close or a press on the scrim closes it and focus returns where it was.
 - **Footer**: "Dial in" with the address as the link and a copy button, then a switchboard bar: identity, site map, console and shortcut switches, and "Hang up" back to top. The homepage adds the blue box.
 
 ## Motion and sound
 
-Motion is movement only: reading content is never hidden or dimmed at rest. One motion preference covers the whole site and respects `prefers-reduced-motion`; reduced motion never downloads the 3D engine. Sound is synthesized with Web Audio, off by default, and follows the visitor between pages once they turn it on.
+Motion is movement only: reading content is never hidden or dimmed at rest. The one deliberate exception is **Hang up** in the footer: the picture switches off like a CRT into the idle 2600 Hz trace, the trace flattens to a dot, the page returns to the top under the cover and the line comes back, all in under a second. It never runs with motion off; the link is then a plain jump to the top. One motion preference covers the whole site and respects `prefers-reduced-motion`; reduced motion never downloads the 3D engine. Sound is synthesized with Web Audio, off by default, and follows the visitor between pages once they turn it on.
 
 ## Do's and Don'ts
 

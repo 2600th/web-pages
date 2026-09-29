@@ -74,6 +74,7 @@ sources:
   - label: Chhota Bheem Jungle Rescue public gameplay
     url: https://www.youtube.com/watch?v=0c2jPM_p5_M
     type: live-demo
+    contextLabel: Video
 reviewedEvidence:
   - title: Chhota Bheem Jungle Rescue alpha handoff
     date: 2020-04-17

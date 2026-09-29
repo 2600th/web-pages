@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import PathCrumb from '../../components/site/PathCrumb.astro';
+import Trace from '../../components/site/Trace.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { SITE } from '../../data/site';
@@ -71,13 +72,14 @@ const readingTime = getNoteReadingTime(entry.body ?? '');
       <div class="route-opening__negative" data-polarity="negative">
         <p class="article-shell__summary">{data.summary}</p>
       </div>
+      <Trace wave="sine" />
     </header>
     <aside class="article-shell__meta" aria-label="About this note">
       <dl class="pg-readout">
-        <div><dt>Published</dt><dd><time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time></dd></div>
+        <div class="is-dup"><dt>Published</dt><dd><time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time></dd></div>
         {data.updatedAt && data.updatedAt.valueOf() !== data.publishedAt.valueOf() && <div><dt>Updated</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>}
-        <div><dt>Type</dt><dd>{NOTE_TYPES[data.type]}</dd></div>
-        <div><dt>Reading</dt><dd><b>{readingTime}</b> min</dd></div>
+        <div class="is-dup"><dt>Type</dt><dd>{NOTE_TYPES[data.type]}</dd></div>
+        <div class="is-dup"><dt>Reading</dt><dd><b>{readingTime}</b> min</dd></div>
         <div><dt>Topics</dt><dd>{data.topics.join(' · ')}</dd></div>
       </dl>
     </aside>

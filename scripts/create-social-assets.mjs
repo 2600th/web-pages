@@ -1,3 +1,7 @@
+// Share cards in the Signal design: the void ground and grid, the 2600th mark, a monitor
+// bezel with real public media or a plain diagram, and the section's waveform strip.
+// Chromium renders each card with the site's own fonts; Sharp encodes it as WebP.
+// These are share artwork, never substitute product evidence.
 import sharp from 'sharp';
 import { mkdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -5,83 +9,95 @@ import { chromium } from '@playwright/test';
 
 const output = new URL('../public/media/social/', import.meta.url);
 await mkdir(output, { recursive: true });
+const asset = (path) => fileURLToPath(new URL(`../public/${path}`, import.meta.url));
+const dataUri = async (path, type) => `data:${type};base64,${(await readFile(asset(path))).toString('base64')}`;
 
-const svg = `
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#f3f2ee"/>
-  <path d="M0 72H1200M0 558H1200" stroke="#b8b7b0"/>
-  <ellipse cx="1030" cy="302" rx="310" ry="92" fill="none" stroke="#1547ff" stroke-width="2"/>
-  <circle cx="978" cy="302" r="11" fill="#1547ff"/>
-  <text x="72" y="120" fill="#1547ff" font-family="Arial, sans-serif" font-size="22" font-weight="700">PRANSHUL CHANDHOK / 2600TH</text>
-  <text x="72" y="275" fill="#090909" font-family="Arial, sans-serif" font-size="104" font-weight="800" letter-spacing="-5">CAREER</text>
-  <text x="72" y="372" fill="#090909" font-family="Arial, sans-serif" font-size="104" font-weight="800" letter-spacing="-5">ATLAS</text>
-  <text x="74" y="470" fill="#5c5c57" font-family="Arial, sans-serif" font-size="28">Games → XR → Robotics → Design technology → Production AI</text>
-  <text x="74" y="535" fill="#090909" font-family="Arial, sans-serif" font-size="20" font-weight="700">2012 — NOW</text>
-</svg>`;
-
-await sharp(Buffer.from(svg)).webp({ quality: 88, smartSubsample: true }).toFile(fileURLToPath(new URL('career-atlas.webp', output)));
-console.log('Generated public/media/social/career-atlas.webp');
-
-// Editorial cards use the site's own font, real public project media or explicit
-// geometric diagrams. These are share artwork, never substitute product evidence.
-const fontfile = fileURLToPath(new URL('../public/fonts/mona-sans-variable.woff2', import.meta.url));
 const cards = [
-  { slug: 'ocean-reliability', lines: ['Web Ocean 3D', 'What broke when', 'other people ran it'], type: 'TECHNICAL TEARDOWN', image: 'work/web-ocean-3d/hero.webp' },
-  { slug: 'ai-floorplan-parsing', lines: ['AI floorplan parsing', 'The hard part isn’t', 'the model'], type: 'TECHNICAL TEARDOWN', cue: 'floorplan' },
-  { slug: 'ai-video-control', lines: ['AI video got good.', 'Directing a sequence', 'is still hard.'], type: 'TECHNICAL TEARDOWN', cue: 'sequence' },
-  { slug: 'generative-and-deterministic-systems', lines: ['Generative systems.', 'Deterministic systems.', 'Where is the boundary?'], type: 'ESSAY', image: 'work/blocks-inco-ai/designesto-before-after.webp', crop: { left: 52, top: 186, width: 1496, height: 633 } },
-  { slug: 'ai-native-game-development-reflection', lines: ['Revisiting my', '2023 essay on', 'AI and games'], type: 'FIELD NOTE', image: 'work/kinema/editor.webp' },
-  { slug: 'ai-native-game-development-three-years-later', lines: ['AI-native game', 'development,', 'three years later'], type: 'ESSAY', image: 'work/kinema/inside.webp' },
-  { slug: 'browser-flight-experiment', lines: ['From a documentary', 'to a browser', 'flight experiment'], type: 'FIELD NOTE', image: 'work/safed-sagar/hero.webp' },
-  { slug: 'from-pixels-to-intelligent-systems', lines: ['Why I still', 'build things', 'myself'], type: 'FIELD NOTE', image: 'work/homelane-spacecraft-pro/hero.webp' },
-  { slug: 'technology-and-human-agency', lines: ['Making tools', 'easier to steer'], type: 'FIELD NOTE', image: 'work/blocks-inco-ai/designesto-after.webp' },
-  { slug: 'propvr-ai-craft', lines: ['PropVR AI → Craft', 'The foundation.', 'The team’s next act.'], type: 'PROJECT STORY', image: 'work/propvr-ai-craft/craft-public-home-20260902.webp' },
+  // The default card for pages without their own image.
+  { slug: '2600th', eyebrow: ['ID', 'Operator file'], title: 'Make the uncertain <em>operable.</em>', lede: 'Product and technology across AI, real-time 3D and design software.', image: 'media/signal/portrait.webp', position: '50% 18%', wave: 'sine' },
+  { slug: 'ocean-reliability', eyebrow: ['05', 'Technical teardown'], title: 'Web Ocean 3D: what broke when other people ran it', image: 'media/work/web-ocean-3d/hero.webp' },
+  { slug: 'ai-floorplan-parsing', eyebrow: ['05', 'Technical teardown'], title: 'AI floorplan parsing: the hard part isn’t the model', cue: 'floorplan' },
+  { slug: 'ai-video-control', eyebrow: ['05', 'Technical teardown'], title: 'AI video got good. Directing a sequence is still hard.', cue: 'sequence' },
+  { slug: 'generative-and-deterministic-systems', eyebrow: ['05', 'Essay'], title: 'Generative systems, deterministic systems: where is the boundary?', image: 'media/work/blocks-inco-ai/designesto-before-after.webp', position: '50% 55%' },
+  { slug: 'ai-native-game-development-reflection', eyebrow: ['05', 'Field note'], title: 'Revisiting my 2023 essay on AI and games', image: 'media/work/kinema/editor.webp' },
+  { slug: 'ai-native-game-development-three-years-later', eyebrow: ['05', 'Essay'], title: 'AI-native game development, three years later', image: 'media/work/kinema/inside.webp' },
+  { slug: 'browser-flight-experiment', eyebrow: ['05', 'Field note'], title: 'From a documentary to a browser flight experiment', image: 'media/work/safed-sagar/hero.webp' },
+  { slug: 'from-pixels-to-intelligent-systems', eyebrow: ['05', 'Field note'], title: 'Why I still build things myself', image: 'media/work/homelane-spacecraft-pro/hero.webp' },
+  { slug: 'technology-and-human-agency', eyebrow: ['05', 'Field note'], title: 'Making tools easier to steer', image: 'media/work/blocks-inco-ai/designesto-after.webp' },
+  { slug: 'propvr-ai-craft', eyebrow: ['02', 'Case file'], title: 'PropVR AI to Craft: the foundation, and the team’s next act', image: 'media/work/propvr-ai-craft/craft-public-home-20260902.webp', position: '50% 0%', wave: 'square' },
 ];
-// Sharp's Windows font backend can silently fall back when given WOFF2.
-// Chromium rasterizes the bundled web font, then Sharp composites the card.
-const browser = await chromium.launch({ headless: true });
-const fontPage = await browser.newPage({ viewport: { width: 1200, height: 200 } });
-const fontData = (await readFile(fontfile)).toString('base64');
-await fontPage.setContent(`<style>@font-face{font-family:"Mona Sans";src:url(data:font/woff2;base64,${fontData}) format("woff2");font-weight:100 900}body{margin:0;background:transparent}#text{display:inline-block;white-space:pre;font-family:"Mona Sans";font-weight:650;line-height:1.1}</style><span id="text">Font readiness</span>`);
-await fontPage.evaluate(() => document.fonts.ready);
-const loaded = await fontPage.evaluate(() => [...document.fonts].every((font) => font.status === 'loaded'));
-if (!loaded) throw new Error('The bundled Mona Sans font did not load for social cards.');
-const textLayer = async (text, size, colour) => {
-  await fontPage.locator('#text').evaluate((element, options) => {
-    element.textContent = options.text;
-    element.style.fontSize = `${options.size}px`;
-    element.style.color = options.colour;
-  }, { text, size, colour });
-  return fontPage.locator('#text').screenshot({ omitBackground: true });
+
+const cue = (kind) => kind === 'floorplan'
+  ? '<svg viewBox="0 0 400 300"><g fill="none" stroke="#4d74ff" stroke-width="3"><path d="M40 40H360V250H40ZM40 130H360M185 40V130M205 130V250"/><path d="M58 58H168V116H58ZM58 148H186V232H58Z" stroke="#e8b45a"/></g><path d="M40 276H360M40 268V284M360 268V284" stroke="#858a99" stroke-width="2"/></svg>'
+  : `<svg viewBox="0 0 400 300">${Array.from({ length: 6 }, (_, i) => `<rect x="${36 + (i % 2) * 172}" y="${30 + Math.floor(i / 2) * 88}" width="156" height="70" fill="none" stroke="${i === 3 ? '#e8b45a' : '#4d74ff'}" stroke-width="2"/><path d="M${52 + (i % 2) * 172} ${80 + Math.floor(i / 2) * 88}h${28 + i * 17}" stroke="#eae8e1" stroke-width="3"/>`).join('')}</svg>`;
+
+// The same trace shapes as the site's openings, drawn once per card.
+const trace = (wave = 'sine') => {
+  const points = [];
+  for (let x = 0; x <= 1200; x += 4) {
+    const t = x / 60;
+    const y = wave === 'square' ? Math.sign(Math.sin(t * Math.PI)) * 0.8 : Math.sin(t * Math.PI);
+    points.push(`${x ? 'L' : 'M'}${x} ${(20 - y * 14).toFixed(1)}`);
+  }
+  return `<svg class="wave" viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="${points.join('')}"/></svg>`;
 };
+
+const fonts = {
+  mona: await dataUri('fonts/mona-sans-latin.woff2', 'font/woff2'),
+  doto: await dataUri('fonts/doto.woff2', 'font/woff2'),
+  mono: await dataUri('fonts/jetbrains-mono.woff2', 'font/woff2'),
+};
+const style = `
+@font-face { font-family: 'Mona Sans'; src: url(${fonts.mona}) format('woff2'); font-weight: 200 900; font-stretch: 75% 125%; }
+@font-face { font-family: 'Doto'; src: url(${fonts.doto}) format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'JetBrains Mono'; src: url(${fonts.mono}) format('woff2'); font-weight: 100 800; }
+* { box-sizing: border-box; margin: 0; }
+body { width: 1200px; height: 630px; overflow: hidden; background: #03040a; color: #eae8e1; font-family: 'Mona Sans', sans-serif; }
+.card { position: relative; width: 1200px; height: 630px; padding: 48px 64px 0; display: grid; grid-template-columns: 620px 1fr; grid-template-rows: auto 1fr auto; column-gap: 56px; }
+.card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 45% 60% at 88% 18%, rgb(36 71 216 / 0.28), transparent 70%), linear-gradient(rgb(234 232 225 / 0.045) 1px, transparent 1px) 0 0 / 56px 56px, linear-gradient(90deg, rgb(234 232 225 / 0.045) 1px, transparent 1px) 0 0 / 56px 56px; }
+.card > * { position: relative; }
+.mark { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; font: 500 17px/1 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; color: #a4a7b3; }
+.mark b { display: inline-flex; align-items: center; gap: 12px; font: 900 30px/1 'Doto', monospace; color: #eae8e1; letter-spacing: 0.02em; text-transform: none; }
+.mark b sup { font: 600 13px/1 'JetBrains Mono', monospace; color: #4d74ff; align-self: flex-start; margin: 2px 0 0 -8px; }
+.mark svg { width: 40px; height: 22px; overflow: visible; }
+.mark svg path { fill: none; stroke: #4d74ff; stroke-width: 2.5; stroke-linecap: round; }
+.copy { display: flex; flex-direction: column; justify-content: center; gap: 22px; padding-bottom: 12px; }
+.eyebrow { display: flex; align-items: center; gap: 14px; font: 500 17px/1 'JetBrains Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #a4a7b3; }
+.eyebrow span { font: 900 22px/1 'Doto', monospace; color: #4d74ff; letter-spacing: 0.04em; }
+h1 { font-weight: 780; font-stretch: 110%; font-size: 58px; line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; }
+h1 em { font-style: normal; font-family: 'Doto', monospace; font-weight: 800; font-stretch: normal; font-size: 0.92em; letter-spacing: -0.01em; color: #4d74ff; text-shadow: 0 0 24px rgb(77 116 255 / 0.55); }
+.lede { max-width: 540px; font-size: 24px; line-height: 1.4; color: #a4a7b3; }
+.monitor { align-self: center; height: 390px; padding: 12px; background: linear-gradient(160deg, #141a31, #080b16); border: 1px solid rgb(234 232 225 / 0.22); box-shadow: 0 40px 80px -40px #000; }
+.monitor > * { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 4px / 7px; background: #000; }
+.monitor svg { background: #0a0d18; padding: 18px; }
+.foot { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 28px; height: 92px; }
+.wave { width: 100%; height: 40px; border-block: 1px solid rgb(234 232 225 / 0.1); }
+.wave path { fill: none; stroke: #4d74ff; stroke-width: 2; }
+.url { font: 500 18px/1 'JetBrains Mono', monospace; letter-spacing: 0.1em; color: #7cf0b0; }
+`;
+
+const browser = await chromium.launch({ headless: true });
 try {
-for (const card of cards) {
-  const cue = card.cue === 'floorplan'
-    ? '<g fill="none" stroke="#6f8dff" stroke-width="3"><path d="M790 170H1100V435H790ZM790 285H1100M930 170V285M950 285V435"/><path d="M805 192H911V266H805ZM809 310H930V413H809Z" stroke="#d6a248"/></g><path d="M808 470H1082M808 460V480M1082 460V480" stroke="#a8a7a1" stroke-width="2"/>'
-    : card.cue === 'sequence'
-      ? Array.from({ length: 6 }, (_, index) => `<rect x="${772 + (index % 2) * 180}" y="${158 + Math.floor(index / 2) * 120}" width="154" height="90" fill="none" stroke="${index === 3 ? '#d6a248' : '#6f8dff'}" stroke-width="2"/><path d="M${789 + (index % 2) * 180} ${220 + Math.floor(index / 2) * 120}h${28 + index * 17}" stroke="#edeae2" stroke-width="3"/>`).join('')
-      : '';
-  const background = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#030405"/><rect x="736" y="110" width="416" height="406" fill="#111419"/>${cue}<path d="M56 110H688M56 516H688" stroke="#edeae2" stroke-opacity="0.24"/><path d="M56 551H94" stroke="#d6a248" stroke-width="3"/></svg>`);
-  const composites = [];
-  if (card.image) {
-    const source = sharp(fileURLToPath(new URL(`../public/media/${card.image}`, import.meta.url)));
-    if (card.crop) source.extract(card.crop);
-    const media = await source.resize(416, 406, { fit: 'cover', position: 'centre' }).webp({ quality: 88 }).toBuffer();
-    composites.push({ input: media, left: 736, top: 110 });
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+  for (const card of cards) {
+    const media = card.image
+      ? `<img src="${await dataUri(card.image, 'image/webp')}" style="object-position:${card.position ?? '50% 50%'}" alt="">`
+      : cue(card.cue);
+    await page.setContent(`<!doctype html><html><head><meta charset="utf-8"><style>${style}</style></head><body><div class="card">
+      <p class="mark"><b><svg viewBox="0 0 28 16"><path d="M1 8c2.5-6 4.5-6 6.5 0s4 6 6.5 0 4-6 6.5 0 4 6 6.5 0"/></svg>2600<sup>th</sup></b>Pranshul Chandhok</p>
+      <div class="copy"><p class="eyebrow"><span>${card.eyebrow[0]}</span>${card.eyebrow[1]}</p><h1>${card.title}</h1>${card.lede ? `<p class="lede">${card.lede}</p>` : ''}</div>
+      <div class="monitor">${media}</div>
+      <div class="foot">${trace(card.wave ?? 'sine')}<p class="url">2600th.com</p></div>
+    </div></body></html>`);
+    await page.evaluate(() => document.fonts.ready);
+    const missing = await page.evaluate(() => [...document.fonts].filter((font) => font.status !== 'loaded').map((font) => font.family));
+    if (missing.length) throw new Error(`Social card fonts did not load: ${missing.join(', ')}`);
+    const overflow = await page.evaluate(() => document.querySelector('h1').getBoundingClientRect().bottom > document.querySelector('.foot').getBoundingClientRect().top);
+    if (overflow) throw new Error(`Social title overruns its card: ${card.slug}`);
+    const png = await page.screenshot({ type: 'png' });
+    await sharp(png).webp({ quality: 88, smartSubsample: true }).toFile(fileURLToPath(new URL(`${card.slug}.webp`, output)));
+    console.log(`Generated public/media/social/${card.slug}.webp`);
   }
-  composites.push({ input: await textLayer('PRANSHUL CHANDHOK / 2600TH', 21, '#a8a7a1'), left: 56, top: 53 });
-  for (const [index, line] of card.lines.entries()) {
-    const layer = await textLayer(line, 48, '#edeae2');
-    const { width } = await sharp(layer).metadata();
-    if (width > 632) throw new Error(`Social title exceeds its reading plane: ${card.slug}: ${line}`);
-    composites.push({ input: layer, left: 56, top: 202 + index * 65 });
-  }
-  composites.push({ input: await textLayer(card.type, 19, '#a8a7a1'), left: 112, top: 539 });
-  composites.push({ input: await textLayer('2600th.com', 20, '#edeae2'), left: 1033, top: 551 });
-  await sharp(background).composite(composites).webp({ quality: 90, smartSubsample: true })
-    .toFile(fileURLToPath(new URL(`${card.slug}.webp`, output)));
-  console.log(`Generated public/media/social/${card.slug}.webp`);
-}
 } finally {
   await browser.close();
 }

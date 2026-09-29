@@ -41,7 +41,7 @@ const bandCount = (key: string) => allWork.filter((entry) => entry.data.domains.
   <div class="pg work-archive" data-work-archive data-static-domain={domain}>
     <PageOpening
       eyebrow={['02', `Band · ${domainMeta.label}`]}
-      path={[{ label: 'work', href: '/work/' }, { label: domain }]}
+      path={[{ label: 'work', href: '/work/' }, { label: 'domain' }, { label: domain }]}
       lede={domainMeta.description}
       readout={[['Lines', `<b>${String(work.length).padStart(2, '0')}</b> ${work.length === 1 ? 'project' : 'projects'} in this band`], ['All work', '<a href="/work/">Every band, every line</a>']]}
       wave="square"
@@ -73,7 +73,7 @@ const bandCount = (key: string) => allWork.filter((entry) => entry.data.domains.
     <section class="work-list-region" aria-labelledby="work-list-heading">
       <header>
         <div><h2 id="work-list-heading" data-work-heading>{domainMeta.label}</h2><span class="work-list-region__count" data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
-        <p data-work-description>{domainMeta.description}</p>
+        <p data-work-description>Selected systems first, followed by the earlier archive.</p>
       </header>
       <WorkList work={work} uniform />
     </section>

@@ -1,6 +1,9 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import PathCrumb from '../../components/site/PathCrumb.astro';
+import Endpoints from '../../components/site/Endpoints.astro';
+import Trace from '../../components/site/Trace.astro';
+import { endpointsForWork } from '../../data/builds';
 import EvidenceSources from '../../components/work/EvidenceSources.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
 import CraftEvolution from '../../components/work/CraftEvolution.astro';
@@ -24,6 +27,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { data } = entry;
+const endpoints = endpointsForWork(data.slug);
 const socialImageMetadata = await sharp(join(process.cwd(), 'public', data.seo.socialImage)).metadata();
 const { Content, headings } = await render(entry);
 const relatedWork = (await getCollection('work')).filter((candidate) => (data.relatedWork ?? []).includes(candidate.data.slug));
@@ -105,9 +109,10 @@ const period = `${data.yearStart}${data.yearEnd && data.yearEnd !== data.yearSta
         <div><dt>Status</dt><dd>{data.status}</dd></div>
         {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
       </dl>
-      {data.slug === 'propvr-ai-craft' && <p class="case-hero__visit"><a href="https://craft.propvr.ai/" target="_blank" rel="noopener noreferrer">Visit Craft ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></p>}
+      {endpoints.length > 0 && <Endpoints endpoints={endpoints} title={data.title} />}
     </div>
     {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroMedia.label ?? data.heroLabel ?? data.title} priority /></div>}
+    <Trace wave="square" />
   </header>
 
   <div class:list={['project-reading', { 'project-reading--with-contents': showProjectContents }]} data-project-reading>

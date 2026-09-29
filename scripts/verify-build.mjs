@@ -43,7 +43,7 @@ const requiredFiles = [
   'lab/index.html',
   'lab/terminal/index.html',
   'lab/dwarkesh-jensen/index.html',
-  'media/social/career-atlas.webp',
+  'media/social/2600th.webp',
   'media/generated/identity/2600th-velvet-character.webp',
   'media/generated/identity/provenance.json',
   'media/signal/portrait.webp',

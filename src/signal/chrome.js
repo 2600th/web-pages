@@ -18,7 +18,8 @@ const SOUND_KEY = '2600th-sound';
 export function setStatus(state, label) {
   const el = $('.sg-status');
   if (!el) return;
-  el.dataset.state = state;
+  if (state) el.dataset.state = state;
+  else delete el.dataset.state;
   const text = $('[data-status-label]', el);
   if (text) text.textContent = label;
 }
@@ -93,9 +94,14 @@ function initHeader() {
   update();
   const menu = $('[data-menu]');
   const panel = $('[data-menu-panel]');
-  const setOpen = (open) => { menu?.setAttribute('aria-expanded', String(open)); if (panel) panel.dataset.open = String(open); };
+  const setOpen = (open) => {
+    menu?.setAttribute('aria-expanded', String(open));
+    if (menu) menu.textContent = open ? 'Close' : 'Menu';
+    if (panel) panel.dataset.open = String(open);
+  };
   menu?.addEventListener('click', () => setOpen(menu.getAttribute('aria-expanded') !== 'true'));
   panel?.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
+  header.addEventListener('focusout', (e) => { if (panel?.dataset.open === 'true' && !header.contains(e.relatedTarget)) setOpen(false); });
   addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && panel?.dataset.open === 'true') { setOpen(false); menu?.focus(); }
   });
@@ -159,6 +165,92 @@ function initReveals() {
 
 let started = false;
 /** Idempotent: the layout and the homepage both call it. */
+/* Hang up: the picture switches off like a CRT into the idle 2600 Hz trace, the trace
+   flattens to a dot, the page returns to the top underneath, and the line comes back.
+   Without motion (or JavaScript) the link is an ordinary jump to the top. */
+function initHangup() {
+  const links = $$('.sg-hangup');
+  if (!links.length) return;
+  let fx = null;
+  let busy = false;
+  let passthrough = false;
+  const W = 1200;
+  const H = 80;
+  const build = () => {
+    const el = document.createElement('div');
+    el.className = 'sg-hang';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = `<i class="sg-hang__shutter sg-hang__shutter--top"></i><i class="sg-hang__shutter sg-hang__shutter--bottom"></i>
+      <svg class="sg-hang__trace" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path /></svg>
+      <b class="sg-hang__dot"></b><p class="sg-hang__label"></p>`;
+    document.body.append(el);
+    return el;
+  };
+  // 26 cycles across the screen: a nod to 2600, drawn at whatever amplitude the line has left.
+  const draw = (path, a) => {
+    let d = '';
+    for (let x = 0; x <= W; x += 6) d += `${x ? 'L' : 'M'}${x} ${(H / 2 - Math.sin((x / W) * 26 * Math.PI * 2) * a * (H / 2 - 6)).toFixed(1)}`;
+    path.setAttribute('d', d);
+  };
+  const status = $('.sg-status');
+  const restStatus = status ? [status.dataset.state, $('[data-status-label]', status)?.textContent ?? ''] : null;
+
+  const play = (link) => {
+    fx ??= build();
+    const [top, bottom] = $$('.sg-hang__shutter', fx);
+    const trace = $('.sg-hang__trace', fx);
+    const path = $('path', trace);
+    const dot = $('.sg-hang__dot', fx);
+    const label = $('.sg-hang__label', fx);
+    const amp = { a: 0.9 };
+    draw(path, amp.a);
+    setStatus('idle', 'Line idle');
+    return gsap.timeline({ defaults: { ease: 'power3.in' } })
+      .set(fx, { visibility: 'visible', '--edge': 1 })
+      .set(trace, { scaleX: 1, opacity: 0 })
+      .set(label, { opacity: 1, textContent: '' })
+      .fromTo(top, { yPercent: -101 }, { yPercent: 0, duration: 0.32 }, 0)
+      .fromTo(bottom, { yPercent: 101 }, { yPercent: 0, duration: 0.32 }, 0)
+      .to(trace, { opacity: 1, duration: 0.1, ease: 'none' }, 0.05)
+      .to(amp, { a: 0, duration: 0.34, ease: 'power2.in', onUpdate: () => draw(path, amp.a) }, 0.08)
+      .to(label, { duration: 0.3, scrambleText: { text: 'Line idle · 2600 Hz', chars: '0123456789', speed: 0.6 }, ease: 'none' }, 0.12)
+      .to(trace, { scaleX: 0.004, duration: 0.18, ease: 'power4.in' }, 0.36)
+      .to(fx, { '--edge': 0, duration: 0.12, ease: 'none' }, 0.36)
+      .fromTo(dot, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.08, ease: 'power2.out' }, 0.5)
+      .set(trace, { opacity: 0 }, 0.54)
+      .add(() => {
+        // Jump natively under the cover, so focus and the address behave exactly as without
+        // JavaScript. Smooth scrolling stays off until the picture is back.
+        root.style.scrollBehavior = 'auto';
+        passthrough = true;
+        link.click();
+        passthrough = false;
+        scrollTo({ top: 0, behavior: 'instant' });
+      }, 0.54)
+      .to(dot, { scale: 0, opacity: 0, duration: 0.2, ease: 'power2.in' }, 0.62)
+      .to(label, { opacity: 0, duration: 0.2, ease: 'none' }, 0.62)
+      .set(fx, { '--edge': 1 }, 0.66)
+      .to(top, { yPercent: -101, duration: 0.36, ease: 'power3.out' }, 0.66)
+      .to(bottom, { yPercent: 101, duration: 0.36, ease: 'power3.out' }, 0.66)
+      .set(fx, { visibility: 'hidden' })
+      .add(() => {
+        root.style.scrollBehavior = '';
+        // Back to the page's own status, unless something else has taken the line since.
+        if (restStatus) setTimeout(() => { if (status.dataset.state === 'idle') setStatus(...restStatus); }, 1800);
+      });
+  };
+
+  links.forEach((link) => link.addEventListener('click', (e) => {
+    if (passthrough) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    sfx.hangup();
+    if (!motionOn() || busy) return;
+    e.preventDefault();
+    busy = true;
+    play(link).then(() => { busy = false; });
+  }));
+}
+
 export function initChrome() {
   if (started) return;
   started = true;
@@ -174,6 +266,7 @@ export function initChrome() {
   initReveals();
   onKonami(() => hooks.phreak());
   initEggs();
+  initHangup();
   consoleHello();
   // Hidden tab keeps the name; only the state changes.
   const title = document.title;

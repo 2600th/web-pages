@@ -59,6 +59,7 @@ function buildConsole() {
   const el = document.createElement('section');
   el.className = 'sg-console';
   el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
   el.setAttribute('aria-label', 'Console');
   el.hidden = true;
   el.innerHTML = `
@@ -105,10 +106,26 @@ export function initEggs() {
     append(dl);
   };
 
+  // While open, the console is modal: everything else is inert, so focus, clicks and
+  // screen readers stay inside it until it closes.
+  let inerted = [];
+  const setModal = (on) => {
+    if (on) {
+      inerted = [...document.body.children].filter((node) => node !== panel && !node.matches('.sg-toast, script') && !node.inert);
+      inerted.forEach((node) => { node.inert = true; });
+    } else {
+      inerted.forEach((node) => { node.inert = false; });
+      inerted = [];
+    }
+  };
+
   function open() {
     if (!panel.hidden) return;
     lastFocus = document.activeElement;
+    gsap.killTweensOf(panel);
+    gsap.set(panel, { clearProps: 'transform' });
     panel.hidden = false;
+    setModal(true);
     if (document.documentElement.dataset.motion === 'on') gsap.fromTo(panel, { yPercent: -100 }, { yPercent: 0, duration: 0.35, ease: 'power3.out' });
     if (!greeted) {
       greeted = true;
@@ -121,7 +138,8 @@ export function initEggs() {
   }
   function close() {
     if (panel.hidden) return;
-    const done = () => { panel.hidden = true; lastFocus?.focus?.(); };
+    setModal(false);
+    const done = () => { panel.hidden = true; gsap.set(panel, { clearProps: 'transform' }); lastFocus?.focus?.(); };
     if (document.documentElement.dataset.motion === 'on') gsap.to(panel, { yPercent: -100, duration: 0.25, ease: 'power2.in', onComplete: done });
     else done();
   }
@@ -216,13 +234,14 @@ export function initEggs() {
     } else if (e.key === '`') { e.preventDefault(); close(); }
   });
 
-  // Global keys: backtick opens the console; typing 2600 seizes the line. They only
-  // fire when nothing is focused, never with modifiers, and can be switched off (WCAG 2.1.4).
+  // Global keys: backtick opens the console; typing 2600 seizes the line. They never fire
+  // while typing in a field or with modifiers, and can be switched off (WCAG 2.1.4).
   let typed = '';
   addEventListener('keydown', (e) => {
-    if (!shortcutsOn || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!shortcutsOn || e.ctrlKey || e.metaKey || e.altKey || !panel.hidden) return;
     const active = document.activeElement;
-    if (active && active !== document.body && active !== document.documentElement) return;
+    // Fields take their own typing, and the blue box handles its own keypad.
+    if (active?.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), .sg-box-wrap')) return;
     if (e.key === '`' || e.key === '~') { e.preventDefault(); panel.hidden ? open() : close(); return; }
     if (/^[0-9]$/.test(e.key)) {
       typed = (typed + e.key).slice(-4);
@@ -230,6 +249,19 @@ export function initEggs() {
       if (typed === '2600') { typed = ''; hooks.seize(); toast('You spoke the network’s language. Line seized.'); }
     }
   });
+  // Esc and backtick close from anywhere inside; Tab cycles between the close button and the prompt.
+  panel.addEventListener('keydown', (e) => {
+    if (e.target === input) return;
+    if (e.key === 'Escape' || e.key === '`') { e.preventDefault(); close(); }
+  });
+  panel.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab' || e.defaultPrevented) return;
+    const closeBtn = panel.querySelector('[data-console-close]');
+    if (!e.shiftKey && document.activeElement === input) { e.preventDefault(); closeBtn.focus(); }
+    else if (e.shiftKey && document.activeElement === closeBtn) { e.preventDefault(); input.focus(); }
+  });
+  // A press on the dimmed page closes the console, as a scrim should.
+  document.addEventListener('pointerdown', (e) => { if (!panel.hidden && !panel.contains(e.target)) close(); });
   document.querySelector('[data-console-open]')?.addEventListener('click', open);
   panel.querySelector('[data-console-close]').addEventListener('click', close);
   const keysBtn = document.querySelector('[data-shortcuts]');

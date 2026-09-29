@@ -107,7 +107,7 @@ export const BUILDS: Build[] = [
   {
     id: 'companion',
     title: 'Dwarkesh × Jensen',
-    state: 'Companion',
+    state: 'Standalone deck',
     tone: 'idle',
     summary: 'An unofficial reading companion to the interview, with searchable explanations linked to the original timestamps.',
     code: ['92 terms', '8 sections', '↳ timestamps'],
@@ -125,3 +125,15 @@ export const BUILDS: Build[] = [
     endpoints: [{ kind: 'open', href: '/lab/terminal/index.html' }],
   },
 ];
+
+/** Case pages for work outside the Lab that still has something you can open. */
+const CASE_ENDPOINTS: Record<string, Endpoint[]> = {
+  'propvr-ai-craft': [{ kind: 'live', href: 'https://craft.propvr.ai/' }],
+  designesto: [{ kind: 'site', href: 'https://www.designesto.ai/' }],
+};
+
+/** The endpoint rows a case page shows in its opening: the build's own, or the case's. */
+export function endpointsForWork(slug: string): Endpoint[] {
+  const build = [FEATURED_BUILD, ...BUILDS].find((entry) => entry.caseHref === `/work/${slug}/`);
+  return build?.endpoints ?? CASE_ENDPOINTS[slug] ?? [];
+}

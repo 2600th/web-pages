@@ -7,8 +7,8 @@ interface Props {
 
 const { sources } = Astro.props;
 const sourceTypeLabels: Record<WorkEntry['sources'][number]['type'], string> = {
-  repository: 'Code',
-  'live-demo': 'Try it',
+  repository: 'Source',
+  'live-demo': 'Live',
   'authored-post': 'My write-up',
   'employer-post': 'Company post',
   'shared-archive': 'Project media',

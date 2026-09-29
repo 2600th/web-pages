@@ -7,7 +7,7 @@ import { BUILDS, FEATURED_BUILD } from '../../data/builds';
 import '../../styles/signal/pages.css';
 
 const all = [FEATURED_BUILD, ...BUILDS];
-const liveCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'live' || end.kind === 'site')).length;
+const liveCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'live')).length;
 const sourceCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'src')).length;
 ---
 
@@ -21,7 +21,7 @@ const sourceCount = all.filter((build) => build.endpoints.some((end) => end.kind
       eyebrow={['04', 'Side channels']}
       path={[{ label: 'lab' }]}
       lede="Games, browser graphics and AI tools I wanted to test for myself. I learn a technology by shipping something with it. Some are still rough, all of them are public."
-      readout={[['Builds', `<b>${String(all.length).padStart(2, '0')}</b>`], ['Live', `<b>${String(liveCount).padStart(2, '0')}</b> you can open now`], ['Source', `<b>${String(sourceCount).padStart(2, '0')}</b> open repositories`]]}
+      readout={[['Builds', `<b>${String(all.length).padStart(2, '0')}</b>`], ['Live', `<b>${String(liveCount).padStart(2, '0')}</b> running on the web`], ['Source', `<b>${String(sourceCount).padStart(2, '0')}</b> open repositories`]]}
       wave="noise"
     >
       <h1 slot="title">Things I’m <em>trying.</em></h1>

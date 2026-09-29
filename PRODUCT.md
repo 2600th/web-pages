@@ -41,14 +41,14 @@ The work spans product strategy, technical architecture, applied AI, evaluation 
 - **2600th** is the experimental identity, maker signature, and lab world rather than a replacement for the real name.
 - The domain remains `2600th.com`.
 - The homepage is Signal: the 2600 Hz phreaking story told through a point-cloud portrait, oscilloscope traces and a working blue box, with a static portrait for reduced motion, no WebGL and no JavaScript. Every page uses the same Signal design system; there is no second theme.
-- The existing site demonstrates a taste for interactive, technical, game-like experiences, but its green CRT terminal aesthetic is evidence and an anti-reference for the redesign rather than a visual system to preserve literally.
+- The handle comes from the 2600 Hz tone Pranshul learned about through a hacking documentary in college. Terminal and telephony motifs appear only where they do something: a real breadcrumb, a readout of real facts, a console that runs commands. The original green CRT terminal is kept as an archive in the Lab, not as a visual system to copy.
 - The voice should be technically credible, direct, curious, occasionally playful, and free of inflated futurist language.
 
 ## Evidence on Hand
 
 - Public LinkedIn profile, experience, recommendations, posts, and featured work.
 - Public X profile and recent project demonstrations.
-- Public GitHub repositories including Kinema, Web Ocean 3D, ComfyUI workflows, and browser-native 3D experiments.
+- Public GitHub repositories including DLSS 5 Video Player, Kinema, Web Ocean 3D, ComfyUI workflows, and browser-native 3D experiments.
 - Publicly announced work and approved contribution descriptions for Blocks, Designesto, PropVR AI → Craft and related AI or spatial products.
 - Public patent reference for a humanoid robot control system and media in the supplied Google Drive archive.
 - GreyKernel archive covering showreels, robotics, platforms, entertainment, training and simulation, real estate, games, collaborative learning, medical work, analytics, and presentations.
@@ -70,4 +70,4 @@ Target WCAG 2.2 AA. Provide keyboard access, visible focus, semantic landmarks, 
 
 ## Public information architecture
 
-Home / Work / Notes / Lab / About. Work lists 19 public records and keeps the old combined Blocks/INCO-AI URL as a useful off-archive compatibility page. Nine Notes use Field Note, Technical Teardown or Essay types. Lab includes independent builds and the unofficial Dwarkesh × Jensen Huang companion. Ghost Terminal is a noindex archive. Private drafts, Agent Skills showcases, and unsupported Gaussian-splatting or Hinglish-voice benchmark work are not published. Local source completion does not mean deployment.
+Work / Lab / Notes / About / Contact, with the 2600th mark leading home. Work lists 20 public records and keeps the old combined Blocks/INCO-AI URL as a useful off-archive compatibility page. Nine Notes use Field Note, Technical Teardown or Essay types. Lab includes independent builds, led by DLSS 5 Video Player, and the unofficial Dwarkesh × Jensen Huang companion deck. Ghost Terminal is a noindex archive. Private drafts, Agent Skills showcases, and unsupported Gaussian-splatting or Hinglish-voice benchmark work are not published. Local source completion does not mean deployment.

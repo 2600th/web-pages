@@ -18,20 +18,12 @@ const CAREER_MEDIA_PROVENANCE = Object.fromEntries(
 
 const ENHANCED_EDITORIAL_RECEIPTS: Record<string, string> = {
   'ai-native-game-thesis-hero-v2': 'exec-4dd3ceb6-98bd-494c-a776-cfd0a2d01895',
-  'alphaman-gameplay-v2': 'exec-e0492cb0-bb16-418f-93d3-959cbc8d11fd',
-  'blocks-designesto-before-after-v2': 'exec-a20db51f-c921-43d5-aa46-addfe2667936',
-  'blocks-designesto-after-v2': 'exec-4bbadf3d-138d-4a6d-996d-7bd2d0d64c7d',
-  'chhota-bheem-jungle-rescue-v2': 'exec-50571dc4-9736-41bd-a5c9-a7a026765d7c',
   'enterprise-xr-hero-v2': 'exec-1823aa82-4f4d-456a-bb89-240010ebb88b',
-  'enterprise-xr-swissotel-v2': 'exec-d0379ee1-274c-4276-8de6-9a72fcb9f12c',
-  'fruit-masti-v2': 'exec-73bd5f99-3f40-4d2f-8ac5-e277d8ae4c0d',
   'humanoid-robot-control-v2': 'exec-453fb818-501c-49cf-aee5-214a8a90da72',
   'ira-lab-v2': 'exec-9e5c9b10-e5d9-4824-9810-cd67e927ba9b',
   'ira-newton-v2': 'exec-705c02d8-2d4e-4a1c-bb0e-9ae925fa9d24',
-  'ira-panorama-v2': 'exec-3772c360-f25b-4d51-b829-c15551e6d420',
   'kinema-editor-v2': 'exec-32a65be7-bb41-461d-af17-cf42478e40d3',
   'kinema-hero-v2': 'exec-184e6a38-4783-49fc-8bbb-0f97ab786870',
-  'kinema-inside-v2': 'exec-d6011643-c930-4c53-ac72-c4b9c50279e2',
   'little-wonder-hero-v2': 'exec-e2ec229c-c83d-4fa1-ad02-b4e3ef38b815',
   'machine-hunter-aim-v2': 'exec-5947a680-5c49-4955-93bc-995add04784b',
   'machine-hunter-draw-v2': 'exec-318f370e-9bc9-4be2-a083-d3e5751492aa',
@@ -39,16 +31,10 @@ const ENHANCED_EDITORIAL_RECEIPTS: Record<string, string> = {
   'machine-hunter-release-v2': 'exec-f61d0756-17ce-4330-8f10-41da58f3fe96',
   'oye-tippa-run-v2': 'exec-df729c36-3032-49fe-9e21-739ced4e9f80',
   'safed-sagar-hero-v2': 'exec-18c8ad9f-c4a7-4721-89ff-aefde0d63b41',
-  'safed-sagar-inside-v2': 'exec-6600be6b-cd71-4fb7-bfbc-e44b7a167d5a',
-  'safed-sagar-near-v2': 'exec-3fe77d74-e65f-4a76-88fd-70dbac39b6d7',
   'spacecraft-hero-v2': 'exec-29f4ae60-f65c-47e5-ad06-333f455a6e64',
-  'spacecraft-public-demo-v2': 'exec-da5d6850-6f79-4945-8c0d-3abb3b4122de',
-  'spacecraft-room-editor-v2': 'exec-a704646e-b093-4f73-a031-ee31feb15f39',
   'spacecraft-workflow-editorial-v2': 'exec-2108bd70-e06c-4d89-b66f-ab5dade4ccb1',
-  'the-brutal-spy-v2': 'exec-cdac7b51-8029-4ea5-8307-d13dc2ced191',
   'web-ocean-clip-v2': 'exec-b39433fd-6f8e-4997-a210-888a6a08888c',
   'web-ocean-hero-v2': 'exec-c3193dbb-8627-4913-b43a-b432cbd8133a',
-  'web-ocean-inside-v2': 'exec-a787f059-48e5-433a-80c4-fd6573d8ad66',
 };
 
 const ENHANCED_EDITORIAL_PROVENANCE = Object.fromEntries(
@@ -72,7 +58,7 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
     'browser-flight-experiment', 'from-pixels-to-intelligent-systems',
     'technology-and-human-agency', 'propvr-ai-craft',
   ].map((slug) => [`/media/social/${slug}.webp`, {
-    sourceUrl: `generated://sharp/editorial-social/${slug}`,
+    sourceUrl: `generated://playwright/signal-social/${slug}`,
     status: 'generated-editorial' as const,
     evidenceUse: false,
   }])),
@@ -247,9 +233,10 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
     status: 'approval-enhanced',
   },
   ...CAREER_MEDIA_PROVENANCE,
-  '/media/social/career-atlas.webp': {
-    sourceUrl: 'https://2600th.substack.com/p/from-pixels-to-metaverse-my-wild',
-    status: 'public-approved',
+  '/media/social/2600th.webp': {
+    sourceUrl: 'generated://playwright/signal-social-default',
+    status: 'generated-identity',
+    evidenceUse: false,
   },
   '/media/work/kinema/hero.webp': {
     sourceUrl: 'https://github.com/2600th/Kinema/blob/main/docs/readme/main-menu.png',

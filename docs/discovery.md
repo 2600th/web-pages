@@ -1,6 +1,6 @@
 # Search and AI discovery
 
-Reviewed on 2 September 2026. These files support discovery; they do not guarantee indexing, rankings, or citations. The configured production origin is `https://www.2600th.com`. This document does not confirm a live deployment.
+Reviewed on 29 September 2026. These files support discovery; they do not guarantee indexing, rankings, or citations. The configured production origin is `https://www.2600th.com`. This document does not confirm a live deployment.
 
 ## What we publish
 
@@ -29,7 +29,7 @@ Do not hand-edit `dist/llms.txt` or add a competing `public/llms.txt`. Update th
 - Note titles, summaries, publication dates, and draft status: `src/content/notes/*.md`.
 - Guide introductions and section structure: `src/data/llms.ts`.
 
-The generator emits an explicit allowlist of public titles, summaries, and canonical links. It does not serialize frontmatter, article bodies, source records, or internal review fields. It normalizes whitespace and escapes Markdown syntax in titles and summaries. Projects use the same selected-systems priority as Work, then historical order. Published notes are newest first. Notes with `draft: true` are excluded, matching the note routes, sitemap and RSS feed. The 19 visible Work records are included. The self-canonical `/work/blocks-inco-ai/` compatibility page is deliberately absent from the guide but remains indexable and present in the sitemap.
+The generator emits an explicit allowlist of public titles, summaries, and canonical links. It does not serialize frontmatter, article bodies, source records, or internal review fields. It normalizes whitespace and escapes Markdown syntax in titles and summaries. Projects use the same selected-systems priority as Work, then historical order. Published notes are newest first. Notes with `draft: true` are excluded, matching the note routes, sitemap and RSS feed. Every visible Work record is included (20 today, among them DLSS 5 Video Player). The self-canonical `/work/blocks-inco-ai/` compatibility page is deliberately absent from the guide but remains indexable and present in the sitemap.
 
 The exact `/lab/dwarkesh-jensen/index.html` companion route is registered with the sitemap integration and linked in the guide and Lab. It is a standalone explanatory artifact with its own self-canonical URL, not a second copy of a wrapper page. The interview is credited as its source, not treated as the artifact's author or an endorsement. No duplicate directory alias is registered. The terminal and private drafts remain excluded.
 

@@ -20,7 +20,7 @@ const types = (Object.keys(NOTE_TYPES) as (keyof typeof NOTE_TYPES)[]).map((key)
       eyebrow={['05', 'Transmissions']}
       path={[{ label: 'notes' }]}
       lede="What I’m learning as I build, test and occasionally break things. Field notes capture one observation, teardowns examine implementation choices, and essays argue a product point from the work."
-      readout={[['Notes', `<b>${String(notes.length).padStart(2, '0')}</b> published`], ['Latest', `<b>${notes[0].data.publishedAt.toISOString().slice(0, 10).split('-').reverse().join('.')}</b>`], ['Feed', '<a href="/rss.xml">Follow via RSS ↗</a>']]}
+      readout={[['Notes', `<b>${String(notes.length).padStart(2, '0')}</b> published`], ['Latest', `<b>${new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(notes[0].data.publishedAt)}</b>`], ['Feed', '<a href="/rss.xml">RSS</a>']]}
       wave="sine"
     >
       <h1 slot="title">Notes from the <em>workbench.</em></h1>

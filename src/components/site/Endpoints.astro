@@ -10,7 +10,7 @@ const { endpoints, title } = Astro.props;
     <a href={end.href} data-kind={end.kind} data-sfx="tick" data-cursor-text={ENDPOINT_LABELS[end.kind]}>
       <b>{ENDPOINT_LABELS[end.kind]}</b><span class="sr-only"> {title}:</span>
       <span>{endpointText(end.href)}</span>
-      <i aria-hidden="true">↗</i>
+      <i aria-hidden="true">{end.href.startsWith('/') ? '→' : '↗'}</i>
     </a>
   ))}
 </nav>

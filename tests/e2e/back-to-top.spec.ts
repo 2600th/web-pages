@@ -110,3 +110,27 @@ for (const width of [320, 878, 1440]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   });
 }
+
+test('Hang up switches the picture off, returns to the top, and skips the effect without motion', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/about/');
+  const hangup = page.locator('.sg-foot .sg-hangup');
+  await hangup.scrollIntoViewIfNeeded();
+  await hangup.click();
+  const fx = page.locator('.sg-hang');
+  await expect(fx).toHaveAttribute('aria-hidden', 'true');
+  await expect.poll(() => fx.evaluate(element => getComputedStyle(element).visibility)).toBe('visible');
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await expect.poll(() => fx.evaluate(element => getComputedStyle(element).visibility)).toBe('hidden');
+  await expect(fx).toHaveCSS('pointer-events', 'none');
+  expect(new URL(page.url()).pathname).toBe('/about/');
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/work/');
+  await page.locator('.sg-foot .sg-hangup').click();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await expect(page.locator('.sg-hang')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});

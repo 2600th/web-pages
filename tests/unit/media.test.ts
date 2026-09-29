@@ -40,6 +40,9 @@ describe('portfolio media', () => {
     expect(stills.length).toBeGreaterThanOrEqual(12);
     for (const filename of stills) expect(statSync(join(directory, filename)).size, filename).toBeLessThanOrEqual(180_000);
     expect(statSync(join(process.cwd(), 'public', 'media', 'social', 'signal-home.webp')).size).toBeLessThanOrEqual(180_000);
+    for (const card of readdirSync(join(process.cwd(), 'public', 'media', 'social'))) {
+      expect(statSync(join(process.cwd(), 'public', 'media', 'social', card)).size, card).toBeLessThanOrEqual(180_000);
+    }
   });
 
   it('ships a release-sized Latin variable font derivative', () => {
