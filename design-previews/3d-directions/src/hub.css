@@ -11,7 +11,7 @@
   --mono: 'JetBrains Mono', ui-monospace, monospace;
   color-scheme: dark;
 }
-body.hub { background: var(--bg); color: var(--ink); font: 400 1rem/1.6 'Mona Sans', system-ui, sans-serif; }
+.hub { background: var(--bg); color: var(--ink); font: 400 1rem/1.6 'Mona Sans', system-ui, sans-serif; }
 .hub em { font-style: normal; color: var(--cobalt); }
 .hub code { font: 0.875em var(--mono); color: var(--ink); background: rgb(236 235 230 / 0.08); padding: 0.1em 0.35em; }
 
