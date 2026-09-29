@@ -74,3 +74,7 @@
   .hub-cards { grid-template-columns: minmax(0, 1fr); max-width: 44rem; }
   .hub-split { grid-template-columns: minmax(0, 1fr); }
 }
+
+.hub-selected { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 1.5rem var(--gutter) 0; padding: 0.9rem 1rem; border: 1px solid rgb(227 176 88 / 0.55); background: rgb(227 176 88 / 0.06); color: var(--muted); }
+.hub-selected span { padding: 0.3rem 0.5rem; background: var(--gold); color: #1a1204; font: 700 0.6875rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.hub-selected a { color: var(--gold); font-weight: 600; }

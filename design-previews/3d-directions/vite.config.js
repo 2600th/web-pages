@@ -16,6 +16,14 @@ export default defineConfig({
         scan: page('scan/index.html'),
         glyph: page('glyph/index.html'),
       },
+      output: {
+        // Keep Three.js out of the entry chunks so pages that import it lazily stay light.
+        manualChunks(id) {
+          if (id.includes('node_modules/three')) return 'three';
+          if (id.includes('node_modules/gsap')) return 'gsap';
+          return undefined;
+        },
+      },
     },
   },
   server: { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
