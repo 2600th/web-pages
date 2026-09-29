@@ -1,12 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import WorkList from '../../components/work/WorkList.astro';
+import Switchboard from '../../components/work/Switchboard.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageOpening from '../../components/site/PageOpening.astro';
 import { CAREER_DOMAIN_META } from '../../data/career-domains';
 import { getPrioritizedWork } from '../../data/work-order';
 import type { CareerDomain } from '../../content/evidence';
 import '../../styles/signal/pages.css';
+import '../../styles/signal/work.css';
 
 const prioritizedWork = getPrioritizedWork(await getCollection('work'));
 const galleryFeatured = ['blocks', 'designesto', 'ira-vr'];
@@ -15,14 +17,17 @@ const work = [
   ...prioritizedWork.filter((entry) => !galleryFeatured.includes(entry.data.slug)),
 ].filter((entry): entry is (typeof prioritizedWork)[number] => Boolean(entry));
 const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
-const bandCount = (domain: string) => work.filter((entry) => entry.data.domains.includes(domain as CareerDomain)).length;
 const years = work.map((entry) => entry.data.yearStart);
+// The title counts the lines in words, the way a switchboard operator would say it.
+const WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty', 'Twenty-one', 'Twenty-two', 'Twenty-three', 'Twenty-four', 'Twenty-five'];
+const lineWords = WORDS[work.length] ?? String(work.length);
 ---
 
 <SiteLayout
   title="Projects by Pranshul Chandhok"
   description="Selected product and technology work by Pranshul Chandhok across applied AI, design software, realtime 3D, XR, games, robotics, and simulation."
   canonical="/work/"
+  status={`${String(work.length).padStart(2, '0')} lines · ${String(domains.length).padStart(2, '0')} bands`}
 >
   <div class="pg work-archive" data-work-archive>
     <PageOpening
@@ -33,13 +38,10 @@ const years = work.map((entry) => entry.data.yearStart);
       wave="square"
       compact
     >
-      <h1 slot="title">Work.</h1>
+      <h1 slot="title">{lineWords} <em>lines.</em></h1>
     </PageOpening>
 
-    <nav class="domain-filter" aria-label="Filter work by domain">
-      <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="Selected systems first, followed by the earlier archive." aria-current="page" data-sfx="tick">All bands <b>{work.length}</b></a>
-      {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description} data-sfx="tick">{domain.label} <b>{bandCount(key)}</b></a>)}
-    </nav>
+    <Switchboard work={work} order={prioritizedWork} total={work.length} />
     <noscript>
       <nav class="domain-filter-mobile-links" aria-label="Browse work domains">
         <a href="/work/">All domains</a>
@@ -66,6 +68,8 @@ const years = work.map((entry) => entry.data.yearStart);
   </div>
 
   <script>
+    import { initSwitchboard } from '../../signal/scenes/switchboard.js';
+    initSwitchboard();
     const initWorkArchive = () => {
       document.querySelectorAll<HTMLElement>('[data-work-archive]').forEach((root) => {
         if (root.dataset.bound === 'true') return;

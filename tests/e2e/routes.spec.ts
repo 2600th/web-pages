@@ -36,7 +36,7 @@ const noteSlugs = [
 ] as const;
 
 const routeCases = [
-  ['/work/', 'Work.'],
+  ['/work/', 'Twenty lines.'],
   ['/work/kinema/', 'Kinema'],
   ['/work/defense-simulation-systems/', 'Defense technology and simulation'],
   ['/notes/', 'Notes from the workbench'],
@@ -65,6 +65,8 @@ test('Ghost Terminal links use a consistent name and serve the original portfoli
     await page.goto(path);
     const archiveLinks = page.locator('a[href*="/lab/terminal/"]');
     await expect(archiveLinks).toHaveCount(1);
+    // On the Lab the link lives on its cartridge's card: load that cartridge first.
+    if (path === '/lab/') await page.locator('[data-pick="terminal"]').click();
     for (const archiveLink of await archiveLinks.all()) {
       await expect(archiveLink).toHaveAccessibleName(/Ghost Terminal/);
       await expect(archiveLink).toHaveAttribute('href', '/lab/terminal/index.html');
@@ -255,17 +257,23 @@ test('all published note routes remain reading surfaces with truthful original-s
 test('lab and about expose their operating surfaces', async ({ page }) => {
   await page.goto('/lab/');
   await expect(page.locator('[data-build-ledger]')).toHaveCount(1);
-  await expect(page.locator('[data-build-ledger] .sg-feature[data-build]')).toHaveCount(1);
-  await expect(page.locator('[data-build-ledger] .sg-build[data-build]')).toHaveCount(7);
+  await expect(page.locator('[data-build-ledger] [data-build]')).toHaveCount(8);
+  await expect(page.locator('[data-build-ledger] [data-pick]')).toHaveCount(8);
   await expect(page.locator('a[href="/lab/terminal/index.html"]')).toHaveCount(1);
 
   await page.goto('/about/');
   await expect(page.locator('[data-operating-dossier]')).toHaveCount(1);
   await expect(page.locator('[data-operating-dossier] .career-acts li')).toHaveCount(3);
   await expect(page.locator('[data-operating-atlas]')).toHaveCount(1);
-  await expect(page.locator('#why-2600th .ab-steps > li')).toHaveCount(5);
-  await expect(page.locator('.ab-portrait img')).toHaveAttribute('src', '/media/signal/portrait.webp');
-  await expect(page.locator('.ab-portrait img')).toHaveAttribute('alt', /.+/);
+  await expect(page.locator('#why-2600th .ab-steps > li')).toHaveCount(3);
+  await expect(page.locator('[data-badge] img')).toHaveAttribute('src', '/media/signal/portrait.webp');
+  await expect(page.locator('[data-badge] img')).toHaveAttribute('alt', /.+/);
+  // One LED per year since 2012, each naming what was running that year.
+  const leds = page.locator('[data-badge] [data-led]');
+  await expect(leds).toHaveCount(new Date().getFullYear() - 2011);
+  await expect(leds.first()).toHaveAccessibleName(/^2012, Game development: .*The Brutal Spy/);
+  await leds.nth(4).focus();
+  await expect(page.locator('[data-badge-year]')).toHaveText('2016');
 });
 
 test('visitor-facing routes omit internal generated-media disclaimers', async ({ page }) => {
@@ -406,7 +414,7 @@ test('work archive renders one canonical list and supports link filters', async 
   await expect(page.locator('[data-work-item]')).toHaveCount(20);
   await page.locator('[data-domain-link="xr"]').click();
   await expect(page).toHaveURL(/\/work\/domain\/xr\/$/);
-  await expect(page.getByRole('link', { name: /IRA VR/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'IRA VR', exact: true })).toBeVisible();
   await expect(page.locator('[data-work-item]:visible')).toHaveCount(6);
 });
 

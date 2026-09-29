@@ -14,6 +14,9 @@ import sharp from 'sharp';
 import { join } from 'node:path';
 import { getNotesForWork, NOTE_TYPES } from '../../data/notes';
 import { getPrioritizedWork } from '../../data/work-order';
+import { MEDIA_PROVENANCE } from '../../data/media-provenance';
+import { CAREER_DOMAIN_META } from '../../data/career-domains';
+import '../../styles/signal/case.css';
 import '../../styles/signal/pages.css';
 
 export async function getStaticPaths() {
@@ -73,13 +76,20 @@ const lines = getPrioritizedWork(await getCollection('work'));
 const position = lines.findIndex((candidate) => candidate.data.slug === data.slug);
 const previous = position > 0 ? lines[position - 1] : undefined;
 const next = position >= 0 && position < lines.length - 1 ? lines[position + 1] : undefined;
+const channelLabel = position >= 0 ? `CH ${String(position + 1).padStart(2, '0')}/${String(lines.length).padStart(2, '0')}` : 'Archive';
 const period = `${data.yearStart}${data.yearEnd && data.yearEnd !== data.yearStart ? `–${data.yearEnd}` : ''}`;
+// The monitor's on-screen display: channel, bands, year and what kind of picture this is.
+const heroProvenance = data.heroMedia ? MEDIA_PROVENANCE[data.heroMedia.src] : undefined;
+const heroKind = heroProvenance?.status?.startsWith('generated') ? 'Editorial' : 'Capture';
+const BAND_TAGS: Record<string, string> = { games: 'GAM', xr: 'XR', simulation: 'SIM', robotics: 'ROB', 'design-tech': 'DSN', 'applied-ai': 'AI' };
+const bandNames = data.domains.map((domain) => CAREER_DOMAIN_META[domain].label).join(' · ');
 ---
 
 <SiteLayout
   title={data.seo.title}
   description={data.seo.description}
   canonical={`/work/${data.slug}/`}
+  status={channelLabel}
   image={data.seo.socialImage}
   imageAlt={`${data.title} | Case study by Pranshul Chandhok`}
   imageWidth={socialImageMetadata.width}
@@ -106,12 +116,21 @@ const period = `${data.yearStart}${data.yearEnd && data.yearEnd !== data.yearSta
       <dl class="case-hero__meta pg-readout">
         <div><dt>My role</dt><dd>{data.role}</dd></div>
         <div><dt>Period</dt><dd><b>{period}</b></dd></div>
-        <div><dt>Status</dt><dd>{data.status}</dd></div>
+        <div><dt>Bands</dt><dd>{bandNames}</dd></div>
         {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
       </dl>
       {endpoints.length > 0 && <Endpoints endpoints={endpoints} title={data.title} />}
     </div>
-    {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroMedia.label ?? data.heroLabel ?? data.title} priority /></div>}
+    {data.heroMedia && <div class="case-hero__media" data-case-monitor data-kind={heroKind.toLowerCase()} data-channel={position >= 0 ? String(position + 1).padStart(2, '0') : ''}>
+      <ProjectMedia media={data.heroMedia} label={data.heroMedia.label ?? data.heroLabel ?? data.title} priority />
+      <p class="case-osd" aria-hidden="true">
+        <span class="case-osd__ch">CH <b>{position >= 0 ? String(position + 1).padStart(2, '0') : '--'}</b>/{String(lines.length).padStart(2, '0')}</span>
+        <span class="case-osd__bands">{data.domains.map((domain) => <i>{BAND_TAGS[domain]}</i>)}</span>
+        <span class="case-osd__year">{period}</span>
+        <span class="case-osd__src" data-kind={heroKind.toLowerCase()}>{heroKind}</span>
+        {(previous || next) && <span class="case-osd__keys"><kbd>◂</kbd><kbd>▸</kbd> channel</span>}
+      </p>
+    </div>}
     <Trace wave="square" />
   </header>
 
@@ -202,10 +221,20 @@ const period = `${data.yearStart}${data.yearEnd && data.yearEnd !== data.yearSta
   </nav>}
   </div>
   </div>
-  {(previous || next) && <nav class="case-next" aria-label="More work">
-    {previous ? <a href={`/work/${previous.data.slug}/`} rel="prev" data-sfx="tick"><span>◂ Previous line</span><strong>{previous.data.title}</strong></a> : <span></span>}
-    {next && <a href={`/work/${next.data.slug}/`} rel="next" data-sfx="tick"><span>Next line ▸</span><strong>{next.data.title}</strong></a>}
+  {(previous || next) && <nav class="case-next" aria-label="More work" data-case-next>
+    {previous ? <a href={`/work/${previous.data.slug}/`} rel="prev" data-sfx="tick" data-cursor-text={`CH ${String(position).padStart(2, '0')}`}>
+      {previous.data.heroMedia && <span class="case-next__thumb" aria-hidden="true"><img src={previous.data.heroMedia.src} alt="" width={previous.data.heroMedia.width} height={previous.data.heroMedia.height} loading="lazy" decoding="async" /></span>}
+      <span>◂ Previous line · CH {String(position).padStart(2, '0')}</span><strong>{previous.data.title}</strong>
+    </a> : <span></span>}
+    {next && <a href={`/work/${next.data.slug}/`} rel="next" data-sfx="tick" data-cursor-text={`CH ${String(position + 2).padStart(2, '0')}`}>
+      {next.data.heroMedia && <span class="case-next__thumb" aria-hidden="true"><img src={next.data.heroMedia.src} alt="" width={next.data.heroMedia.width} height={next.data.heroMedia.height} loading="lazy" decoding="async" /></span>}
+      <span>Next line · CH {String(position + 2).padStart(2, '0')} ▸</span><strong>{next.data.title}</strong>
+    </a>}
   </nav>}
+  <script>
+    import { initCaseMonitor } from '../../signal/scenes/case-monitor.js';
+    initCaseMonitor();
+  </script>
   </div>
 </SiteLayout>
 

@@ -6,14 +6,27 @@ import BackToTop from '../components/shared/BackToTop.astro';
 import '../styles/signal/tokens.css';
 import '../styles/signal/chrome.css';
 
-type Props = SeoProps & { variant?: 'home' | 'page'; bodyClass?: string };
-const { variant = 'page', bodyClass = '', ...seo } = Astro.props;
+/** `status` is what the header's line light says on this page, e.g. "CH 07/20 · Games". */
+type Props = SeoProps & { variant?: 'home' | 'page'; bodyClass?: string; status?: string };
+const { variant = 'page', bodyClass = '', status, ...seo } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en-IN" data-motion="on" data-sound="off">
   <head>
-    <script is:inline>document.documentElement.classList.add('js')</script>
+    <script is:inline>
+      // Before first paint: mark JavaScript, and apply the saved motion choice so the first
+      // frame (and the page transition into it) already respects it.
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('js');
+        try {
+          const saved = localStorage.getItem('2600th-ambient-motion');
+          const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          root.dataset.motion = saved === 'off' || (!saved && reduce) ? 'off' : 'on';
+        } catch { /* storage blocked: keep the default */ }
+      })();
+    </script>
     <SeoHead {...seo}>
       <link rel="preload" href="/fonts/doto.woff2" as="font" type="font/woff2" crossorigin />
       <slot name="head" />
@@ -24,7 +37,7 @@ const { variant = 'page', bodyClass = '', ...seo } = Astro.props;
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="sg-grain" aria-hidden="true"></div>
     <div class="sg-flash" aria-hidden="true"></div>
-    <SiteHeader variant={variant} />
+    <SiteHeader variant={variant} status={status} />
     <slot name="before-main" />
     <main id="main" tabindex="-1">
       <slot />

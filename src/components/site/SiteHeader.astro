@@ -1,6 +1,6 @@
 ---
-interface Props { variant: 'home' | 'page' }
-const { variant } = Astro.props;
+interface Props { variant: 'home' | 'page'; status?: string }
+const { variant, status } = Astro.props;
 const path = Astro.url.pathname;
 // The homepage navigates its own story; every other page navigates the site.
 const items = variant === 'home'
@@ -21,7 +21,7 @@ const current = (href: string) => variant === 'page' && href.startsWith('/') && 
       {items.map(([href, label]) => <a href={href} aria-current={current(href)} data-sfx="tick">{label}</a>)}
     </nav>
     <div class="sg-controls">
-      <p class="sg-status" data-status data-state={variant === 'page' ? 'locked' : undefined}><i></i><span data-status-label>{variant === 'page' ? 'Locked · 2600 Hz' : 'Line idle'}</span></p>
+      <p class="sg-status" data-status data-state={variant === 'page' ? 'locked' : undefined}><i></i><span data-status-label>{variant === 'page' ? (status ?? 'Locked · 2600 Hz') : 'Line idle'}</span></p>
       <button type="button" class="sg-chip" data-sound-toggle aria-pressed="false">
         <span class="sg-chip__bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="sg-chip__label" data-sound-label>Sound off</span>
       </button>

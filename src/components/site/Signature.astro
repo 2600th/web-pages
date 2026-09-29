@@ -1,0 +1,83 @@
+---
+/**
+ * A note's signal signature: its sections drawn as one carrier, each burst as wide and
+ * as loud as the section is long. On an article it is the contents and the reading
+ * progress; in a list it is a small, decorative fingerprint.
+ */
+import type { NoteSegment } from '../../data/notes';
+
+interface Props {
+  segments: NoteSegment[];
+  seed: string;
+  variant?: 'full' | 'mini';
+  tone?: 'cobalt' | 'ink' | 'phosphor';
+  /** The note type's wave: field notes sine, teardowns square, essays saw. */
+  wave?: 'sine' | 'square' | 'saw';
+}
+const { segments, seed, variant = 'mini', tone = 'cobalt', wave = 'sine' } = Astro.props;
+const shape = (angle: number) => {
+  if (wave === 'square') return Math.sign(Math.sin(angle)) * 0.82;
+  if (wave === 'saw') return ((((angle / (Math.PI * 2)) % 1) + 1) % 1) * 1.8 - 0.9;
+  return Math.sin(angle);
+};
+
+const W = 1000;
+const H = variant === 'full' ? 120 : 40;
+const mid = H / 2;
+const gap = variant === 'full' ? 10 : 4;
+const total = segments.reduce((sum, segment) => sum + Math.max(segment.words, 1), 0) || 1;
+const loudest = Math.max(...segments.map((segment) => segment.words), 1);
+let hash = 0;
+for (const char of seed) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+const rand = () => ((hash = (hash * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+const usable = W - gap * Math.max(segments.length - 1, 0);
+// An untitled opening before the first section is 00, so section numbers match the article's.
+const offset = !segments[0]?.slug && segments.some((segment) => segment.slug) ? 0 : 1;
+let x = 0;
+const bursts = segments.map((segment, index) => {
+  const width = Math.max(usable * (Math.max(segment.words, 1) / total), 6);
+  const amp = (mid - 4) * (0.28 + 0.72 * Math.sqrt(segment.words / loudest));
+  const cycles = (wave === 'sine' ? 3 : 2) + Math.round(rand() * (wave === 'sine' ? 5 : 3)) + Math.round(width / (wave === 'sine' ? 60 : 90));
+  const phase = rand() * Math.PI * 2;
+  const points: string[] = [];
+  for (let px = 0; px <= width; px += 2) {
+    const u = px / width;
+    const envelope = Math.sin(Math.PI * u) ** 0.6;
+    const y = mid - shape(u * cycles * Math.PI * 2 + phase) * amp * envelope;
+    points.push(`${(x + px).toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const burst = { ...segment, index, x, width, d: `M${points.join('L')}` };
+  x += width + gap;
+  return burst;
+});
+const baseline = `M0 ${mid}H${W}`;
+---
+
+{variant === 'mini' ? (
+  <svg class:list={['sig sig--mini', `sig--${tone}`]} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path class="sig__base" d={baseline} />
+    {bursts.map((burst) => <path class="sig__burst" d={burst.d} />)}
+  </svg>
+) : (
+  <nav class:list={['sig sig--full', `sig--${tone}`]} aria-label="Signal: this note by section" data-signature>
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id={`sig-read-${seed}`}><rect class="sig__clip" x="0" y="0" width="0" height={H} data-signature-clip /></clipPath>
+      </defs>
+      <path class="sig__base" d={baseline} />
+      <g class="sig__dim">{bursts.map((burst) => <path class="sig__burst" d={burst.d} />)}</g>
+      <g class="sig__lit" clip-path={`url(#sig-read-${seed})`}>{bursts.map((burst) => <path class="sig__burst" d={burst.d} />)}</g>
+      <line class="sig__head" x1="0" x2="0" y1="0" y2={H} data-signature-head />
+    </svg>
+    <ol class="sig__marks">
+      {bursts.map((burst) => (
+        <li style={`left:${(burst.x / W) * 100}%;width:${(burst.width / W) * 100}%`} data-end={burst.x / W > 0.5 ? '' : undefined}>
+          {burst.slug
+            ? <a href={`#${burst.slug}`} data-signature-mark={burst.slug}><b>{String(burst.index + offset).padStart(2, '0')}</b><span class="sig__tip">{burst.label}<i> · {burst.words} words</i></span></a>
+            : <span class="sig__mark"><b>{String(burst.index + offset).padStart(2, '0')}</b><span class="sig__tip">{burst.label}<i> · {burst.words} words</i></span></span>}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

@@ -197,11 +197,11 @@ test('the lab feature keeps a still poster and an explicit play control on mobil
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/lab/');
 
-  const feature = page.locator('#lab-dlss');
-  const video = feature.locator('video');
+  const feature = page.locator('[data-arcade]');
+  const video = feature.locator('[data-feed="dlss"] video');
   await expect(video).toHaveAttribute('poster', /\.webp$/);
   await expect(video).toHaveJSProperty('paused', true);
-  await expect(feature.getByRole('button', { name: /play/i })).toBeVisible();
+  await expect(feature.getByRole('button', { name: /play clip/i })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 

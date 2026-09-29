@@ -7,10 +7,10 @@ The static Astro source for [www.2600th.com](https://www.2600th.com), the portfo
 The whole site uses one design system, **Signal** (see [DESIGN.md](DESIGN.md)), built on the 2600 Hz tone behind the handle.
 
 - **Homepage** (`src/pages/index.astro`, scripts in `src/signal/`): a one-page scroll story. A Three.js point-cloud portrait assembles from noise, locks onto 2600 Hz and morphs into oscilloscope traces while the origin story plays: computers and games from an early age, college from 2007 to 2011, a hacking documentary, the 2600 Hz tone, the Cap’n Crunch whistle, the blue box and Kevin Mitnick. Then proof, six selected systems on a tunable monitor, a four-era career log, the Lab, the four latest notes and a working MF blue box.
-- **Work**: a gallery of 20 projects with domain bands and chronological order. Each case page opens with a shell-path breadcrumb, a readout and, where there is something to open, the same endpoint rows the Lab uses (Live, Site, Source, Notes, Open). The old combined `/work/blocks-inco-ai/` stays as a self-canonical compatibility page outside the archive.
-- **Lab**: independent builds with endpoint rows, led by DLSS 5 Video Player. It also links the unofficial Dwarkesh × Jensen companion (`/lab/dwarkesh-jensen/index.html`, a standalone deck) and the original Ghost Terminal (`/lab/terminal/index.html`, archived with `noindex,follow`). Use those exact file URLs.
-- **Notes**: nine articles typed as Field Note, Technical Teardown or Essay.
-- **About**: why 2600th, the career in three acts, tools in use, the patent and how I work.
+- **Work**: a switchboard of 20 projects across six bands (the band labels filter), then the gallery with chronological order. Each case page opens with a shell-path breadcrumb, a readout and, where there is something to open, the same endpoint rows the Lab uses (Live, Site, Source, Notes, Open), with a hero monitor that tunes in on its channel; ← → change channel. The old combined `/work/blocks-inco-ai/` stays as a self-canonical compatibility page outside the archive.
+- **Lab**: independent builds as cartridges in an arcade cabinet with a WebGL CRT, led by DLSS 5 Video Player; each card keeps its endpoint rows. It also links the unofficial Dwarkesh × Jensen companion (`/lab/dwarkesh-jensen/index.html`, a standalone deck) and the original Ghost Terminal (`/lab/terminal/index.html`, archived with `noindex,follow`). Use those exact file URLs.
+- **Notes**: nine articles typed as Field Note, Technical Teardown or Essay, tuned on a receiver. Each note's waveform signature is drawn from its sections and doubles as its contents.
+- **About**: a conference badge with one LED per year since 2012, then why 2600th, the career in three acts, tools in use, the patent and how I work.
 
 Every page shares the header, the dial-in footer, the backtick console and the Hang up return to the top. Sound is synthesized with Web Audio and off by default. The 3D engine loads lazily and only with motion on; reduced motion, no WebGL and no JavaScript all get a static portrait and the full content. One motion preference (`2600th-ambient-motion`) covers every page. Easter eggs (the console, the Konami code, dialling 2600) are keyboard-gated per WCAG 2.1.4 and can be switched off. Native links work without JavaScript.
 
@@ -28,10 +28,11 @@ npm run dev
 | Path | What it holds |
 | --- | --- |
 | `src/layouts/SiteLayout.astro` | The one page layout: head, header, footer, back to top, cursor and toast |
-| `src/components/site/` | Signal components: header, footer, openings, path, trace, endpoints, build cards, transmissions |
-| `src/components/work/`, `src/components/shared/` | Gallery, case media, sources, responsive images, SEO head |
-| `src/styles/signal/` | `tokens.css`, `chrome.css` (shared chrome) and `pages.css` (interior pages) |
+| `src/components/site/` | Signal components: header, footer, openings, path, trace, signatures, notes log, endpoints, build cards, transmissions |
+| `src/components/work/`, `src/components/about/`, `src/components/shared/` | Switchboard, gallery, case media, sources, the About badge, responsive images, SEO head |
+| `src/styles/signal/` | `tokens.css`, `chrome.css` (shared chrome), `pages.css` (interior pages) and one sheet per section signature |
 | `src/signal/` | Homepage engine, audio, console and site-wide behaviour (`chrome.js`) |
+| `src/signal/scenes/` | Interior scenes: the lazy scene loader, receiver, reading, switchboard, case monitor, arcade, badge and 404 intercept |
 | `src/content/` | Work and Notes content with their schemas |
 | `src/data/` | Site identity, builds and endpoints, work order, notes helpers, media provenance |
 | `public/lab/` | The standalone companion deck and the archived Ghost Terminal |

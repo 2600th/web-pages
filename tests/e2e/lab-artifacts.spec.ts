@@ -10,6 +10,7 @@ test('Lab preserves its existing builds and opens the attributed companion', asy
     expect((await request.get(href)).status()).toBe(200);
   }
   await expect(page.locator('[data-build-ledger] a[href="https://github.com/2600th"]')).toHaveCount(1);
+  await page.locator('[data-pick="companion"]').click();
   await page.locator(`[data-build-ledger] a[href="${route}"]`).click();
   await expect(page.getByRole('link', { name: 'Return to Lab' })).toHaveAttribute('href', '/lab/');
   await expect(page.getByRole('link', { name: 'Dwarkesh Patel’s interview with Jensen Huang' })).toHaveAttribute('href', 'https://www.youtube.com/watch?v=Hrbq66XqtCo');

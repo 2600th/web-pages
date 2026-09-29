@@ -92,6 +92,20 @@ body.sg {
 
 @keyframes sg-blink { 50% { opacity: 0.15; } }
 
+/* Page to page is a channel change: the old picture folds to a bright line, the new one
+   opens from it. The header stays put. Browsers without view transitions just navigate. */
+@view-transition { navigation: auto; }
+.sg-top { view-transition-name: sg-header; }
+::view-transition-group(root) { animation-duration: 420ms; }
+::view-transition-old(root) { animation: sg-channel-out 200ms cubic-bezier(0.7, 0, 0.84, 0) both; }
+::view-transition-new(root) { animation: sg-channel-in 320ms cubic-bezier(0.16, 1, 0.3, 1) 110ms both; }
+@keyframes sg-channel-out { to { transform: scaleY(0.004); filter: brightness(3) saturate(0); opacity: 0.6; } }
+@keyframes sg-channel-in { from { transform: scaleY(0.004); filter: brightness(3) saturate(0); } }
+html[data-motion='off']::view-transition-old(root),
+html[data-motion='off']::view-transition-new(root),
+html[data-motion='off']::view-transition-group(*) { animation: none; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; scroll-behavior: auto !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

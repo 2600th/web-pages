@@ -1,0 +1,38 @@
+/* ==========================================================================
+   Case files: the hero monitor with its on-screen display, the tune-in, the
+   loupe, and the channel buttons at the end.
+   ========================================================================== */
+
+.case-hero__media .project-media { border-radius: 10px 10px 0 0; }
+.case-osd {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.1rem; padding: 0.7rem 1rem;
+  background: linear-gradient(180deg, #0c1127, #060914); border: 1px solid var(--line-strong); border-top: 1px solid rgb(77 116 255 / 0.3); border-radius: 0 0 10px 10px;
+  font: 600 0.6875rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+.case-osd__ch { color: var(--term); text-shadow: 0 0 8px rgb(124 240 176 / 0.5); }
+.case-osd__ch b { font: 800 0.9375rem/1 var(--dot); letter-spacing: 0.02em; }
+.case-osd__bands { display: inline-flex; gap: 0.3rem; }
+.case-osd__bands i { padding: 0.2rem 0.35rem; border: 1px solid var(--line-strong); font-style: normal; font-size: 0.5625rem; color: var(--phosphor); }
+.case-osd__year { font: 800 0.8125rem/1 var(--dot); letter-spacing: 0.02em; color: var(--phosphor); }
+.case-osd__src { padding: 0.25rem 0.45rem; background: rgb(124 240 176 / 0.1); color: var(--term); }
+.case-osd__src[data-kind='editorial'] { background: rgb(157 182 255 / 0.1); color: var(--phosphor); }
+.case-osd__keys { margin-left: auto; color: var(--dim); }
+.case-osd__keys kbd { display: inline-grid; place-items: center; min-width: 1.3rem; height: 1.3rem; margin-right: 0.2rem; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 3px; font: 600 0.6875rem/1 var(--mono); color: var(--ink); }
+@media (hover: none) { .case-osd__keys { display: none; } }
+
+.case-tune { position: absolute; inset: 0.6rem 0.6rem auto; width: calc(100% - 1.2rem); aspect-ratio: 16 / 9; height: auto; border-radius: 4px / 7px; image-rendering: pixelated; pointer-events: none; z-index: 2; }
+.case-loupe {
+  position: absolute; left: 0; top: 0; z-index: 3; width: 140px; height: 140px; border-radius: 50%; pointer-events: none;
+  border: 1px solid rgb(157 182 255 / 0.6); box-shadow: 0 0 0 4px rgb(3 4 10 / 0.6), 0 10px 30px rgb(0 0 0 / 0.7), 0 0 20px rgb(77 116 255 / 0.4);
+  background-repeat: no-repeat; opacity: 0; transition: opacity 180ms;
+}
+.case-loupe::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: repeating-linear-gradient(rgb(0 0 0 / 0.18) 0 1px, transparent 1px 3px); }
+.case-loupe[data-on='true'] { opacity: 1; }
+.case-hero__media [data-evidence-media] img { cursor: zoom-in; }
+
+.case-next a { position: relative; overflow: hidden; isolation: isolate; }
+.case-next__thumb { position: absolute; inset: 0; z-index: -1; opacity: 0.38; transition: opacity 400ms, transform 700ms var(--ease); }
+.case-next__thumb img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.6); }
+.case-next__thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--panel) 18%, rgb(10 13 24 / 0.35)), repeating-linear-gradient(rgb(255 255 255 / 0.03) 0 1px, transparent 1px 3px); }
+.case-next a[rel='next'] .case-next__thumb::after { background: linear-gradient(270deg, var(--panel) 18%, rgb(10 13 24 / 0.35)), repeating-linear-gradient(rgb(255 255 255 / 0.03) 0 1px, transparent 1px 3px); }
+.case-next a:hover .case-next__thumb, .case-next a:focus-visible .case-next__thumb { opacity: 0.7; transform: scale(1.04); }

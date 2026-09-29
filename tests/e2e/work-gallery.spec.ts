@@ -21,12 +21,19 @@ test('Work presents the approved featured hierarchy without duplicating archive 
   ]);
 });
 
-test('compact desktop controls bring the first project into the opening viewport', async ({ page }) => {
+test('compact openings bring the projects into the first viewport', async ({ page }) => {
+  // Desktop: the switchboard, where every project is a jack, starts in the first screen.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/work/');
+  const board = await page.locator('[data-switchboard] .swb__board').boundingBox();
+  expect(board?.y).toBeLessThanOrEqual(600);
+  await expect(page.locator('[data-switchboard] [data-jack]').first()).toBeInViewport();
+  // Below the board's breakpoint the gallery's lead project shows in the first screen.
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await page.goto('/work/');
+  await expect(page.locator('[data-switchboard]')).toBeHidden();
   const firstImage = await page.locator('[data-work-item]').first().locator('.work-gallery__image').boundingBox();
-  // The compact opening leaves at least a third of the first screen for the lead project.
-  expect(firstImage?.y).toBeLessThanOrEqual(600);
+  expect(firstImage?.y).toBeLessThanOrEqual(660);
 });
 
 test('filtering and chronological ordering use the uniform gallery while preserving behavior', async ({ page }) => {

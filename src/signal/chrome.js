@@ -15,7 +15,12 @@ const root = document.documentElement;
 const motionOn = () => root.dataset.motion === 'on';
 const SOUND_KEY = '2600th-sound';
 
+// What this page's line light says at rest (the header renders it per page).
+let restingStatus = null;
+const pageStatus = () => restingStatus ?? 'Locked · 2600 Hz';
+
 export function setStatus(state, label) {
+  restingStatus ??= $('[data-status-label]')?.textContent ?? null;
   const el = $('.sg-status');
   if (!el) return;
   if (state) el.dataset.state = state;
@@ -30,7 +35,7 @@ setHooks({
   seize() {
     sfx.seize(); flash(0.8);
     setStatus('seized', 'Line seized');
-    setTimeout(() => setStatus('locked', 'Locked · 2600 Hz'), 2400);
+    setTimeout(() => setStatus('locked', pageStatus()), 2400);
     unlock('seize');
   },
   phreak() {
@@ -150,6 +155,30 @@ function initMedia() {
 }
 
 /* Movement only: reading content is never hidden or dimmed at rest. */
+/* Arrival: the shell path types itself, the title's accent word decodes from noise,
+   and navigation labels flicker when a pointer finds them. Text is always in the HTML;
+   this only plays over it. */
+function initBoot() {
+  if (!motionOn()) return;
+  $$('.pg-path').forEach((path) => {
+    const steps = Math.max(8, Math.round(path.textContent.trim().length * 0.8));
+    gsap.fromTo(path, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.55, ease: `steps(${steps})`, delay: 0.15, clearProps: 'clipPath' });
+  });
+  $$('.pg-open h1 em').forEach((em) => decode(em, { duration: 1.1 }));
+  // Readout values tick over like a counter settling.
+  $$('.pg-open .pg-readout b, .case-hero__meta b').forEach((value, i) => {
+    const text = value.textContent;
+    gsap.to(value, { duration: 0.8, delay: 0.25 + i * 0.08, scrambleText: { text, chars: '0123456789', speed: 0.6 }, ease: 'none' });
+  });
+  $$('.sg-nav a, .sg-foot__nav a').forEach((link) => {
+    const text = link.textContent;
+    link.addEventListener('pointerenter', () => {
+      if (!motionOn()) return;
+      gsap.to(link, { duration: 0.35, scrambleText: { text, chars: '▓▒░01', speed: 1 }, ease: 'none', overwrite: 'auto' });
+    });
+  });
+}
+
 function initReveals() {
   $$('[data-decode]').forEach((el) => {
     ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => decode(el, { duration: 0.9 }) });
@@ -264,6 +293,7 @@ export function initChrome() {
   initCursor();
   initMagnetic();
   initReveals();
+  initBoot();
   onKonami(() => hooks.phreak());
   initEggs();
   initHangup();

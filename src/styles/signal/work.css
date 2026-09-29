@@ -1,0 +1,98 @@
+/* ==========================================================================
+   Work: the switchboard. Bands are trunk lines, projects are jacks, cords join
+   what belongs together. The band labels are the domain filter.
+   ========================================================================== */
+
+.swb { margin-block: 1.4rem 0.2rem; }
+.swb__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.6rem 2rem; margin-bottom: 0.9rem; }
+.swb__head h2 { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.swb__head h2 span { margin-right: 0.6rem; font: 800 0.9375rem/1 var(--dot); letter-spacing: 0.04em; text-transform: none; color: var(--cobalt); }
+.swb__head p { max-width: 38rem; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
+
+.swb__board {
+  --swb-head: 3.1rem; --swb-row: 2.9rem;
+  position: relative; display: grid; grid-template-columns: minmax(0, 13.5rem) minmax(0, 1fr) minmax(0, 16rem); gap: 0 1.4rem;
+  padding: 1.1rem 1.3rem 1.3rem; background: linear-gradient(180deg, #0a0e20, #05070f); border: 1px solid var(--line-strong); border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 40px 90px -55px rgb(77 116 255 / 0.6);
+}
+/* Panel screws: it is a piece of equipment. */
+.swb__board::before {
+  content: ''; position: absolute; inset: 0.45rem; pointer-events: none;
+  background: radial-gradient(circle, #2a3150 0 2px, transparent 2.5px) 0 0 / 6px 6px no-repeat, radial-gradient(circle, #2a3150 0 2px, transparent 2.5px) 100% 0 / 6px 6px no-repeat, radial-gradient(circle, #2a3150 0 2px, transparent 2.5px) 0 100% / 6px 6px no-repeat, radial-gradient(circle, #2a3150 0 2px, transparent 2.5px) 100% 100% / 6px 6px no-repeat;
+}
+
+/* Band labels: the filter, one per trunk line. */
+.swb .swb__labels { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--swb-head) repeat(6, var(--swb-row)); gap: 0; padding: 0; border: 0; }
+.swb .swb__labels a {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; height: 100%; min-width: 0; min-height: 0; padding: 0 0.7rem;
+  background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none;
+  font: 500 0.6875rem/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: color 200ms, background 250ms;
+}
+.swb .swb__labels a span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.swb .swb__labels a b { font: 800 0.875rem/1 var(--dot); color: var(--phosphor); }
+.swb .swb__labels .swb__all { align-self: end; height: 2.4rem; margin-bottom: 0.35rem; border: 1px solid var(--line-strong); }
+.swb .swb__labels a:hover { color: var(--ink); background: rgb(77 116 255 / 0.08); }
+.swb .swb__labels a[aria-current='page'] { color: #fff; background: linear-gradient(90deg, rgb(36 71 216 / 0.45), transparent); box-shadow: inset 2px 0 0 var(--cobalt); }
+.swb .swb__labels a[aria-current='page'] b { color: #fff; }
+
+.swb__field { position: relative; display: grid; grid-template-rows: 1.5rem 1.6rem calc(var(--swb-row) * 6); min-width: 0; }
+.swb__eras { position: relative; margin: 0; padding: 0; list-style: none; }
+.swb__eras li { position: absolute; top: 0.2rem; height: 0.7rem; border-top: 1px solid var(--line-strong); border-inline: 1px solid var(--line-strong); }
+.swb__eras li + li { margin-left: 3px; }
+.swb__eras span { position: absolute; top: -0.25rem; left: 0.5rem; padding: 0 0.35rem; background: #090d1d; font: 600 0.5625rem/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+.swb__years { display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); align-items: center; margin: 0; padding: 0; list-style: none; font: 800 0.75rem/1 var(--dot); color: var(--dim); text-align: center; }
+.swb__years li:nth-child(5n + 1) { color: var(--phosphor); }
+.swb__grid { position: relative; }
+.swb__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.swb__col { stroke: rgb(234 232 225 / 0.05); vector-effect: non-scaling-stroke; }
+.swb__trunk { stroke: rgb(77 116 255 / 0.32); stroke-width: 1; stroke-dasharray: 2 7; vector-effect: non-scaling-stroke; transition: stroke 250ms, stroke-opacity 250ms; }
+html[data-motion='on'] .swb__trunk { animation: swb-flow 4s linear infinite; }
+@keyframes swb-flow { to { stroke-dashoffset: -90; } }
+.swb__patch { fill: none; stroke: var(--phosphor); stroke-opacity: 0.14; stroke-width: 1.1; vector-effect: non-scaling-stroke; transition: stroke-opacity 250ms, stroke 250ms; }
+.swb__band { fill: none; stroke: var(--gold); stroke-opacity: 0.32; stroke-width: 1.4; vector-effect: non-scaling-stroke; transition: stroke-opacity 250ms; }
+
+.swb__jack {
+  position: absolute; z-index: 1; display: grid; place-items: center; width: 1.45rem; height: 1.45rem; margin: -0.725rem 0 0 -0.725rem; border-radius: 50%;
+  background: radial-gradient(circle, #02030a 0 30%, #353d63 33% 50%, #0b0f22 53%);
+  box-shadow: 0 0 0 1px rgb(234 232 225 / 0.16), 0 3px 6px rgb(0 0 0 / 0.8);
+  transition: transform 250ms var(--ease), opacity 250ms, box-shadow 250ms;
+}
+.swb__jack i { width: 0.36rem; height: 0.36rem; border-radius: 50%; background: #5a6282; transition: background 200ms, box-shadow 200ms; }
+.swb__jack:hover, .swb__jack:focus-visible, .swb__jack[data-on] { transform: scale(1.3); z-index: 2; }
+.swb__jack[data-on] { box-shadow: 0 0 0 1px var(--gold), 0 0 18px rgb(232 180 90 / 0.5); }
+.swb__jack[data-on] i { background: var(--gold); box-shadow: 0 0 8px var(--gold), 0 0 20px var(--gold); }
+.swb__jack[data-rel] { box-shadow: 0 0 0 1px var(--cobalt), 0 0 14px rgb(77 116 255 / 0.5); }
+.swb__jack[data-rel] i { background: var(--phosphor); box-shadow: 0 0 8px var(--cobalt); }
+.swb__jack:focus-visible { outline: 2px solid var(--focus, var(--cobalt)); outline-offset: 4px; }
+.swb[data-lit] .swb__jack:not([data-on]):not([data-rel]) { opacity: 0.35; }
+.swb[data-lit] .swb__patch { stroke-opacity: 0.05; }
+.swb[data-lit] .swb__band { stroke-opacity: 0.1; }
+.swb__patch[data-on] { stroke: var(--cobalt); stroke-opacity: 0.95 !important; stroke-width: 1.8; filter: drop-shadow(0 0 4px var(--cobalt)); }
+.swb__band[data-on] { stroke-opacity: 1 !important; stroke-width: 2; filter: drop-shadow(0 0 4px var(--gold)); }
+/* A band, pointed at or chosen: its trunk runs bright and its jacks answer. */
+.swb__trunk[data-active] { stroke: var(--cobalt); stroke-opacity: 0.9; stroke-width: 1.5; }
+.swb__jack[data-dim] { opacity: 0.3; }
+.swb[data-band='games'] .swb__trunk[data-band='games'], .swb[data-band='xr'] .swb__trunk[data-band='xr'], .swb[data-band='simulation'] .swb__trunk[data-band='simulation'],
+.swb[data-band='robotics'] .swb__trunk[data-band='robotics'], .swb[data-band='design-tech'] .swb__trunk[data-band='design-tech'], .swb[data-band='applied-ai'] .swb__trunk[data-band='applied-ai'] { stroke: var(--cobalt); stroke-opacity: 1; stroke-width: 1.6; }
+.swb[data-band='games'] .swb__jack[data-band='games'] i, .swb[data-band='xr'] .swb__jack[data-band='xr'] i, .swb[data-band='simulation'] .swb__jack[data-band='simulation'] i,
+.swb[data-band='robotics'] .swb__jack[data-band='robotics'] i, .swb[data-band='design-tech'] .swb__jack[data-band='design-tech'] i, .swb[data-band='applied-ai'] .swb__jack[data-band='applied-ai'] i { background: var(--phosphor); box-shadow: 0 0 8px var(--cobalt); }
+
+.swb__readout { display: grid; align-content: start; gap: 0.55rem; margin-top: calc(var(--swb-head) - 0.4rem); padding: 1rem 1.1rem; border: 1px solid var(--line-strong); background: rgb(3 4 10 / 0.6); position: relative; min-height: calc(var(--swb-row) * 6 + 0.4rem); }
+.swb__readout::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0.9rem; height: 0.9rem; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+.swb__ch { display: flex; align-items: center; gap: 0.6rem; font: 500 0.6875rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+.swb__ch b { font: 800 0.9375rem/1 var(--dot); letter-spacing: 0.04em; color: var(--gold); }
+.swb__lamp { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+.swb:not([data-lit]) .swb__lamp { background: var(--dim); box-shadow: none; }
+.swb__title { font-weight: 720; font-size: 1.3rem; line-height: 1.15; color: var(--ink); text-wrap: balance; }
+.swb__bands { font: 500 0.6875rem/1.5 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--phosphor); }
+.swb__role { font-size: 0.875rem; line-height: 1.45; color: var(--muted); }
+
+/* The board needs room; smaller screens keep the domain menu and the gallery. */
+@media (max-width: 64rem) {
+  .swb { display: none; }
+}
+@media (max-width: 80rem) {
+  .swb__board { grid-template-columns: minmax(0, 12rem) minmax(0, 1fr); }
+  .swb__readout { grid-column: 1 / -1; min-height: 0; margin-top: 1rem; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; column-gap: 1.2rem; }
+  .swb__readout .swb__ch { grid-row: span 2; }
+}

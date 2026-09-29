@@ -17,6 +17,23 @@ export const NOTE_TYPES = {
   essay: 'Essay',
 } as const;
 
+/**
+ * Each type keeps one colour and one wave everywhere: field notes a phosphor sine,
+ * teardowns a cobalt square, essays an ink saw. Green and gold stay reserved for
+ * live builds and attention.
+ */
+export const NOTE_TONES = {
+  'field-note': 'phosphor',
+  'technical-teardown': 'cobalt',
+  essay: 'ink',
+} as const;
+
+export const NOTE_WAVES = {
+  'field-note': 'sine',
+  'technical-teardown': 'square',
+  essay: 'saw',
+} as const;
+
 /** Reading estimate from body copy, never hand-maintained frontmatter. */
 export function getNoteReadingTime(body: string): number {
   const text = body
@@ -28,6 +45,39 @@ export function getNoteReadingTime(body: string): number {
     .replace(/[`#*_>|~\-]/g, ' ');
   const words = text.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu)?.length ?? 0;
   return Math.max(1, Math.ceil(words / 220));
+}
+
+const countWords = (text: string) => text
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+  .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+  .replace(/<[^>]*>/g, '')
+  .match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu)?.length ?? 0;
+
+export type NoteSegment = { label: string; slug?: string; words: number };
+
+/**
+ * The shape of a note: one segment per `##` section (or per paragraph for short notes
+ * without sections), sized by its word count. It drives the signal signature that
+ * doubles as the note's contents and reading progress. Slugs come from the rendered
+ * headings so links match the page.
+ */
+export function getNoteSignature(body: string, headings: { depth: number; slug: string; text: string }[] = []): NoteSegment[] {
+  const text = body.replace(/^---\r?\n[\s\S]*?\r?\n---\s*/, '');
+  const sections = text.split(/^##\s+/m);
+  const intro = sections.shift() ?? '';
+  const h2 = headings.filter((heading) => heading.depth === 2);
+  if (sections.length > 0) {
+    const segments: NoteSegment[] = sections.map((section, index) => ({
+      label: h2[index]?.text ?? section.split('\n')[0].trim(),
+      slug: h2[index]?.slug,
+      words: countWords(section),
+    }));
+    const lead = countWords(intro);
+    return lead > 0 ? [{ label: 'Opening', words: lead }, ...segments] : segments;
+  }
+  return intro.split(/\n\s*\n/).map((paragraph) => ({ label: 'Paragraph', words: countWords(paragraph) }))
+    .filter((segment) => segment.words > 0)
+    .map((segment, index) => ({ ...segment, label: `Paragraph ${index + 1}` }));
 }
 
 export function getPublishedNotes<T extends NoteRecord>(entries: T[]): T[] {

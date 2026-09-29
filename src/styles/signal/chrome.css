@@ -18,7 +18,7 @@
 }
 /* Interior pages keep the header in flow (sticky), so native back-to-top and focus work without JavaScript. */
 body:not(.sg-home) .sg-top { position: sticky; top: 0; }
-.sg-top[data-scrolled='true'] { background: rgb(3 4 10 / 0.94); box-shadow: 0 1px 0 var(--line); }
+.sg-top[data-scrolled='true'] { background: rgb(3 4 10 / 0.82); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); box-shadow: 0 1px 0 var(--line); }
 html[data-phreak='on'] .sg-top[data-scrolled='true'] { background: rgb(6 18 71 / 0.94); }
 .sg-mark { justify-self: start; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; text-decoration: none; font: 900 1.3rem/1 var(--dot); letter-spacing: 0.02em; }
 .sg-mark sup { font: 600 0.6rem/1 var(--mono); color: var(--cobalt); align-self: flex-start; margin-top: 0.55rem; margin-left: -0.3rem; }
@@ -247,14 +247,14 @@ html:not(.js) .sg-copy { display: none; }
 .sg-console__log .is-cmd { margin-top: 0.55rem; color: var(--ink); }
 .sg-console__log .is-cmd:first-child { margin-top: 0; }
 .sg-console__log .is-cmd::before { content: 'guest@2600th:~$ '; color: var(--term); }
-.sg-console__log .is-logo { color: var(--cobalt); white-space: pre; overflow-x: auto; line-height: 1.2; }
+.sg-console__log .is-logo { margin-bottom: 0.9rem; color: var(--cobalt); white-space: pre; overflow-x: auto; font-size: 0.75rem; line-height: 1.08; letter-spacing: 0; text-shadow: 0 0 12px rgb(77 116 255 / 0.55); }
 .sg-console__log .is-dim { color: var(--dim); }
 .sg-console__rows { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.1rem 1.6rem; padding-left: 1ch; }
 .sg-console__rows dt { color: var(--ink); white-space: nowrap; }
 .sg-console__rows dd { color: var(--phosphor); }
-.sg-console__fetch { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0.6rem 2.5rem; min-width: 0; }
+.sg-console__fetch { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0.9rem 2.5rem; min-width: 0; margin-block: 0.45rem 0.3rem; }
 .sg-console__fetch pre { max-width: 100%; }
-.sg-console__fetch pre:first-child { color: var(--cobalt); white-space: pre; line-height: 1.2; overflow-x: auto; }
+.sg-console__fetch pre:first-child { color: var(--cobalt); white-space: pre; font-size: 0.75rem; line-height: 1.08; overflow-x: auto; text-shadow: 0 0 12px rgb(77 116 255 / 0.55); }
 .sg-console__line { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1.1rem 0.7rem; border-top: 1px solid var(--line); background: rgb(3 4 10 / 0.6); }
 .sg-console__line label { color: var(--term); white-space: nowrap; }
 .sg-console__line input { flex: 1; min-width: 0; min-height: 2.25rem; background: transparent; border: 0; outline: none; color: var(--ink); font: inherit; caret-color: var(--gold); }
@@ -310,7 +310,7 @@ html:not(.js) .sg-copy { display: none; }
   .sg-console { left: 0.5rem; right: 0.5rem; top: calc(0.5rem + env(safe-area-inset-top, 0px)); height: min(70svh, 34rem); }
   .sg-console__hint { display: none; }
   .sg-console__log { padding-inline: 0.8rem; }
-  .sg-console__log .is-logo, .sg-console__fetch pre:first-child { font-size: 0.625rem; }
+  .sg-console__log .is-logo, .sg-console__fetch pre:first-child { font-size: 0.5625rem; }
   .sg-console__line { padding-inline: 0.8rem; }
   .sg-console__bar { justify-content: space-between; }
   .sg-console__rows { grid-template-columns: minmax(0, 1fr); gap: 0; padding-left: 0; }

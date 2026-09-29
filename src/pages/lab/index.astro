@@ -1,39 +1,104 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageOpening from '../../components/site/PageOpening.astro';
-import BuildFeature from '../../components/site/BuildFeature.astro';
-import BuildCard from '../../components/site/BuildCard.astro';
-import { BUILDS, FEATURED_BUILD } from '../../data/builds';
+import Endpoints from '../../components/site/Endpoints.astro';
+import { BUILDS, FEATURED_BUILD, ENDPOINT_LABELS } from '../../data/builds';
 import '../../styles/signal/pages.css';
+import '../../styles/signal/lab.css';
 
 const all = [FEATURED_BUILD, ...BUILDS];
 const liveCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'live')).length;
 const sourceCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'src')).length;
+const pad = (value: number) => String(value).padStart(2, '0');
+// The short tag each cartridge wears in the roster.
+const tag = (tone: string) => ({ new: 'New', live: 'Live', idle: 'Demo', off: 'Archive' } as Record<string, string>)[tone] ?? '';
 ---
 
 <SiteLayout
   title="Experiments by Pranshul Chandhok"
   description="Games, browser graphics, and AI experiments I’m building to learn. Try the demos, read the code, or explore my earlier console portfolio."
   canonical="/lab/"
+  status={`Cart 01 · ${all[0].title}`}
 >
   <div class="pg lab-page">
     <PageOpening
       eyebrow={['04', 'Side channels']}
       path={[{ label: 'lab' }]}
-      lede="Games, browser graphics and AI tools I wanted to test for myself. I learn a technology by shipping something with it. Some are still rough, all of them are public."
-      readout={[['Builds', `<b>${String(all.length).padStart(2, '0')}</b>`], ['Live', `<b>${String(liveCount).padStart(2, '0')}</b> running on the web`], ['Source', `<b>${String(sourceCount).padStart(2, '0')}</b> open repositories`]]}
+      lede="Games, browser graphics and AI tools I wanted to test for myself. I learn a technology by shipping something with it. Some are still rough; all of them are public."
+      readout={[['Builds', `<b>${pad(all.length)}</b> on the cabinet`], ['Live', `<b>${pad(liveCount)}</b> running on the web`], ['Source', `<b>${pad(sourceCount)}</b> open repositories`]]}
       wave="noise"
+      compact
     >
       <h1 slot="title">Things I’m <em>trying.</em></h1>
     </PageOpening>
 
-    <section class="lab-ledger" aria-labelledby="build-index-title" data-build-ledger>
-      <h2 id="build-index-title" class="sr-only">Try them yourself</h2>
-      <BuildFeature />
-      <ul class="sg-builds">
-        {BUILDS.map((build) => <BuildCard build={build} />)}
-      </ul>
-      <a class="sg-more" href="https://github.com/2600th" data-sfx="tick">Everything else on GitHub <span aria-hidden="true">↗</span></a>
+    <section class="arcade lab-ledger" aria-labelledby="arcade-title" data-build-ledger data-arcade>
+      <h2 id="arcade-title" class="sr-only">Pick a build</h2>
+      <div class="arcade__cab">
+        <p class="arcade__marquee" aria-hidden="true"><b>2600<sup>th</sup></b><span>Arcade</span><i>Select build</i></p>
+        <div class="arcade__screen" data-arcade-screen>
+          <div class="arcade__feeds">
+            {all.map((build, index) => (
+              <div class="arcade__feed" data-feed={build.id} data-on={index === 0 ? '' : undefined}>
+                {build.media?.type === 'video' && <video muted loop playsinline preload="none" poster={build.media.poster} src={build.media.src} aria-label={build.media.alt}></video>}
+                {build.media?.type === 'img' && <img src={build.media.src} alt={build.media.alt} width={build.media.width} height={build.media.height} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />}
+                {build.code && <pre class="arcade__code" aria-label={`${build.title} on screen`}>{build.code.map((line) => line.replace('▌', '')).join('\n')}</pre>}
+              </div>
+            ))}
+          </div>
+          <canvas class="arcade__gl" aria-hidden="true" data-arcade-gl></canvas>
+          <button type="button" class="arcade__play" data-arcade-play aria-pressed="false" hidden={!all[0].media || all[0].media.type !== 'video'}><i aria-hidden="true"></i><span data-arcade-play-label>Play clip</span></button>
+          <p class="arcade__attract" aria-hidden="true"><b>Press start</b><span>Demo loop · pick a cartridge to play</span></p>
+          <div class="arcade__hud" aria-hidden="true">
+            <span>1UP <b>2600</b></span>
+            <span class="arcade__hud-title" data-arcade-hud>{all[0].title}</span>
+            <span>CH <b data-arcade-ch>01</b></span>
+          </div>
+        </div>
+        <div class="arcade__deck" aria-hidden="true">
+          <span class="arcade__stick"><i></i></span>
+          <span class="arcade__btn arcade__btn--a" data-arcade-press="start">A</span>
+          <span class="arcade__btn arcade__btn--b" data-arcade-press="next">B</span>
+          <span class="arcade__coin">Insert coin</span>
+        </div>
+      </div>
+
+      <div class="arcade__side">
+        <p class="arcade__hint" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> or <kbd>1</kbd>–<kbd>{all.length}</kbd> select</span><span><kbd>⏎</kbd> start</span><span><kbd>S</kbd> source</span></p>
+        <ol class="arcade__roster" aria-label="Builds" data-arcade-roster>
+          {all.map((build, index) => (
+            <li>
+              <button type="button" aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`build-${build.id}`} data-pick={build.id} data-sfx="tick">
+                <b>{pad(index + 1)}</b>
+                <span>{build.title}</span>
+                <i data-tone={build.tone}>{tag(build.tone)}</i>
+              </button>
+            </li>
+          ))}
+        </ol>
+        <div class="arcade__cards" aria-live="polite">
+          {all.map((build, index) => {
+            const primary = build.endpoints[0];
+            return (
+              <article class="arcade__card" id={`build-${build.id}`} data-build={build.id} data-on={index === 0 ? '' : undefined} aria-labelledby={`build-${build.id}-title`}>
+                <p class="arcade__meta"><span class="sg-state" data-tone={build.tone}><i></i>{build.state}</span><span class="arcade__no">Cart {pad(index + 1)}</span></p>
+                <h3 id={`build-${build.id}-title`}>{build.caseHref ? <a href={build.caseHref} data-sfx="tick" data-cursor-text="Read">{build.title}</a> : build.title}</h3>
+                <p class="arcade__summary">{build.summary}</p>
+                {'body' in build && (build as typeof FEATURED_BUILD).body.map((paragraph) => <p class="arcade__body">{paragraph}</p>)}
+                {'facts' in build && <ul class="arcade__facts">{(build as typeof FEATURED_BUILD).facts.map(([label, detail]) => <li><b>{label}</b><span>{detail}</span></li>)}</ul>}
+                <div class="arcade__ends" data-start-label={`Press start · ${ENDPOINT_LABELS[primary.kind]}`}><Endpoints endpoints={build.endpoints} title={build.title} /></div>
+                {'note' in build && <p class="arcade__note">{(build as typeof FEATURED_BUILD).note}</p>}
+              </article>
+            );
+          })}
+        </div>
+        <a class="sg-more" href="https://github.com/2600th" data-sfx="tick">Everything else on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
     </section>
   </div>
+
+  <script>
+    import { initArcade } from '../../signal/scenes/arcade-ui.js';
+    initArcade();
+  </script>
 </SiteLayout>

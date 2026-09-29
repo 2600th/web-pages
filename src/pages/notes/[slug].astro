@@ -2,22 +2,32 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import PathCrumb from '../../components/site/PathCrumb.astro';
 import Trace from '../../components/site/Trace.astro';
+import Signature from '../../components/site/Signature.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { SITE } from '../../data/site';
-import { getPublishedNotes, getNoteReadingTime, getOriginalSource, NOTE_TYPES } from '../../data/notes';
+import { getPublishedNotes, getNoteReadingTime, getNoteSignature, getOriginalSource, NOTE_TYPES, NOTE_TONES, NOTE_WAVES } from '../../data/notes';
+import '../../styles/signal/notes.css';
 import '../../styles/signal/pages.css';
 
 export async function getStaticPaths() {
   const notes = getPublishedNotes(await getCollection('notes'));
-  return notes.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+  // Newest first, so a note's channel counts up from the oldest transmission.
+  return notes.map((entry, index) => ({
+    params: { slug: entry.data.slug },
+    props: { entry, channel: notes.length - index, total: notes.length, newer: notes[index - 1], older: notes[index + 1] },
+  }));
 }
 
 interface Props {
   entry: CollectionEntry<'notes'>;
+  channel: number;
+  total: number;
+  newer?: CollectionEntry<'notes'>;
+  older?: CollectionEntry<'notes'>;
 }
 
-const { entry } = Astro.props;
+const { entry, channel, total, newer, older } = Astro.props;
 const { data } = entry;
 const { Content, headings } = await render(entry);
 const sections = headings.filter((heading) => heading.depth === 2);
@@ -48,12 +58,19 @@ const jsonLd = [{
   ],
 }];
 const readingTime = getNoteReadingTime(entry.body ?? '');
+const signature = getNoteSignature(entry.body ?? '', headings);
+const tone = NOTE_TONES[data.type];
+const railSections = signature.filter((segment) => segment.slug);
+const pad = (value: number) => String(value).padStart(2, '0');
+const shortDate = (date: Date) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date);
+const neighbours = [older && { rel: 'Older', entry: older }, newer && { rel: 'Newer', entry: newer }].filter(Boolean) as { rel: string; entry: CollectionEntry<'notes'> }[];
 ---
 
 <SiteLayout
   title={data.title}
   description={data.summary}
   canonical={`/notes/${data.slug}/`}
+  status={`RX · CH ${pad(channel)}`}
   image={data.ogImage}
   imageAlt={`${data.title} by Pranshul Chandhok`}
   imageWidth={1200}
@@ -61,26 +78,37 @@ const readingTime = getNoteReadingTime(entry.body ?? '');
   ogType="article"
   jsonLd={jsonLd}
 >
-  <div class="pg">
-  <article class="article-shell" data-reading-surface>
-    <header class="article-shell__opening route-opening route-opening--article" data-route-opening>
+  <div class="pg tx-page">
+  <article class:list={['article-shell tx', { 'tx--short': railSections.length < 2 }]} data-reading-surface data-note-type={data.type} data-tone={tone}>
+    <header class="article-shell__opening route-opening route-opening--article tx-head" data-route-opening>
       <PathCrumb items={[{ label: 'notes', href: '/notes/' }, { label: data.slug }]} />
-      <p class="route-opening__context">{NOTE_TYPES[data.type]} · {formatDate(data.publishedAt)} · {readingTime} min read</p>
-      <div class="route-opening__positive" data-polarity="positive">
-        <h1>{data.title}</h1>
-      </div>
-      <div class="route-opening__negative" data-polarity="negative">
-        <p class="article-shell__summary">{data.summary}</p>
-      </div>
-      <Trace wave="sine" />
+      <p class="tx-slip">
+        <span class="tx-slip__rx" aria-hidden="true"><i></i>RX</span>
+        <span class="tx-slip__ch">CH <b>{pad(channel)}</b><span aria-hidden="true">/{pad(total)}</span></span>
+        <span class="route-opening__context">{NOTE_TYPES[data.type]} · {formatDate(data.publishedAt)} · {readingTime} min<span class="tx-hide-sm"> read</span></span>
+      </p>
+      <h1>{data.title}</h1>
+      <p class="article-shell__summary">{data.summary}</p>
+      {signature.length >= 2 ? <Signature variant="full" segments={signature} seed={data.slug} tone={tone} wave={NOTE_WAVES[data.type]} /> : <Trace wave="sine" />}
     </header>
+    {railSections.length >= 2 && <nav class="tx-rail" aria-label="Sections" data-tx-rail>
+      <p class="tx-rail__label">Sections <span>{pad(railSections.length)}</span></p>
+      <ol>
+        {railSections.map((section, index) => (
+          <li data-rail={section.slug}>
+            <a href={`#${section.slug}`} data-sfx="tick"><b>{pad(index + 1)}</b><span>{section.label}</span><i aria-hidden="true"><u data-rail-fill></u></i></a>
+          </li>
+        ))}
+      </ol>
+    </nav>}
     <aside class="article-shell__meta" aria-label="About this note">
+      <p class="tx-report" aria-hidden="true">Signal report</p>
       <dl class="pg-readout">
         <div class="is-dup"><dt>Published</dt><dd><time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time></dd></div>
         {data.updatedAt && data.updatedAt.valueOf() !== data.publishedAt.valueOf() && <div><dt>Updated</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>}
         <div class="is-dup"><dt>Type</dt><dd>{NOTE_TYPES[data.type]}</dd></div>
-        <div class="is-dup"><dt>Reading</dt><dd><b>{readingTime}</b> min</dd></div>
-        <div><dt>Topics</dt><dd>{data.topics.join(' · ')}</dd></div>
+        <div class="is-dup"><dt>Reading</dt><dd><b>{readingTime}</b> min · <b>{signature.reduce((sum, segment) => sum + segment.words, 0).toLocaleString('en-GB')}</b> words</dd></div>
+        <div><dt>Topics</dt><dd class="tx-topics">{data.topics.map((topic) => <span>{topic}</span>)}</dd></div>
       </dl>
     </aside>
     <div class="article-shell__content">
@@ -91,7 +119,7 @@ const readingTime = getNoteReadingTime(entry.body ?? '');
         </nav>
       </details>}
       {data.heroMedia && <ProjectMedia media={data.heroMedia} label="Article image" priority />}
-      <div class="prose"><Content /></div>
+      <div class="prose tx-prose" data-tx-prose><Content /></div>
       {(relatedWork.length > 0 || data.relatedLab.length > 0) && <nav class="article-shell__related" aria-label="Related work and experiments">
         <h2>From the work</h2>
         <ul>
@@ -103,8 +131,30 @@ const readingTime = getNoteReadingTime(entry.body ?? '');
         <strong>{data.sourceAttribution}</strong>
         {originalSource && <p><a href={originalSource} target="_blank" rel="noopener noreferrer">Read the original post ↗</a></p>}
       </footer>
+      <section class="tx-end" aria-labelledby="tx-end-title">
+        <h2 id="tx-end-title" class="tx-end__eot"><span>End of transmission</span></h2>
+        <svg class="tx-end__flat" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20H180l8-14 10 28 9-26 8 18 6-6H600" /></svg>
+        {neighbours.length > 0 && <ul class="tx-next">
+          {neighbours.map(({ rel, entry: note }) => (
+            <li data-tone={NOTE_TONES[note.data.type]}>
+              <a href={`/notes/${note.data.slug}/`} data-sfx="tick" data-cursor-text="Tune">
+                <span class="tx-next__rel">{rel} transmission</span>
+                <strong>{note.data.title}</strong>
+                <span class="tx-next__meta">{NOTE_TYPES[note.data.type]} · <time datetime={note.data.publishedAt.toISOString()}>{shortDate(note.data.publishedAt)}</time></span>
+                <Signature segments={getNoteSignature(note.body ?? '')} seed={note.data.slug} tone={NOTE_TONES[note.data.type]} wave={NOTE_WAVES[note.data.type]} />
+              </a>
+            </li>
+          ))}
+        </ul>}
+        <p class="tx-end__reply">Reply on the same line: <a href="#contact" data-sfx="tick">dial in below</a>.</p>
+      </section>
     </div>
   </article>
+  <div class="tx-meter" aria-hidden="true" data-tone={tone} data-tx-meter><span class="tx-meter__label"><i></i>RX <b data-tx-meter-pct>0</b>%</span><span class="tx-meter__section" data-tx-meter-section></span><span class="tx-meter__bar"><i data-tx-meter-bar></i></span></div>
   </div>
+  <script>
+    import { initReading } from '../../signal/scenes/reading.js';
+    initReading();
+  </script>
 </SiteLayout>
 

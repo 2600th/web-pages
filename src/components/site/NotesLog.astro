@@ -1,0 +1,41 @@
+---
+/** The Notes index: every note as a numbered transmission, newest first, the latest featured. */
+import type { CollectionEntry } from 'astro:content';
+import Signature from './Signature.astro';
+import { getNoteReadingTime, getNoteSignature, NOTE_TONES, NOTE_TYPES, NOTE_WAVES } from '../../data/notes';
+
+interface Props { notes: CollectionEntry<'notes'>[] }
+const { notes } = Astro.props;
+const pad = (value: number) => String(value).padStart(2, '0');
+const stamp = (date: Date) => {
+  const [year, month, day] = date.toISOString().slice(0, 10).split('-');
+  return { datetime: `${year}-${month}-${day}`, text: `${day}.${month}.${year.slice(2)}` };
+};
+---
+
+<ol class="notes-list tx-log" data-transmissions data-tx-log>
+  {notes.map((note, index) => {
+    const date = stamp(note.data.publishedAt);
+    const channel = notes.length - index;
+    const tone = NOTE_TONES[note.data.type];
+    const featured = index === 0;
+    return (
+      <li class:list={['tx-row', { 'tx-row--feature': featured }]} data-note-type={note.data.type} data-tone={tone} data-channel={channel}>
+        <a href={`/notes/${note.data.slug}/`} data-sfx="tick" data-cursor-text="Tune in" data-preview={note.data.ogImage}>
+          <span class="tx-row__ch" aria-hidden="true">CH<b>{pad(channel)}</b></span>
+          <span class="tx-row__head">
+            <time datetime={date.datetime}>{date.text}</time>
+            <span class="tx-row__type">{NOTE_TYPES[note.data.type]}</span>
+            {featured && <span class="tx-row__latest">Latest</span>}
+          </span>
+          <span class="tx-row__title">{note.data.title}</span>
+          <span class="tx-row__summary">{note.data.summary}</span>
+          <span class="tx-row__sig"><Signature segments={getNoteSignature(note.body ?? '')} seed={note.data.slug} tone={tone} wave={NOTE_WAVES[note.data.type]} /></span>
+          <span class="tx-row__meta">{getNoteReadingTime(note.body ?? '')} min read · {note.data.topics.join(' · ')}</span>
+          {featured && <span class="tx-row__card" aria-hidden="true"><img src={note.data.ogImage} alt="" width="1200" height="630" loading="eager" decoding="async" /></span>}
+          <span class="tx-row__go" aria-hidden="true">→</span>
+        </a>
+      </li>
+    );
+  })}
+</ol>

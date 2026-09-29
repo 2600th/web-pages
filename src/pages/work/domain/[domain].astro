@@ -3,10 +3,12 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import WorkList from '../../../components/work/WorkList.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import PageOpening from '../../../components/site/PageOpening.astro';
+import Switchboard from '../../../components/work/Switchboard.astro';
 import { CAREER_DOMAIN_META } from '../../../data/career-domains';
 import { getPrioritizedWork } from '../../../data/work-order';
 import type { CareerDomain } from '../../../content/evidence';
 import '../../../styles/signal/pages.css';
+import '../../../styles/signal/work.css';
 
 export async function getStaticPaths() {
   const work = await getCollection('work');
@@ -30,20 +32,36 @@ interface Props {
 const { domain, work } = Astro.props as Props;
 const domainMeta = CAREER_DOMAIN_META[domain];
 const allWork = getPrioritizedWork(await getCollection('work'));
-const bandCount = (key: string) => allWork.filter((entry) => entry.data.domains.includes(key as CareerDomain)).length;
+// What this band actually covers: its years, its eras, and where it crosses other bands.
+const firstYear = Math.min(...work.map((entry) => entry.data.yearStart));
+const lastYear = Math.max(...work.map((entry) => entry.data.yearEnd ?? entry.data.yearStart));
+const ERA_LABELS: Record<string, string> = { programmer: 'Programmer', founder: 'Founder', operator: 'Operator' };
+const eraList = [...new Set(work.map((entry) => ERA_LABELS[entry.data.era] ?? entry.data.era))].join(' · ');
+const crossings = domains
+  .filter(([key]) => key !== domain)
+  .map(([key, meta]) => ({ label: meta.label, count: work.filter((entry) => entry.data.domains.includes(key)).length }))
+  .filter((cross) => cross.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 2);
 ---
 
 <SiteLayout
   title={`${domainMeta.label} · Projects`}
   description={`${domainMeta.description} Explore my projects in this area and read about my contribution to each.`}
   canonical={`/work/domain/${domain}/`}
+  status={`Band · ${({ games: 'Games', xr: 'XR', simulation: 'Simulation', robotics: 'Robotics', 'design-tech': 'Design tech', 'applied-ai': 'Applied AI' } as Record<string, string>)[domain] ?? domainMeta.label}`}
 >
   <div class="pg work-archive" data-work-archive data-static-domain={domain}>
     <PageOpening
       eyebrow={['02', `Band · ${domainMeta.label}`]}
       path={[{ label: 'work', href: '/work/' }, { label: 'domain' }, { label: domain }]}
       lede={domainMeta.description}
-      readout={[['Lines', `<b>${String(work.length).padStart(2, '0')}</b> ${work.length === 1 ? 'project' : 'projects'} in this band`], ['All work', '<a href="/work/">Every band, every line</a>']]}
+      readout={[
+        ['Lines', `<b>${String(work.length).padStart(2, '0')}</b> ${work.length === 1 ? 'project' : 'projects'}`],
+        ['Active', `<b>${firstYear === lastYear ? firstYear : `${firstYear}–${lastYear}`}</b>`],
+        ['Eras', eraList],
+        ...(crossings.length ? [['Crosses', crossings.map((cross) => `${cross.label} <b>${cross.count}</b>`).join(' · ')] as [string, string]] : []),
+      ]}
       wave="square"
       compact
     >
@@ -51,10 +69,7 @@ const bandCount = (key: string) => allWork.filter((entry) => entry.data.domains.
       <p class="sr-only">{work.length} relevant projects. My work in {domainMeta.label.toLowerCase()}, including the product and technical decisions behind each project.</p>
     </PageOpening>
 
-    <nav class="domain-filter" aria-label="Filter work by domain">
-      <a href="/work/" data-sfx="tick">All bands <b>{allWork.length}</b></a>
-      {domains.map(([key, meta]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={meta.label} data-domain-description={meta.description} aria-current={key === domain ? 'page' : undefined} data-sfx="tick">{meta.label} <b>{bandCount(key)}</b></a>)}
-    </nav>
+    <Switchboard work={allWork} order={allWork} total={allWork.length} active={domain} />
     <noscript>
       <nav class="domain-filter-mobile-links" aria-label="Browse work domains">
         <a href="/work/">All domains</a>
@@ -80,6 +95,8 @@ const bandCount = (key: string) => allWork.filter((entry) => entry.data.domains.
   </div>
 
   <script>
+    import { initSwitchboard } from '../../../signal/scenes/switchboard.js';
+    initSwitchboard();
     const initStaticDomain = () => {
       document.querySelectorAll<HTMLElement>('[data-static-domain]').forEach((root) => {
         if (root.dataset.bound === 'true') return;

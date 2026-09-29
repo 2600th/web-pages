@@ -1,33 +1,36 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageOpening from '../components/site/PageOpening.astro';
+import ConBadge from '../components/about/ConBadge.astro';
+import { getCollection } from 'astro:content';
+import { getPrioritizedWork } from '../data/work-order';
 import { PERSON } from '../data/site';
 import '../styles/signal/pages.css';
+import '../styles/signal/about.css';
+
+const work = getPrioritizedWork(await getCollection('work'));
 ---
 
 <SiteLayout
   title="About Pranshul Chandhok"
   description="I lead Product and Technology for Interior Company at Square Yards. My background spans game development, founding GreyKernel, and building design software."
   canonical="/about/"
+  status="ID · 2600th"
 >
   <div class="pg about-page" data-operating-dossier>
     <PageOpening
       eyebrow={['ID', 'Operator file']}
       path={[{ label: 'about' }]}
-      lede="I’m drawn to ideas that sound interesting but might not quite work yet. Building something is how I find out."
       wave="saw"
     >
       <h1 slot="title">I learn by <em>building.</em></h1>
-      <p class="pg-lede">I’m {PERSON.jobTitle}. I work across AI and real-time 3D, and stay hands-on with the software we build. I’m based in Gurugram.</p>
-      <figure class="ab-portrait" slot="aside">
-        <img src="/media/signal/portrait.webp" width="720" height="948" alt="The 2600th character rendered as a point cloud of cobalt light" loading="eager" />
-        <figcaption><span>Portrait · point cloud</span><b>2600 Hz</b></figcaption>
-      </figure>
+      <p class="pg-lede">I’m Pranshul Chandhok, {PERSON.jobTitle}. I’m drawn to ideas that sound interesting but might not quite work yet, and building something is how I find out. I work across AI and real-time 3D and stay hands-on with the software we build.</p>
       <dl class="pg-readout">
-        <div><dt>Name</dt><dd>Pranshul Chandhok</dd></div>
         <div><dt>Handle</dt><dd><b>2600th</b></dd></div>
         <div><dt>Building</dt><dd><b>14+</b> years</dd></div>
+        <div><dt>Based</dt><dd>Gurugram, India</dd></div>
       </dl>
+      <ConBadge slot="aside" work={work} />
     </PageOpening>
 
     <section class="pg-section" id="why-2600th" aria-labelledby="why-title">
@@ -41,15 +44,7 @@ import '../styles/signal/pages.css';
           </li>
           <li>
             <p class="ab-steps__when">2007–2011</p>
-            <div><h3>College, and a documentary on hacking.</h3><p>In college I got interested in hacking and its history. A documentary on the subject walked through the phone phreaks, the Cap’n Crunch whistle and the 2600 Hz trick, Kevin Mitnick’s story and a lot more.</p></div>
-          </li>
-          <li>
-            <p class="ab-steps__when">The tone</p>
-            <div><h3>The tone that meant “idle”.</h3><p>Long-distance trunks in the old phone network used a 2600 Hz tone to signal a free line. A toy whistle from boxes of Cap’n Crunch happened to produce it, and blue boxes went further, playing the network’s own routing tones. Understand the signalling and you could take control of a call.</p></div>
-          </li>
-          <li>
-            <p class="ab-steps__when">The people</p>
-            <div><h3>The system includes its people.</h3><p>Kevin Mitnick started out as a phone phreak and became one of the most wanted hackers in America. Much of his access came from persuading people rather than breaking code. His story is the reminder that a system includes the people who operate it.</p></div>
+            <div><h3>College, and a documentary on hacking.</h3><p>In college I got interested in hacking and its history. A documentary walked through the phone phreaks: the Cap’n Crunch whistle that happened to play 2600 Hz, the tone long-distance trunks used to mean “line idle”, the blue boxes that spoke the network’s own routing tones, and Kevin Mitnick, who got much of his access by persuading people rather than breaking code.</p></div>
           </li>
           <li>
             <p class="ab-steps__when">The handle</p>
@@ -87,23 +82,13 @@ import '../styles/signal/pages.css';
       </ol>
     </section>
 
-    <section class="pg-section" aria-labelledby="contribution-title">
-      <p class="sg-eyebrow"><span>03</span> The work</p>
-      <div class="pg-split">
-        <h2 id="contribution-title">What I mean by building.</h2>
-        <div class="prose">
-          <p>My work moves between product direction, technical architecture, prototypes and implementation. Sometimes I’m building the first version; sometimes I’m helping a team decide how the system should work and carry it into production. Each Work page describes my role and the people who took it forward.</p>
-          <p>My independent projects in the <a href="/lab/">Lab</a> are where I can try an idea, inspect the result and share the code.</p>
-        </div>
-      </div>
-    </section>
-
     <section class="pg-section tools-in-use" aria-labelledby="tools-title">
-      <p class="sg-eyebrow"><span>04</span> Toolchain</p>
+      <p class="sg-eyebrow"><span>03</span> Toolchain</p>
       <div class="pg-split">
         <h2 id="tools-title">Tools in use.</h2>
         <dl>
-          <div><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
+          <div><dt>Game engines</dt><dd>Unity for cross-platform games at <a href="/work/merkur-magie/">Merkur</a> and for the <a href="/work/enterprise-immersive-systems/">enterprise XR</a> training and simulation work at GreyKernel.</dd></div>
+          <div><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>, with <a href="/notes/ocean-reliability/">KTX2 textures</a> keeping its download in budget. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
           <div><dt>Applied AI</dt><dd>OpenAI and Gemini for <a href="/notes/ai-floorplan-parsing/">floorplan interpretation</a>, with ComfyUI for repeatable <a href="/notes/ai-video-control/">image and video experiments</a>.</dd></div>
           <div><dt>Product prototypes</dt><dd>Next.js, Tailwind CSS, AI SDK and fal.ai formed part of the initial <a href="/work/propvr-ai-craft/">PropVR AI MVP</a> I built for the team to extend.</dd></div>
         </dl>
@@ -111,7 +96,7 @@ import '../styles/signal/pages.css';
     </section>
 
     <section class="pg-section" aria-labelledby="patent-title">
-      <p class="sg-eyebrow"><span>05</span> Patent</p>
+      <p class="sg-eyebrow"><span>04</span> Patent</p>
       <div class="ab-patent">
         <div>
           <p class="ab-patent__no" aria-hidden="true">395331</p>
@@ -126,14 +111,26 @@ import '../styles/signal/pages.css';
     </section>
 
     <section class="pg-section" aria-labelledby="principles-title">
-      <p class="sg-eyebrow"><span>06</span> Operating rules</p>
-      <h2 id="principles-title">How I work.</h2>
+      <p class="sg-eyebrow"><span>05</span> Operating rules</p>
+      <div class="ab-rules">
+      <div class="pg-split">
+        <h2 id="principles-title">How I work.</h2>
+        <div class="prose">
+          <p>My work moves between product direction, technical architecture, prototypes and implementation. Sometimes I’m building the first version; sometimes I’m helping a team decide how the system should work and carry it into production. Each Work page describes my role and the people who took it forward. The <a href="/lab/">Lab</a> is where I try an idea on my own, inspect the result and share the code.</p>
+        </div>
+      </div>
       <ol class="principles">
         <li><span><strong>Try the idea.</strong>I often build a small prototype to answer a question. It gives the team something concrete to discuss.</span></li>
         <li><span><strong>Stay close to implementation.</strong>I test tools and read the code before recommending them. Their limits matter as much as their capabilities.</span></li>
         <li><span><strong>Pay attention when it breaks.</strong>Slow responses, memory limits, and confusing controls tell me where more work is needed.</span></li>
         <li><span><strong>Use AI where it helps.</strong>Sometimes a deterministic rule or a database query is the better choice. Some decisions still need a person.</span></li>
       </ol>
+      </div>
     </section>
   </div>
+
+  <script>
+    import { initBadge } from '../signal/scenes/badge.js';
+    initBadge();
+  </script>
 </SiteLayout>

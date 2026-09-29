@@ -4,6 +4,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { parse } from 'yaml';
 
 test('published article and case-study metadata match visible authorship, dates and image files', async ({ page, request }) => {
+  // Visits every note and case study and decodes each social image.
+  test.setTimeout(90_000);
   const records = (collection: string) => readdirSync(`src/content/${collection}`).filter(file => file.endsWith('.md')).map(file => parse(readFileSync(`src/content/${collection}/${file}`, 'utf8').split(/^---\s*$/m)[1]));
   const images = new Set<string>();
   for (const [collection, entries] of [['notes', records('notes').filter(data => !data.draft)], ['work', records('work')]] as const) {

@@ -1,0 +1,147 @@
+---
+/**
+ * The switchboard: every project is a jack, placed in each band it belongs to at the
+ * year it started. A cord joins a project across its bands; patch cords join projects
+ * that grew out of each other. The band labels are the domain filter.
+ */
+import type { CollectionEntry } from 'astro:content';
+import type { CareerDomain } from '../../content/evidence';
+import { CAREER_DOMAIN_META } from '../../data/career-domains';
+
+interface Props {
+  work: CollectionEntry<'work'>[];
+  /** The archive's own order, for channel numbers. */
+  order: CollectionEntry<'work'>[];
+  total: number;
+  /** On a band page: that band is lit, the others recede. */
+  active?: CareerDomain;
+  allHref?: string;
+}
+const { work, order, total, active, allHref = '/work/' } = Astro.props;
+const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
+const first = 2012;
+const last = Math.max(new Date().getFullYear(), ...work.map((entry) => entry.data.yearStart));
+const years = Array.from({ length: last - first + 1 }, (_, i) => first + i);
+const colW = 100 / years.length;
+const rowH = 100 / domains.length;
+const pad = (value: number) => String(value).padStart(2, '0');
+const channelOf = (slug: string) => order.findIndex((entry) => entry.data.slug === slug) + 1;
+
+// Jacks: one per project per band, spread when a band has several projects in one year.
+type Jack = { slug: string; row: number; domain: CareerDomain; x: number; y: number };
+const jacks: Jack[] = [];
+domains.forEach(([domain], row) => {
+  const inRow = work.filter((entry) => entry.data.domains.includes(domain));
+  const byYear = new Map<number, typeof inRow>();
+  inRow.forEach((entry) => byYear.set(entry.data.yearStart, [...(byYear.get(entry.data.yearStart) ?? []), entry]));
+  byYear.forEach((entries, year) => {
+    const spread = Math.min(colW * 0.32, 2.1);
+    entries.forEach((entry, k) => {
+      const x = (year - first + 0.5) * colW + (k - (entries.length - 1) / 2) * spread;
+      jacks.push({ slug: entry.data.slug, row, domain, x, y: (row + 0.5) * rowH });
+    });
+  });
+});
+const jacksOf = (slug: string) => jacks.filter((jack) => jack.slug === slug);
+
+// Cords in a 1000 × 600 space; the SVG stretches, strokes do not.
+const X = (x: number) => (x * 10).toFixed(1);
+const Y = (y: number) => (y * 6).toFixed(1);
+const bands: { slug: string; d: string }[] = [];
+work.forEach((entry) => {
+  const own = jacksOf(entry.data.slug).sort((a, b) => a.row - b.row);
+  for (let i = 1; i < own.length; i++) {
+    const a = own[i - 1];
+    const b = own[i];
+    const bow = 18 + (b.row - a.row) * 6;
+    bands.push({ slug: entry.data.slug, d: `M${X(a.x)} ${Y(a.y)}C${(a.x * 10 + bow).toFixed(1)} ${Y(a.y + rowH * 0.4)} ${(b.x * 10 + bow).toFixed(1)} ${Y(b.y - rowH * 0.4)} ${X(b.x)} ${Y(b.y)}` });
+  }
+});
+const seen = new Set<string>();
+const patches: { a: string; b: string; d: string }[] = [];
+work.forEach((entry) => {
+  (entry.data.relationships ?? []).forEach((other) => {
+    const key = [entry.data.slug, other].sort().join('|');
+    if (seen.has(key)) return;
+    const from = jacksOf(entry.data.slug);
+    const to = jacksOf(other);
+    if (!from.length || !to.length) return;
+    seen.add(key);
+    // Patch between the nearest pair of jacks, sagging under its own weight.
+    let best: [Jack, Jack] = [from[0], to[0]];
+    let bestD = Infinity;
+    from.forEach((p) => to.forEach((q) => { const d = Math.hypot(p.x - q.x, (p.y - q.y) * 0.6); if (d < bestD) { bestD = d; best = [p, q]; } }));
+    const [p, q] = best;
+    const sag = 5 + Math.min(18, Math.abs(p.x - q.x) * 0.45);
+    const my = Math.max(p.y, q.y) + sag;
+    patches.push({ a: entry.data.slug, b: other, d: `M${X(p.x)} ${Y(p.y)}Q${X((p.x + q.x) / 2)} ${Y(my)} ${X(q.x)} ${Y(q.y)}` });
+  });
+});
+
+const eras = [
+  { label: 'Programmer', from: 2012, to: 2014 },
+  { label: 'Founder', from: 2015, to: 2021 },
+  { label: 'Operator', from: 2021, to: last },
+];
+const projects = Object.fromEntries(work.map((entry) => [entry.data.slug, {
+  title: entry.data.title,
+  channel: pad(channelOf(entry.data.slug)),
+  years: entry.data.yearEnd && entry.data.yearEnd !== entry.data.yearStart ? `${entry.data.yearStart}–${String(entry.data.yearEnd).slice(2)}` : String(entry.data.yearStart),
+  role: entry.data.role,
+  bands: entry.data.domains.map((domain) => CAREER_DOMAIN_META[domain].label).join(' · '),
+  summary: entry.data.summary,
+  related: (entry.data.relationships ?? []).filter((slug) => work.some((item) => item.data.slug === slug)),
+}]));
+const firstJack = jacks.slice().sort((a, b) => a.row - b.row || a.x - b.x)[0];
+---
+
+<section class:list={['swb', { 'swb--band': active }]} aria-labelledby="swb-title" data-switchboard data-active={active}>
+  <header class="swb__head">
+    <h2 id="swb-title"><span>Switchboard</span> {work.length} lines across {domains.length} bands</h2>
+    <p>Each jack is a project, in every band it belongs to, at the year it started. Cords join a project across bands and link work that grew out of other work.</p>
+  </header>
+  <div class="swb__board">
+    <nav class="domain-filter swb__labels" aria-label="Filter work by domain">
+      <a href={allHref} class="swb__all" data-domain-link="all" data-domain-label="All work" data-domain-description="Selected systems first, followed by the earlier archive." aria-current={active ? undefined : 'page'} data-sfx="tick">All bands <b>{total}</b></a>
+      {domains.map(([key, meta]) => (
+        <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={meta.label} data-domain-description={meta.description} aria-current={key === active ? 'page' : undefined} data-sfx="tick" data-band={key}>
+          <span>{meta.label}</span><b>{work.filter((entry) => entry.data.domains.includes(key)).length}</b>
+        </a>
+      ))}
+    </nav>
+    <div class="swb__field">
+      <ol class="swb__eras" aria-hidden="true">
+        {eras.map((era) => <li style={`left:${(era.from - first) * colW}%;width:${(era.to - era.from + 1) * colW}%`}><span>{era.label}</span></li>)}
+      </ol>
+      <ol class="swb__years" aria-hidden="true" style={`grid-template-columns:repeat(${years.length},minmax(0,1fr))`}>{years.map((year) => <li>{String(year).slice(2)}</li>)}</ol>
+      <div class="swb__grid">
+        <svg class="swb__svg" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          {years.map((_, i) => <line class="swb__col" x1={X(i * colW)} x2={X(i * colW)} y1="0" y2="600" />)}
+          {domains.map(([key], row) => <line class="swb__trunk" data-band={key} data-active={key === active ? '' : undefined} x1="0" x2="1000" y1={Y((row + 0.5) * rowH)} y2={Y((row + 0.5) * rowH)} />)}
+          {patches.map((patch) => <path class="swb__patch" d={patch.d} data-a={patch.a} data-b={patch.b} />)}
+          {bands.map((band) => <path class="swb__band" d={band.d} data-slug={band.slug} />)}
+        </svg>
+        {jacks.map((jack) => (
+          <a
+            class="swb__jack"
+            href={`/work/${jack.slug}/`}
+            style={`left:${jack.x.toFixed(2)}%;top:${jack.y.toFixed(2)}%`}
+            data-jack={jack.slug}
+            data-band={jack.domain}
+            data-dim={active && jack.domain !== active ? '' : undefined}
+            tabindex={jack === firstJack ? 0 : -1}
+            aria-label={`${projects[jack.slug].title}, ${projects[jack.slug].years}, ${CAREER_DOMAIN_META[jack.domain].label}`}
+            data-cursor-text={`CH ${projects[jack.slug].channel}`}
+          ><i></i></a>
+        ))}
+      </div>
+    </div>
+    <aside class="swb__readout" aria-live="polite" data-swb-readout>
+      <p class="swb__ch"><span class="swb__lamp" aria-hidden="true"></span><b data-swb-ch>--</b><span data-swb-years>{first}–{last}</span></p>
+      <p class="swb__title" data-swb-title>Pick up a line</p>
+      <p class="swb__bands" data-swb-bands>Point at a jack, or tab into the board and use the arrow keys.</p>
+      <p class="swb__role" data-swb-role></p>
+    </aside>
+  </div>
+  <script type="application/json" data-swb-projects set:html={JSON.stringify(projects)} />
+</section>

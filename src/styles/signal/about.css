@@ -1,0 +1,89 @@
+/* ==========================================================================
+   About: the conference badge. Cobalt solder mask, gold plating, white silkscreen,
+   the portrait on its display, and one LED per year wired to it.
+   ========================================================================== */
+
+.about-page { overflow-x: clip; }
+.about-page .pg-open__aside { justify-self: center; width: 100%; max-width: 20rem; }
+.bdg { --led-code: var(--phosphor); --led-founder: var(--gold); --led-operator: #f4f2ea; position: relative; margin: 0; padding-top: 3.2rem; perspective: 1100px; }
+
+/* The lanyard runs up out of frame. */
+.bdg__lanyard { position: absolute; top: -1.5rem; left: 50%; width: 3rem; height: 5.4rem; transform: translateX(-50%); overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 40%); mask-image: linear-gradient(transparent, #000 40%); }
+.bdg__lanyard span {
+  position: absolute; inset: 0 0.35rem; display: grid; place-items: center; writing-mode: vertical-rl; transform: rotate(180deg);
+  background: repeating-linear-gradient(90deg, #1f37b0 0 2px, #2447d8 2px 4px); font: 800 0.5rem/1 var(--mono); letter-spacing: 0.3em; text-transform: uppercase; color: rgb(255 255 255 / 0.75); white-space: nowrap; overflow: hidden;
+}
+.bdg__lanyard i { position: absolute; left: 50%; bottom: 0; width: 1.6rem; height: 1.25rem; transform: translateX(-50%); border-radius: 3px 3px 6px 6px; background: linear-gradient(90deg, #6b7088, #d8dbe6 45%, #7c8197); box-shadow: 0 2px 4px rgb(0 0 0 / 0.6); }
+
+.bdg__board { position: relative; aspect-ratio: 360 / 620; transform-style: preserve-3d; transform-origin: 50% -10%; filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.75)) drop-shadow(0 0 40px rgb(36 71 216 / 0.25)); }
+.bdg__pcb { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.bdg__outline { fill: url(#bdg-mask); stroke: #c9a45a; stroke-opacity: 0.55; stroke-width: 1.5; }
+.bdg__hole circle:first-child { fill: #c9a45a; }
+.bdg__hole circle:last-child { fill: var(--void); }
+.bdg__silk { fill: #eef1ff; fill-opacity: 0.9; font-family: var(--mono); }
+.bdg__silk--brand { font: 900 22px var(--dot); letter-spacing: 0.02em; }
+.bdg__silk--tiny { font-size: 6.5px; letter-spacing: 0.14em; fill-opacity: 0.62; }
+.bdg__silk--year { font-size: 7.5px; letter-spacing: 0.04em; fill-opacity: 0.75; }
+.bdg__silk--name { font: 800 15px var(--display); letter-spacing: 0.08em; fill-opacity: 1; }
+.bdg__silk--line { font-size: 7.5px; letter-spacing: 0.12em; fill-opacity: 0.72; }
+.bdg__era path { fill: none; stroke: #eef1ff; stroke-opacity: 0.4; stroke-width: 0.8; }
+.bdg__bezel { fill: #03040a; stroke: #2f3f8f; stroke-width: 1.2; }
+.bdg__pad { fill: #c9a45a; }
+.bdg__smd rect { fill: #1b1f2e; }
+.bdg__smd .bdg__smd-end { fill: #c9a45a; }
+.bdg__trace { fill: none; stroke: #4d6dff; stroke-opacity: 0.4; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke-opacity 200ms; }
+.bdg__trace[data-on] { stroke-opacity: 1; stroke-width: 2; }
+.bdg__trace[data-on][data-era='code'] { stroke: var(--led-code); filter: drop-shadow(0 0 3px var(--led-code)); }
+.bdg__trace[data-on][data-era='founder'] { stroke: var(--led-founder); filter: drop-shadow(0 0 3px var(--led-founder)); }
+.bdg__trace[data-on][data-era='operator'] { stroke: var(--led-operator); filter: drop-shadow(0 0 3px var(--led-operator)); }
+
+/* The display: portrait by default, a readout when a year is picked. */
+.bdg__screen { position: absolute; overflow: hidden; border-radius: 3px; background: #000; box-shadow: inset 0 0 0 1px rgb(157 182 255 / 0.15); }
+.bdg__screen img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; transition: opacity 250ms, filter 250ms; }
+.bdg__screen::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px), radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(0 0 0 / 0.55)); }
+.bdg[data-reading] .bdg__screen img { opacity: 0.18; filter: blur(2px) saturate(0.4); }
+.bdg__read { position: absolute; inset: 0; display: grid; align-content: start; gap: 0.45rem; padding: 1rem 0.95rem; opacity: 0; pointer-events: none; transition: opacity 180ms; }
+.bdg[data-reading] .bdg__read { opacity: 1; }
+.bdg__read-year { font: 900 clamp(2.4rem, 5vw, 3.1rem)/0.9 var(--dot); color: var(--phosphor); text-shadow: var(--glow); }
+.bdg__read-role { font: 700 0.625rem/1.35 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+.bdg__read-list { display: grid; gap: 0.3rem; margin: 0.3rem 0 0; padding: 0; list-style: none; }
+.bdg__read-list li { overflow: hidden; padding-left: 0.9rem; font: 500 0.75rem/1.3 var(--mono); color: var(--ink); text-overflow: ellipsis; white-space: nowrap; position: relative; }
+.bdg__read-list li::before { content: '›'; position: absolute; left: 0; color: var(--cobalt); }
+.bdg__osd { position: absolute; left: 0.6rem; bottom: 0.55rem; padding: 0.22rem 0.4rem; background: rgb(3 4 10 / 0.7); font: 700 0.5625rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--phosphor); transition: color 200ms, background 200ms; }
+.bdg__osd[data-flash] { background: var(--gold); color: var(--void); }
+.bdg[data-reading] .bdg__osd { opacity: 0; }
+
+/* LEDs: SMD parts, lit in their era's colour; the current year breathes. */
+.bdg__leds { margin: 0; padding: 0; list-style: none; }
+.bdg__leds li { position: absolute; width: 0; height: 0; }
+.bdg__led { position: absolute; left: -0.8rem; top: -0.8rem; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; padding: 0; background: none; border: 0; border-radius: 50%; cursor: pointer; }
+.bdg__led i { width: 0.62rem; height: 0.44rem; border-radius: 2px; background: var(--led); opacity: 0.55; box-shadow: 0 0 6px var(--led); transition: opacity 180ms, box-shadow 180ms, transform 180ms; }
+.bdg__led[data-era='code'] { --led: var(--led-code); }
+.bdg__led[data-era='founder'] { --led: var(--led-founder); }
+.bdg__led[data-era='operator'] { --led: var(--led-operator); }
+.bdg__led:hover i, .bdg__led[data-on] i, .bdg__led[aria-pressed='true'] i { opacity: 1; transform: scale(1.25); box-shadow: 0 0 6px var(--led), 0 0 18px var(--led), 0 0 30px var(--led); }
+.bdg__led:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+html[data-motion='on'] .bdg__led[data-now]:not([data-on]) i { animation: bdg-breathe 2.4s ease-in-out infinite; }
+@keyframes bdg-breathe { 50% { opacity: 1; box-shadow: 0 0 6px var(--led), 0 0 18px var(--led); } }
+
+/* Tactile switches A and B. */
+.bdg__key { position: absolute; display: grid; place-items: center; width: 2.1rem; height: 2.1rem; margin: -1.05rem 0 0 -1.05rem; padding: 0; border: 0; border-radius: 4px; background: linear-gradient(145deg, #2b2f3f, #11131c); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 3px 0 #05060a, 0 5px 10px rgb(0 0 0 / 0.6); cursor: pointer; transition: transform 90ms, box-shadow 90ms; }
+.bdg__key i { display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5d6173, #1a1c26 70%); font: 800 0.625rem/1 var(--mono); font-style: normal; color: rgb(255 255 255 / 0.7); }
+.bdg__key[data-badge-key='b'] i { background: radial-gradient(circle at 35% 30%, #f2cf86, #b27a24 70%); color: #3a2506; }
+.bdg__key[data-down], .bdg__key:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 1px 0 #05060a, 0 2px 4px rgb(0 0 0 / 0.6); }
+.bdg__key:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+.bdg__sheen { position: absolute; inset: 0; border-radius: 6%/3.5%; pointer-events: none; background: radial-gradient(40% 30% at var(--mx, 30%) var(--my, 20%), rgb(255 255 255 / 0.1), transparent 70%); mix-blend-mode: screen; opacity: 0; transition: opacity 300ms; }
+.bdg__board:hover .bdg__sheen { opacity: 1; }
+
+html:not(.js) .bdg__key { display: none; }
+html:not(.js) .bdg__led { cursor: default; }
+html:not(.js) .bdg__led i { opacity: 0.85; }
+
+/* ---------- About sections ---------- */
+.ab-rules { display: grid; gap: 2rem; }
+.ab-rules > .prose { max-width: 46rem; color: var(--muted); }
+
+@media (max-width: 64rem) {
+  .about-page .pg-open__aside { max-width: 21rem; margin-top: 1rem; }
+}

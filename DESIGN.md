@@ -67,7 +67,7 @@ components:
 
 The whole site is one idea: a 2600 Hz line you tune, seize and dial. The handle 2600th comes from the tone that once told the long-distance network a line was idle, so the visual language borrows from oscilloscopes, switchboards and terminals, and uses them to organise real content rather than decorate it. The homepage tells the story with a point-cloud portrait, oscilloscope traces and a working MF blue box. Every interior page shares the same chrome and components so that clicking through never leaves the story.
 
-Source of truth: `src/styles/signal/tokens.css` (tokens, fonts, base), `src/styles/signal/chrome.css` (header, footer, console, builds, endpoints, transmissions) and `src/styles/signal/pages.css` (openings, archive, case files, reading, about, lab, 404). The homepage adds `src/signal/style.css`.
+Source of truth: `src/styles/signal/tokens.css` (tokens, fonts, base, page transitions), `src/styles/signal/chrome.css` (header, footer, console, builds, endpoints, transmissions) and `src/styles/signal/pages.css` (openings, archive, case files, reading, 404). Each section's signature piece has its own sheet: `notes.css`, `work.css`, `case.css`, `lab.css` and `about.css`. The homepage adds `src/signal/style.css`.
 
 ## Colors
 
@@ -95,12 +95,20 @@ Mona Sans at a wide stretch carries display and body. Doto, a dot-matrix face, s
 - **Endpoints**: every build lists its links the same way, one row per link: kind, address, arrow (↗ leaves the site, → stays on it). The featured build, the cards and case pages all use the same rows. The kind says what is behind the link: LIVE for a running web app, SITE for a project or product site, SOURCE, NOTES, OPEN for a page on this site. Sources and links on case pages use the same words.
 - **Channel cards**: the work archive's image cards, with the year and role in the meta line and scanlines on hover. Nothing is laid over the project image.
 - **Transmissions**: notes as a call log with Doto dates.
+- **Signatures** (one per section, each tied to real content):
+  - *Notes*: a receiver whose stations are the note types, over a waterfall canvas. Every note gets a waveform signature drawn from its own sections and word counts, in its type's tone (field note phosphor and sine, teardown cobalt and square, essay ink and saw). In an article the signature is the contents: its marks are the sections, a head tracks the reading, and the transmission ends with EOT and the next channels.
+  - *Work*: a switchboard. Bands are trunk lines, each project is a jack at the year it started, cords join a project across bands and link work that grew out of other work. The band labels are the domain filter. Hidden below 64rem, where the domain menu and gallery remain.
+  - *Case files*: the hero is a monitor that tunes in through static with the channel number, over an on-screen-display chin (channel, band tags, year, CAPTURE or EDITORIAL). Captures get a 2× loupe; ← → change channel to the previous or next case.
+  - *Lab*: an arcade cabinet with a WebGL CRT. The roster is the build list; number keys load a cartridge, Enter or A starts it, S opens its source. Until someone plays, attract mode cycles the cartridges.
+  - *About*: a conference badge. The silkscreen carries the facts, the display the portrait, and one LED per year since 2012 is wired to the display: a year's LED reads out that year's role and the projects running.
+  - *404*: an intercept operator with the SIT tones, the dialled path and the closest real routes.
+- **Header status**: the line status reads the page's state (a channel, a cartridge, RX progress while reading) and returns to rest.
 - **Console**: a modal terminal window opened with the backtick key or the footer's Console switch on every page: a title bar, aligned output and a scrim. While open the page behind is inert; Esc, backtick, Close or a press on the scrim closes it and focus returns where it was.
 - **Footer**: "Dial in" with the address as the link and a copy button, then a switchboard bar: identity, site map, console and shortcut switches, and "Hang up" back to top. The homepage adds the blue box.
 
 ## Motion and sound
 
-Motion is movement only: reading content is never hidden or dimmed at rest. The one deliberate exception is **Hang up** in the footer: the picture switches off like a CRT into the idle 2600 Hz trace, the trace flattens to a dot, the page returns to the top under the cover and the line comes back, all in under a second. It never runs with motion off; the link is then a plain jump to the top. One motion preference covers the whole site and respects `prefers-reduced-motion`; reduced motion never downloads the 3D engine. Sound is synthesized with Web Audio, off by default, and follows the visitor between pages once they turn it on.
+Motion is movement only: reading content is never hidden or dimmed at rest. Pages change with a short channel-change view transition. Scenes (canvas, WebGL) mount lazily when they scroll into view and only run with motion on. The one deliberate exception is **Hang up** in the footer: the picture switches off like a CRT into the idle 2600 Hz trace, the trace flattens to a dot, the page returns to the top under the cover and the line comes back, all in under a second. It never runs with motion off; the link is then a plain jump to the top. One motion preference covers the whole site and respects `prefers-reduced-motion`; reduced motion never downloads the 3D engine. Sound is synthesized with Web Audio, off by default, and follows the visitor between pages once they turn it on.
 
 ## Do's and Don'ts
 

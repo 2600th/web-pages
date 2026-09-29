@@ -154,6 +154,7 @@ test('Lab experiments separate launching, reading, and source actions', async ({
     ['Web Ocean 3D', 'https://web-ocean-3d.vercel.app/', 'https://github.com/2600th/web-ocean-3d'],
     ['Safed Sagar', 'https://oss-web-3d.vercel.app/', 'https://github.com/2600th/oss-web-3d'],
   ]) {
+    await page.locator('[data-pick]').filter({ hasText: title }).click();
     const card = page.locator('[data-build]').filter({ has: page.getByRole('heading', { name: title, exact: true }) });
     await expect(card.getByRole('heading', { name: title }).getByRole('link')).toHaveAttribute('href', /^\/work\/[\w-]+\/$/);
     const ends = card.getByRole('navigation', { name: `${title} links` });

@@ -1,0 +1,111 @@
+---
+/**
+ * The About signature: a conference badge. The portrait is on its display, the
+ * silkscreen carries the facts, and one LED per year since 2012 is wired to the
+ * display. Point at (or tab to) a year and its trace lights and the display reads
+ * out the role and the projects that were running. A steps through the years; B
+ * plays the 2600 Hz tone. Without JavaScript it is a still board.
+ */
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { work: CollectionEntry<'work'>[] }
+const { work } = Astro.props;
+
+const first = 2012;
+const last = Math.max(new Date().getFullYear(), ...work.map((entry) => entry.data.yearEnd ?? entry.data.yearStart));
+// The call log's three acts, in its own words.
+const ERA = {
+  code: { label: 'Programmer', role: 'Game development' },
+  founder: { label: 'Founder', role: 'Co-founder and CTO, GreyKernel' },
+  operator: { label: 'Operator', role: 'Product and technology' },
+} as const;
+const eraOf = (year: number): keyof typeof ERA => (year <= 2014 ? 'code' : year <= 2020 ? 'founder' : 'operator');
+const years = Array.from({ length: last - first + 1 }, (_, i) => {
+  const year = first + i;
+  const running = work
+    .filter((entry) => entry.data.yearStart <= year && (entry.data.yearEnd ?? entry.data.yearStart) >= year)
+    .sort((a, b) => a.data.yearStart - b.data.yearStart);
+  return { year, era: eraOf(year), projects: running.map((entry) => entry.data.title.replace(/ — .*| · .*/, '')) };
+});
+const n = years.length;
+// Board space is 360 × 620. LEDs sit on a row, pads under the display, traces between.
+const ledX = (i: number) => 40 + i * (280 / (n - 1));
+const padX = (i: number) => 96 + i * (168 / (n - 1));
+const pct = (value: number, of: number) => `${((value / of) * 100).toFixed(3)}%`;
+const eras = (['code', 'founder', 'operator'] as const).map((key) => {
+  const idx = years.map((y, i) => (y.era === key ? i : -1)).filter((i) => i >= 0);
+  return { key, from: ledX(idx[0]) - 7, to: ledX(idx[idx.length - 1]) + 7, label: ERA[key].label };
+});
+const data = years.map((y) => ({ ...y, role: ERA[y.era].role, label: ERA[y.era].label }));
+---
+
+<figure class="bdg" data-badge aria-label="Conference badge: Pranshul Chandhok, 2600th">
+  <div class="bdg__lanyard" aria-hidden="true"><span>2600th · 2600th · 2600th · 2600th</span><i></i></div>
+  <div class="bdg__board">
+    <svg class="bdg__pcb" viewBox="0 0 360 620" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="bdg-mask" x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0" stop-color="#1a2f9c" />
+          <stop offset="0.55" stop-color="#11207a" />
+          <stop offset="1" stop-color="#0a1456" />
+        </linearGradient>
+        <pattern id="bdg-pour" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="6" stroke="#3a58d8" stroke-opacity="0.16" stroke-width="1" />
+        </pattern>
+      </defs>
+      <path class="bdg__outline" fill-rule="evenodd" d="M24 2H336A22 22 0 0 1 358 24V596A22 22 0 0 1 336 618H24A22 22 0 0 1 2 596V24A22 22 0 0 1 24 2ZM156 18A6 6 0 0 0 156 30H204A6 6 0 0 0 204 18Z" />
+      <path fill="url(#bdg-pour)" fill-rule="evenodd" d="M24 10H336A14 14 0 0 1 350 24V596A14 14 0 0 1 336 610H24A14 14 0 0 1 10 596V24A14 14 0 0 1 24 10ZM156 18A6 6 0 0 0 156 30H204A6 6 0 0 0 204 18Z" />
+      {[[26, 26], [334, 26], [26, 594], [334, 594]].map(([x, y]) => <g class="bdg__hole"><circle cx={x} cy={y} r="9" /><circle cx={x} cy={y} r="5" /></g>)}
+
+      <text class="bdg__silk bdg__silk--brand" x="44" y="50">2600<tspan dy="-6" font-size="8">th</tspan></text>
+      <text class="bdg__silk bdg__silk--tiny" x="316" y="48" text-anchor="end">OPERATOR FILE · REV {String(last).slice(2)}</text>
+
+      <rect class="bdg__bezel" x="52" y="58" width="256" height="330" rx="6" />
+      <text class="bdg__silk bdg__silk--tiny" x="56" y="400">U1 · DISPLAY</text>
+      {years.map((_, i) => <rect class="bdg__pad" x={(padX(i) - 2.5).toFixed(1)} y="404" width="5" height="9" rx="1" />)}
+      {years.map((y, i) => (
+        <path class="bdg__trace" data-year={y.year} data-era={y.era} d={`M${ledX(i).toFixed(1)} 468V454L${padX(i).toFixed(1)} 428V413`} />
+      ))}
+      {years.map((y, i) => <text class="bdg__silk bdg__silk--year" x={ledX(i).toFixed(1)} y="496" text-anchor="middle">{String(y.year).slice(2)}</text>)}
+      {eras.map((era) => (
+        <g class="bdg__era">
+          <path d={`M${era.from.toFixed(1)} 502V506H${era.to.toFixed(1)}V502`} />
+          <text class="bdg__silk bdg__silk--tiny" x={((era.from + era.to) / 2).toFixed(1)} y="516" text-anchor="middle">{era.label.toUpperCase()}</text>
+        </g>
+      ))}
+
+      <text class="bdg__silk bdg__silk--name" x="180" y="542" text-anchor="middle">PRANSHUL CHANDHOK</text>
+      <text class="bdg__silk bdg__silk--line" x="180" y="557" text-anchor="middle">VP PRODUCT &amp; TECHNOLOGY · GURUGRAM, IN</text>
+      <text class="bdg__silk bdg__silk--line" x="180" y="570" text-anchor="middle">BUILDING SINCE 2012 · PAT. IN 395331</text>
+
+      <text class="bdg__silk bdg__silk--tiny" transform="translate(34 230) rotate(-90)" text-anchor="middle">SIGNAL · 2600 HZ · LINE IDLE</text>
+      {[0, 1, 2, 3, 4, 5].map((k) => (
+        <g class="bdg__smd" transform={`translate(318 ${120 + k * 34})`}><rect x="0" y="0" width="12" height="6" rx="1" /><rect class="bdg__smd-end" x="0" y="0" width="3" height="6" /><rect class="bdg__smd-end" x="9" y="0" width="3" height="6" /><text class="bdg__silk bdg__silk--tiny" x="6" y="16" text-anchor="middle">R{k + 1}</text></g>
+      ))}
+      <text class="bdg__silk bdg__silk--tiny" x="98" y="599">A · STEP</text>
+      <text class="bdg__silk bdg__silk--tiny" x="262" y="599" text-anchor="end">B · 2600 HZ</text>
+    </svg>
+
+    <div class="bdg__screen" style={`left:${pct(60, 360)};top:${pct(66, 620)};width:${pct(240, 360)};height:${pct(314, 620)}`}>
+      <img src="/media/signal/portrait.webp" width="720" height="948" alt="The 2600th character rendered as a point cloud of cobalt light" loading="eager" />
+      <div class="bdg__read" aria-hidden="true" data-badge-read>
+        <p class="bdg__read-year" data-badge-year></p>
+        <p class="bdg__read-role" data-badge-role></p>
+        <ul class="bdg__read-list" data-badge-list></ul>
+      </div>
+      <p class="bdg__osd" aria-hidden="true" data-badge-osd>2600 Hz · line idle</p>
+    </div>
+
+    <ol class="bdg__leds" aria-label="Years since 2012">
+      {data.map((y, i) => (
+        <li style={`left:${pct(ledX(i), 360)};top:${pct(472, 620)}`}>
+          <button type="button" class="bdg__led" data-era={y.era} data-led={i} data-now={y.year === last ? '' : undefined} aria-label={`${y.year}, ${y.role}: ${y.projects.join(', ')}`}><i></i></button>
+        </li>
+      ))}
+    </ol>
+    <button type="button" class="bdg__key" data-badge-key="a" style={`left:${pct(72, 360)};top:${pct(597, 620)}`} aria-label="Step to the next year"><i>A</i></button>
+    <button type="button" class="bdg__key" data-badge-key="b" style={`left:${pct(288, 360)};top:${pct(597, 620)}`} aria-label="Play the 2600 hertz tone"><i>B</i></button>
+    <span class="bdg__sheen" aria-hidden="true"></span>
+  </div>
+  <script type="application/json" data-badge-years set:html={JSON.stringify(data)} />
+</figure>

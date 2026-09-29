@@ -2,53 +2,79 @@
 import { getCollection } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageOpening from '../../components/site/PageOpening.astro';
-import Transmissions from '../../components/site/Transmissions.astro';
-import { getPublishedNotes, NOTE_TYPES } from '../../data/notes';
+import NotesLog from '../../components/site/NotesLog.astro';
+import { getPublishedNotes, getNoteReadingTime, NOTE_TONES, NOTE_TYPES } from '../../data/notes';
 import '../../styles/signal/pages.css';
+import '../../styles/signal/notes.css';
 
 const notes = getPublishedNotes(await getCollection('notes'));
-const types = (Object.keys(NOTE_TYPES) as (keyof typeof NOTE_TYPES)[]).map((key) => ({ key, label: NOTE_TYPES[key], count: notes.filter((note) => note.data.type === key).length }));
+const types = (Object.keys(NOTE_TYPES) as (keyof typeof NOTE_TYPES)[]).map((key) => ({ key, label: NOTE_TYPES[key], tone: NOTE_TONES[key], count: notes.filter((note) => note.data.type === key).length }));
+// Stations on the receiver, oldest on the left: the same channel numbers the log uses.
+const stations = [...notes].reverse().map((note, index) => ({
+  channel: index + 1,
+  slug: note.data.slug,
+  title: note.data.title,
+  type: NOTE_TYPES[note.data.type],
+  tone: NOTE_TONES[note.data.type],
+  date: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(note.data.publishedAt),
+  minutes: getNoteReadingTime(note.body ?? ''),
+}));
+const pad = (value: number) => String(value).padStart(2, '0');
+const latest = stations[stations.length - 1];
 ---
 
 <SiteLayout
   title="Notes from the workbench"
   description="What I’m learning while building AI products, experimenting with browser graphics, and trying new tools. Notes by Pranshul Chandhok."
   canonical="/notes/"
+  status={`RX · ${pad(notes.length)} transmissions`}
 >
   <div class="pg notes-page">
     <PageOpening
       eyebrow={['05', 'Transmissions']}
       path={[{ label: 'notes' }]}
-      lede="What I’m learning as I build, test and occasionally break things. Field notes capture one observation, teardowns examine implementation choices, and essays argue a product point from the work."
-      readout={[['Notes', `<b>${String(notes.length).padStart(2, '0')}</b> published`], ['Latest', `<b>${new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(notes[0].data.publishedAt)}</b>`], ['Feed', '<a href="/rss.xml">RSS</a>']]}
+      lede="What I’m learning as I build, test and occasionally break things. Field notes capture one observation, teardowns take an implementation apart, and essays argue a product point from the work."
+      readout={[['Notes', `<b>${pad(notes.length)}</b> transmissions`], ['Latest', `<b>${latest.date}</b>`], ['Feed', '<a href="/rss.xml">RSS</a>']]}
       wave="sine"
+      compact
     >
       <h1 slot="title">Notes from the <em>workbench.</em></h1>
     </PageOpening>
 
+    <section class="rx" aria-labelledby="rx-title" data-receiver data-tone={latest.tone}>
+      <h2 id="rx-title" class="sr-only">Receiver: every note by channel</h2>
+      <div class="rx__screen">
+        <canvas class="rx__canvas" aria-hidden="true" data-rx-canvas></canvas>
+        <div class="rx__scale" aria-hidden="true">
+          {stations.map((station) => (
+            <a class="rx__station" href={`/notes/${station.slug}/`} tabindex="-1" data-rx-station={station.channel} data-tone={station.tone} style={`left:${((station.channel - 0.5) / stations.length) * 100}%`}>
+              <i></i><b>{pad(station.channel)}</b>
+            </a>
+          ))}
+          <span class="rx__needle" data-rx-needle style={`left:${((latest.channel - 0.5) / stations.length) * 100}%`}></span>
+        </div>
+      </div>
+      <div class="rx__readout" aria-live="off" data-rx-readout>
+        <p class="rx__tuned"><span class="rx__lamp" aria-hidden="true"></span>Tuned to <b data-rx-ch>CH {pad(latest.channel)}</b></p>
+        <p class="rx__title" data-rx-title>{latest.title}</p>
+        <p class="rx__meta" data-rx-meta>{latest.type} · {latest.date} · {latest.minutes} min</p>
+      </div>
+      <script type="application/json" data-rx-stations set:html={JSON.stringify(stations)} />
+    </section>
+
     <div class="note-types" role="group" aria-label="Filter notes by type" data-note-filter>
-      <button type="button" aria-pressed="true" data-note-filter-type="all" data-sfx="tick">All <b>{notes.length}</b></button>
-      {types.map((type) => <button type="button" aria-pressed="false" data-note-filter-type={type.key} data-sfx="tick">{type.label}s <b>{type.count}</b></button>)}
+      <button type="button" aria-pressed="true" data-note-filter-type="all" data-sfx="tick">All bands <b>{notes.length}</b></button>
+      {types.map((type) => <button type="button" aria-pressed="false" data-note-filter-type={type.key} data-tone={type.tone} data-sfx="tick"><i aria-hidden="true"></i>{type.label}s <b>{type.count}</b></button>)}
     </div>
     <p class="sr-only" aria-live="polite" data-note-status></p>
 
     <section class="pg-notes" aria-label="All notes">
-      <Transmissions notes={notes} detailed />
+      <NotesLog notes={notes} />
     </section>
   </div>
 
   <script>
-    const root = document.querySelector<HTMLElement>('[data-note-filter]');
-    const items = [...document.querySelectorAll<HTMLElement>('[data-transmissions] > li')];
-    const status = document.querySelector<HTMLElement>('[data-note-status]');
-    root?.addEventListener('click', (event) => {
-      const button = (event.target as Element).closest<HTMLButtonElement>('[data-note-filter-type]');
-      if (!button) return;
-      const type = button.dataset.noteFilterType;
-      root.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
-      let visible = 0;
-      items.forEach((item) => { item.hidden = type !== 'all' && item.dataset.noteType !== type; if (!item.hidden) visible += 1; });
-      if (status) status.textContent = `${visible} ${visible === 1 ? 'note' : 'notes'} shown`;
-    });
+    import { initNotesIndex } from '../../signal/scenes/notes-index.js';
+    initNotesIndex();
   </script>
 </SiteLayout>
