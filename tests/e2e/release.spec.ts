@@ -124,7 +124,8 @@ test('work-domain controls adapt before the link row needs a scrollbar', async (
 
     const filter = page.locator('.domain-filter');
     const select = page.locator('.domain-filter-select');
-    if (width <= 1024) {
+    // The switchboard (whose band labels are the filter) needs 64rem; below it the menu takes over.
+    if (width < 1024) {
       await expect(filter).toBeHidden();
       await expect(select).toBeVisible();
     } else {

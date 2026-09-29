@@ -37,9 +37,9 @@ html[data-motion='on'] .arcade__marquee span { animation: arcade-neon 5s steps(1
 .arcade__screen[data-gl='on'] .arcade__feeds { opacity: 0; }
 /* Glass: a scanline film and the tube's inner shadow over whichever picture is showing. */
 .arcade__screen::after { content: ''; pointer-events: none; background: repeating-linear-gradient(rgb(255 255 255 / 0.035) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 30% 20%, rgb(255 255 255 / 0.07), transparent 45%); box-shadow: inset 0 0 50px rgb(0 0 0 / 0.85), inset 0 0 2px rgb(157 182 255 / 0.4); }
-.arcade__hud { position: absolute; top: 1.7rem; left: 2.2rem; right: 2.2rem; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font: 700 0.6875rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-shadow: 0 0 6px var(--cobalt), 0 1px 0 #000; pointer-events: none; }
-/* The clip control sits in the screen's lower corner. */
-.arcade__play { position: absolute; right: 1.9rem; bottom: 1.8rem; z-index: 3; display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.25rem; padding: 0 0.75rem; background: rgb(3 4 10 / 0.72); border: 1px solid rgb(157 182 255 / 0.4); border-radius: 3px; font: 700 0.625rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--phosphor); cursor: pointer; transition: border-color 200ms, color 200ms; }
+.arcade__hud { position: absolute; top: 1rem; left: 1rem; right: 1rem; z-index: 2; padding: 0.7rem 1.2rem 1.6rem; border-radius: 22px 22px 0 0 / 28px 28px 0 0; background: linear-gradient(rgb(2 3 8 / 0.82), rgb(2 3 8 / 0.45) 55%, transparent); display: flex; align-items: center; justify-content: space-between; gap: 1rem; font: 700 0.6875rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-shadow: 0 0 6px var(--cobalt), 0 1px 0 #000; pointer-events: none; }
+/* The clip control sits on the deck, beside the coin slot. */
+.arcade__play { margin-left: auto; display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.25rem; padding: 0 0.75rem; background: rgb(3 4 10 / 0.72); border: 1px solid rgb(157 182 255 / 0.4); border-radius: 3px; font: 700 0.625rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--phosphor); cursor: pointer; transition: border-color 200ms, color 200ms; }
 .arcade__play i { width: 0; height: 0; border-block: 0.3rem solid transparent; border-left: 0.5rem solid currentColor; }
 .arcade__play[aria-pressed='true'] i { width: 0.5rem; height: 0.6rem; border: 0; border-inline: 0.16rem solid currentColor; }
 .arcade__play:hover, .arcade__play:focus-visible { border-color: var(--phosphor); color: #fff; }
@@ -68,6 +68,7 @@ html[data-motion='on'] .arcade__marquee span { animation: arcade-neon 5s steps(1
 .arcade__btn--a { background: radial-gradient(circle at 35% 30%, #8aa4ff, var(--cobalt-deep) 65%); box-shadow: 0 5px 0 #13236e, 0 0 18px rgb(77 116 255 / 0.55); }
 .arcade__btn--b { background: radial-gradient(circle at 35% 30%, #ffd89a, #b9812b 65%); box-shadow: 0 5px 0 #5f3f0d, 0 0 18px rgb(232 180 90 / 0.45); color: #1a1204; }
 .arcade__btn[data-down] { transform: translateY(4px); box-shadow: 0 1px 0 rgb(0 0 0 / 0.6); }
+.arcade__play:not([hidden]) + .arcade__coin { margin-left: 0; }
 .arcade__coin { margin-left: auto; padding: 0.45rem 0.6rem; border: 1px solid rgb(232 180 90 / 0.5); font: 700 0.625rem/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
 html[data-motion='on'] .arcade__coin { animation: sg-blink 1.6s steps(2, jump-none) infinite; }
 
@@ -128,9 +129,8 @@ html:not(.js) .arcade__cab { position: static; }
   .arcade__screen { padding: 0.6rem; }
   .arcade__feeds, .arcade__gl, .arcade__screen::after { inset: 0.6rem; border-radius: 14px / 18px; }
   .arcade__gl { width: calc(100% - 1.2rem); height: calc(100% - 1.2rem); }
-  .arcade__hud { top: 1.2rem; left: 1.4rem; right: 1.4rem; font-size: 0.5625rem; }
+  .arcade__hud { top: 0.6rem; left: 0.6rem; right: 0.6rem; padding: 0.6rem 0.8rem 1.2rem; border-radius: 14px 14px 0 0 / 18px 18px 0 0; font-size: 0.5625rem; }
   .arcade__hud-title { display: none; }
-  .arcade__play { right: 1.1rem; bottom: 1.1rem; }
   .arcade__attract { bottom: auto; top: 42%; }
   .arcade__attract span { display: none; }
   .arcade__deck { gap: 0.8rem; padding: 0.8rem 1rem; }

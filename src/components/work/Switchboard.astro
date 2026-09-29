@@ -35,10 +35,12 @@ domains.forEach(([domain], row) => {
   const byYear = new Map<number, typeof inRow>();
   inRow.forEach((entry) => byYear.set(entry.data.yearStart, [...(byYear.get(entry.data.yearStart) ?? []), entry]));
   byYear.forEach((entries, year) => {
-    const spread = Math.min(colW * 0.32, 2.1);
+    // Jacks that share a year in a band step sideways and zigzag so none overlap.
+    const spread = Math.min(colW * 0.3, 1.9);
     entries.forEach((entry, k) => {
       const x = (year - first + 0.5) * colW + (k - (entries.length - 1) / 2) * spread;
-      jacks.push({ slug: entry.data.slug, row, domain, x, y: (row + 0.5) * rowH });
+      const zig = entries.length > 1 ? (k % 2 ? 1 : -1) * rowH * 0.17 : 0;
+      jacks.push({ slug: entry.data.slug, row, domain, x, y: (row + 0.5) * rowH + zig });
     });
   });
 });
@@ -91,6 +93,7 @@ const projects = Object.fromEntries(work.map((entry) => [entry.data.slug, {
   bands: entry.data.domains.map((domain) => CAREER_DOMAIN_META[domain].label).join(' · '),
   summary: entry.data.summary,
   related: (entry.data.relationships ?? []).filter((slug) => work.some((item) => item.data.slug === slug)),
+  thumb: entry.data.heroMedia?.src ?? '',
 }]));
 const firstJack = jacks.slice().sort((a, b) => a.row - b.row || a.x - b.x)[0];
 ---
@@ -138,9 +141,10 @@ const firstJack = jacks.slice().sort((a, b) => a.row - b.row || a.x - b.x)[0];
     </div>
     <aside class="swb__readout" aria-live="polite" data-swb-readout>
       <p class="swb__ch"><span class="swb__lamp" aria-hidden="true"></span><b data-swb-ch>--</b><span data-swb-years>{first}–{last}</span></p>
+      <img class="swb__thumb" src={projects[firstJack.slug].thumb || undefined} alt="" width="320" height="180" decoding="async" loading="lazy" data-swb-thumb hidden />
       <p class="swb__title" data-swb-title>Pick up a line</p>
-      <p class="swb__bands" data-swb-bands>Point at a jack, or tab into the board and use the arrow keys.</p>
-      <p class="swb__role" data-swb-role></p>
+      <p class="swb__bands" data-swb-bands></p>
+      <p class="swb__role" data-swb-role>Point at a jack, or tab into the board and use the arrow keys. Every jack opens its case file.</p>
     </aside>
   </div>
   <script type="application/json" data-swb-projects set:html={JSON.stringify(projects)} />

@@ -81,7 +81,7 @@ const period = `${data.yearStart}${data.yearEnd && data.yearEnd !== data.yearSta
 // The monitor's on-screen display: channel, bands, year and what kind of picture this is.
 const heroProvenance = data.heroMedia ? MEDIA_PROVENANCE[data.heroMedia.src] : undefined;
 const heroKind = heroProvenance?.status?.startsWith('generated') ? 'Editorial' : 'Capture';
-const BAND_TAGS: Record<string, string> = { games: 'GAM', xr: 'XR', simulation: 'SIM', robotics: 'ROB', 'design-tech': 'DSN', 'applied-ai': 'AI' };
+const BAND_TAGS: Record<string, string> = { games: 'Games', xr: 'XR', simulation: 'Simulation', robotics: 'Robotics', 'design-tech': 'Design tech', 'applied-ai': 'Applied AI' };
 const bandNames = data.domains.map((domain) => CAREER_DOMAIN_META[domain].label).join(' · ');
 ---
 

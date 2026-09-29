@@ -53,9 +53,9 @@ function tuneIn(monitor) {
     }
     ctx.putImageData(image, 0, 0);
     if (channel) {
-      ctx.font = '700 16px "JetBrains Mono", monospace';
+      ctx.font = '900 18px Doto, "JetBrains Mono", monospace';
       ctx.fillStyle = '#7cf0b0';
-      ctx.fillText(`CH ${channel}`, 12, 24);
+      ctx.fillText(`CH ${channel}`, 12, 26);
     }
     canvas.style.opacity = String(1 - t ** 2.2);
     requestAnimationFrame(draw);

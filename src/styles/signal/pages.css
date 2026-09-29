@@ -169,6 +169,7 @@ html[data-motion='on'] .pg-wave path { animation: pg-wave 6s linear infinite; }
 .evidence-sources small { font: 500 0.625rem/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); text-align: right; }
 .evidence-sources a > span:last-child { color: var(--dim); }
 .related-notes ul { border-top: 1px solid var(--line); }
+.related-notes .project-story__frame { padding-top: 3rem; }
 .related-notes li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 1rem; align-items: baseline; padding: 1rem 0; border-bottom: 1px solid var(--line); }
 .related-notes li span { font: 500 0.6875rem/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
 .related-notes a { font-weight: 620; font-size: 1.05rem; text-decoration-color: var(--cobalt); text-underline-offset: 0.2em; }
@@ -366,7 +367,7 @@ html:not(.js) .note-types { display: none; }
   .craft-evolution__steps li:nth-child(2) { border-right: 0; }
   .craft-evolution__steps li:nth-child(n + 3) { border-top: 1px solid var(--line); }
 }
-@media (max-width: 64rem) {
+@media (max-width: 63.99rem) {
   .domain-filter { display: none; }
   .domain-filter-select.pg-select:not([hidden]) { display: grid; padding-block: 1rem; border-block: 1px solid var(--line); }
 }

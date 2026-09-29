@@ -88,8 +88,16 @@ function initPreview(rows) {
   box.innerHTML = '<img alt="" width="1200" height="630" decoding="async">';
   document.body.append(box);
   const img = box.querySelector('img');
-  const x = gsap.quickTo(box, 'x', { duration: 0.45, ease: 'power3' });
   const y = gsap.quickTo(box, 'y', { duration: 0.45, ease: 'power3' });
+  // The monitor sits over the row's own waveform at the right edge and only follows the
+  // pointer up and down, so it never covers the title or the excerpt being read.
+  const place = (link, event, first) => {
+    const row = link.getBoundingClientRect();
+    const h = box.offsetHeight || 170;
+    const top = Math.min(Math.max(event.clientY - h / 2, row.top - h * 0.35), row.bottom - h * 0.65);
+    if (first) gsap.set(box, { x: row.right - box.offsetWidth, y: top });
+    else y(top);
+  };
   let on = false;
   rows.forEach((row) => {
     if (row.classList.contains('tx-row--feature')) return;
@@ -97,11 +105,11 @@ function initPreview(rows) {
     link.addEventListener('pointerenter', (event) => {
       if (!motionOn()) return;
       img.src = link.dataset.preview;
-      gsap.set(box, { x: event.clientX + 28, y: event.clientY - 90 });
+      place(link, event, true);
       box.dataset.on = 'true';
       on = true;
     });
-    link.addEventListener('pointermove', (event) => { if (on) { x(event.clientX + 28); y(event.clientY - 90); } });
+    link.addEventListener('pointermove', (event) => { if (on) place(link, event, false); });
     link.addEventListener('pointerleave', () => { box.dataset.on = 'false'; on = false; });
   });
   addEventListener('scroll', () => { if (on) { box.dataset.on = 'false'; on = false; } }, { passive: true });

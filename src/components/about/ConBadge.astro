@@ -66,7 +66,7 @@ const data = years.map((y) => ({ ...y, role: ERA[y.era].role, label: ERA[y.era].
       {years.map((y, i) => (
         <path class="bdg__trace" data-year={y.year} data-era={y.era} d={`M${ledX(i).toFixed(1)} 468V454L${padX(i).toFixed(1)} 428V413`} />
       ))}
-      {years.map((y, i) => <text class="bdg__silk bdg__silk--year" x={ledX(i).toFixed(1)} y="496" text-anchor="middle">{String(y.year).slice(2)}</text>)}
+      {years.map((y, i) => <text class="bdg__silk bdg__silk--year" x={ledX(i).toFixed(1)} y="497" text-anchor="middle">{String(y.year).slice(2)}</text>)}
       {eras.map((era) => (
         <g class="bdg__era">
           <path d={`M${era.from.toFixed(1)} 502V506H${era.to.toFixed(1)}V502`} />

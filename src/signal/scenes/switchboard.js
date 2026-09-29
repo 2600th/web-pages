@@ -20,8 +20,11 @@ export function initSwitchboard() {
     bands: root.querySelector('[data-swb-bands]'),
     role: root.querySelector('[data-swb-role]'),
   };
+  const thumb = root.querySelector('[data-swb-thumb]');
   const rest = Object.fromEntries(Object.entries(out).map(([key, el]) => [key, el?.textContent ?? '']));
   const pos = new Map(jacks.map((jack) => [jack, { x: parseFloat(jack.style.left), y: parseFloat(jack.style.top) }]));
+  // Thumbnails are lazy until the board is first touched.
+  root.addEventListener('pointerenter', () => { if (thumb) thumb.loading = 'eager'; }, { once: true });
   let current = null;
 
   const light = (slug, { sound = true } = {}) => {
@@ -38,7 +41,12 @@ export function initSwitchboard() {
     patches.forEach((patch) => patch.toggleAttribute('data-on', patch.dataset.a === slug || patch.dataset.b === slug));
     if (!project) {
       Object.entries(out).forEach(([key, el]) => { if (el) el.textContent = rest[key]; });
+      if (thumb) thumb.hidden = true;
       return;
+    }
+    if (thumb) {
+      thumb.hidden = !project.thumb;
+      if (project.thumb) thumb.src = project.thumb;
     }
     out.ch.textContent = `CH ${project.channel}`;
     out.years.textContent = project.years;

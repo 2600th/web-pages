@@ -29,7 +29,7 @@ test('compact openings bring the projects into the first viewport', async ({ pag
   expect(board?.y).toBeLessThanOrEqual(600);
   await expect(page.locator('[data-switchboard] [data-jack]').first()).toBeInViewport();
   // Below the board's breakpoint the gallery's lead project shows in the first screen.
-  await page.setViewportSize({ width: 1024, height: 900 });
+  await page.setViewportSize({ width: 1000, height: 900 });
   await page.goto('/work/');
   await expect(page.locator('[data-switchboard]')).toBeHidden();
   const firstImage = await page.locator('[data-work-item]').first().locator('.work-gallery__image').boundingBox();

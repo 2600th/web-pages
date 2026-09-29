@@ -70,15 +70,18 @@ function terminal(lines) {
   const ctx = canvas.getContext('2d');
   const text = lines.map((line) => line.replace('▌', ''));
   const total = text.reduce((sum, line) => sum + line.length, 0);
-  let typed = -1;
+  // Typing runs on the clock (about 45 characters a second), not on frame count, so a
+  // slow GPU shows the same text at the same moment.
+  let typed = 0;
+  let started = null;
   return {
     canvas,
     size: [canvas.width, canvas.height],
-    reset() { typed = 0; },
+    reset() { typed = 0; started = null; },
     draw(time) {
-      const next = Math.min(total, typed + 1);
+      if (started === null) started = time;
+      typed = Math.min(total, Math.floor((time - started) * 45));
       const blink = Math.floor(time * 2.2) % 2 === 0;
-      typed = next;
       ctx.fillStyle = '#02050a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.font = '500 40px "JetBrains Mono", monospace';

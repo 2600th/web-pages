@@ -41,7 +41,8 @@ export function initReading() {
   })).filter((row) => row.target);
 
   let active = -2;
-  let lastPct = -1;
+  let lastEnded = null;
+  const resting = document.querySelector('[data-status-label]')?.textContent ?? '';
   const locate = () => {
     const probe = scrollY + innerHeight * 0.35;
     const top = docY(prose);
@@ -91,10 +92,11 @@ export function initReading() {
       meter.dataset.on = String(past && !done);
       if (pct) pct.textContent = String(Math.round(progress * 100)).padStart(2, '0');
       const reading = Math.round(progress * 100);
-      if (reading !== lastPct) {
-        lastPct = reading;
-        if (done || reading >= 99) setStatus('seized', 'EOT · end of transmission');
-        else if (reading > 0) setStatus('locked', `RX ${String(reading).padStart(2, '0')}%`);
+      const ended = done || reading >= 99;
+      if (ended !== lastEnded) {
+        lastEnded = ended;
+        if (ended) setStatus('seized', 'EOT · end of transmission');
+        else setStatus('locked', resting);
       }
       if (bar) bar.style.transform = `scaleX(${progress})`;
     }
