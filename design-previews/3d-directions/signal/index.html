@@ -3,12 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <script>document.documentElement.classList.add('js')</script>
+  <!-- Review preview: kept out of search until it replaces the live homepage. -->
   <meta name="robots" content="noindex, nofollow" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#03040a" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2303040a'/%3E%3Cpath d='M3 16c3-9 5-9 8 0s5 9 8 0 5-9 8 0' fill='none' stroke='%234d74ff' stroke-width='2.4'/%3E%3C/svg%3E" />
   <title>Pranshul Chandhok · 2600th</title>
-  <meta name="description" content="Pranshul Chandhok (2600th) builds products where new technology meets real operating constraints: applied AI, real-time 3D, design software, XR and games." />
+  <meta name="description" content="Pranshul Chandhok (2600th) leads product and technology for Interior Company at Square Yards and builds with applied AI, real-time 3D, design software, XR and games." />
+  <link rel="canonical" href="https://www.2600th.com/" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:site_name" content="Pranshul Chandhok / 2600th" />
+  <meta property="og:title" content="Pranshul Chandhok · 2600th" />
+  <meta property="og:description" content="Product and technology leader building with applied AI, real-time 3D, design software, XR and games." />
+  <meta property="og:url" content="https://www.2600th.com/" />
+  <meta property="og:image" content="https://www.2600th.com/media/social/career-atlas.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Pranshul Chandhok portfolio and career atlas" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@2600th" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Pranshul Chandhok","alternateName":"2600th","jobTitle":"VP Product & Technology, Interior Company at Square Yards","address":{"@type":"PostalAddress","addressLocality":"Gurugram","addressCountry":"IN"},"url":"https://www.2600th.com/","sameAs":["https://www.linkedin.com/in/pranshulchandhok/","https://x.com/2600th","https://github.com/2600th","https://2600th.substack.com/"]}</script>
 </head>
 <body class="sg">
   <!--
@@ -36,15 +51,16 @@
       <a href="#log" data-sfx="tick">Log</a>
       <a href="#lab" data-sfx="tick">Lab</a>
       <a href="#notes" data-sfx="tick">Notes</a>
+      <a href="https://www.2600th.com/about/" data-sfx="tick">About</a>
       <a href="#contact" data-sfx="tick">Contact</a>
     </nav>
     <div class="sg-controls">
-      <p class="sg-status" aria-live="polite"><i data-status-led></i><span data-status-label>Dialing</span></p>
+      <p class="sg-status" data-status><i></i><span data-status-label>Line idle</span></p>
       <button type="button" class="sg-chip" data-sound-toggle aria-pressed="false">
-        <span class="sg-chip__bars" aria-hidden="true"><i></i><i></i><i></i></span><span data-sound-label>Sound off</span>
+        <span class="sg-chip__bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="sg-chip__label" data-sound-label>Sound off</span>
       </button>
       <button type="button" class="sg-chip" data-motion-toggle aria-pressed="true">
-        <span class="sg-chip__dot" aria-hidden="true"></span><span data-motion-label>Motion on</span>
+        <span class="sg-chip__dot" aria-hidden="true"></span><span class="sg-chip__label" data-motion-label>Motion on</span>
       </button>
     </div>
   </header>
@@ -68,44 +84,48 @@
           <canvas class="sg-canvas" data-canvas></canvas>
           <img class="sg-poster" src="../src/assets/signal/character.webp" alt="" width="720" height="1003" />
           <div class="sg-scope" data-scope>
-            <p><span>CH1</span><b data-scope-f>2600.0 Hz</b></p>
+            <p><span>Tone</span><b data-scope-f>2600.0 Hz</b></p>
             <p><span>Period</span><b data-scope-t>384.6 µs</b></p>
             <p><span>Mode</span><b data-scope-mode>Portrait</b></p>
           </div>
-          <p class="sg-loading" data-loading>Acquiring carrier <span data-loading-pct>00</span>%</p>
+          <p class="sg-loading" data-loading>Listening for 2600 Hz <span data-loading-pct>00</span>%</p>
         </div>
       </div>
 
       <section class="sg-hero" id="top" aria-labelledby="hero-title">
-        <a class="sg-incoming" href="#lab-dlss" data-sfx="tick">
-          <span class="sg-incoming__tag"><i></i>Incoming</span>
-          <span class="sg-incoming__text">DLSS 5 Video Player v0.26.2 is out</span>
-          <span aria-hidden="true">→</span>
-        </a>
         <p class="sg-kicker"><span>Pranshul Chandhok</span><span class="sg-kicker__alias">aka 2600th</span></p>
         <h1 id="hero-title" data-hero-title><span class="sg-h1-line">Make the uncertain</span> <em>operable.</em></h1>
         <p class="sg-lede">I lead product and technology for Interior Company at Square Yards. Fourteen years across games, XR, design software and AI, and I still ship code on the side.</p>
         <div class="sg-actions">
-          <a class="sg-btn" href="#origin" data-magnetic data-sfx="tick">Tune in <span aria-hidden="true">↓</span></a>
-          <a class="sg-btn sg-btn--ghost" href="#work" data-magnetic data-sfx="tick">Selected work</a>
+          <a class="sg-btn" href="#work" data-magnetic data-sfx="tick">Selected work <span aria-hidden="true">↓</span></a>
+          <a class="sg-btn sg-btn--ghost" href="#origin" data-magnetic data-sfx="tick">Why 2600th</a>
         </div>
-        <p class="sg-cue" aria-hidden="true"><i></i>Scroll to dial</p>
+        <ul class="sg-heroproof" aria-label="At a glance">
+          <li><b>14+</b> years building</li>
+          <li><b>GreyKernel</b> co-founder, CTO</li>
+          <li><b>IN 395331</b> patent co-inventor</li>
+        </ul>
+        <a class="sg-incoming" href="#lab-dlss" data-sfx="tick">
+          <span class="sg-incoming__tag"><i></i>New build</span>
+          <span class="sg-incoming__text">DLSS 5 Video Player is out</span>
+          <span aria-hidden="true">→</span>
+        </a>
       </section>
 
-      <section class="sg-tuner" aria-labelledby="tuner-title" data-tuner>
+      <section class="sg-tuner" aria-labelledby="tuner-title" data-tuner data-locked="true">
         <header class="sg-tuner__head">
-          <h2 id="tuner-title">Carrier</h2>
-          <p class="sg-tuner__lock" data-lock><i></i><span data-lock-label>Searching</span></p>
+          <h2 id="tuner-title">SF tone</h2>
+          <p class="sg-tuner__lock" data-lock><i></i><span data-lock-label>Locked</span></p>
         </header>
-        <p class="sg-freq" aria-hidden="true"><span data-freq>1200.0</span><small>Hz</small></p>
+        <p class="sg-freq" aria-hidden="true"><span data-freq>2600.0</span><small>Hz</small></p>
         <canvas class="sg-tuner__scope" data-tuner-scope width="320" height="72" aria-hidden="true"></canvas>
         <label class="sg-range">
-          <span class="sr-only">Carrier frequency. The portrait resolves at 2600 hertz.</span>
+          <span class="sr-only">Supervisory tone frequency. The portrait resolves at 2600 hertz.</span>
           <input type="range" min="2000" max="3200" step="1" value="2600" data-tune aria-valuetext="2600 hertz, locked" />
           <span class="sg-range__ticks" aria-hidden="true" data-ticks></span>
         </label>
         <div class="sg-tuner__row">
-          <button type="button" class="sg-seize" data-seize data-magnetic>Seize the line</button>
+          <button type="button" class="sg-seize" data-seize data-magnetic>Send 2600 Hz</button>
         </div>
         <p class="sg-tuner__note">Drag off 2600 Hz to break the signal. Turn sound on to hear it.</p>
       </section>
@@ -114,6 +134,7 @@
         <header class="sg-beat sg-beat--intro" data-beat="0">
           <p class="sg-eyebrow"><span>01</span> Why 2600th</p>
           <h2 id="origin-title">“2600th is an old handle from my college-era interest in hacker and phreaking culture. <em>It stuck.</em>”</h2>
+          <a class="sg-skip" href="#work" data-sfx="tick">Skip the story, see the work <span aria-hidden="true">↓</span></a>
         </header>
         <article class="sg-beat" data-beat="1">
           <p class="sg-beat__no">01 / 03</p>
@@ -141,9 +162,9 @@
       <h2 id="proof-title" class="sr-only">Experience at a glance</h2>
       <ul>
         <li><p class="sg-meter" data-count="14" data-suffix="+">14+</p><p><strong>Years building</strong> Games, XR, design software and AI</p></li>
-        <li><p class="sg-meter" data-count="2015">2015</p><p><strong>Co-founded GreyKernel</strong> Six years leading its technology</p></li>
-        <li><p class="sg-meter" data-count="395331">395331</p><p><strong>Indian patent</strong> Co-inventor, humanoid robot control</p></li>
-        <li><p class="sg-meter" data-version="0.26.2">v0.26.2</p><p><strong>Latest release</strong> DLSS 5 Video Player, 26 Sep 2026</p></li>
+        <li><p class="sg-meter">2015</p><p><strong>Co-founded GreyKernel</strong> Six years leading its technology</p></li>
+        <li><p class="sg-meter">395331</p><p><strong>Indian patent</strong> Co-inventor, humanoid robot control</p></li>
+        <li><p class="sg-meter">Sep 2026</p><p><strong>Still shipping</strong> Latest: DLSS 5 Video Player</p></li>
       </ul>
     </section>
 
@@ -211,21 +232,22 @@
           </li>
         </ol>
 
-        <figure class="sg-monitor" aria-hidden="true" data-monitor>
-          <div class="sg-monitor__screen">
-            <div class="sg-monitor__ch" data-channel="0"><img src="../src/assets/signal/blocks.webp" alt="" width="1100" height="619" /></div>
-            <div class="sg-monitor__ch" data-channel="1"><video muted loop playsinline preload="none" poster="../src/assets/signal/designesto.webp" src="../src/assets/signal/designesto.mp4"></video></div>
-            <div class="sg-monitor__ch" data-channel="2"><img src="../src/assets/signal/craft.webp" alt="" width="1100" height="688" loading="lazy" /></div>
-            <div class="sg-monitor__ch" data-channel="3"><video muted loop playsinline preload="none" poster="../src/assets/signal/spacecraft.webp" src="../src/assets/signal/spacecraft.mp4"></video></div>
-            <div class="sg-monitor__ch" data-channel="4"><video muted loop playsinline preload="none" poster="../src/assets/signal/enterprise.webp" src="../src/assets/signal/enterprise.mp4"></video></div>
-            <div class="sg-monitor__ch" data-channel="5"><video muted loop playsinline preload="none" poster="../src/assets/signal/ira.webp" src="../src/assets/signal/ira.mp4"></video></div>
+        <figure class="sg-monitor" data-monitor>
+          <div class="sg-monitor__screen" aria-hidden="true">
+            <div class="sg-monitor__ch" data-channel="0" data-kind="Illustration"><img src="../src/assets/signal/blocks.webp" alt="" width="1100" height="619" /></div>
+            <div class="sg-monitor__ch" data-channel="1" data-kind="Loop"><video muted loop playsinline preload="none" poster="../src/assets/signal/designesto.webp" src="../src/assets/signal/designesto.mp4"></video></div>
+            <div class="sg-monitor__ch" data-channel="2" data-kind="Capture"><img src="../src/assets/signal/craft.webp" alt="" width="1100" height="688" loading="lazy" /></div>
+            <div class="sg-monitor__ch" data-channel="3" data-kind="Loop"><video muted loop playsinline preload="none" poster="../src/assets/signal/spacecraft.webp" src="../src/assets/signal/spacecraft.mp4"></video></div>
+            <div class="sg-monitor__ch" data-channel="4" data-kind="Loop"><video muted loop playsinline preload="none" poster="../src/assets/signal/enterprise.webp" src="../src/assets/signal/enterprise.mp4"></video></div>
+            <div class="sg-monitor__ch" data-channel="5" data-kind="Loop"><video muted loop playsinline preload="none" poster="../src/assets/signal/ira.webp" src="../src/assets/signal/ira.mp4"></video></div>
             <canvas class="sg-monitor__static" data-static width="160" height="90"></canvas>
             <span class="sg-monitor__roll"></span>
           </div>
           <figcaption class="sg-monitor__bar">
-            <span class="sg-monitor__ch-no">CH <b data-monitor-no>01</b></span>
+            <span class="sg-monitor__ch-no" aria-hidden="true">CH <b data-monitor-no>01</b></span>
             <span class="sg-monitor__title" data-monitor-title>Blocks</span>
-            <span class="sg-monitor__rec" data-monitor-rec><i></i><span>Still</span></span>
+            <button type="button" class="sg-monitor__play" data-monitor-play hidden aria-pressed="false">Play loop</button>
+            <span class="sg-monitor__rec" data-monitor-rec><i></i><span>Illustration</span></span>
           </figcaption>
         </figure>
       </div>
@@ -236,7 +258,7 @@
       <header class="sg-head">
         <p class="sg-eyebrow"><span>03</span> Call log</p>
         <h2 id="log-title" data-decode>Four eras, four signals</h2>
-        <p>How I got here, from shipping mobile games to leading product and technology. Each era sounded different.</p>
+        <p>How I got here, from shipping mobile games to leading product and technology. Each era sounded different. <a class="sg-inline" href="https://www.2600th.com/about/">The longer version</a></p>
       </header>
       <canvas class="sg-log__wave" data-log-wave aria-hidden="true"></canvas>
       <ol class="sg-eras" data-eras>
@@ -264,7 +286,7 @@
         <li class="sg-era" data-era="ai">
           <p class="sg-era__years">2024–now</p>
           <h3>Square Yards</h3>
-          <p class="sg-era__wave">Noise, resolving</p>
+          <p class="sg-era__wave">Signal from noise</p>
           <p>VP Product &amp; Technology, Interior Company. Deciding where generation helps and where a product has to be exact.</p>
           <p class="sg-era__links"><a href="https://www.2600th.com/work/blocks/">Blocks</a> <a href="https://www.2600th.com/work/designesto/">Designesto</a> <a href="https://www.2600th.com/notes/generative-and-deterministic-systems/">The boundary</a></p>
         </li>
@@ -279,12 +301,14 @@
       </header>
 
       <article class="sg-feature" id="lab-dlss" aria-labelledby="dlss-title">
-        <div class="sg-feature__media" data-tilt>
-          <video muted loop playsinline preload="none" poster="../src/assets/signal/dlss.webp" src="../src/assets/signal/dlss.mp4" data-inview-video aria-label="DLSS 5 Video Player comparing a source frame with its neural render, split down the middle"></video>
-          <span class="sg-feature__badge">New · v0.26.2</span>
-        </div>
+        <figure class="sg-feature__media" data-tilt>
+          <video muted loop playsinline preload="none" poster="../src/assets/signal/dlss.webp" src="../src/assets/signal/dlss.mp4" data-feature-video aria-label="DLSS 5 Video Player comparing a source frame with its neural render, split down the middle"></video>
+          <button type="button" class="sg-feature__play" data-feature-play aria-pressed="false"><span data-feature-play-label>Play clip</span></button>
+          <span class="sg-feature__badge">New</span>
+          <figcaption>Player UI and demo clip from the project. Game footage: 007 First Light © IO Interactive, shown for comparison.</figcaption>
+        </figure>
         <div class="sg-feature__copy">
-          <p class="sg-feature__state"><i></i>Shipped 26 Sep 2026 · Windows · RTX</p>
+          <p class="sg-feature__state"><i></i>v0.26.2 · 26 Sep 2026 · Windows · RTX</p>
           <h3 id="dlss-title">DLSS 5 Video Player</h3>
           <p>A free, open-source player that puts any video through NVIDIA’s DLSS 5 neural renderer and checks every frame against the original. It renders while you watch, then gives you split, wipe, difference and loupe views of what the model changed.</p>
           <p>Its own documentation includes a frame where the model makes the picture worse.</p>
@@ -297,7 +321,7 @@
             <a class="sg-btn" href="https://2600th.github.io/dlss5-video-player/" data-magnetic data-sfx="tick">Website <span aria-hidden="true">↗</span></a>
             <a class="sg-btn sg-btn--ghost" href="https://github.com/2600th/dlss5-video-player" data-magnetic data-sfx="tick">Source <span aria-hidden="true">↗</span></a>
           </div>
-          <p class="sg-feature__note">Community project, not an NVIDIA product.</p>
+          <p class="sg-feature__note">Community project, not an NVIDIA product. The neural runtime is an unsigned community build; the README explains how to verify each file or supply the runtime yourself.</p>
         </div>
       </article>
 
@@ -313,8 +337,8 @@
         </li>
         <li class="sg-build" data-tilt>
           <a href="https://web-ocean-3d.vercel.app/">
-            <span class="sg-build__media"><video muted loop playsinline preload="none" poster="../src/assets/signal/ocean.webp" src="../src/assets/signal/ocean.mp4" data-hover-video></video></span>
-            <span class="sg-build__state"><i></i>Shipped</span>
+            <span class="sg-build__media"><video muted loop playsinline preload="none" poster="../src/assets/signal/ocean.webp" src="../src/assets/signal/ocean.mp4" data-hover-video aria-label="Web Ocean 3D boat crossing the waves"></video></span>
+            <span class="sg-build__state"><i></i>Live demo</span>
             <strong>Web Ocean 3D</strong>
             <span>An interactive ocean with weather and a boat to pilot. Sharing it exposed a texture budget I wasn’t measuring.</span>
           </a>
@@ -322,10 +346,10 @@
         </li>
         <li class="sg-build" data-tilt>
           <a href="https://oss-web-3d.vercel.app/">
-            <span class="sg-build__media"><img src="../src/assets/signal/safed.webp" alt="Safed Sagar cruising over procedurally generated Himalayan terrain" width="1100" height="509" loading="lazy" /></span>
-            <span class="sg-build__state"><i></i>Shipped</span>
+            <span class="sg-build__media"><img src="../src/assets/signal/safed.webp" alt="Safed Sagar cruising over procedurally generated mountain terrain" width="1100" height="509" loading="lazy" /></span>
+            <span class="sg-build__state"><i></i>Live demo</span>
             <strong>Safed Sagar</strong>
-            <span>A fictional MiG-21 reconnaissance flight over procedural Himalayan terrain, built in days on WebGL2.</span>
+            <span>A fictional MiG-21 reconnaissance flight over procedurally generated Himalayan terrain, built and released in days.</span>
           </a>
           <a class="sg-build__src" href="https://github.com/2600th/oss-web-3d">Source ↗</a>
         </li>
@@ -363,10 +387,10 @@
         <p>Field notes, technical teardowns and essays, written while the work is still fresh.</p>
       </header>
       <ol class="sg-tx">
-        <li><a href="https://www.2600th.com/notes/ai-native-game-development-three-years-later/" data-sfx="tick"><time datetime="2026-09-03">03.09.26</time><span class="sg-tx__type">Essay</span><span class="sg-tx__title" data-hover-decode>AI-native game development, three years later</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
-        <li><a href="https://www.2600th.com/notes/ai-floorplan-parsing/" data-sfx="tick"><time datetime="2026-09-02">02.09.26</time><span class="sg-tx__type">Teardown</span><span class="sg-tx__title" data-hover-decode>The hard part of AI floorplan parsing isn’t the model</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
-        <li><a href="https://www.2600th.com/notes/generative-and-deterministic-systems/" data-sfx="tick"><time datetime="2026-09-02">02.09.26</time><span class="sg-tx__type">Essay</span><span class="sg-tx__title" data-hover-decode>The boundary between generative and deterministic systems</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
-        <li><a href="https://www.2600th.com/notes/ocean-reliability/" data-sfx="tick"><time datetime="2026-08-09">09.08.26</time><span class="sg-tx__type">Teardown</span><span class="sg-tx__title" data-hover-decode>Web Ocean 3D: what broke when other people ran it</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.2600th.com/notes/ai-native-game-development-three-years-later/" data-sfx="tick"><time datetime="2026-09-03">03.09.26</time><span class="sg-tx__type">Essay</span><span class="sg-tx__title">AI-native game development, three years later</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.2600th.com/notes/ai-floorplan-parsing/" data-sfx="tick"><time datetime="2026-09-02">02.09.26</time><span class="sg-tx__type">Teardown</span><span class="sg-tx__title">The hard part of AI floorplan parsing isn’t the model</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.2600th.com/notes/generative-and-deterministic-systems/" data-sfx="tick"><time datetime="2026-09-02">02.09.26</time><span class="sg-tx__type">Essay</span><span class="sg-tx__title">The boundary between generative and deterministic systems</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://www.2600th.com/notes/ocean-reliability/" data-sfx="tick"><time datetime="2026-08-09">09.08.26</time><span class="sg-tx__type">Teardown</span><span class="sg-tx__title">Web Ocean 3D: what broke when other people ran it</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
       </ol>
       <a class="sg-more" href="https://www.2600th.com/notes/" data-sfx="tick">All notes <span aria-hidden="true">→</span></a>
     </section>
@@ -386,6 +410,7 @@
         <li><a href="https://x.com/2600th">X</a></li>
         <li><a href="https://github.com/2600th">GitHub</a></li>
         <li><a href="https://2600th.substack.com/">Substack</a></li>
+        <li><a href="https://www.2600th.com/about/">About</a></li>
       </ul>
     </div>
 
@@ -407,9 +432,9 @@
     </div>
 
     <div class="sg-colophon">
-      <p>Built with Three.js, GSAP and the Web Audio API. The portrait is up to 170,000 points sampled from a 3D model, and every tone on this page is synthesized in your browser.</p>
+      <p>Built with Three.js, GSAP and the Web Audio API. The portrait is up to 140,000 points sampled from a 3D model, and every tone on this page is synthesized in your browser.</p>
       <p>Pranshul Chandhok · Gurugram, India · 2026</p>
-      <p class="sg-secrets">Seven things are hidden on this page. <button type="button" class="sg-secrets__open" data-console-open>Press ` to start</button></p>
+      <p class="sg-secrets">Seven things are hidden on this page. <button type="button" class="sg-secrets__open" data-console-open><span class="sg-secrets__desk">Press ` to start</span><span class="sg-secrets__touch">Open the console</span></button> <button type="button" class="sg-secrets__keys" data-shortcuts aria-pressed="true">Keyboard shortcuts on</button></p>
       <a class="sg-hangup" href="#top" data-sfx="tick">Hang up <span aria-hidden="true">↑</span></a>
     </div>
   </footer>

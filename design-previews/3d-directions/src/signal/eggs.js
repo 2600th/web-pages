@@ -14,6 +14,8 @@ export const ACHIEVEMENTS = [
   ['devtools', 'Hacked it from devtools'],
 ];
 const KEY = '2600th-achievements';
+const KEYS = '2600th-shortcuts';
+let shortcutsOn = (() => { try { return localStorage.getItem(KEYS) !== 'off'; } catch { return true; } })();
 const found = new Set((() => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } })());
 
 export function unlock(id) {
@@ -65,7 +67,7 @@ function buildConsole() {
       <label for="sg-console-input">guest@2600th:~$</label>
       <input id="sg-console-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-console-input />
     </form>
-    <p class="sg-console__hint">Tab completes · ↑ history · Esc closes</p>`;
+    <p class="sg-console__hint"><span>Tab completes · ↑ history · Esc closes</span><button type="button" class="sg-console__close" data-console-close>Close</button></p>`;
   document.body.append(el);
   return el;
 }
@@ -150,7 +152,6 @@ export function initEggs() {
     },
     uptime: () => print('up 14+ years, load average: games, xr, ai'),
     sudo: () => print('2600th is not in the sudoers file. This incident will be reported.'),
-    rm: (arg) => print(arg?.includes('-rf') ? 'Nice try.' : 'rm: permission denied'),
     achievements: () => {
       ACHIEVEMENTS.forEach(([id, name]) => print(`  [${found.has(id) ? 'x' : ' '}] ${found.has(id) ? name : '???'}`));
       print(`  ${found.size}/${ACHIEVEMENTS.length} found`);
@@ -162,6 +163,7 @@ export function initEggs() {
     },
     clear: () => { log.textContent = ''; },
     exit: () => close(),
+    shortcuts: (arg) => { setShortcuts(arg !== 'off'); print(`keyboard shortcuts ${shortcutsOn ? 'on' : 'off'}`); },
     hire: () => print('This is a portfolio, not a job board. Questions and ideas are welcome: 2600th@gmail.com'),
   };
   const names = Object.keys(commands);
@@ -182,19 +184,22 @@ export function initEggs() {
     if (e.key === 'Escape') { e.preventDefault(); close(); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); hIndex = Math.max(0, hIndex - 1); input.value = history[hIndex] ?? ''; }
     else if (e.key === 'ArrowDown') { e.preventDefault(); hIndex = Math.min(history.length, hIndex + 1); input.value = history[hIndex] ?? ''; }
-    else if (e.key === 'Tab') {
-      e.preventDefault();
+    else if (e.key === 'Tab' && !e.shiftKey && input.value.trim()) {
+      // Complete only a partial command; an empty line keeps normal Tab focus movement.
       const match = names.filter((n) => n.startsWith(input.value.trim().toLowerCase()));
+      if (match.length) e.preventDefault();
       if (match.length === 1) input.value = `${match[0]} `;
       else if (match.length > 1) print(match.join('  '));
     } else if (e.key === '`') { e.preventDefault(); close(); }
   });
 
-  // Global keys: backtick opens the console; typing 2600 anywhere seizes the line.
+  // Global keys: backtick opens the console; typing 2600 seizes the line. They only
+  // fire when nothing is focused, never with modifiers, and can be switched off (WCAG 2.1.4).
   let typed = '';
   addEventListener('keydown', (e) => {
-    const t = e.target;
-    if (t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement || t.isContentEditable) return;
+    if (!shortcutsOn || e.ctrlKey || e.metaKey || e.altKey) return;
+    const active = document.activeElement;
+    if (active && active !== document.body && active !== document.documentElement) return;
     if (e.key === '`' || e.key === '~') { e.preventDefault(); panel.hidden ? open() : close(); return; }
     if (/^[0-9]$/.test(e.key)) {
       typed = (typed + e.key).slice(-4);
@@ -203,6 +208,12 @@ export function initEggs() {
     }
   });
   document.querySelector('[data-console-open]')?.addEventListener('click', open);
+  panel.querySelector('[data-console-close]').addEventListener('click', close);
+  const keysBtn = document.querySelector('[data-shortcuts]');
+  const syncKeys = () => { keysBtn?.setAttribute('aria-pressed', String(shortcutsOn)); if (keysBtn) keysBtn.textContent = `Keyboard shortcuts ${shortcutsOn ? 'on' : 'off'}`; };
+  function setShortcuts(on) { shortcutsOn = on; try { localStorage.setItem(KEYS, on ? 'on' : 'off'); } catch { /* private mode */ } syncKeys(); }
+  keysBtn?.addEventListener('click', () => setShortcuts(!shortcutsOn));
+  syncKeys();
 
   // Logo: five quick clicks blows the whistle.
   let clicks = [];

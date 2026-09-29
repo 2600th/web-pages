@@ -30,7 +30,7 @@ export function initCursor() {
     ring.dataset.hot = String(Boolean(target));
     label.textContent = target?.closest('[data-cursor-text]')?.dataset.cursorText ?? '';
   }, { passive: true });
-  document.addEventListener('pointerleave', () => { ring.dataset.on = 'false'; });
+  document.documentElement.addEventListener('mouseleave', () => { ring.dataset.on = 'false'; });
 }
 
 /** Buttons lean toward the pointer. */

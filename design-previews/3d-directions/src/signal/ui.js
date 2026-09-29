@@ -32,7 +32,8 @@ export function initTuner(engine) {
     ticksEl.append(t);
   }
   const ticks = $$('i', ticksEl);
-  const tuning = { hz: LOCK_HZ, shown: 1200, locked: false, intro: true };
+  // HTML ships the settled state (2600 Hz, locked); the intro only runs when the engine does.
+  const tuning = { hz: LOCK_HZ, shown: LOCK_HZ, locked: true, intro: false };
 
   const setReadout = (hz) => { readout.textContent = hz.toFixed(1).padStart(6, '0'); };
   const detuneFor = (hz) => { const off = Math.abs(hz - LOCK_HZ); return off < 6 ? 0 : Math.min(1, Math.pow(off / 500, 0.7)); };
@@ -123,6 +124,11 @@ export function initTuner(engine) {
   scopeLoop.renderOnce();
 
   return {
+    startIntro() {
+      tuning.intro = true; tuning.locked = false; tuner.dataset.locked = 'false'; lockLabel.textContent = 'Searching';
+      setStatus('idle', 'Listening');
+      scopeLoop.wake();
+    },
     finishIntro() {
       if (!tuning.intro) return;
       tuning.intro = false; tuning.shown = LOCK_HZ; setReadout(LOCK_HZ); setLocked(true, { silent: true });
@@ -143,6 +149,17 @@ export function initLines() {
   const rec = $('[data-monitor-rec]');
   let active = -1;
   let staticRaf = 0;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const playBtn = $('[data-monitor-play]');
+  playBtn.addEventListener('click', () => {
+    const video = channels[active]?.querySelector('video');
+    if (!video) return;
+    const play = video.paused;
+    if (play) video.play().catch(() => {}); else video.pause();
+    playBtn.setAttribute('aria-pressed', String(play));
+    playBtn.textContent = play ? 'Pause loop' : 'Play loop';
+    rec.dataset.live = String(play);
+  });
 
   lines.forEach((line, i) => {
     const cycles = [6, 9, 12, 5, 8, 11][i] ?? 7;
@@ -179,21 +196,26 @@ export function initLines() {
       if (on) {
         ch.classList.remove('is-tuning'); void ch.offsetWidth;
         if (motionOn()) ch.classList.add('is-tuning');
-        if (video && motionOn()) video.play().catch(() => {});
+        if (video && fine && motionOn()) video.play().catch(() => {});
       } else video?.pause();
       ch.classList.toggle('is-on', on);
     });
     const line = lines[i];
     noNo.textContent = String(i + 1).padStart(2, '0');
     decode(title, { text: line.querySelector('.sg-line__title').textContent, duration: 0.45 });
-    const live = Boolean(channels[i].querySelector('video')) && motionOn();
-    rec.dataset.live = String(live);
-    rec.querySelector('span').textContent = live ? 'Live' : 'Still';
+    // Honest media labels: Loop (authentic recording), Capture (real UI), Illustration (editorial).
+    const kind = channels[i].dataset.kind;
+    const video = channels[i].querySelector('video');
+    const playing = Boolean(video) && fine && motionOn();
+    rec.dataset.live = String(playing);
+    rec.querySelector('span').textContent = kind;
+    playBtn.hidden = !video || playing;
+    playBtn.setAttribute('aria-pressed', 'false');
+    playBtn.textContent = 'Play loop';
     if (motionOn()) burstStatic();
     if (fromUser) { sfx.channel(); sfx.mf(line.dataset.mf); }
   }
 
-  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   lines.forEach((line, i) => {
     line.addEventListener('pointerenter', () => fine && activate(i));
     line.addEventListener('focusin', () => activate(i));
@@ -271,7 +293,8 @@ export function initLog() {
 
 /* ---------------- Proof meters ---------------- */
 export function animateMeter(el) {
-  if (el.dataset.version) { decode(el, { text: `v${el.dataset.version}`, duration: 1.1 }); return; }
+  // Only real quantities count up; years and identifiers stay as written.
+  if (!el.dataset.count) return;
   const target = Number(el.dataset.count);
   const suffix = el.dataset.suffix ?? '';
   if (!motionOn()) { el.textContent = `${target}${suffix}`; return; }
@@ -303,7 +326,7 @@ export function initBlueBox(engine) {
     }
     if (key === 'KP') { routing = ''; show(seized ? 'KP_' : 'KP · NO TRUNK'); return; }
     if (key === 'ST') {
-      const secret = { 1337: ['ELITE · 1337', 'leet'], 42: ['THE ANSWER · 42'], 404: ['404 · NOT FOUND'], 2600: ['HELLO, PHREAK'] }[routing];
+      const secret = { 1337: ['ELITE · 1337', 'leet'], 2600: ['HELLO, PHREAK'] }[routing];
       if (seized && secret) {
         show(secret[0], 'seized'); flash(0.6);
         if (secret[1]) unlock(secret[1]);

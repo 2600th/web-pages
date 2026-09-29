@@ -10,7 +10,7 @@ import { createLoop, dpr } from '../shared/env.js';
 
 /* Point shader: portrait ⇄ oscilloscope traces. */
 const pointVertex = /* glsl */`
-  uniform float uTime, uAssemble, uDetune, uMorph, uMode, uSeize, uSize, uPixelRatio, uRotY, uWaveWidth, uWaveY, uWaveAmp;
+  uniform float uTime, uAssemble, uDetune, uMorph, uMode, uSeize, uSize, uPixelRatio, uRotY, uWaveWidth, uWaveX, uWaveY, uWaveAmp, uAdd;
   uniform sampler2D uMap;
   uniform vec3 uPointer;
   uniform float uPointerForce;
@@ -73,25 +73,27 @@ const pointVertex = /* glsl */`
     float lane = step(0.5, aRand.z);
     float mfOffset = clamp(1.0 - abs(uMode - 2.0), 0.0, 1.0) * (lane - 0.5) * 0.34;
     float thick = (aRand.y - 0.5) * 0.012 * (1.0 + 2.5 * pow(abs(aRand.y - 0.5) * 2.0, 6.0));
-    vec3 wave = vec3((u - 0.5) * uWaveWidth, uWaveY + mfOffset + trace(u, uTime, lane) * uWaveAmp + thick, 0.0);
+    vec3 wave = vec3(uWaveX + (u - 0.5) * uWaveWidth, uWaveY + mfOffset + trace(u, uTime, lane) * uWaveAmp + thick, 0.0);
     float stagger = clamp(uMorph * 1.8 - (1.0 - h) * 0.55 - aRand.y * 0.25, 0.0, 1.0);
     stagger = stagger * stagger * (3.0 - 2.0 * stagger);
     p = mix(p, wave, stagger);
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uSize * uPixelRatio * (1.0 + ring * 2.5 + abs(ripple) * 1.2 + (1.0 - a) * 1.5) / -mv.z;
+    gl_PointSize = uSize * uPixelRatio * mix(1.15, 1.0, uAdd) * (1.0 + ring * 2.0 + abs(ripple) * 1.2 + (1.0 - a) * 1.5) / -mv.z;
 
     // Colour: lifted albedo, form lighting, cobalt rim; traces glow cobalt (and gold on CH2).
     vec3 albedo = texture(uMap, aUv).rgb;
     vec3 viewN = normalize(normalMatrix * n);
     float lambert = max(dot(n, normalize(vec3(-0.4, 0.6, 0.8))), 0.0);
     float rim = pow(1.0 - abs(viewN.z), 2.2);
-    float face = smoothstep(0.8, 0.86, h);
     vec3 cobalt = vec3(0.30, 0.45, 1.0);
     vec3 gold = vec3(1.0, 0.72, 0.34);
-    vec3 lit = (pow(albedo, vec3(0.5)) * (0.6 + 1.25 * lambert) * (1.0 - face * 0.45) + cobalt * rim * 0.7) * 0.72;
-    lit += gold * ring * 1.8 + cobalt * abs(ripple) * 0.6;
+    // Locked: a true-colour pointillist portrait. Detuned or morphing: an additive hologram.
+    vec3 solid = min(pow(albedo, vec3(0.62)) * (0.45 + 0.95 * lambert), vec3(0.62)) + cobalt * rim * 0.45;
+    vec3 holo = (pow(albedo, vec3(0.5)) * (0.6 + 1.25 * lambert) + cobalt * rim * 0.7) * 0.72;
+    vec3 lit = mix(solid, holo, uAdd);
+    lit += gold * ring * 1.1 + cobalt * abs(ripple) * 0.6;
     lit = mix(cobalt * 1.3, lit, a);
     float ch2 = clamp(1.0 - abs(uMode - 2.0), 0.0, 1.0) * lane;
     vec3 traceCol = mix(mix(cobalt * 1.25, vec3(0.8, 0.86, 1.0), 0.18), gold * 1.1, ch2);
@@ -103,6 +105,7 @@ const pointVertex = /* glsl */`
 `;
 
 const pointFragment = /* glsl */`
+  uniform float uAdd;
   varying vec3 vColor;
   varying float vAlpha;
   void main() {
@@ -110,7 +113,7 @@ const pointFragment = /* glsl */`
     float r = dot(c, c);
     if (r > 0.25) discard;
     float soft = smoothstep(0.25, 0.0, r);
-    gl_FragColor = vec4(vColor * soft * vAlpha, 1.0);
+    gl_FragColor = uAdd > 0.5 ? vec4(vColor * soft * vAlpha, 1.0) : vec4(vColor, 1.0);
   }
 `;
 
@@ -159,11 +162,12 @@ const CRTShader = {
 export async function createSignalEngine({ canvas, stage, motion, onProgress }) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
   const light = matchMedia('(max-width: 760px), (pointer: coarse)').matches || (navigator.deviceMemory !== undefined && navigator.deviceMemory <= 4);
-  renderer.setPixelRatio(dpr(light ? 1.5 : 1.75));
+  let pixelRatio = dpr(1.5);
+  renderer.setPixelRatio(pixelRatio);
   renderer.toneMapping = THREE.NoToneMapping;
 
   const character = await loadCharacter({ light, onProgress });
-  const count = light ? 70000 : 170000;
+  const count = light ? 70000 : 140000;
 
   // Denser sampling on the head so the face reads first.
   const posAttr = character.geometry.getAttribute('position');
@@ -179,6 +183,8 @@ export async function createSignalEngine({ canvas, stage, motion, onProgress }) 
   const rands = new Float32Array(count * 3);
   const p = new THREE.Vector3(); const n = new THREE.Vector3(); const uv = new THREE.Vector2();
   for (let i = 0; i < count; i++) {
+    // Yield between batches so text effects and input stay responsive while sampling.
+    if (i && i % 20000 === 0) await new Promise((r) => setTimeout(r, 0));
     sampler.sample(p, n, undefined, uv);
     positions.set([p.x, p.y, p.z], i * 3);
     normals.set([n.x, n.y, n.z], i * 3);
@@ -197,13 +203,23 @@ export async function createSignalEngine({ canvas, stage, motion, onProgress }) 
   const uniforms = {
     uTime: { value: 0 }, uAssemble: { value: motion ? 0 : 1 }, uDetune: { value: 0 }, uMorph: { value: 0 }, uMode: { value: 0 }, uSeize: { value: 0 },
     uSize: { value: light ? 5.4 : 3.7 }, uPixelRatio: { value: renderer.getPixelRatio() }, uRotY: { value: 0 },
-    uWaveWidth: { value: 6 }, uWaveY: { value: 0.9 }, uWaveAmp: { value: 0.16 },
+    uWaveWidth: { value: 6 }, uWaveX: { value: 0 }, uWaveY: { value: 0.9 }, uWaveAmp: { value: 0.16 }, uAdd: { value: 1 },
     uMap: { value: character.map }, uPointer: { value: new THREE.Vector3(99, 99, 0) }, uPointerForce: { value: 0 },
   };
-  const points = new THREE.Points(geometry, new THREE.ShaderMaterial({
+  const material = new THREE.ShaderMaterial({
     vertexShader: pointVertex, fragmentShader: pointFragment, uniforms,
     transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
-  }));
+  });
+  const points = new THREE.Points(geometry, material);
+  function setAdditive(on) {
+    if ((uniforms.uAdd.value > 0.5) === on) return;
+    uniforms.uAdd.value = on ? 1 : 0;
+    material.blending = on ? THREE.AdditiveBlending : THREE.NormalBlending;
+    material.transparent = on;
+    material.depthWrite = !on;
+    material.depthTest = !on;
+    material.needsUpdate = true;
+  }
   points.frustumCulled = false;
 
   const scene = new THREE.Scene();
@@ -234,22 +250,23 @@ export async function createSignalEngine({ canvas, stage, motion, onProgress }) 
     composer.setSize(w, h);
     const pr = renderer.getPixelRatio();
     crt.uniforms.uResolution.value.set(w * pr, h * pr);
-    if (bloom) bloom.resolution.set(w / 2, h / 2);
     camera.aspect = w / h;
     mobile = w < 736;
-    const fill = mobile ? 0.54 : 0.84;
+    const fill = mobile ? 0.5 : 0.84;
     const dist = (HEIGHT / fill) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
-    lookY = mobile ? HEIGHT * 0.5 - 0.14 * (HEIGHT / fill) : HEIGHT * 0.5;
+    lookY = mobile ? HEIGHT * 0.5 - 0.17 * (HEIGHT / fill) : HEIGHT * 0.5;
     camera.position.set(0, lookY, dist);
     camera.lookAt(0, lookY, 0);
     camera.updateProjectionMatrix();
     viewHeight = HEIGHT / fill;
     viewWidth = viewHeight * camera.aspect;
     figureX = mobile ? 0 : viewWidth * 0.14;
-    uniforms.uWaveWidth.value = viewWidth * 1.08;
+    // Desktop traces live on the right, clear of the story copy; phones run them across the top.
+    uniforms.uWaveWidth.value = viewWidth * (mobile ? 1.08 : 0.58);
+    uniforms.uWaveX.value = mobile ? 0 : viewWidth * 0.21;
     uniforms.uWaveAmp.value = Math.min(0.16, viewHeight * 0.075);
     uniforms.uPixelRatio.value = pr;
-    crt.uniforms.uGridCenter.value.set(mobile ? 0.5 : 0.64, mobile ? 0.64 : 0.5);
+    crt.uniforms.uGridCenter.value.set(mobile ? 0.5 : 0.67, mobile ? 0.3 : 0.5);
   }
 
   const raycaster = new THREE.Raycaster();
@@ -274,7 +291,8 @@ export async function createSignalEngine({ canvas, stage, motion, onProgress }) 
     uniforms.uSeize.value = state.seize;
     uniforms.uMorph.value = state.morph;
     uniforms.uMode.value = state.mode;
-    uniforms.uWaveY.value = lookY + (0.5 - (mobile ? 0.3 : state.waveRow)) * viewHeight;
+    uniforms.uWaveY.value = lookY + (0.5 - (mobile ? 0.22 : 0.5)) * viewHeight;
+    setAdditive(state.assemble < 1 || state.detune > 0.04 || state.morph > 0.08 || state.seize > 0.02);
     uniforms.uRotY.value = (live ? Math.sin(clock * 0.25) * 0.18 : 0) + state.pointer.x * 0.3;
     points.position.x = THREE.MathUtils.lerp(figureX, 0, THREE.MathUtils.smoothstep(state.morph, 0, 0.6));
 
@@ -291,10 +309,31 @@ export async function createSignalEngine({ canvas, stage, motion, onProgress }) 
     crt.uniforms.uSeize.value = state.seize;
     crt.uniforms.uGrid.value += (state.gridAmount - crt.uniforms.uGrid.value) * 0.08;
     composer.render();
+    if (!ready) { ready = true; document.documentElement.classList.add('webgl-ready'); }
+    govern(dt);
     state.onFrame?.(dt);
   }
 
+  // Adaptive resolution: step the pixel ratio (then bloom) down if frames stay slow.
+  let ready = false; let ema = 1 / 60; let slow = 0;
+  function govern(dt) {
+    if (!dt || !state.motion) return;
+    ema += (dt - ema) * 0.05;
+    slow = ema > 1 / 38 ? slow + 1 : 0;
+    if (slow > 90) {
+      slow = 0;
+      if (pixelRatio > 0.8) { pixelRatio = Math.max(0.75, pixelRatio - 0.25); renderer.setPixelRatio(pixelRatio); resize(); }
+      else if (bloom?.enabled) bloom.enabled = false;
+    }
+  }
+
   const loop = createLoop(stage, frame, () => state.motion || state.seize > 0 || state.detune !== state.targetDetune);
+  canvas.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    loop.dispose();
+    document.documentElement.classList.remove('webgl-ready');
+    document.documentElement.classList.add('no-webgl');
+  });
   new ResizeObserver(() => { resize(); loop.renderOnce(); }).observe(stage);
   resize();
 
