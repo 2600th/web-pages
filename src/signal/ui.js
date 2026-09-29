@@ -3,18 +3,13 @@ import { createLoop } from './env.js';
 import { sound, sfx, carrierFollow, carrierRelease } from './audio.js';
 import { decode, toast, flash } from './fx.js';
 import { unlock } from './eggs.js';
+import { setStatus } from './chrome.js';
 
+export { setStatus };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const motionOn = () => document.documentElement.dataset.motion === 'on';
 export const LOCK_HZ = 2600;
-
-/* ---------------- Header status ---------------- */
-export function setStatus(state, label) {
-  const el = $('.sg-status');
-  el.dataset.state = state;
-  $('[data-status-label]').textContent = label;
-}
 
 /* ---------------- Tuner ---------------- */
 export function initTuner(engine) {
@@ -394,27 +389,6 @@ export function initBlueBox(engine) {
     });
     wrap.addEventListener('pointerleave', () => { box.style.transform = ''; });
   }
-}
-
-/* ---------------- Copy email ---------------- */
-export function initCopy() {
-  const btn = $('[data-copy]');
-  const label = $('[data-copy-label]');
-  btn.addEventListener('click', async () => {
-    const text = btn.dataset.copy;
-    try { await navigator.clipboard.writeText(text); }
-    catch {
-      const range = document.createRange();
-      range.selectNodeContents($('[data-mail]'));
-      getSelection().removeAllRanges(); getSelection().addRange(range);
-      toast('Selected. Press Ctrl+C or ⌘C to copy.');
-      return;
-    }
-    btn.dataset.state = 'done'; label.textContent = 'Copied';
-    sfx.lock();
-    toast('Email copied.');
-    setTimeout(() => { btn.dataset.state = ''; label.textContent = 'Copy'; }, 2200);
-  });
 }
 
 /* ---------------- Section dial + nav state ---------------- */

@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getNoteReadingTime } from '../../data/notes';
+
+interface Props { notes: CollectionEntry<'notes'>[]; detailed?: boolean }
+const { notes, detailed = false } = Astro.props;
+const LABELS = { essay: 'Essay', 'technical-teardown': 'Teardown', 'field-note': 'Field note' } as const;
+const stamp = (date: Date) => {
+  const [year, month, day] = date.toISOString().slice(0, 10).split('-');
+  return { datetime: `${year}-${month}-${day}`, text: `${day}.${month}.${year.slice(2)}` };
+};
+---
+
+<ol class:list={['sg-tx', { 'sg-tx--detailed notes-list': detailed }]} data-transmissions>
+  {notes.map((note) => {
+    const date = stamp(note.data.publishedAt);
+    return (
+      <li data-note-type={note.data.type}>
+        <a href={`/notes/${note.data.slug}/`} data-sfx="tick">
+          <time datetime={date.datetime}>{date.text}</time>
+          <span class="sg-tx__type">{LABELS[note.data.type]}</span>
+          <span class="sg-tx__title">{note.data.title}</span>
+          <span class="sg-tx__go" aria-hidden="true">↗</span>
+          {detailed && <span class="sg-tx__summary">{note.data.summary}</span>}
+          {detailed && <span class="sg-tx__meta">{getNoteReadingTime(note.body ?? '')} min read · {note.data.topics.join(' · ')}</span>}
+        </a>
+      </li>
+    );
+  })}
+</ol>

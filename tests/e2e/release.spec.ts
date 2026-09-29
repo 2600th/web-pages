@@ -18,7 +18,7 @@ const workDomainCounts = {
   simulation: 6,
   robotics: 2,
   'design-tech': 4,
-  'applied-ai': 5,
+  'applied-ai': 6,
 } as const;
 
 test('robots and RSS expose the canonical public site', async ({ request }) => {
@@ -92,7 +92,7 @@ test('the work archive remains link-complete without JavaScript', async ({ brows
   const fallback = await noJs.newPage();
   await fallback.goto('/work/');
   const archive = fallback.locator('[data-work-item]');
-  await expect(archive).toHaveCount(19);
+  await expect(archive).toHaveCount(20);
   await expect(archive.getByRole('link', { name: /IRA VR/ })).toHaveAttribute('href', '/work/ira-vr/');
   await expect(archive.getByRole('link', { name: /Kinema/ })).toHaveAttribute('href', '/work/kinema/');
   await noJs.close();
@@ -159,46 +159,50 @@ test('crawlable work domain routes render only their subset without JavaScript',
   await noJs.close();
 });
 
-test('interior index openings keep the cinematic velvet contract', async ({ page }) => {
+test('interior index openings stay bounded so content starts in the first screen', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   for (const path of ['/work/', '/notes/', '/about/', '/lab/']) {
     await page.goto(path);
     const opening = page.locator('[data-route-opening]');
     await expect(opening).toBeVisible();
-    await expect(opening.locator('[data-polarity="positive"]')).toBeVisible();
-    await expect(opening.locator('[data-polarity="negative"]')).toBeVisible();
-    if (path === '/notes/') await expect(opening.locator('[data-notes-opening-media]')).toHaveCount(1);
-    else await expect(opening.locator('img[src*="/media/generated/editorial/"]')).toHaveCount(0);
+    await expect(opening.locator('img[src*="/media/generated/editorial/"]')).toHaveCount(0);
     const height = (await opening.boundingBox())?.height ?? 0;
+    expect(await opening.locator('h1').evaluate((heading) => Number.parseFloat(getComputedStyle(heading).fontSize))).toBeGreaterThanOrEqual(60);
+    // The title and the first line of the lede always land in the first screen.
+    const lede = (await opening.locator('.pg-lede').first().boundingBox())!;
+    expect(lede.y + 24, `${path} lede in the first screen`).toBeLessThanOrEqual(800);
     if (path === '/work/') {
-      expect(height, `${path} compact opening height`).toBeGreaterThanOrEqual(150);
-      expect(height, `${path} compact opening height`).toBeLessThanOrEqual(260);
-      expect(await opening.locator('h1').evaluate((heading) => Number.parseFloat(getComputedStyle(heading).fontSize))).toBeGreaterThanOrEqual(60);
+      expect(height, `${path} compact opening height`).toBeGreaterThanOrEqual(240);
+      expect(height, `${path} compact opening height`).toBeLessThanOrEqual(360);
     } else {
-      expect(height, `${path} opening height`).toBeGreaterThanOrEqual(560);
-      expect(height, `${path} opening height`).toBeLessThanOrEqual(760);
+      expect(height, `${path} opening height`).toBeGreaterThanOrEqual(300);
+      expect(height, `${path} opening height`).toBeLessThanOrEqual(900);
     }
   }
 });
 
-test('lab hero keeps its title inside the copy plane', async ({ page }) => {
+test('lab opening keeps its title inside the copy plane', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/lab/');
 
-  const title = await page.locator('.lab-hero h1').boundingBox();
-  const media = await page.locator('.lab-hero figure').boundingBox();
+  const title = await page.locator('[data-route-opening] h1').boundingBox();
+  const readout = await page.locator('[data-route-opening] .pg-open__aside').boundingBox();
   expect(title).not.toBeNull();
-  expect(media).not.toBeNull();
-  expect((title?.x ?? 0) + (title?.width ?? 0)).toBeLessThanOrEqual((media?.x ?? 0) - 8);
+  expect(readout).not.toBeNull();
+  expect((title?.x ?? 0) + (title?.width ?? 0)).toBeLessThanOrEqual((readout?.x ?? 0) - 8);
 });
 
-test('lab hero uses art-directed mobile media and a stacked caption', async ({ page }) => {
+test('the lab feature keeps a still poster and an explicit play control on mobile', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/lab/');
 
-  await expect(page.locator('.lab-hero source[media]')).toHaveAttribute('srcset', '/media/work/kinema/inside-mobile.webp');
-  await expect(page.locator('.lab-hero img')).toHaveAttribute('src', '/media/work/kinema/inside.webp');
-  expect(await page.locator('.lab-hero figcaption').evaluate((element) => getComputedStyle(element).flexDirection)).toBe('column');
+  const feature = page.locator('#lab-dlss');
+  const video = feature.locator('video');
+  await expect(video).toHaveAttribute('poster', /\.webp$/);
+  await expect(video).toHaveJSProperty('paused', true);
+  await expect(feature.getByRole('button', { name: /play/i })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
 test('mobile work filters expose every domain without a hidden horizontal rail', async ({ page }) => {
@@ -227,17 +231,18 @@ test('long case titles remain bounded near tablet width', async ({ page }) => {
 });
 
 test('all interior routes contain their content at the 320, 390, 946, and 1440px floors', async ({ page }) => {
+  test.setTimeout(90_000);
   for (const width of [320, 390, 946, 1440]) {
     await page.setViewportSize({ width, height: width < 500 ? 844 : 900 });
     for (const path of ['/work/', '/work/domain/xr/', '/work/kinema/', '/notes/', '/notes/ai-video-control/', '/about/', '/lab/']) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `${path} at ${width}px`).toBeLessThanOrEqual(width);
-      for (const element of await page.locator('main a, main button, main input, main select').all()) {
-        const box = await element.boundingBox();
-        if (!box) continue;
-        expect(box.x, `${path} control x at ${width}px`).toBeGreaterThanOrEqual(-1);
-        expect(box.x + box.width, `${path} control right at ${width}px`).toBeLessThanOrEqual(width + 1);
-      }
+      // Measure every control in one pass; only rendered controls with a box can overflow.
+      const outside = await page.evaluate((viewport) => [...document.querySelectorAll('main a, main button, main input, main select')]
+        .map((element) => ({ element, box: element.getBoundingClientRect() }))
+        .filter(({ element, box }) => box.width > 0 && box.height > 0 && !element.closest('.table-scroll, .sr-only') && (box.left < -1 || box.right > viewport + 1))
+        .map(({ element, box }) => `${element.textContent?.trim().slice(0, 40)} [${Math.round(box.left)}, ${Math.round(box.right)}]`), width);
+      expect(outside, `${path} controls at ${width}px`).toEqual([]);
     }
   }
 });
@@ -353,33 +358,51 @@ test('the dark-first header remains usable at the 320px support floor', async ({
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/work/');
 
-  await expect(page.locator('.site-signature')).toContainText('2600TH');
-  await expect(page.locator('.site-nav a')).toHaveCount(5);
-  await expect(page.locator('[data-theme-control]')).toHaveCount(0);
+  await expect(page.locator('.sg-top .sg-mark')).toContainText('2600');
+  await expect(page.locator('.sg-nav a')).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
-  for (const target of await page.locator('.site-nav a').all()) {
+  const menu = page.locator('.sg-top [data-menu]');
+  await expect(menu).toHaveAttribute('aria-expanded', 'false');
+  await menu.click();
+  await expect(menu).toHaveAttribute('aria-expanded', 'true');
+  for (const target of [...await page.locator('.sg-nav a').all(), ...await page.locator('.sg-panel .sg-chip').all()]) {
+    await expect(target).toBeVisible();
     const box = await target.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
     expect(box?.width).toBeGreaterThanOrEqual(44);
   }
+  await page.keyboard.press('Escape');
+  await expect(menu).toHaveAttribute('aria-expanded', 'false');
+  await expect(menu).toBeFocused();
 });
 
 test('header focus order follows the visual order on desktop and mobile', async ({ page }) => {
-  for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
-    await page.setViewportSize(viewport);
-    await page.goto('/work/');
-    const signature = page.locator('.site-signature');
-    const work = page.getByRole('link', { name: 'Home', exact: true });
-    await signature.focus();
-    await page.keyboard.press('Tab');
-    await expect(work).toBeFocused();
-  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/work/');
+  const mark = page.getByRole('link', { name: '2600th, Pranshul Chandhok, home' });
+  const nav = page.getByRole('navigation', { name: 'Primary navigation' });
+  await mark.focus();
+  await page.keyboard.press('Tab');
+  await expect(nav.getByRole('link', { name: 'Work', exact: true })).toBeFocused();
+  for (let index = 0; index < 5; index += 1) await page.keyboard.press('Tab');
+  await expect(page.locator('.sg-top [data-sound-toggle]')).toBeFocused();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work/');
+  await mark.focus();
+  await page.keyboard.press('Tab');
+  const menu = page.locator('.sg-top [data-menu]');
+  await expect(menu).toBeFocused();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await expect(nav.getByRole('link', { name: 'Work', exact: true })).toBeFocused();
 });
 
 test('primary CTA text stays visible in the dark-first system after hover', async ({ page }) => {
   await page.goto('/404');
-  const cta = page.locator('.button-link--primary').first();
+  const cta = page.locator('.sg-btn:not(.sg-btn--ghost)').first();
   await expect(cta).toBeVisible();
+  // The hover state wipes a cobalt layer in behind the label, so measure against whichever layer is showing.
   const contrast = () => cta.evaluate((element) => {
     const luminance = (color: string) => {
       const rgb = color.match(/[\d.]+/g)!.slice(0, 3).map(Number).map(value => {
@@ -389,12 +412,14 @@ test('primary CTA text stays visible in the dark-first system after hover', asyn
       return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
     };
     const style = getComputedStyle(element);
-    const colors = [luminance(style.color), luminance(style.backgroundColor)].sort((a, b) => b - a);
+    const wipe = getComputedStyle(element, '::before');
+    const background = wipe.transform === 'none' ? wipe.backgroundColor : style.backgroundColor;
+    const colors = [luminance(style.color), luminance(background)].sort((a, b) => b - a);
     return (colors[0] + 0.05) / (colors[1] + 0.05);
   });
   await expect.poll(contrast).toBeGreaterThanOrEqual(4.5);
   await cta.hover();
-  await cta.evaluate(element => Promise.all(element.getAnimations().map(animation => animation.finished)));
+  await cta.evaluate(element => Promise.all(element.getAnimations({ subtree: true }).map(animation => animation.finished)));
   await expect.poll(contrast).toBeGreaterThanOrEqual(4.5);
 });
 

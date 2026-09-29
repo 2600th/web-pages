@@ -1,0 +1,16 @@
+---
+import { ENDPOINT_LABELS, endpointText, type Endpoint } from '../../data/builds';
+
+interface Props { endpoints: Endpoint[]; title: string }
+const { endpoints, title } = Astro.props;
+---
+
+<nav class="sg-ends" aria-label={`${title} links`}>
+  {endpoints.map((end) => (
+    <a href={end.href} data-kind={end.kind} data-sfx="tick" data-cursor-text={ENDPOINT_LABELS[end.kind]}>
+      <b>{ENDPOINT_LABELS[end.kind]}</b><span class="sr-only"> {title}:</span>
+      <span>{endpointText(end.href)}</span>
+      <i aria-hidden="true">↗</i>
+    </a>
+  ))}
+</nav>

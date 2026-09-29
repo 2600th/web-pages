@@ -40,7 +40,7 @@ The work spans product strategy, technical architecture, applied AI, evaluation 
 - The primary human and searchable identity is **Pranshul Chandhok**.
 - **2600th** is the experimental identity, maker signature, and lab world rather than a replacement for the real name.
 - The domain remains `2600th.com`.
-- The homepage is Signal: the 2600 Hz phreaking story told through a point-cloud portrait, oscilloscope traces and a working blue box, with a static portrait for reduced motion, no WebGL and no JavaScript. Interior pages use the dark Velvet Reveal editorial system: preserve its restrained grid and character.
+- The homepage is Signal: the 2600 Hz phreaking story told through a point-cloud portrait, oscilloscope traces and a working blue box, with a static portrait for reduced motion, no WebGL and no JavaScript. Every page uses the same Signal design system; there is no second theme.
 - The existing site demonstrates a taste for interactive, technical, game-like experiences, but its green CRT terminal aesthetic is evidence and an anti-reference for the redesign rather than a visual system to preserve literally.
 - The voice should be technically credible, direct, curious, occasionally playful, and free of inflated futurist language.
 

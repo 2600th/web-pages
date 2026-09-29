@@ -1,20 +1,19 @@
+// Homepage: the 2600 Hz portrait, the tuner, the origin story and the blue box.
+// Header, preferences, console and shared components come from chrome.js.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
-import { hasWebGL, bindMotionToggle } from './env.js';
-import { sound, sfx } from './audio.js';
-import { decode, initCursor, initMagnetic, initTilt, toast, flash, onKonami, consoleHello } from './fx.js';
-import { setStatus, initTuner, initLines, initLog, animateMeter, initBlueBox, initCopy, initDial } from './ui.js';
-import { initEggs, setHooks, unlock } from './eggs.js';
+import { hasWebGL } from './env.js';
+import { sfx } from './audio.js';
+import { decode, initTilt, toast, flash } from './fx.js';
+import { initTuner, initLines, initLog, animateMeter, initBlueBox, initDial } from './ui.js';
+import { initChrome, setHooks, setStatus, unlock } from './chrome.js';
+import { hooks } from './eggs.js';
 
-gsap.registerPlugin(ScrollTrigger, ScrambleTextPlugin);
-// Wall-clock timing: text decodes finish on schedule even when a weak GPU drops frames.
-gsap.ticker.lagSmoothing(0);
+initChrome();
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const root = document.documentElement;
 const motionOn = () => root.dataset.motion === 'on';
-const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 /* ---------------- Engine: a stub until WebGL is running ---------------- */
 const stub = { state: { detune: 0, targetDetune: 0, assemble: 1, morph: 0, mode: 0, seize: 0, pointer: {}, motion: false }, wake() {}, seize() {}, setMotion() {}, setBackground() {} };
@@ -23,31 +22,10 @@ let engineStarted = false;
 // Everything else talks to the engine through this proxy, so it works before (and without) WebGL.
 const live = { get state() { return engine.state; }, wake: () => engine.wake(), seize: () => engine.seize() };
 
-/* ---------------- Preferences ---------------- */
-bindMotionToggle($('[data-motion-toggle]'), (on) => {
+document.addEventListener('signal:motion', ({ detail: { on } }) => {
   engine.setMotion(on);
   if (on && !engineStarted) boot3D();
-  if (!on) $$('video').forEach((v) => v.pause());
-  ScrollTrigger.refresh();
 });
-
-const soundBtn = $('[data-sound-toggle]');
-soundBtn.addEventListener('click', () => {
-  const on = soundBtn.getAttribute('aria-pressed') !== 'true';
-  sound.set(on);
-  soundBtn.setAttribute('aria-pressed', String(on));
-  $('[data-sound-label]').textContent = on ? 'Sound on' : 'Sound off';
-  root.dataset.sound = on ? 'on' : 'off';
-  if (on) sfx.dialTone();
-});
-document.addEventListener('pointerover', (e) => {
-  const el = e.target.closest?.('[data-sfx="tick"]');
-  if (el && !el.contains(e.relatedTarget)) sfx.tick();
-});
-
-/* ---------------- Header ---------------- */
-const header = $('[data-header]');
-addEventListener('scroll', () => { header.dataset.scrolled = String(scrollY > 40); }, { passive: true });
 
 /* ---------------- Hero ---------------- */
 const heroTitle = $('[data-hero-title]');
@@ -100,17 +78,20 @@ function boot3D() {
 $('[data-loading]').hidden = true;
 if (motionOn()) boot3D();
 
-/* ---------------- Origin story: figure → traces ---------------- */
+/* ---------------- Origin story: portrait → traces → portrait ---------------- */
+// Beats 1–3 are the network's tones; beat 4 is the person behind the system, so the
+// traces fold back into the portrait; the handoff holds it.
 const SCOPE = [
-  { f: '2600.0 Hz', t: '384.6 µs', mode: 'Idle tone' },
-  { f: '≈ 2600 Hz', t: '≈ 384.6 µs', mode: 'Toy whistle' },
-  { f: '1100 + 1700 Hz', t: 'KP · 2 of 6', mode: 'Blue box MF' },
-  { f: 'Line held', t: 'Handoff', mode: 'Your move' },
+  { f: '2600.0 Hz', t: '384.6 µs', mode: 'Idle tone', morph: 1 },
+  { f: '≈ 2600 Hz', t: '≈ 384.6 µs', mode: 'Toy whistle', morph: 1 },
+  { f: '1100 + 1700 Hz', t: 'KP · 2 of 6', mode: 'Blue box MF', morph: 1 },
+  { f: 'Human factor', t: 'Social layer', mode: 'Portrait', morph: 0 },
+  { f: 'Line held', t: 'Handoff', mode: 'Your move', morph: 0 },
 ];
 function wireStory() {
   const scope = $('[data-scope]');
-  const set = (i) => {
-    const s = SCOPE[i];
+  let beatMorph = 1;
+  const set = (s) => {
     decode($('[data-scope-f]'), { text: s.f, duration: 0.5 });
     decode($('[data-scope-t]'), { text: s.t, duration: 0.5 });
     decode($('[data-scope-mode]'), { text: s.mode, duration: 0.5 });
@@ -119,7 +100,7 @@ function wireStory() {
     trigger: '.sg-beat--intro', start: 'top bottom', end: 'center center', scrub: true,
     onUpdate: (st) => {
       if (!motionOn()) { engine.state.morph = 0; scope.dataset.on = 'false'; return; }
-      engine.state.morph = st.progress;
+      engine.state.morph = st.progress * beatMorph;
       engine.state.gridAmount = 0.45 + st.progress * 0.55;
       scope.dataset.on = String(st.progress > 0.7);
       engine.wake();
@@ -128,12 +109,15 @@ function wireStory() {
   $$('.sg-beat[data-beat]').forEach((beat) => {
     const i = Number(beat.dataset.beat);
     if (!i) return;
+    const s = SCOPE[i - 1];
     ScrollTrigger.create({
       trigger: beat, start: 'top 55%', end: 'bottom 45%',
       onToggle: (st) => {
         if (!st.isActive) return;
-        gsap.to(engine.state, { mode: i - 1, duration: motionOn() ? 1 : 0, ease: 'power2.inOut', onUpdate: () => engine.wake() });
-        set(i - 1);
+        beatMorph = s.morph;
+        const duration = motionOn() ? 1.1 : 0;
+        gsap.to(engine.state, { mode: Math.min(i - 1, 2), morph: motionOn() ? s.morph : 0, duration, ease: 'power2.inOut', onUpdate: () => engine.wake() });
+        set(s);
         if (i === 3) sfx.mf('KP'); else if (i < 3) sfx.mf('2600');
       },
     });
@@ -145,17 +129,13 @@ function wireStory() {
   ScrollTrigger.create({ trigger: '.sg-beat--handoff', start: 'top 55%', onEnter: () => decode($('.sg-beat--handoff h3'), { duration: 0.9 }) });
 }
 
-/* ---------------- Reveals ---------------- */
+/* ---------------- Home reveals ---------------- */
 function initReveals() {
-  $$('[data-decode]').forEach((el) => {
-    ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => decode(el, { duration: 0.9 }) });
-  });
   $$('.sg-meter[data-count]').forEach((el) => {
     ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => animateMeter(el) });
   });
   if (!motionOn()) return;
-  const groups = ['.sg-proof li', '.sg-line', '.sg-monitor', '.sg-era', '.sg-feature', '.sg-build', '.sg-tx li', '.sg-contact__copy > *', '.sg-box-wrap'];
-  groups.forEach((sel) => {
+  ['.sg-proof li', '.sg-line', '.sg-monitor', '.sg-era', '.sg-box-wrap'].forEach((sel) => {
     ScrollTrigger.batch(sel, {
       start: 'top 92%', once: true,
       // Movement only: reading content is never hidden or dimmed at rest (DESIGN.md).
@@ -167,77 +147,38 @@ function initReveals() {
   });
 }
 
-/* ---------------- Media: playback is always the visitor's choice ---------------- */
-function initMedia() {
-  const feature = $('[data-feature-video]');
-  const featureBtn = $('[data-feature-play]');
-  const featureLabel = $('[data-feature-play-label]');
-  const setFeature = (play) => {
-    if (play) feature.play().catch(() => {}); else feature.pause();
-    featureBtn.setAttribute('aria-pressed', String(play));
-    featureLabel.textContent = play ? 'Pause clip' : 'Play clip';
-  };
-  featureBtn.addEventListener('click', () => setFeature(feature.paused));
-  new IntersectionObserver(([e]) => { if (!e.isIntersecting && !feature.paused) setFeature(false); }).observe(feature);
-  if (finePointer) {
-    $$('[data-hover-video]').forEach((v) => {
-      const card = v.closest('.sg-build');
-      card.addEventListener('pointerenter', () => { if (motionOn()) v.play().catch(() => {}); });
-      card.addEventListener('pointerleave', () => v.pause());
-    });
-  }
-  $$('.sg-build > a:first-child').forEach((a) => { a.dataset.cursorText = a.href.includes('github.com') ? 'Source' : 'Launch'; });
-  $('[data-tune]').dataset.cursorText = 'Tune';
-  $('[data-seize]').dataset.cursorText = '2600 Hz';
-}
-
-/* ---------------- Easter eggs ---------------- */
-function seizeLine() {
-  sfx.seize();
-  engine.seize();
-  flash(0.8);
-  setStatus('seized', 'Line seized');
-  setTimeout(() => setStatus('locked', 'Locked · 2600 Hz'), 2400);
-  unlock('seize');
-}
-function togglePhreak() {
-  const on = root.dataset.phreak !== 'on';
-  root.dataset.phreak = on ? 'on' : 'off';
-  engine.setBackground(on ? '#061247' : '#03040a');
-  sfx.mf('KP'); setTimeout(() => sfx.mf('ST'), 160);
-  toast(on ? 'Phreak mode. The whole page is a blue box now.' : 'Phreak mode off.');
-  if (on) unlock('phreak');
-}
-function goto(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: motionOn() ? 'smooth' : 'auto' });
-}
-setHooks({ seize: seizeLine, phreak: togglePhreak, goto });
-onKonami(togglePhreak);
-initEggs();
-
-// Phones: header menu.
-const menu = $('[data-menu]');
-const nav = $('#primary-nav');
-menu.addEventListener('click', () => {
-  const open = menu.getAttribute('aria-expanded') !== 'true';
-  menu.setAttribute('aria-expanded', String(open));
-  nav.dataset.open = String(open);
+/* ---------------- Easter eggs with the engine attached ---------------- */
+const siteGoto = hooks.goto;
+setHooks({
+  seize() {
+    sfx.seize();
+    engine.seize();
+    flash(0.8);
+    setStatus('seized', 'Line seized');
+    setTimeout(() => setStatus('locked', 'Locked · 2600 Hz'), 2400);
+    unlock('seize');
+  },
+  phreak() {
+    const on = root.dataset.phreak !== 'on';
+    root.dataset.phreak = on ? 'on' : 'off';
+    engine.setBackground(on ? '#061247' : '#03040a');
+    sfx.mf('KP'); setTimeout(() => sfx.mf('ST'), 160);
+    toast(on ? 'Phreak mode. The whole page is a blue box now.' : 'Phreak mode off.');
+    if (on) unlock('phreak');
+  },
+  goto(id) {
+    const section = document.getElementById(id === 'home' ? 'top' : id);
+    if (section) { section.scrollIntoView({ behavior: motionOn() ? 'smooth' : 'auto' }); return true; }
+    return siteGoto(id);
+  },
 });
-nav.addEventListener('click', (e) => { if (e.target.closest('a')) { menu.setAttribute('aria-expanded', 'false'); nav.dataset.open = 'false'; } });
 
-// Hidden tab keeps the name; only the state changes.
-const title = document.title;
-document.addEventListener('visibilitychange', () => { document.title = document.hidden ? 'Line idle · Pranshul Chandhok' : title; });
-consoleHello();
+$('[data-tune]').dataset.cursorText = 'Tune';
+$('[data-seize]').dataset.cursorText = '2600 Hz';
 
-/* ---------------- Boot ---------------- */
 initDial();
 initLines();
 initLog();
 initBlueBox(live);
-initCopy();
-initMedia();
-initCursor();
-initMagnetic();
 initTilt();
 initReveals();

@@ -1,134 +1,39 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import '../../styles/content-pages.css';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageOpening from '../../components/site/PageOpening.astro';
+import BuildFeature from '../../components/site/BuildFeature.astro';
+import BuildCard from '../../components/site/BuildCard.astro';
+import { BUILDS, FEATURED_BUILD } from '../../data/builds';
+import '../../styles/signal/pages.css';
 
-const work = await getCollection('work');
-const experimentActions = (slug: string) => {
-  const entry = work.find((entry) => entry.data.slug === slug);
-  const demo = entry?.data.sources.find((source) => source.type === 'live-demo');
-  const source = entry?.data.sources.find((source) => source.type === 'repository');
-  return [
-    ...(demo ? [{ label: 'Launch demo', href: demo.url }] : []),
-    { label: 'Read the build', href: `/work/${slug}/` },
-    ...(source ? [{ label: 'Source', href: source.url }] : []),
-  ];
-};
-
-const builds = [
-  {
-    state: 'Companion',
-    title: 'Dwarkesh × Jensen',
-    description: 'An unofficial reading companion to the interview: 92 terms across eight sections, with searchable explanations and links to the original timestamps.',
-    href: '/lab/dwarkesh-jensen/index.html',
-  },
-  {
-    state: 'Active',
-    title: 'Kinema',
-    description: 'A third-person game with a level editor in the same browser tab. I’m using it to explore gameplay, graphics, and editing tools.',
-    href: '/work/kinema/',
-    actions: experimentActions('kinema'),
-    guidance: 'F1 opens the level editor.',
-  },
-  {
-    state: 'Shipped',
-    title: 'Web Ocean 3D',
-    description: 'An interactive ocean with changing weather and a boat to pilot. I’m also working on how it loads and runs across devices.',
-    href: '/work/web-ocean-3d/',
-    actions: experimentActions('web-ocean-3d'),
-    guidance: 'Boat and camera modes; WebGL2 fallback available.',
-  },
-  {
-    state: 'Shipped',
-    title: 'Safed Sagar',
-    description: 'A compact fictional reconnaissance experience built and released in days as a browser flight experiment.',
-    href: '/work/safed-sagar/',
-    actions: experimentActions('safed-sagar'),
-    guidance: 'Keyboard, gamepad, and touch controls. Fictional flight experience.',
-  },
-  {
-    state: 'Source',
-    title: 'GitHub',
-    description: 'Repositories, 3D experiments, AI workflows, and the implementation behind this site.',
-    href: 'https://github.com/2600th',
-  },
-  {
-    state: 'Archived',
-    title: 'Ghost Terminal',
-    description: 'My earlier portfolio, built as a command-line interface. You can still explore it here.',
-    href: '/lab/terminal/index.html',
-  },
-] as const;
+const all = [FEATURED_BUILD, ...BUILDS];
+const liveCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'live' || end.kind === 'site')).length;
+const sourceCount = all.filter((build) => build.endpoints.some((end) => end.kind === 'src')).length;
 ---
 
-<BaseLayout
+<SiteLayout
   title="Experiments by Pranshul Chandhok"
   description="Games, browser graphics, and AI experiments I’m building to learn. Try the demos, read the code, or explore my earlier console portfolio."
   canonical="/lab/"
 >
-  <div class="lab-page">
-    <header class="route-opening route-opening--lab lab-hero" data-route-opening>
-      <div class="route-opening__positive" data-polarity="positive">
-        <h1>Things I’m trying.</h1>
-        <p class="route-opening__statement">Games, browser graphics, and ideas I wanted to test for myself.</p>
-      </div>
-      <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">2600th / experiments</p>
-        <p>I use these projects to learn a technology by working with it. Some are still rough. You can try them and look through the code.</p>
-        <figure class="lab-hero__figure">
-          <picture>
-            <source media="(max-width: 42rem)" srcset="/media/work/kinema/inside-mobile.webp" />
-            <img src="/media/work/kinema/inside.webp" alt="Kinema browser gameplay experiment with a live objective and spatial obstacle course" width="1600" height="900" />
-          </picture>
-          <figcaption><span>Current build</span><strong>Kinema / browser-native gameplay</strong></figcaption>
-        </figure>
-      </div>
-    </header>
+  <div class="pg lab-page">
+    <PageOpening
+      eyebrow={['04', 'Side channels']}
+      path={[{ label: 'lab' }]}
+      lede="Games, browser graphics and AI tools I wanted to test for myself. I learn a technology by shipping something with it. Some are still rough, all of them are public."
+      readout={[['Builds', `<b>${String(all.length).padStart(2, '0')}</b>`], ['Live', `<b>${String(liveCount).padStart(2, '0')}</b> you can open now`], ['Source', `<b>${String(sourceCount).padStart(2, '0')}</b> open repositories`]]}
+      wave="noise"
+    >
+      <h1 slot="title">Things I’m <em>trying.</em></h1>
+    </PageOpening>
 
-    <section class="build-index" aria-labelledby="build-index-title" data-build-ledger>
-      <header>
-        <h2 id="build-index-title">Try them yourself.</h2>
-        <p>Open a hands-on experiment, explore a reading companion, or follow the code.</p>
-      </header>
-      <ol>
-        {builds.map((build) => (
-          <li data-build-row>
-            {'actions' in build ? <article class="build-entry" aria-labelledby={`build-${build.title.toLowerCase().replaceAll(' ', '-')}`}>
-              <span class="build-entry__state">{build.state}</span>
-              <div class="build-entry__body">
-                <h3 id={`build-${build.title.toLowerCase().replaceAll(' ', '-')}`}>{build.title}</h3>
-                <p>{build.description}</p>
-                <p class="build-entry__guidance">{build.guidance}</p>
-                <div class="build-entry__actions">
-                  {build.actions.map((action) => <a href={action.href} target={action.href.startsWith('http') ? '_blank' : undefined} rel={action.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
-                    {action.label}{action.href.startsWith('http') && <><span aria-hidden="true"> ↗</span><span class="sr-only"> (opens in a new tab)</span></>}
-                  </a>)}
-                </div>
-              </div>
-            </article> : <a href={build.href} target={build.href.startsWith('http') ? '_blank' : undefined} rel={build.href.startsWith('http') ? 'noopener' : undefined}>
-              <span>{build.state}</span>
-              <strong>{build.title}</strong>
-              <span>{build.description}</span>
-              <span aria-hidden="true">↗</span>
-            </a>}
-          </li>
-        ))}
-      </ol>
+    <section class="lab-ledger" aria-labelledby="build-index-title" data-build-ledger>
+      <h2 id="build-index-title" class="sr-only">Try them yourself</h2>
+      <BuildFeature />
+      <ul class="sg-builds">
+        {BUILDS.map((build) => <BuildCard build={build} />)}
+      </ul>
+      <a class="sg-more" href="https://github.com/2600th" data-sfx="tick">Everything else on GitHub <span aria-hidden="true">↗</span></a>
     </section>
   </div>
-</BaseLayout>
-
-<style>
-  .build-entry { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.5rem; padding-block: 2rem; }
-  .build-entry__state { padding-top: 0.35rem; color: var(--gold); font-size: var(--type-label); text-transform: uppercase; }
-  .build-entry h3 { margin-bottom: 0.6rem; font-size: var(--type-article); }
-  .build-entry p { max-width: 64ch; margin-bottom: 0.65rem; color: var(--muted); }
-  .build-entry .build-entry__guidance { font-size: 0.875rem; }
-  .build-entry__actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
-  .build-entry .build-entry__actions a { display: inline-flex; min-height: 2.75rem; gap: 0.35rem; align-items: center; padding-block: 0.5rem; font-size: 0.9375rem; text-decoration: underline; }
-  .build-entry .build-entry__actions a > span { grid-column: auto; grid-row: auto; color: var(--gold); font-size: inherit; }
-  @media (max-width: 40rem) {
-    .build-entry { grid-template-columns: 1fr; gap: 0.5rem; }
-    .build-entry__actions { gap: 0.4rem 1.5rem; }
-  }
-</style>
+</SiteLayout>

@@ -1,0 +1,22 @@
+---
+import Endpoints from './Endpoints.astro';
+import { FEATURED_BUILD as build } from '../../data/builds';
+---
+
+<article class="sg-feature" id="lab-dlss" aria-labelledby="dlss-title" data-build={build.id}>
+  <figure class="sg-feature__media">
+    {build.media?.type === 'video' && <video muted loop playsinline preload="none" poster={build.media.poster} src={build.media.src} data-feature-video aria-label={build.media.alt}></video>}
+    <button type="button" class="sg-feature__play" data-feature-play aria-pressed="false"><span data-feature-play-label>Play clip</span></button>
+    <span class="sg-feature__badge">New</span>
+    <figcaption>{build.caption}</figcaption>
+  </figure>
+  <div class="sg-feature__copy">
+    <span class="sg-state" data-tone={build.tone}><i></i>{build.state}</span>
+    <h3 id="dlss-title"><a href={build.caseHref} data-sfx="tick" data-cursor-text="Read">{build.title}</a></h3>
+    <p>{build.summary}</p>
+    {build.body.map((paragraph) => <p>{paragraph}</p>)}
+    <ul class="sg-feature__facts">{build.facts.map(([label, detail]) => <li><b>{label}</b> {detail}</li>)}</ul>
+    <Endpoints endpoints={build.endpoints} title={build.title} />
+    <p class="sg-feature__note">{build.note}</p>
+  </div>
+</article>

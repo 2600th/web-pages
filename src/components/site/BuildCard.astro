@@ -1,0 +1,21 @@
+---
+import Endpoints from './Endpoints.astro';
+import type { Build } from '../../data/builds';
+
+interface Props { build: Build }
+const { build } = Astro.props;
+---
+
+<li class:list={['sg-build', { 'sg-build--text': build.variant, 'sg-build--term': build.variant === 'term', 'sg-build--wide': build.variant === 'term' }]} data-build={build.id}>
+  <div class="sg-build__body">
+    {build.media?.type === 'img' && <span class="sg-build__media"><img src={build.media.src} alt={build.media.alt} width={build.media.width} height={build.media.height} loading="lazy" /></span>}
+    {build.media?.type === 'video' && <span class="sg-build__media"><video muted loop playsinline preload="none" poster={build.media.poster} src={build.media.src} data-hover-video aria-label={build.media.alt}></video></span>}
+    {build.code && <span class="sg-build__code" aria-hidden="true">{build.code.map((line) => line.endsWith('▌')
+      ? <span>{line.slice(0, -1)}<i class="sg-caret"></i></span>
+      : <span>{line}</span>)}</span>}
+    <span class="sg-state" data-tone={build.tone}><i></i>{build.state}</span>
+    <h3>{build.caseHref ? <a href={build.caseHref} data-sfx="tick" data-cursor-text="Read">{build.title}</a> : build.title}</h3>
+    <p>{build.summary}</p>
+  </div>
+  <Endpoints endpoints={build.endpoints} title={build.title} />
+</li>

@@ -52,7 +52,9 @@ test('long project narratives use a bounded reading measure and native section n
 
   const reading = page.locator('[data-project-reading]');
   const prose = reading.locator('.prose');
-  expect((await reading.boundingBox())!.width).toBeLessThanOrEqual(1160);
+  const readingBox = (await reading.boundingBox())!;
+  expect(readingBox.x).toBeGreaterThanOrEqual(16);
+  expect(readingBox.x + readingBox.width).toBeLessThanOrEqual(1280 - 16);
   const proseBox = (await prose.boundingBox())!;
   expect(proseBox.width).toBeGreaterThanOrEqual(600);
   expect(proseBox.width).toBeLessThanOrEqual(850);
@@ -152,9 +154,10 @@ test('Lab experiments separate launching, reading, and source actions', async ({
     ['Web Ocean 3D', 'https://web-ocean-3d.vercel.app/', 'https://github.com/2600th/web-ocean-3d'],
     ['Safed Sagar', 'https://oss-web-3d.vercel.app/', 'https://github.com/2600th/oss-web-3d'],
   ]) {
-    const row = page.locator('[data-build-row]').filter({ has: page.getByRole('heading', { name: title, exact: true }) });
-    await expect(row.getByRole('link', { name: 'Launch demo' })).toHaveAttribute('href', demo);
-    await expect(row.getByRole('link', { name: 'Read the build' })).toHaveAttribute('href', /\/work\//);
-    await expect(row.getByRole('link', { name: /^Source/ })).toHaveAttribute('href', source);
+    const card = page.locator('[data-build]').filter({ has: page.getByRole('heading', { name: title, exact: true }) });
+    await expect(card.getByRole('heading', { name: title }).getByRole('link')).toHaveAttribute('href', /^\/work\/[\w-]+\/$/);
+    const ends = card.getByRole('navigation', { name: `${title} links` });
+    await expect(ends.getByRole('link', { name: /^Live/ })).toHaveAttribute('href', demo);
+    await expect(ends.getByRole('link', { name: /^Source/ })).toHaveAttribute('href', source);
   }
 });

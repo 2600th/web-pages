@@ -34,31 +34,12 @@ function workEntries() {
 }
 
 describe('portfolio media', () => {
-  it('keeps route-opening AVIF and WebP derivatives inside the fast-load budget', () => {
-    const filenames = [
-      'routes/work/ira-vr-v2-640.avif',
-      'routes/work/ira-vr-v2-640.webp',
-      'routes/work/ira-vr-v2-960.avif',
-      'routes/work/ira-vr-v2-960.webp',
-      'routes/work/spacecraft-pro-640.avif',
-      'routes/work/spacecraft-pro-640.webp',
-      'routes/work/spacecraft-pro-960.avif',
-      'routes/work/spacecraft-pro-960.webp',
-      'routes/work/designesto-ai-640.avif',
-      'routes/work/designesto-ai-640.webp',
-      'routes/work/designesto-ai-960.avif',
-      'routes/work/designesto-ai-960.webp',
-      'routes/notes/notes-aperture-640.avif',
-      'routes/notes/notes-aperture-640.webp',
-      'routes/notes/notes-aperture-960.avif',
-      'routes/notes/notes-aperture-960.webp',
-    ];
-
-    for (const filename of filenames) {
-      const absolute = join(process.cwd(), 'public', 'media', filename);
-      expect(existsSync(absolute), filename).toBe(true);
-      expect(statSync(absolute).size, filename).toBeLessThanOrEqual(180_000);
-    }
+  it('keeps Signal stills and the social card inside the fast-load budget', () => {
+    const directory = join(process.cwd(), 'public', 'media', 'signal');
+    const stills = readdirSync(directory).filter((filename) => filename.endsWith('.webp'));
+    expect(stills.length).toBeGreaterThanOrEqual(12);
+    for (const filename of stills) expect(statSync(join(directory, filename)).size, filename).toBeLessThanOrEqual(180_000);
+    expect(statSync(join(process.cwd(), 'public', 'media', 'social', 'signal-home.webp')).size).toBeLessThanOrEqual(180_000);
   });
 
   it('ships a release-sized Latin variable font derivative', () => {
@@ -67,7 +48,7 @@ describe('portfolio media', () => {
     expect(statSync(font).size).toBeLessThanOrEqual(200_000);
 
     const layout = readFileSync(join(process.cwd(), 'src', 'components', 'shared', 'SeoHead.astro'), 'utf8');
-    const styles = readFileSync(join(process.cwd(), 'src', 'styles', 'global.css'), 'utf8');
+    const styles = readFileSync(join(process.cwd(), 'src', 'styles', 'signal', 'tokens.css'), 'utf8');
     expect(layout).toContain('/fonts/mona-sans-latin.woff2');
     expect(styles).toContain('/fonts/mona-sans-latin.woff2');
   });
@@ -138,8 +119,6 @@ describe('portfolio media', () => {
       '/media/generated/editorial/defense-systems-atlas-v2.avif',
       '/media/generated/editorial/blocks-design-production-v1.webp',
       '/media/generated/editorial/blocks-design-production-v1.avif',
-      '/media/generated/identity/2600th-operator-diorama.webp',
-      '/media/generated/identity/2600th-equipment-inventory.webp',
     ];
     const provenance = MEDIA_PROVENANCE as Record<
       string,

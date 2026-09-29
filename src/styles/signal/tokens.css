@@ -1,0 +1,97 @@
+/* Signal design system: tokens, fonts and base. Every page on 2600th.com starts here. */
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/mona-sans-latin.woff2') format('woff2-variations');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Doto';
+  src: url('/fonts/doto.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono.woff2') format('woff2');
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+:root {
+  --void: #03040a;
+  --panel: #0a0d18;
+  --panel-2: #10152a;
+  --ink: #eae8e1;
+  --muted: #a4a7b3;
+  --dim: #858a99;
+  --cobalt: #4d74ff;
+  --cobalt-deep: #2447d8;
+  --phosphor: #9db6ff;
+  --gold: #e8b45a;
+  --live: #5fe0a2;
+  --term: #7cf0b0;
+  --line: rgb(234 232 225 / 0.1);
+  --line-strong: rgb(234 232 225 / 0.22);
+  --glow: 0 0 22px rgb(77 116 255 / 0.55);
+  --gutter: clamp(1rem, 3.2vw, 3.5rem);
+  --measure: 68ch;
+  --display: 'Mona Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --dot: 'Doto', 'JetBrains Mono', monospace;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --focus: #9db6ff;
+  --grid: linear-gradient(rgb(77 116 255 / 0.06) 1px, transparent 1px), linear-gradient(90deg, rgb(77 116 255 / 0.06) 1px, transparent 1px);
+  color-scheme: dark;
+}
+/* Konami code: the whole site turns into a blue box. */
+html[data-phreak='on'] {
+  --void: #061247;
+  --panel: #0b1a63;
+  --panel-2: #10237a;
+  --cobalt: #ffd35c;
+  --phosphor: #ffe7a3;
+  --gold: #ffffff;
+  --line: rgb(255 255 255 / 0.14);
+  --glow: 0 0 22px rgb(255 211 92 / 0.6);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 5rem; scroll-behavior: smooth; }
+html[data-motion='off'] { scroll-behavior: auto; }
+body { margin: 0; min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+img, video, canvas, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, h4, p, ol, ul, dl, dd, figure, blockquote { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+
+body.sg {
+  background: var(--void);
+  color: var(--ink);
+  font: 400 clamp(1rem, 0.3vw + 0.94rem, 1.125rem)/1.6 var(--display);
+  overflow-x: clip;
+  transition: background 600ms var(--ease);
+}
+.sg em { font-style: normal; }
+.sg ::selection { background: var(--cobalt); color: #fff; }
+
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; top: 0.75rem; left: 0.75rem; z-index: 110; padding: 0.7rem 1rem;
+  background: #fff; color: #000; font: 600 0.875rem/1 var(--display);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+@keyframes sg-blink { 50% { opacity: 0.15; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; scroll-behavior: auto !important; }
+}

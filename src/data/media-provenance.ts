@@ -15,45 +15,6 @@ const CAREER_MEDIA_PROVENANCE = Object.fromEntries(
   ),
 ) as Record<string, MediaProvenance>;
 
-const ROUTE_OPENING_MEDIA_PROVENANCE = Object.fromEntries(
-  [
-    {
-      stem: '/media/routes/work/blocks',
-      sourceUrl: 'generated://openai/imagegen/exec-827f03a5-b295-4bea-bf7f-2571b59e7dd1',
-      status: 'generated-editorial',
-      evidenceUse: false,
-    },
-    {
-      stem: '/media/routes/work/ira-vr-v2',
-      sourceUrl: 'generated://openai/imagegen/exec-705c02d8-2d4e-4a1c-bb0e-9ae925fa9d24',
-      status: 'generated-editorial',
-      evidenceUse: false,
-    },
-    {
-      stem: '/media/routes/work/spacecraft-pro',
-      sourceUrl: 'https://www.youtube.com/watch?v=yDFFZskBKaA',
-      status: 'public-corroborated',
-    },
-    {
-      stem: '/media/routes/work/designesto-ai',
-      sourceUrl: 'https://www.designesto.ai/',
-      status: 'public-approved',
-    },
-    {
-      stem: '/media/routes/notes/notes-aperture',
-      sourceUrl: 'generated://editorial/notes-aperture',
-      status: 'generated-editorial',
-      evidenceUse: false,
-    },
-  ].flatMap((asset) =>
-    [640, 960].flatMap((width) =>
-      ['avif', 'webp'].map((format) => [
-        `${asset.stem}-${width}.${format}`,
-        { sourceUrl: asset.sourceUrl, status: asset.status, evidenceUse: asset.evidenceUse },
-      ]),
-    ),
-  ),
-) as Record<string, MediaProvenance>;
 
 const ENHANCED_EDITORIAL_RECEIPTS: Record<string, string> = {
   'ai-native-game-thesis-hero-v2': 'exec-4dd3ceb6-98bd-494c-a776-cfd0a2d01895',
@@ -119,7 +80,6 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
     sourceUrl: 'https://craft.propvr.ai/',
     status: 'public-approved',
   },
-  ...ROUTE_OPENING_MEDIA_PROVENANCE,
   ...ENHANCED_EDITORIAL_PROVENANCE,
   '/media/generated/editorial/blocks-design-production-v2.webp': {
     sourceUrl: 'generated://openai/imagegen/exec-827f03a5-b295-4bea-bf7f-2571b59e7dd1',
@@ -139,16 +99,6 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
   '/media/generated/editorial/blocks-design-production-v1.avif': {
     sourceUrl: 'generated://openai/imagegen/exec-b4375d06-c7b4-4960-8be7-a130269002dc',
     status: 'generated-editorial',
-    evidenceUse: false,
-  },
-  '/media/generated/identity/2600th-operator-diorama.webp': {
-    sourceUrl: 'generated://openai/imagegen/exec-560170e9-2c42-4cc5-ad72-0b043602deb1',
-    status: 'generated-identity',
-    evidenceUse: false,
-  },
-  '/media/generated/identity/2600th-equipment-inventory.webp': {
-    sourceUrl: 'generated://openai/imagegen/exec-01183ce7-faf2-4eba-91f4-5b6e58ca0d84',
-    status: 'generated-identity',
     evidenceUse: false,
   },
   '/media/generated/editorial/defense-systems-diorama.webp': {
@@ -418,7 +368,8 @@ const SIGNAL_DERIVATIVES: Record<string, string | MediaProvenance> = {
   kinema: '/media/work/kinema/inside.webp',
   ocean: '/media/work/web-ocean-3d/clip-poster.webp',
   wonder: '/media/work/little-wonder/hero.webp',
-  character: { sourceUrl: 'generated://openai/imagegen/2600th-velvet-character', status: 'generated-identity', evidenceUse: false },
+  character: { sourceUrl: 'generated://openai/imagegen/2600th-character', status: 'generated-identity', evidenceUse: false },
+  portrait: { sourceUrl: 'generated://playwright/signal-portrait-render', status: 'generated-identity', evidenceUse: false },
   dlss: { sourceUrl: 'https://github.com/2600th/dlss5-video-player', status: 'public-repository' },
   safed: { sourceUrl: 'https://github.com/2600th/oss-web-3d', status: 'public-repository' },
 };

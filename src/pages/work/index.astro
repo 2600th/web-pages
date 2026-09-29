@@ -1,11 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import WorkList from '../../components/work/WorkList.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageOpening from '../../components/site/PageOpening.astro';
 import { CAREER_DOMAIN_META } from '../../data/career-domains';
 import { getPrioritizedWork } from '../../data/work-order';
 import type { CareerDomain } from '../../content/evidence';
-import '../../styles/content-pages.css';
+import '../../styles/signal/pages.css';
 
 const prioritizedWork = getPrioritizedWork(await getCollection('work'));
 const galleryFeatured = ['blocks', 'designesto', 'ira-vr'];
@@ -14,22 +15,30 @@ const work = [
   ...prioritizedWork.filter((entry) => !galleryFeatured.includes(entry.data.slug)),
 ].filter((entry): entry is (typeof prioritizedWork)[number] => Boolean(entry));
 const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.order - b.order) as [CareerDomain, typeof CAREER_DOMAIN_META[CareerDomain]][];
+const bandCount = (domain: string) => work.filter((entry) => entry.data.domains.includes(domain as CareerDomain)).length;
+const years = work.map((entry) => entry.data.yearStart);
 ---
 
-<BaseLayout
+<SiteLayout
   title="Projects by Pranshul Chandhok"
   description="Selected product and technology work by Pranshul Chandhok across applied AI, design software, realtime 3D, XR, games, robotics, and simulation."
   canonical="/work/"
 >
-  <div class="page-shell work-archive" data-work-archive>
-    <header class="work-gallery-opening" data-route-opening>
-      <h1 data-polarity="positive">Projects</h1>
-      <p data-polarity="negative">Products, platforms, and experiments I helped define, build, and put into use.</p>
-    </header>
+  <div class="pg work-archive" data-work-archive>
+    <PageOpening
+      eyebrow={['02', 'Trunk lines']}
+      path={[{ label: 'work' }]}
+      lede="Products, platforms and experiments I helped define, build and put into use."
+      readout={[['Lines', `<b>${String(work.length).padStart(2, '0')}</b>`], ['Span', `<b>${Math.min(...years)}–${new Date().getFullYear()}</b>`], ['Bands', `<b>${String(domains.length).padStart(2, '0')}</b> domains`]]}
+      wave="square"
+      compact
+    >
+      <h1 slot="title">Work.</h1>
+    </PageOpening>
 
     <nav class="domain-filter" aria-label="Filter work by domain">
-      <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="Selected systems first, followed by the earlier archive." aria-current="page">All domains</a>
-      {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description}>{domain.label}</a>)}
+      <a href="/work/" data-domain-link="all" data-domain-label="All work" data-domain-description="Selected systems first, followed by the earlier archive." aria-current="page" data-sfx="tick">All bands <b>{work.length}</b></a>
+      {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`} data-domain-link={key} data-domain-label={domain.label} data-domain-description={domain.description} data-sfx="tick">{domain.label} <b>{bandCount(key)}</b></a>)}
     </nav>
     <noscript>
       <nav class="domain-filter-mobile-links" aria-label="Browse work domains">
@@ -37,7 +46,7 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
         {domains.map(([key, domain]) => <a href={`/work/domain/${key}/`}>{domain.label}</a>)}
       </nav>
     </noscript>
-    <label class="domain-filter-select" hidden>
+    <label class="domain-filter-select pg-select" hidden>
       <span>Work domain</span>
       <select aria-label="Choose a work domain" data-domain-select>
         <option value="all">All domains</option>
@@ -50,128 +59,91 @@ const domains = Object.entries(CAREER_DOMAIN_META).sort(([, a], [, b]) => a.orde
       <header>
         <div><h2 id="work-list-heading" data-work-heading>All work</h2><span class="work-list-region__count" data-visible-count>{String(work.length).padStart(2, '0')}</span></div>
         <p data-work-description>Selected systems first, followed by the earlier archive.</p>
+        <label class="work-order pg-select" hidden><span>Project order</span><select data-work-order><option value="priority">Selected systems first</option><option value="chronological">Chronological, earliest first</option></select></label>
       </header>
-      <label class="work-order" hidden><span>Project order</span><select data-work-order><option value="priority">Selected systems first</option><option value="chronological">Chronological, earliest first</option></select></label>
       <WorkList work={work} />
     </section>
   </div>
-</BaseLayout>
 
-<script>
-  const initWorkArchive = () => {
-    document.querySelectorAll<HTMLElement>('[data-work-archive]').forEach((root) => {
-      if (root.dataset.bound === 'true') return;
-      root.dataset.bound = 'true';
-      const links = [...root.querySelectorAll<HTMLAnchorElement>('[data-domain-link]')];
-      const items = [...root.querySelectorAll<HTMLElement>('[data-work-item]')];
-      const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
-      const order = root.querySelector<HTMLSelectElement>('[data-work-order]');
-      const priority = new Map(items.map((item, index) => [item, index]));
-      let activeDomain = 'all';
-      const sortItems = () => {
-        const chronological = order?.value === 'chronological';
-        const sorted = [...items].sort((a, b) => chronological
-          ? Number(a.dataset.workYear) - Number(b.dataset.workYear) || Number(a.dataset.workCareerOrder) - Number(b.dataset.workCareerOrder)
-          : priority.get(a)! - priority.get(b)!);
-        const list = root.querySelector('[data-work-gallery]');
-        sorted.forEach((item) => {
-          list?.append(item);
-        });
-        list?.setAttribute('data-gallery-layout', chronological || activeDomain !== 'all' ? 'uniform' : 'featured');
-        const description = root.querySelector<HTMLElement>('[data-work-description]');
-        if (description && activeDomain === 'all') description.textContent = chronological
-          ? 'From the earliest projects to current work.' : 'Selected systems first, followed by the earlier archive.';
-      };
-
-      const render = () => {
-        const pathDomain = location.pathname.match(/^\/work\/domain\/([^/]+)\/?$/)?.[1];
-        const requested = pathDomain ?? new URLSearchParams(location.search).get('domain');
-        const activeLink = links.find((link) => link.dataset.domainLink === requested) ?? links[0];
-        activeDomain = activeLink.dataset.domainLink ?? 'all';
-        if (select) select.value = activeDomain;
-        let visible = 0;
-
-        for (const item of items) {
-          const domains = (item.dataset.workDomains ?? '').split(' ');
-          item.hidden = activeDomain !== 'all' && !domains.includes(activeDomain);
-          if (!item.hidden) visible += 1;
+  <script>
+    const initWorkArchive = () => {
+      document.querySelectorAll<HTMLElement>('[data-work-archive]').forEach((root) => {
+        if (root.dataset.bound === 'true') return;
+        root.dataset.bound = 'true';
+        const links = [...root.querySelectorAll<HTMLAnchorElement>('[data-domain-link]')];
+        const items = [...root.querySelectorAll<HTMLElement>('[data-work-item]')];
+        const select = root.querySelector<HTMLSelectElement>('[data-domain-select]');
+        const order = root.querySelector<HTMLSelectElement>('[data-work-order]');
+        const priority = new Map(items.map((item, index) => [item, index]));
+        let activeDomain = 'all';
+        const sortItems = () => {
+          const chronological = order?.value === 'chronological';
+          const sorted = [...items].sort((a, b) => chronological
+            ? Number(a.dataset.workYear) - Number(b.dataset.workYear) || Number(a.dataset.workCareerOrder) - Number(b.dataset.workCareerOrder)
+            : priority.get(a)! - priority.get(b)!);
+          const list = root.querySelector('[data-work-gallery]');
+          sorted.forEach((item) => {
+            list?.append(item);
+          });
+          list?.setAttribute('data-gallery-layout', chronological || activeDomain !== 'all' ? 'uniform' : 'featured');
+          const description = root.querySelector<HTMLElement>('[data-work-description]');
+          if (description && activeDomain === 'all') description.textContent = chronological
+            ? 'From the earliest projects to current work.' : 'Selected systems first, followed by the earlier archive.';
+        };
+  
+        const render = () => {
+          const pathDomain = location.pathname.match(/^\/work\/domain\/([^/]+)\/?$/)?.[1];
+          const requested = pathDomain ?? new URLSearchParams(location.search).get('domain');
+          const activeLink = links.find((link) => link.dataset.domainLink === requested) ?? links[0];
+          activeDomain = activeLink.dataset.domainLink ?? 'all';
+          if (select) select.value = activeDomain;
+          let visible = 0;
+  
+          for (const item of items) {
+            const domains = (item.dataset.workDomains ?? '').split(' ');
+            item.hidden = activeDomain !== 'all' && !domains.includes(activeDomain);
+            if (!item.hidden) visible += 1;
+          }
+  
+          for (const link of links) {
+            if (link === activeLink) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+          }
+          const heading = root.querySelector<HTMLElement>('[data-work-heading]');
+          const description = root.querySelector<HTMLElement>('[data-work-description]');
+          const count = root.querySelector<HTMLElement>('[data-visible-count]');
+          const status = root.querySelector<HTMLElement>('[data-work-status]');
+          if (heading) heading.textContent = activeLink.dataset.domainLabel ?? 'All work';
+          if (description) description.textContent = activeLink.dataset.domainDescription ?? '';
+          if (count) count.textContent = String(visible).padStart(2, '0');
+          if (status) status.textContent = `${activeLink.dataset.domainLabel ?? 'All work'}, ${visible} ${visible === 1 ? 'project' : 'projects'}`;
+          root.querySelector('[data-work-gallery]')?.setAttribute('data-gallery-layout', activeDomain === 'all' && order?.value !== 'chronological' ? 'featured' : 'uniform');
+        };
+  
+        if (select) {
+          select.addEventListener('change', () => {
+            const value = select.value;
+            const link = links.find((candidate) => candidate.dataset.domainLink === value) ?? links[0];
+            window.location.assign(link.href);
+          });
+          root.querySelector<HTMLElement>('.domain-filter-select')?.removeAttribute('hidden');
         }
-
-        for (const link of links) {
-          if (link === activeLink) link.setAttribute('aria-current', 'page');
-          else link.removeAttribute('aria-current');
-        }
-        const heading = root.querySelector<HTMLElement>('[data-work-heading]');
-        const description = root.querySelector<HTMLElement>('[data-work-description]');
-        const count = root.querySelector<HTMLElement>('[data-visible-count]');
-        const status = root.querySelector<HTMLElement>('[data-work-status]');
-        if (heading) heading.textContent = activeLink.dataset.domainLabel ?? 'All work';
-        if (description) description.textContent = activeLink.dataset.domainDescription ?? '';
-        if (count) count.textContent = String(visible).padStart(2, '0');
-        if (status) status.textContent = `${activeLink.dataset.domainLabel ?? 'All work'}, ${visible} ${visible === 1 ? 'project' : 'projects'}`;
-        root.querySelector('[data-work-gallery]')?.setAttribute('data-gallery-layout', activeDomain === 'all' && order?.value !== 'chronological' ? 'featured' : 'uniform');
-      };
-
-      if (select) {
-        select.addEventListener('change', () => {
-          const value = select.value;
-          const link = links.find((candidate) => candidate.dataset.domainLink === value) ?? links[0];
-          window.location.assign(link.href);
-        });
-        root.querySelector<HTMLElement>('.domain-filter-select')?.removeAttribute('hidden');
-      }
-      render();
-      if (order) {
-        order.value = new URLSearchParams(location.search).get('order') === 'chronological' ? 'chronological' : 'priority';
-        order.addEventListener('change', () => {
-          const url = new URL(location.href);
-          if (order.value === 'chronological') url.searchParams.set('order', order.value);
-          else url.searchParams.delete('order');
-          history.replaceState(null, '', url);
+        render();
+        if (order) {
+          order.value = new URLSearchParams(location.search).get('order') === 'chronological' ? 'chronological' : 'priority';
+          order.addEventListener('change', () => {
+            const url = new URL(location.href);
+            if (order.value === 'chronological') url.searchParams.set('order', order.value);
+            else url.searchParams.delete('order');
+            history.replaceState(null, '', url);
+            sortItems();
+          });
+          order.closest('label')?.removeAttribute('hidden');
           sortItems();
-        });
-        order.closest('label')?.removeAttribute('hidden');
-        sortItems();
-      }
-    });
-  };
-  initWorkArchive();
-  document.addEventListener('astro:after-swap', initWorkArchive);
-</script>
-
-<style>
-  .work-gallery-opening { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; padding: clamp(2rem, 5vw, 3rem) 0 clamp(1.5rem, 4vw, 2rem); }
-  .work-gallery-opening h1 { margin: 0; color: var(--text); font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1.08; }
-  .work-gallery-opening p { max-width: 40ch; margin: 0; color: var(--text-muted); font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.6; }
-  .work-archive[data-work-archive] .work-list-region { padding-block: 1.5rem clamp(3rem, 6vw, 6rem); }
-  .work-archive[data-work-archive] .work-list-region > header { display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin-bottom: 0.75rem; }
-  .work-archive[data-work-archive] .work-list-region > header > div { align-items: center; gap: 0.75rem; }
-  .work-archive[data-work-archive] .work-list-region h2 { max-width: none; font-size: 1rem; font-weight: 650; letter-spacing: 0; }
-  .work-archive[data-work-archive] .work-list-region header p { max-width: none; }
-  .work-archive[data-work-archive] .work-order { justify-content: flex-end; margin-block: 0 1rem; }
-  .domain-filter { display: flex; overflow-x: auto; border-block: 1px solid var(--line); scrollbar-width: thin; }
-  .domain-filter a { min-width: max-content; min-height: 3rem; padding: 1rem 1.25rem; border-right: 1px solid var(--line); color: var(--text-muted); font-size: 0.76rem; font-weight: 680; text-decoration: none; }
-  .domain-filter a[aria-current='page'] { background: var(--text); color: var(--surface); }
-  .domain-filter-select { display: none; }
-  .domain-filter-select[hidden] { display: none !important; }
-  .work-list-region { padding-block: clamp(4rem, 8vw, 8rem); }
-  .work-list-region > header { display: grid; grid-template-columns: 1fr minmax(16rem, 0.45fr); gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
-  .work-list-region > header > div { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
-  .work-list-region h2 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 7vw, 6rem); }
-  .work-list-region__count { color: var(--signal); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
-  .work-list-region header p { max-width: 34ch; margin: 0; color: var(--text-muted); font-size: 0.85rem; }
-  [data-work-item][hidden] { display: none; }
-
-  @media (max-width: 64rem) {
-    .domain-filter { display: none; }
-    .domain-filter-select { display: grid; gap: 0.4rem; padding: 1rem 0; border-block: 1px solid var(--line); }
-    .domain-filter-select span { color: var(--text-muted); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
-    .domain-filter-select select { width: 100%; min-height: 3rem; padding: 0.6rem 2.5rem 0.6rem 0.75rem; border: 1px solid var(--line-strong); border-radius: 0; background: var(--surface); color: var(--text); }
-  }
-
-  @media (max-width: 46rem) {
-    .work-gallery-opening { grid-template-columns: 1fr; gap: 0.85rem; }
-    .work-archive[data-work-archive] .work-list-region { padding-top: 1rem; }
-    .work-archive[data-work-archive] .work-list-region > header { align-items: flex-start; }
-  }
-</style>
+        }
+      });
+    };
+    initWorkArchive();
+    document.addEventListener('astro:after-swap', initWorkArchive);
+  </script>
+</SiteLayout>

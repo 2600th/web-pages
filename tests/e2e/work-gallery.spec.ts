@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 const visibleProjectPaths = [
   '/work/blocks/', '/work/designesto/', '/work/ira-vr/', '/work/propvr-ai-craft/', '/work/homelane-spacecraft-pro/',
   '/work/greykernel/', '/work/enterprise-immersive-systems/', '/work/humanoid-robot-control-system/',
-  '/work/web-ocean-3d/', '/work/kinema/', '/work/safed-sagar/', '/work/little-wonder/',
+  '/work/dlss5-video-player/', '/work/web-ocean-3d/', '/work/kinema/', '/work/safed-sagar/', '/work/little-wonder/',
   '/work/ai-native-game-thesis/', '/work/the-brutal-spy/', '/work/alphaman/', '/work/merkur-magie/',
   '/work/machine-hunter/', '/work/mysticmojo/', '/work/defense-simulation-systems/',
 ];
@@ -13,7 +13,7 @@ test('Work presents the approved featured hierarchy without duplicating archive 
 
   const gallery = page.locator('[data-work-gallery]');
   const items = gallery.locator('[data-work-item]');
-  await expect(items).toHaveCount(19);
+  await expect(items).toHaveCount(visibleProjectPaths.length);
   expect(await items.locator('> a').evaluateAll(links => links.map(link => new URL((link as HTMLAnchorElement).href).pathname))).toEqual(visibleProjectPaths);
   await expect(gallery.locator('[data-gallery-role="lead"] > a')).toHaveAttribute('href', '/work/blocks/');
   expect(await gallery.locator('[data-gallery-role="support"] > a').evaluateAll(links => links.map(link => new URL((link as HTMLAnchorElement).href).pathname))).toEqual([
@@ -25,7 +25,8 @@ test('compact desktop controls bring the first project into the opening viewport
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/work/');
   const firstImage = await page.locator('[data-work-item]').first().locator('.work-gallery__image').boundingBox();
-  expect(firstImage?.y).toBeLessThanOrEqual(450);
+  // The compact opening leaves at least a third of the first screen for the lead project.
+  expect(firstImage?.y).toBeLessThanOrEqual(600);
 });
 
 test('filtering and chronological ordering use the uniform gallery while preserving behavior', async ({ page }) => {

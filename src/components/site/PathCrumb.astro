@@ -1,0 +1,15 @@
+---
+/** Breadcrumbs as a shell path: ~ / work / blocks. */
+type Crumb = { label: string; href?: string };
+interface Props { items: Crumb[] }
+const { items } = Astro.props;
+---
+
+<nav class="pg-path breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><span class="pg-path__prompt" aria-hidden="true">guest@2600th:</span><a href="/" aria-label="Home">~</a></li>
+    {items.map((item) => (
+      <li>{item.href ? <a href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}</li>
+    ))}
+  </ol>
+</nav>

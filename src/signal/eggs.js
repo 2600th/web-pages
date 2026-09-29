@@ -28,7 +28,7 @@ export function unlock(id) {
 }
 
 /** Wiring for effects the eggs trigger, supplied by main. */
-const hooks = { seize() {}, phreak() {}, goto() {} };
+export const hooks = { seize() {}, phreak() {}, goto() { return false; } };
 export function setHooks(h) { Object.assign(hooks, h); }
 
 /* ---------------- Toy whistle: click the logo five times ---------------- */
@@ -50,7 +50,7 @@ const LOGO = [
 ];
 const HELP = [
   ['help', 'this list'], ['whoami', 'who runs this line'], ['neofetch', 'system info'], ['ls', 'list sections'],
-  ['cd <section>', 'jump to work, log, lab, notes or contact'], ['man 2600', 'the tone behind the name'],
+  ['cd <section>', 'go to work, lab, notes, about or contact'], ['man 2600', 'the tone behind the name'],
   ['dial <digits>', 'play MF tones, e.g. dial 1337'], ['seize', 'send 2600 Hz'], ['phreak', 'toggle phreak mode'],
   ['ping', 'check the line'], ['achievements', 'what you have found'], ['sound on|off', 'toggle audio'], ['clear', 'clear the screen'], ['exit', 'close'],
 ];
@@ -62,12 +62,16 @@ function buildConsole() {
   el.setAttribute('aria-label', 'Console');
   el.hidden = true;
   el.innerHTML = `
+    <header class="sg-console__bar">
+      <p class="sg-console__title"><i aria-hidden="true"></i>guest@2600th · tty2600</p>
+      <p class="sg-console__hint">Tab completes · ↑ history · Esc closes</p>
+      <button type="button" class="sg-console__close" data-console-close>Close</button>
+    </header>
     <div class="sg-console__log" role="log" aria-live="polite" data-console-log></div>
     <form class="sg-console__line" data-console-form>
       <label for="sg-console-input">guest@2600th:~$</label>
       <input id="sg-console-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-console-input />
-    </form>
-    <p class="sg-console__hint"><span>Tab completes · ↑ history · Esc closes</span><button type="button" class="sg-console__close" data-console-close>Close</button></p>`;
+    </form>`;
   document.body.append(el);
   return el;
 }
@@ -82,12 +86,23 @@ export function initEggs() {
   let lastFocus = null;
   let greeted = false;
 
+  const append = (node) => { log.append(node); log.scrollTop = log.scrollHeight; };
   const print = (text, cls = '') => {
     const line = document.createElement('pre');
     line.className = cls;
     line.textContent = text;
-    log.append(line);
-    log.scrollTop = log.scrollHeight;
+    append(line);
+  };
+  // Two-column output as a real list, so descriptions wrap in their own column on phones.
+  const rows = (pairs) => {
+    const dl = document.createElement('dl');
+    dl.className = 'sg-console__rows';
+    pairs.forEach(([term, detail]) => {
+      const dt = document.createElement('dt'); dt.textContent = term;
+      const dd = document.createElement('dd'); dd.textContent = detail;
+      dl.append(dt, dd);
+    });
+    append(dl);
   };
 
   function open() {
@@ -112,26 +127,34 @@ export function initEggs() {
   }
 
   const commands = {
-    help: () => HELP.forEach(([c, d]) => print(`  ${c.padEnd(15)} ${d}`)),
+    help: () => rows(HELP),
     whoami: () => print('Pranshul Chandhok (2600th)\nVP Product & Technology, Interior Company at Square Yards.\nGurugram, India.'),
     neofetch: () => {
       const info = [
         'guest@2600th', '------------', 'Name: Pranshul Chandhok', 'Handle: 2600th', 'Role: VP Product & Technology',
         'Uptime: 14+ years', 'Eras: games, XR, design software, AI', 'Stack: TypeScript, Three.js, C++, Unity', 'Patent: IN 395331', 'Shell: curiosity',
       ];
-      print(LOGO.map((l, i) => l + '   ' + (info[i] ?? '')).concat(info.slice(LOGO.length).map((l) => ' '.repeat(36) + l)).join('\n'), 'is-logo');
+      // Logo and details side by side, stacking when the window is narrow.
+      const wrap = document.createElement('div');
+      wrap.className = 'sg-console__fetch';
+      const art = document.createElement('pre'); art.textContent = LOGO.join('\n');
+      const text = document.createElement('pre'); text.textContent = info.join('\n');
+      wrap.append(art, text);
+      append(wrap);
     },
-    ls: () => print('work/   log/   lab/   notes/   contact   README.md'),
+    ls: () => print('work/   lab/   notes/   about/   contact   README.md'),
     cat: (arg) => arg === 'README.md'
-      ? print('I learn by building. This page is one of those builds:\na point cloud, a CRT shader and a synthesized phone network.')
+      ? print('I learn by building. This site is one of those builds:\na point cloud, a CRT shader and a synthesized phone network.')
       : print(`cat: ${arg || ''}: No such file`),
     cd: (arg) => {
-      const id = (arg || '').replace(/\/$/, '');
-      if (['work', 'log', 'lab', 'notes', 'contact', 'top'].includes(id)) { close(); hooks.goto(id); }
-      else print(`cd: ${arg || ''}: No such section. Try ls.`);
+      const raw = (arg || '').trim();
+      const id = raw.replace(/^~\/?|^\//, '').replace(/\/$/, '') || 'home';
+      const target = id === '..' ? 'home' : id;
+      if (['work', 'log', 'lab', 'notes', 'about', 'contact', 'top', 'home'].includes(target)) { close(); hooks.goto(target); }
+      else print(`cd: ${raw}: No such section. Try ls.`);
     },
     man: (arg) => arg === '2600'
-      ? print('2600(7)\n\nIn the old North American long-distance network, a 2600 Hz tone meant\n"this trunk is idle". Period: 1/2600 s = 384.6 µs.\nPlay it down a live call and the far switch waits for routing digits,\nsent as MF tone pairs: KP = 1100+1700 Hz, ST = 1500+1700 Hz.\nCarriers later moved signalling out of band. The handle stuck.')
+      ? print('2600(7)\n\nIn the old North American long-distance network, a 2600 Hz tone meant\n"this trunk is idle". Period: 1/2600 s = 384.6 µs.\nPlay it down a live call and the far switch waits for routing digits,\nsent as MF tone pairs: KP = 1100+1700 Hz, ST = 1500+1700 Hz.\nI first heard about it in a hacking documentary in college. The handle stuck.')
       : print('What manual page do you want? Try: man 2600'),
     dial: (arg) => {
       const digits = (arg || '').replace(/[^0-9]/g, '');
@@ -174,7 +197,7 @@ export function initEggs() {
     input.value = '';
     if (!raw) return;
     history.push(raw); hIndex = history.length;
-    print(`guest@2600th:~$ ${raw}`, 'is-cmd');
+    print(raw, 'is-cmd');
     const [cmd, ...rest] = raw.split(/\s+/);
     const fn = commands[cmd.toLowerCase()];
     if (fn) fn(rest.join(' ')); else print(`command not found: ${cmd}. Try help.`);

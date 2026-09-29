@@ -31,22 +31,3 @@ import { craft } from '../../data/craft';
     {craft.sources.map((source) => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}<span class="sr-only"> (opens in a new tab)</span></a></li>)}
   </ul>
 </section>
-
-<style>
-  .craft-evolution { margin-block: clamp(2.5rem, 6vw, 5rem); }
-  .craft-evolution h2 { max-width: 25ch; }
-  .craft-evolution__steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; margin-block: 2rem 3rem; border-block: 1px solid var(--line); }
-  .craft-evolution__steps li { padding: 1.25rem 1rem; border-inline-end: 1px solid var(--line); }
-  .craft-evolution__steps li:last-child { border-inline-end: 0; }
-  .craft-evolution__steps strong, .craft-evolution__steps span, .craft-evolution__steps small { display: block; }
-  .craft-evolution__steps strong { margin-bottom: 1rem; }
-  .craft-evolution__steps small { margin-top: 1rem; }
-  .craft-evolution__table { overflow-x: auto; margin-block: 2rem; }
-  table { width: 100%; border-collapse: collapse; text-align: left; }
-  caption { text-align: left; font-weight: 700; margin-bottom: 1rem; }
-  th, td { padding: 1rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { background: var(--inverse-surface); color: var(--inverse-text); }
-  .craft-evolution__note { font-size: 0.9rem; }
-  .craft-evolution__sources { display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem; list-style: none; padding: 0; }
-  @media (max-width: 700px) { .craft-evolution__steps { grid-template-columns: 1fr; } .craft-evolution__steps li { border-inline-end: 0; border-bottom: 1px solid var(--line); } .craft-evolution__steps li:last-child { border-bottom: 0; } }
-</style>

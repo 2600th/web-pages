@@ -1,7 +1,7 @@
 // Capability and preference plumbing shared by every direction.
 
 const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
-// Shared with the rest of the site (src/scripts/ambient-preference.ts), so the choice follows the visitor.
+// One motion preference for the whole site, so the choice follows the visitor from page to page.
 const STORAGE_KEY = '2600th-ambient-motion';
 
 function readStored() {

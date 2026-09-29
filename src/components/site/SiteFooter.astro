@@ -1,0 +1,42 @@
+---
+import { CONTACT_EMAIL, SOCIAL_LINKS } from '../../data/site';
+
+interface Props { variant: 'home' | 'page' }
+const { variant } = Astro.props;
+const path = Astro.url.pathname;
+const sitemap = [['/work/', 'Work'], ['/lab/', 'Lab'], ['/notes/', 'Notes'], ['/about/', 'About'], ['/rss.xml', 'RSS']];
+---
+
+<footer class:list={['sg-foot', `sg-foot--${variant}`]} id="contact" aria-labelledby="contact-title" tabindex="-1">
+  <div class="sg-foot__main">
+    <div class="sg-foot__copy">
+      <p class="sg-eyebrow"><span>{variant === 'home' ? '06' : 'TEL'}</span> Dial in</p>
+      <h2 id="contact-title">Let’s compare <em>notes.</em></h2>
+      <p>Questions about AI products, real-time 3D or building teams around new technology are welcome.</p>
+      <div class="sg-mail">
+        <a href={`mailto:${CONTACT_EMAIL}`} data-mail data-event="contact_start" data-event-context={`${variant}-footer`}>{CONTACT_EMAIL}</a>
+        <button type="button" class="sg-copy" data-copy={CONTACT_EMAIL} data-event="contact_copy" data-event-context={`${variant}-footer`}><span data-copy-label>Copy</span></button>
+      </div>
+      <ul class="sg-social">
+        {SOCIAL_LINKS.map((link) => <li><a href={link.href} rel="me">{link.label}</a></li>)}
+      </ul>
+    </div>
+    <slot />
+  </div>
+
+  <div class="sg-foot__bar">
+    <p class="sg-foot__id">
+      <a class="sg-mark" href="/" aria-label="2600th, home"><svg class="sg-mark__wave" viewBox="0 0 28 16" aria-hidden="true"><path d="M1 8c2.5-6 4.5-6 6.5 0s4 6 6.5 0 4-6 6.5 0 4 6 6.5 0" /></svg><span>2600</span><sup>th</sup></a>
+      <span>Pranshul Chandhok · Gurugram, India</span>
+    </p>
+    <nav class="sg-foot__nav" aria-label="Footer navigation">
+      {sitemap.map(([href, label]) => <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>)}
+    </nav>
+    <p class="sg-foot__keys">
+      {variant === 'home' && <span class="sg-foot__secret">Seven things are hidden here.</span>}
+      <button type="button" data-console-open aria-label="Open the console"><kbd aria-hidden="true">`</kbd> Console</button>
+      <button type="button" data-shortcuts aria-pressed="true">Keyboard shortcuts on</button>
+    </p>
+    <a class="sg-hangup" href="#page-top" data-sfx="tick">Hang up <span aria-hidden="true">↑</span></a>
+  </div>
+</footer>

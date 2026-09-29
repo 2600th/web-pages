@@ -1,0 +1,52 @@
+---
+import PathCrumb from './PathCrumb.astro';
+
+type Crumb = { label: string; href?: string };
+interface Props {
+  eyebrow: [string, string];
+  path: Crumb[];
+  lede?: string;
+  readout?: [string, string][];
+  wave?: 'sine' | 'square' | 'saw' | 'noise' | 'tones';
+  long?: boolean;
+  /** Index pages whose content is the list below: a shorter opening so the first item shows. */
+  compact?: boolean;
+}
+const { eyebrow, path, lede, readout = [], wave = 'sine', long = false, compact = false } = Astro.props;
+
+// A static trace per section, drawn once at build time. Wide enough to slide 200px when motion is on.
+const W = 1600;
+const H = 48;
+const points: string[] = [];
+let seed = 2600;
+let phase = 0;
+const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+for (let x = 0; x <= W; x += 4) {
+  const t = x / 100;
+  let y = 0;
+  if (wave === 'sine') y = Math.sin(t * Math.PI);
+  else if (wave === 'square') y = Math.sign(Math.sin(t * Math.PI)) * 0.8;
+  else if (wave === 'saw') y = ((t % 2) - 1) * 0.9;
+  else if (wave === 'noise') y = (rand() - 0.5) * 1.4 * (0.4 + 0.6 * Math.abs(Math.sin(t * 0.7)));
+  // Rising tones, phase-continuous so the trace never jumps between them.
+  else { phase += 0.04 * Math.PI * (1 + Math.floor((x / W) * 3)); y = Math.sin(phase) * 0.85; }
+  points.push(`${x === 0 ? 'M' : 'L'}${x} ${(H / 2 - y * (H / 2 - 6)).toFixed(1)}`);
+}
+---
+
+<header class:list={['pg-open route-opening', { 'pg-open--long': long, 'pg-open--compact': compact }]} data-route-opening>
+  <div class="pg-open__copy">
+    <PathCrumb items={path} />
+    <p class="sg-eyebrow"><span>{eyebrow[0]}</span> {eyebrow[1]}</p>
+    <slot name="title" />
+    {lede && <p class="pg-lede">{lede}</p>}
+    <slot />
+  </div>
+  {(readout.length > 0 || Astro.slots.has('aside')) && (
+    <div class="pg-open__aside">
+      {readout.length > 0 && <dl class="pg-readout">{readout.map(([label, value]) => <div><dt>{label}</dt><dd set:html={value} /></div>)}</dl>}
+      <slot name="aside" />
+    </div>
+  )}
+  <svg class="pg-wave" viewBox={`0 0 ${W - 400} ${H}`} preserveAspectRatio="none" aria-hidden="true"><path d={points.join('')} /></svg>
+</header>

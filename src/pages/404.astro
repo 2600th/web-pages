@@ -1,25 +1,29 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import '../styles/content-pages.css';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageOpening from '../components/site/PageOpening.astro';
+import '../styles/signal/pages.css';
 ---
 
-<BaseLayout
+<SiteLayout
   title="Page not found"
   description="This page does not exist. Return to the portfolio of Pranshul Chandhok."
   canonical="/404.html"
   robots="noindex,follow"
 >
-  <div class="page-shell not-found-page">
-    <header class="route-opening route-opening--404" data-route-opening>
-      <div class="route-opening__positive" data-polarity="positive">
-        <h1>Page not found</h1>
-        <p class="route-opening__statement">This address doesn’t lead to a page on the site.</p>
-      </div>
-      <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">Error 404</p>
-        <p>You can return home, browse my <a href="/work/">projects</a>, or read the latest <a href="/notes/">notes</a>.</p>
-        <p><a class="button-link button-link--primary" href="/">Return home ↗</a></p>
-      </div>
-    </header>
+  <div class="pg not-found-page">
+    <PageOpening
+      eyebrow={['404', 'Intercept']}
+      path={[{ label: '404' }]}
+      lede="The number you have dialed is not in service. Please check the address and try again, or take one of these lines instead."
+      wave="tones"
+    >
+      <h1 slot="title">Page not <em>found.</em></h1>
+      <div class="nf-sit" aria-hidden="true" title="Special information tones"><i></i><i></i><i></i></div>
+      <p class="nf-links">
+        <a class="sg-btn" href="/" data-sfx="tick">Return home <span aria-hidden="true">↗</span></a>
+        <a class="sg-btn sg-btn--ghost" href="/work/" data-sfx="tick">Browse my projects</a>
+        <a class="sg-btn sg-btn--ghost" href="/notes/" data-sfx="tick">Read the latest notes</a>
+      </p>
+    </PageOpening>
   </div>
-</BaseLayout>
+</SiteLayout>

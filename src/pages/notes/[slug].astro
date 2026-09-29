@@ -1,11 +1,11 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import Breadcrumbs from '../../components/shared/Breadcrumbs.astro';
+import PathCrumb from '../../components/site/PathCrumb.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
 import { SITE } from '../../data/site';
 import { getPublishedNotes, getNoteReadingTime, getOriginalSource, NOTE_TYPES } from '../../data/notes';
-import '../../styles/content-pages.css';
+import '../../styles/signal/pages.css';
 
 export async function getStaticPaths() {
   const notes = getPublishedNotes(await getCollection('notes'));
@@ -46,9 +46,10 @@ const jsonLd = [{
     { '@type': 'ListItem', position: 3, name: data.title, item: `${SITE.url}/notes/${data.slug}/` },
   ],
 }];
+const readingTime = getNoteReadingTime(entry.body ?? '');
 ---
 
-<BaseLayout
+<SiteLayout
   title={data.title}
   description={data.summary}
   canonical={`/notes/${data.slug}/`}
@@ -59,21 +60,26 @@ const jsonLd = [{
   ogType="article"
   jsonLd={jsonLd}
 >
-  <Breadcrumbs items={[{ label: 'Notes', href: '/notes/' }, { label: data.title }]} />
+  <div class="pg">
   <article class="article-shell" data-reading-surface>
     <header class="article-shell__opening route-opening route-opening--article" data-route-opening>
+      <PathCrumb items={[{ label: 'notes', href: '/notes/' }, { label: data.slug }]} />
+      <p class="route-opening__context">{NOTE_TYPES[data.type]} · {formatDate(data.publishedAt)} · {readingTime} min read</p>
       <div class="route-opening__positive" data-polarity="positive">
         <h1>{data.title}</h1>
       </div>
       <div class="route-opening__negative" data-polarity="negative">
-        <p class="route-opening__context">{NOTE_TYPES[data.type]} · {formatDate(data.publishedAt)}</p>
         <p class="article-shell__summary">{data.summary}</p>
       </div>
     </header>
-    <aside class="article-shell__meta">
-      <p>Published <time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time>{data.updatedAt && data.updatedAt.valueOf() !== data.publishedAt.valueOf() && <><br />Updated <time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></>}</p>
-      <p>{data.topics.join(' · ')}</p>
-      <p>{getNoteReadingTime(entry.body ?? '')} min read</p>
+    <aside class="article-shell__meta" aria-label="About this note">
+      <dl class="pg-readout">
+        <div><dt>Published</dt><dd><time datetime={data.publishedAt.toISOString()}>{formatDate(data.publishedAt)}</time></dd></div>
+        {data.updatedAt && data.updatedAt.valueOf() !== data.publishedAt.valueOf() && <div><dt>Updated</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>}
+        <div><dt>Type</dt><dd>{NOTE_TYPES[data.type]}</dd></div>
+        <div><dt>Reading</dt><dd><b>{readingTime}</b> min</dd></div>
+        <div><dt>Topics</dt><dd>{data.topics.join(' · ')}</dd></div>
+      </dl>
     </aside>
     <div class="article-shell__content">
       {showContents && <details class="article-contents">
@@ -97,26 +103,6 @@ const jsonLd = [{
       </footer>
     </div>
   </article>
-</BaseLayout>
+  </div>
+</SiteLayout>
 
-<style>
-  .article-shell__related { margin-block-start: 3rem; padding-block-start: 1.5rem; border-top: 1px solid var(--line); }
-  .article-shell__related ul { display: flex; flex-wrap: wrap; gap: 0.8rem 1.8rem; padding: 0; list-style: none; }
-  .article-shell__related a { display: inline-block; padding-block: 0.5rem; }
-  .article-contents { margin-bottom: 2rem; padding-block: 0.75rem; border-block: 1px solid var(--line); }
-  .article-contents summary { width: fit-content; min-height: 2.75rem; padding-block: 0.5rem; color: var(--warm); cursor: pointer; font-weight: 650; }
-  .article-contents ol { margin: 0.5rem 0 0; padding-left: 1.5rem; }
-  .article-contents li { padding-left: 0.25rem; }
-  .article-contents a { display: inline-block; padding-block: 0.55rem; color: var(--muted); line-height: 1.45; }
-  .article-shell :global(.prose h2) { margin-block: 2.8rem 1rem; font-size: var(--type-article); max-width: 28ch; scroll-margin-top: 1.5rem; }
-  .article-shell :global(.prose .table-scroll) { margin-block: 2rem; padding-bottom: 0.5rem; scrollbar-color: var(--gold) var(--velvet-soft); }
-  .article-shell :global(.prose table) { width: 100%; table-layout: auto; border-collapse: collapse; margin-block: 0; font-size: 1rem; line-height: 1.5; }
-  .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.8rem 0.75rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: normal; }
-  .article-shell :global(.prose th) { color: var(--warm); }
-  .article-shell :global(.prose pre) { max-width: 100%; overflow-x: auto; padding: 1.2rem; font-size: 1rem; line-height: 1.65; }
-  .article-shell :global(.prose :not(pre) > code) { overflow-wrap: anywhere; }
-  @media (max-width: 40rem) {
-    .article-shell :global(.prose .table-scroll table) { min-width: 42rem; }
-    .article-shell :global(.prose th), .article-shell :global(.prose td) { padding: 0.75rem; }
-  }
-</style>

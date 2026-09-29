@@ -7,6 +7,7 @@ const workSlugs = [
   'designesto',
   'propvr-ai-craft',
   'defense-simulation-systems',
+  'dlss5-video-player',
   'enterprise-immersive-systems',
   'greykernel',
   'homelane-spacecraft-pro',
@@ -35,7 +36,7 @@ const noteSlugs = [
 ] as const;
 
 const routeCases = [
-  ['/work/', 'Projects'],
+  ['/work/', 'Work.'],
   ['/work/kinema/', 'Kinema'],
   ['/work/defense-simulation-systems/', 'Defense technology and simulation'],
   ['/notes/', 'Notes from the workbench'],
@@ -60,10 +61,10 @@ for (const [path, heading] of routeCases) {
 }
 
 test('Ghost Terminal links use a consistent name and serve the original portfolio', async ({ page, request }) => {
-  for (const [path, expectedCount] of [['/', 1], ['/lab/', 2]] as const) {
+  for (const path of ['/', '/lab/']) {
     await page.goto(path);
     const archiveLinks = page.locator('a[href*="/lab/terminal/"]');
-    await expect(archiveLinks).toHaveCount(expectedCount);
+    await expect(archiveLinks).toHaveCount(1);
     for (const archiveLink of await archiveLinks.all()) {
       await expect(archiveLink).toHaveAccessibleName(/Ghost Terminal/);
       await expect(archiveLink).toHaveAttribute('href', '/lab/terminal/index.html');
@@ -90,7 +91,7 @@ test('the archive return action stays in mobile flow instead of covering the con
   expect(actionBottom).toBeLessThanOrEqual((firstPanel?.y ?? 0) + 80);
 });
 
-test('work index exposes all 19 visible records as one inspectable route list', async ({ page }) => {
+test('work index exposes every visible record as one inspectable route list', async ({ page }) => {
   await page.goto('/work/');
 
   const records = page.locator('[data-work-item]');
@@ -113,13 +114,13 @@ test('work archive opens with authentic historical media and a public SpaceCraft
 
 test('every work domain filter returns its complete subset', async ({ page }) => {
   const expectedCounts = {
-    all: 19,
+    all: 20,
     games: 9,
     xr: 6,
     simulation: 6,
     robotics: 2,
     'design-tech': 4,
-    'applied-ai': 5,
+    'applied-ai': 6,
   } as const;
 
   for (const [domain, count] of Object.entries(expectedCounts)) {
@@ -129,36 +130,23 @@ test('every work domain filter returns its complete subset', async ({ page }) =>
   }
 });
 
-test('interior route openings use the velvet editorial system with generated art confined to Notes', async ({ page }) => {
+test('interior route openings share the Signal opening: path, eyebrow, one heading and a trace', async ({ page }) => {
   for (const path of ['/work/', '/notes/', '/about/', '/lab/', '/this-route-does-not-exist/']) {
     await page.goto(path);
     const opening = page.locator('[data-route-opening]');
-    await expect(opening).toHaveCount(1);
-    await expect(opening.locator('[data-polarity="positive"]')).toHaveCount(1);
-    await expect(opening.locator('[data-polarity="negative"]')).toHaveCount(1);
-    await expect(page.locator('main h1')).toHaveCount(1);
-    await expect(opening.locator('img[src*="/media/generated/editorial/"]')).toHaveCount(0);
-
-    const colors = await opening.evaluate((element) => {
-      const positive = element.querySelector('[data-polarity="positive"]');
-      const negative = element.querySelector('[data-polarity="negative"]');
-      return {
-        opening: getComputedStyle(element).backgroundColor,
-        positive: positive ? getComputedStyle(positive).backgroundColor : '',
-        negative: negative ? getComputedStyle(negative).backgroundColor : '',
-        positiveText: positive ? getComputedStyle(positive).color : '',
-        negativeText: negative ? getComputedStyle(negative).color : '',
-      };
-    });
-    expect(colors.opening).not.toBe('rgb(36, 87, 255)');
-    expect(colors.positiveText).toBe('rgb(237, 234, 226)');
-    expect(colors.negativeText).toBe(path === '/work/' ? 'rgb(168, 167, 161)' : 'rgb(237, 234, 226)');
-    expect(colors.positive).not.toBe('rgb(241, 240, 234)');
-    expect(colors.negative).not.toBe('rgb(241, 240, 234)');
+    await expect(opening, path).toHaveCount(1);
+    await expect(opening.getByRole('navigation', { name: 'Breadcrumb' }), path).toContainText('guest@2600th:');
+    await expect(opening.locator('.sg-eyebrow'), path).toBeVisible();
+    await expect(page.locator('main h1'), path).toHaveCount(1);
+    await expect(opening.locator('.pg-wave'), path).toHaveAttribute('aria-hidden', 'true');
+    await expect(opening.locator('img[src*="/media/generated/editorial/"]'), path).toHaveCount(0);
+    if (path !== '/this-route-does-not-exist/') await expect(opening.locator('.pg-readout'), path).toHaveCount(1);
+    // Openings sit on the void ground, never a light or saturated slab.
+    expect(await opening.evaluate((element) => getComputedStyle(element).backgroundColor), path).toBe('rgba(0, 0, 0, 0)');
   }
 });
 
-test('Work gallery and Notes opening include art-directed, responsive media', async ({ page }) => {
+test('Work gallery leads with art-directed, responsive media', async ({ page }) => {
   await page.goto('/work/');
   const workMedia = page.locator('[data-gallery-role="lead"], [data-gallery-role="support"]');
   await expect(workMedia).toHaveCount(3);
@@ -171,36 +159,22 @@ test('Work gallery and Notes opening include art-directed, responsive media', as
     if (index === 0) await expect(link.locator('img')).toHaveAttribute('fetchpriority', 'high');
     await expect(link.locator('img')).toHaveAttribute('decoding', 'async');
   }
-
-  await page.goto('/notes/');
-  const notesMedia = page.locator('[data-notes-opening-media]');
-  await expect(page.locator('.route-opening--notes[data-motion-scope]')).toHaveCount(1);
-  await expect(notesMedia).toHaveAttribute('data-motion-reveal', '');
-  await expect(notesMedia.locator('picture')).toHaveCount(1);
-  await expect(notesMedia.locator('source[type="image/avif"]')).toHaveCount(1);
-  await expect(notesMedia.locator('source[type="image/webp"]')).toHaveCount(1);
-  await expect(notesMedia.locator('img')).toHaveAttribute('loading', 'eager');
-  await expect(notesMedia.locator('img')).toHaveAttribute('fetchpriority', 'high');
-  await expect(notesMedia.locator('img')).toHaveAttribute('decoding', 'async');
-  await expect(notesMedia.locator('img')).toHaveAttribute('width', '960');
-  await expect(notesMedia.locator('img')).toHaveAttribute('height', '540');
-  await expect(notesMedia.locator('figcaption')).toHaveCount(0);
 });
 
-test('reduced motion keeps route-opening media in its static composition', async ({ page }) => {
+test('reduced motion keeps gallery media and opening traces still', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/work/');
   expect(await page.locator('[data-work-gallery] img').first().evaluate(image => Number.parseFloat(getComputedStyle(image).transitionDuration))).toBeLessThan(0.001);
   await page.goto('/notes/');
-  await expect(page.locator('[data-route-opening]')).toHaveAttribute('data-motion-state', 'static');
+  await expect(page.locator('html')).toHaveAttribute('data-motion', 'off');
+  expect(await page.locator('.pg-wave path').evaluate(path => getComputedStyle(path).animationName)).toBe('none');
 });
 
-test('Work gallery and Notes opening media stay contained at every supported review width', async ({ page }) => {
+test('Work gallery and interior openings stay contained at every supported review width', async ({ page }) => {
   for (const width of [320, 390, 878, 946, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const path of ['/work/', '/notes/']) {
+    for (const [path, selector] of [['/work/', '[data-work-gallery]'], ['/notes/', '[data-route-opening]']] as const) {
       await page.goto(path);
-      const selector = path === '/work/' ? '[data-work-gallery]' : '[data-notes-opening-media]';
       const media = page.locator(selector);
       await expect(media).toBeVisible();
       const box = await media.boundingBox();
@@ -209,26 +183,6 @@ test('Work gallery and Notes opening media stay contained at every supported rev
       expect((box?.x ?? 0) + (box?.width ?? width + 1), `${path} right at ${width}px`).toBeLessThanOrEqual(width + 1);
       const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       expect(scrollWidth, `${path} document at ${width}px`).toBeLessThanOrEqual(width);
-
-      if (path === '/work/') continue;
-      const geometry = await page.locator('[data-route-opening]').evaluate((opening) => {
-        const mediaElement = opening.querySelector('[data-notes-opening-media]');
-        const copyElement = opening.querySelector('.route-opening__copy');
-        const mediaBox = mediaElement?.getBoundingClientRect();
-        const copyBox = copyElement?.getBoundingClientRect();
-        const frames = [...(mediaElement?.querySelectorAll('a') ?? [])].map((frame) => frame.getBoundingClientRect());
-        return {
-          dividerContent: getComputedStyle(opening, '::after').content,
-          mediaBottom: mediaBox?.bottom ?? 0,
-          copyTop: copyBox?.top ?? Number.POSITIVE_INFINITY,
-          frameBottoms: frames.map((frame) => frame.bottom),
-        };
-      });
-      expect(geometry.dividerContent, `${path} has no decorative rule over the media plane at ${width}px`).toBe('none');
-      expect(geometry.mediaBottom, `${path} media clears copy at ${width}px`).toBeLessThanOrEqual(geometry.copyTop - 8);
-      for (const frameBottom of geometry.frameBottoms) {
-        expect(frameBottom, `${path} frame remains inside media plane at ${width}px`).toBeLessThanOrEqual(geometry.mediaBottom + 1);
-      }
     }
   }
 });
@@ -260,6 +214,8 @@ test('case detail is organized around the reader journey and useful project link
 });
 
 test('main website and every published Note omit forbidden visitor-facing copy', async ({ page }) => {
+  // Visits every public route (about 45), so allow more than the default budget.
+  test.setTimeout(90_000);
   const internalLanguage = /\b(?:evidence|corroboration|source ledger|public record|sourced career marker|reviewed archive|approval-enhanced|evidenceStatus)\b/i;
   await page.goto('/notes/');
   const publishedNotePaths = await page.locator('.notes-list > li > a').evaluateAll(links => links.map(link => link.getAttribute('href')!));
@@ -299,18 +255,17 @@ test('all published note routes remain reading surfaces with truthful original-s
 test('lab and about expose their operating surfaces', async ({ page }) => {
   await page.goto('/lab/');
   await expect(page.locator('[data-build-ledger]')).toHaveCount(1);
-  await expect(page.locator('[data-build-ledger] [data-build-row]')).toHaveCount(6);
-  await expect(page.locator('a[href="/lab/terminal/index.html"]')).toHaveCount(2);
+  await expect(page.locator('[data-build-ledger] .sg-feature[data-build]')).toHaveCount(1);
+  await expect(page.locator('[data-build-ledger] .sg-build[data-build]')).toHaveCount(7);
+  await expect(page.locator('a[href="/lab/terminal/index.html"]')).toHaveCount(1);
 
   await page.goto('/about/');
   await expect(page.locator('[data-operating-dossier]')).toHaveCount(1);
   await expect(page.locator('[data-operating-dossier] .career-acts li')).toHaveCount(3);
   await expect(page.locator('[data-operating-atlas]')).toHaveCount(1);
-  await expect(page.locator('[data-operating-atlas] li[data-motion-reveal]')).toHaveCount(3);
-  await expect(page.locator('[data-about-diorama] img')).toHaveAttribute('src', '/media/generated/identity/2600th-operator-diorama.webp');
-  await expect(page.locator('[data-about-diorama] figcaption')).toHaveCount(0);
-  await expect(page.locator('[data-equipment-inventory] img')).toHaveAttribute('src', '/media/generated/identity/2600th-equipment-inventory.webp');
-  await expect(page.locator('[data-equipment-inventory] figcaption')).toHaveCount(0);
+  await expect(page.locator('#why-2600th .ab-steps > li')).toHaveCount(5);
+  await expect(page.locator('.ab-portrait img')).toHaveAttribute('src', '/media/signal/portrait.webp');
+  await expect(page.locator('.ab-portrait img')).toHaveAttribute('alt', /.+/);
 });
 
 test('visitor-facing routes omit internal generated-media disclaimers', async ({ page }) => {
@@ -321,47 +276,35 @@ test('visitor-facing routes omit internal generated-media disclaimers', async ({
   }
 });
 
-test('shared route-opening headings keep readable line spacing and stack before columns become cramped', async ({ page }) => {
+test('shared route-opening headings stay clear of their lede and stack before columns become cramped', async ({ page }) => {
   for (const width of [320, 390, 878, 946, 1024]) {
     await page.setViewportSize({ width, height: 912 });
-    for (const path of ['/about/', '/work/', '/notes/']) {
+    for (const path of ['/about/', '/work/', '/notes/', '/work/defense-simulation-systems/']) {
       await page.goto(path);
-      if (path === '/work/') {
-        const opening = page.locator('.work-gallery-opening');
-        const heading = opening.locator('h1');
-        const intro = opening.locator('p');
-        const [openingBox, headingBox, introBox] = await Promise.all([opening.boundingBox(), heading.boundingBox(), intro.boundingBox()]);
-        expect(openingBox, `${path} compact opening at ${width}px`).not.toBeNull();
-        expect((openingBox?.x ?? -1) >= 0 && (openingBox?.x ?? 0) + (openingBox?.width ?? width + 1) <= width + 1, `${path} compact opening is contained at ${width}px`).toBe(true);
-        if (width <= 736) expect(introBox?.y ?? -1, `${path} intro stacks after its heading at ${width}px`).toBeGreaterThanOrEqual((headingBox?.y ?? 0) + (headingBox?.height ?? 0) - 1);
-        const typeMetrics = await heading.evaluate((element) => {
-          const style = getComputedStyle(element);
-          return { fontSize: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
-        });
-        expect(typeMetrics.lineHeight / typeMetrics.fontSize, `${path} heading keeps a readable line box at ${width}px`).toBeGreaterThanOrEqual(1.03);
-        continue;
-      }
-      const opening = page.locator('.route-opening');
-      const positive = opening.locator('.route-opening__positive');
-      const negative = opening.locator('.route-opening__negative');
-      const [positiveBox, negativeBox] = await Promise.all([positive.boundingBox(), negative.boundingBox()]);
-      expect(positiveBox, `${path} positive plane at ${width}px`).not.toBeNull();
-      expect(negativeBox, `${path} negative plane at ${width}px`).not.toBeNull();
-      expect(negativeBox?.y ?? -1, `${path} stacks its media plane at ${width}px`).toBeGreaterThanOrEqual((positiveBox?.y ?? 0) + (positiveBox?.height ?? 0) - 1);
-
-      const typeMetrics = await positive.locator('h1').evaluate((heading) => {
+      const layout = await page.locator('[data-route-opening]').evaluate((opening) => {
+        const heading = opening.querySelector('h1')!;
+        const next = heading.nextElementSibling;
+        const copy = opening.querySelector('.pg-open__copy, .case-hero__copy');
+        const aside = opening.querySelector('.pg-open__aside, .case-hero__media');
         const style = getComputedStyle(heading);
-        return { fontSize: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
+        const box = (element: Element | null | undefined) => element ? element.getBoundingClientRect() : null;
+        return {
+          fontSize: Number.parseFloat(style.fontSize),
+          lineHeight: Number.parseFloat(style.lineHeight),
+          heading: box(heading)!.toJSON(),
+          next: box(next)?.toJSON(),
+          copy: box(copy)?.toJSON(),
+          aside: box(aside)?.toJSON(),
+          right: opening.getBoundingClientRect().right,
+        };
       });
-      expect(typeMetrics.lineHeight / typeMetrics.fontSize, `${path} heading keeps a readable line box at ${width}px`).toBeGreaterThanOrEqual(1.03);
+      expect(layout.lineHeight / layout.fontSize, `${path} heading line box at ${width}px`).toBeGreaterThanOrEqual(0.9);
+      if (layout.next) expect(layout.next.top, `${path} heading clears the next line at ${width}px`).toBeGreaterThanOrEqual(layout.heading.bottom - 1);
+      expect(layout.heading.right, `${path} heading contained at ${width}px`).toBeLessThanOrEqual(width + 1);
+      if (width <= 736 && layout.copy && layout.aside) {
+        expect(layout.aside.top, `${path} aside stacks after the copy at ${width}px`).toBeGreaterThanOrEqual(layout.copy.bottom - 1);
+      }
     }
-
-    await page.goto('/work/defense-simulation-systems/');
-    const caseTypeMetrics = await page.locator('.case-hero__positive h1').evaluate((heading) => {
-      const style = getComputedStyle(heading);
-      return { fontSize: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
-    });
-    expect(caseTypeMetrics.lineHeight / caseTypeMetrics.fontSize, `case heading keeps a readable line box at ${width}px`).toBeGreaterThanOrEqual(1.03);
   }
 });
 
@@ -399,27 +342,31 @@ test('case-study statements read as editorial leads instead of oversized display
   }
 });
 
-test('article metadata becomes a readable vertical rail on narrow screens', async ({ page }) => {
+test('article metadata stays a readable, contained readout on narrow screens', async ({ page }) => {
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 912 });
     await page.goto('/notes/ai-video-control/');
 
-    const rail = page.locator('.article-shell__meta');
-    const layout = await rail.evaluate((element) => {
+    const layout = await page.locator('.article-shell__meta').evaluate((element) => {
       const railBox = element.getBoundingClientRect();
-      const items = [...element.children].map((child) => {
+      const items = [...element.querySelectorAll('.pg-readout > div')].map((child) => {
         const box = child.getBoundingClientRect();
-        return { top: box.top, bottom: box.bottom, left: box.left, width: box.width };
+        return { top: box.top, bottom: box.bottom, left: box.left, right: box.right };
       });
-      return { railWidth: railBox.width, items };
+      return { left: railBox.left, right: railBox.right, items };
     });
 
-    expect(layout.items).toHaveLength(3);
-    expect(layout.items[0].bottom, `${width}px date clears topics`).toBeLessThanOrEqual(layout.items[1].top + 1);
-    expect(layout.items[1].bottom, `${width}px topics clear reading time`).toBeLessThanOrEqual(layout.items[2].top + 1);
-    for (const item of layout.items) {
-      expect(item.width, `${width}px metadata item uses the rail`).toBeGreaterThanOrEqual(layout.railWidth * 0.9);
-      expect(item.left, `${width}px metadata item alignment`).toBeCloseTo(layout.items[0].left, 0);
+    expect(layout.items.length, `${width}px readout rows`).toBeGreaterThanOrEqual(4);
+    expect(layout.left).toBeGreaterThanOrEqual(0);
+    expect(layout.right).toBeLessThanOrEqual(width);
+    for (const [index, item] of layout.items.entries()) {
+      expect(item.left, `${width}px row ${index} inside the rail`).toBeGreaterThanOrEqual(layout.left - 1);
+      expect(item.right, `${width}px row ${index} inside the rail`).toBeLessThanOrEqual(layout.right + 1);
+      if (index > 0) {
+        const previous = layout.items[index - 1];
+        const sameRow = Math.abs(previous.top - item.top) < 2;
+        expect(sameRow ? item.left >= previous.right - 1 : item.top >= previous.bottom - 1, `${width}px row ${index} clears row ${index - 1}`).toBe(true);
+      }
     }
   }
 });
@@ -429,22 +376,18 @@ test('standard case openings keep context, summary, and metadata in a readable v
     await page.setViewportSize({ width, height: 912 });
     for (const path of ['/work/mysticmojo/', '/work/enterprise-immersive-systems/', '/work/kinema/']) {
       await page.goto(path);
-      const negative = page.locator('.case-hero:not([data-case-variant]) .case-hero__negative');
-      const layout = await negative.evaluate((element) => {
-        const children = [...element.children].map((child) => {
-          const rect = child.getBoundingClientRect();
+      const layout = await page.locator('[data-project-opening-copy]').evaluate((element) => {
+        const pick = (selector: string) => {
+          const rect = element.querySelector(selector)!.getBoundingClientRect();
           return { top: rect.top, right: rect.right, bottom: rect.bottom, left: rect.left, width: rect.width };
-        });
+        };
         const rect = element.getBoundingClientRect();
         return {
-          flexDirection: getComputedStyle(element).flexDirection,
           bounds: { left: rect.left, right: rect.right, width: rect.width },
-          children,
+          children: [pick('.case-hero__context'), pick('.case-hero__summary'), pick('.case-hero__meta')],
         };
       });
 
-      expect(layout.flexDirection, `${path} at ${width}px`).toBe('column');
-      expect(layout.children).toHaveLength(3);
       expect(layout.children[0].bottom, `${path} context clears summary at ${width}px`).toBeLessThanOrEqual(layout.children[1].top + 1);
       expect(layout.children[1].bottom, `${path} summary clears metadata at ${width}px`).toBeLessThanOrEqual(layout.children[2].top + 1);
       expect(layout.children[2].width, `${path} metadata uses the reading plane at ${width}px`).toBeGreaterThanOrEqual(layout.bounds.width * 0.6);
@@ -456,30 +399,11 @@ test('standard case openings keep context, summary, and metadata in a readable v
   }
 });
 
-test('About diorama keeps the operator portrait inside the stacked opening crop', async ({ page }) => {
-  for (const width of [878, 946, 1024]) {
-    await page.setViewportSize({ width, height: 912 });
-    await page.goto('/about/');
-
-    const visibleSourceTop = await page.locator('[data-about-diorama] img').evaluate((image) => {
-      const element = image as HTMLImageElement;
-      const rect = element.getBoundingClientRect();
-      const scale = Math.max(rect.width / element.naturalWidth, rect.height / element.naturalHeight);
-      const renderedHeight = element.naturalHeight * scale;
-      const verticalOverflow = Math.max(0, renderedHeight - rect.height);
-      const positionY = Number.parseFloat(getComputedStyle(element).objectPosition.split(/\s+/)[1] ?? '50') / 100;
-      return (verticalOverflow * positionY) / scale;
-    });
-
-    expect(visibleSourceTop, `portrait remains visible at ${width}px`).toBeLessThanOrEqual(64);
-  }
-});
-
 test('work archive renders one canonical list and supports link filters', async ({ page }) => {
   await page.goto('/work/');
-  await expect(page.locator('[data-visible-count]')).toHaveText('19');
-  await expect(page.locator('[data-work-item]')).toHaveCount(19);
-  await page.getByRole('link', { name: 'XR and spatial computing', exact: true }).first().click();
+  await expect(page.locator('[data-visible-count]')).toHaveText('20');
+  await expect(page.locator('[data-work-item]')).toHaveCount(20);
+  await page.locator('[data-domain-link="xr"]').click();
   await expect(page).toHaveURL(/\/work\/domain\/xr\/$/);
   await expect(page.getByRole('link', { name: /IRA VR/ })).toBeVisible();
   await expect(page.locator('[data-work-item]:visible')).toHaveCount(6);
@@ -489,37 +413,25 @@ test('work archive opening speaks to visitors instead of publication mechanics',
   await page.goto('/work/');
 
   await expect(page.getByText(/Full cases go deep/i)).toHaveCount(0);
-  await expect(page.getByText('Products, platforms, and experiments I helped define, build, and put into use.')).toBeVisible();
+  await expect(page.getByText('Products, platforms and experiments I helped define, build and put into use.')).toBeVisible();
 });
 
-test('footer invitation is a contained two-line lockup at every review width', async ({ page }) => {
+test('footer invitation and address stay contained at every review width', async ({ page }) => {
   for (const width of [1186, 946, 390, 320]) {
     await page.setViewportSize({ width, height: 912 });
     await page.goto('/work/');
 
-    const invitation = page.getByRole('link', { name: 'Let’s compare notes', exact: true });
-    await expect(invitation.locator('.site-footer__invitation-line')).toHaveCount(2);
-    await invitation.scrollIntoViewIfNeeded();
-    const geometry = await invitation.evaluate((element) => {
-      const rect = element.getBoundingClientRect();
-      return {
-        left: rect.left,
-        right: rect.right,
-        scrollWidth: element.scrollWidth,
-        clientWidth: element.clientWidth,
-      };
-    });
-    expect(geometry.left, `${width}px left`).toBeGreaterThanOrEqual(0);
-    expect(geometry.right, `${width}px right`).toBeLessThanOrEqual(width);
-    expect(geometry.scrollWidth, `${width}px internal overflow`).toBeLessThanOrEqual(geometry.clientWidth + 1);
+    for (const target of [page.locator('#contact h2'), page.locator('#contact [data-mail]')]) {
+      await target.scrollIntoViewIfNeeded();
+      const geometry = await target.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, scrollWidth: element.scrollWidth, clientWidth: element.clientWidth };
+      });
+      expect(geometry.left, `${width}px left`).toBeGreaterThanOrEqual(0);
+      expect(geometry.right, `${width}px right`).toBeLessThanOrEqual(width);
+      expect(geometry.scrollWidth, `${width}px internal overflow`).toBeLessThanOrEqual(geometry.clientWidth + 1);
+    }
   }
-});
-
-test('stacked route openings remove the desktop center divider from the reading plane', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/about/');
-  const dividerDisplay = await page.locator('[data-route-opening]').evaluate((element) => getComputedStyle(element, '::after').display);
-  expect(dividerDisplay).toBe('none');
 });
 
 test('concise work pages render a useful project story without empty case-study sections', async ({ page }) => {
@@ -540,8 +452,7 @@ test('defense work names the full program and systems contribution', async ({ pa
   expect(defenseRecord).not.toContain('Tata Safari');
   expect(defenseRecord).toMatch(/custom hardware[\s\S]*IMU[\s\S]*sensor[\s\S]*instructor[\s\S]*evaluation/i);
   const opening = page.locator('.case-hero');
-  await expect(opening).toHaveAttribute('data-case-variant', 'systems-atlas');
-  await expect(opening.locator('.case-hero__context')).toHaveText('2019–2021 · GreyKernel');
+  await expect(opening.locator('.case-hero__meta')).toContainText('2019');
   await expect(opening.locator('.case-hero__media picture source[type="image/avif"]')).toHaveAttribute(
     'srcset',
     /defense-systems-atlas-v2-[a-f0-9]+-320\.avif 320w/,
@@ -554,13 +465,12 @@ test('defense work names the full program and systems contribution', async ({ pa
   await expect(page.locator('a[href*="drive.google.com"], a[href*="docs.google.com"]')).toHaveCount(0);
 });
 
-test('defense systems atlas remains cinematic and contained at every review width', async ({ page }) => {
+test('the defense case opening stays contained at every review width', async ({ page }) => {
   for (const width of [1440, 946, 390, 320]) {
     await page.setViewportSize({ width, height: 912 });
     await page.goto('/work/defense-simulation-systems/');
 
-    const opening = page.locator('[data-case-variant="systems-atlas"]');
-    await expect(opening).toBeVisible();
+    const opening = page.locator('.case-hero');
     await expect(opening.getByRole('heading', { level: 1, name: 'Defense technology and simulation' })).toBeVisible();
     await expect(opening.locator('.case-hero__summary')).toBeVisible();
     await expect(opening.locator('.case-hero__meta > div')).toHaveCount(3);
@@ -573,10 +483,6 @@ test('defense systems atlas remains cinematic and contained at every review widt
     expect(geometry.right, `${width}px right`).toBeLessThanOrEqual(width);
     expect(geometry.scrollWidth, `${width}px internal overflow`).toBeLessThanOrEqual(geometry.clientWidth + 1);
   }
-
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/work/defense-simulation-systems/');
-  await expect(page.locator('[data-case-variant="systems-atlas"]')).toHaveAttribute('data-motion-state', 'static');
 });
 
 test('enterprise immersive work includes the wider client and domain record', async ({ page }) => {

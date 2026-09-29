@@ -37,8 +37,13 @@ test('independent builds link to their live websites and source', async ({ page 
     await expect(card, host).toHaveCount(1);
     await expect(card, host).toContainText(host);
   }
-  await expect(lab.getByRole('link', { name: /Website/ })).toHaveAttribute('href', 'https://2600th.github.io/dlss5-video-player/');
-  await expect(lab.locator('a[href="https://github.com/2600th/dlss5-video-player"]')).toHaveCount(1);
+  // The featured build lists its links with the same endpoint rows as every card.
+  const dlss = lab.getByRole('navigation', { name: 'DLSS 5 Video Player links' });
+  await expect(dlss.getByRole('link', { name: /^Site/ })).toHaveAttribute('href', 'https://2600th.github.io/dlss5-video-player/');
+  await expect(dlss.getByRole('link', { name: /^Source/ })).toHaveAttribute('href', 'https://github.com/2600th/dlss5-video-player');
+  await expect(lab.getByRole('link', { name: /Website/ })).toHaveCount(0);
+  const kinds = await lab.locator('.sg-ends a').evaluateAll(links => links.map(link => link.querySelector('b')?.textContent));
+  expect(new Set(kinds)).toEqual(new Set(['Live', 'Site', 'Source', 'Notes', 'Open']));
 });
 
 test('transmissions show the four latest published notes and one shared contact', async ({ page }) => {
@@ -87,7 +92,7 @@ test('reduced motion shows the portrait poster and never downloads the 3D engine
 test('the motion choice made on any page carries to the homepage', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/work/');
-  const ambient = page.getByRole('button', { name: 'Ambient motion' });
+  const ambient = page.locator('.sg-top [data-motion-toggle]');
   await expect(ambient).toHaveAttribute('aria-pressed', 'true');
   await ambient.click();
   await expect(ambient).toHaveAttribute('aria-pressed', 'false');

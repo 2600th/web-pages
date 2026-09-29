@@ -13,7 +13,8 @@ for (const domain of ['all', 'unknown']) {
 test('primary navigation reaches each section and marks only the current section', async ({ page }) => {
   await page.goto('/about/');
   const nav = page.getByRole('navigation', { name: 'Primary navigation' });
-  await expect(nav.getByRole('link')).toHaveText(['Home', 'Work', 'Notes', 'Lab', 'About']);
+  await expect(nav.getByRole('link')).toHaveText(['Work', 'Lab', 'Notes', 'About', 'Contact']);
+  await expect(page.getByRole('link', { name: '2600th, Pranshul Chandhok, home' })).toHaveAttribute('href', '/');
   await expect(nav.locator('[aria-current="page"]')).toHaveText('About');
   await nav.getByRole('link', { name: 'Notes', exact: true }).focus();
   await page.keyboard.press('Enter');
@@ -24,10 +25,10 @@ test('primary navigation reaches each section and marks only the current section
 test('Work excludes compatibility records and supports priority and chronological exploration', async ({ page }) => {
   await page.goto('/work/');
   const items = page.locator('[data-work-item] > a');
-  await expect(items).toHaveCount(19);
+  await expect(items).toHaveCount(20);
   expect((await items.evaluateAll(links => links.map(link => link.getAttribute('href')))).slice(0, 10)).toEqual([
     '/work/blocks/', '/work/designesto/', '/work/ira-vr/', '/work/propvr-ai-craft/', '/work/homelane-spacecraft-pro/',
-    '/work/greykernel/', '/work/enterprise-immersive-systems/', '/work/humanoid-robot-control-system/', '/work/web-ocean-3d/', '/work/kinema/',
+    '/work/greykernel/', '/work/enterprise-immersive-systems/', '/work/humanoid-robot-control-system/', '/work/dlss5-video-player/', '/work/web-ocean-3d/',
   ]);
   await page.getByLabel('Project order').selectOption('chronological');
   await expect(items.first()).toHaveAttribute('href', '/work/the-brutal-spy/');
@@ -40,7 +41,10 @@ test('Work excludes compatibility records and supports priority and chronologica
 
 test('About explains contribution boundaries and connects verified tools to public work', async ({ page }) => {
   await page.goto('/about/');
-  await expect(page.getByText('2600th is an old handle from my college-era interest in hacker and phreaking culture. It stuck.', { exact: true })).toHaveCount(1);
+  const why = page.getByRole('region', { name: 'A handle from a documentary. An instinct that stayed.' });
+  await expect(why).toContainText('2007–2011');
+  await expect(why).toContainText('2600 Hz');
+  await expect(why).toContainText('Kevin Mitnick');
   const tools = page.getByRole('region', { name: 'Tools in use.' });
   await expect(tools.getByRole('link', { name: /Web Ocean 3D/ })).toHaveAttribute('href', '/work/web-ocean-3d/');
   await expect(tools.getByRole('link', { name: /Kinema/ })).toHaveAttribute('href', '/work/kinema/');

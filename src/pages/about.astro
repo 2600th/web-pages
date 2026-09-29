@@ -1,137 +1,139 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageOpening from '../components/site/PageOpening.astro';
 import { PERSON } from '../data/site';
-import '../styles/content-pages.css';
+import '../styles/signal/pages.css';
 ---
 
-<BaseLayout
+<SiteLayout
   title="About Pranshul Chandhok"
   description="I lead Product and Technology for Interior Company at Square Yards. My background spans game development, founding GreyKernel, and building design software."
   canonical="/about/"
 >
-  <div class="page-shell about-page" data-operating-dossier data-motion-scope>
-    <header class="route-opening route-opening--about" data-route-opening>
-      <div class="route-opening__positive" data-polarity="positive">
-        <h1>I learn by building.</h1>
-        <p class="route-opening__statement">I’m drawn to ideas that sound interesting but might not quite work yet. Building something is how I find out.</p>
-      </div>
-      <div class="route-opening__negative" data-polarity="negative">
-        <div class="about-opening__copy">
-          <p class="route-opening__context">Pranshul Chandhok / 2600th</p>
-          <p>I’m {PERSON.jobTitle}.</p>
-          <p>I work across AI and real-time 3D, and stay hands-on with the software we build. I’m based in Gurugram.</p>
-        </div>
-        <figure class="about-opening__diorama" data-about-diorama>
-          <img src="/media/generated/identity/2600th-operator-diorama.webp" width="1600" height="900" alt="Pranshul beside a modular spatial-computing workbench" />
-        </figure>
-      </div>
-    </header>
+  <div class="pg about-page" data-operating-dossier>
+    <PageOpening
+      eyebrow={['ID', 'Operator file']}
+      path={[{ label: 'about' }]}
+      lede="I’m drawn to ideas that sound interesting but might not quite work yet. Building something is how I find out."
+      wave="saw"
+    >
+      <h1 slot="title">I learn by <em>building.</em></h1>
+      <p class="pg-lede">I’m {PERSON.jobTitle}. I work across AI and real-time 3D, and stay hands-on with the software we build. I’m based in Gurugram.</p>
+      <figure class="ab-portrait" slot="aside">
+        <img src="/media/signal/portrait.webp" width="720" height="948" alt="The 2600th character rendered as a point cloud of cobalt light" loading="eager" />
+        <figcaption><span>Portrait · point cloud</span><b>2600 Hz</b></figcaption>
+      </figure>
+      <dl class="pg-readout">
+        <div><dt>Name</dt><dd>Pranshul Chandhok</dd></div>
+        <div><dt>Handle</dt><dd><b>2600th</b></dd></div>
+        <div><dt>Building</dt><dd><b>14+</b> years</dd></div>
+      </dl>
+    </PageOpening>
 
-    <section class="career-acts operating-atlas" aria-labelledby="career-acts-title" data-operating-atlas>
-      <header>
-        <div>
-          <h2 id="career-acts-title">How I got here.</h2>
-        </div>
-        <figure class="career-acts__inventory" data-equipment-inventory data-motion-reveal>
-          <img src="/media/generated/identity/2600th-equipment-inventory.webp" width="1600" height="900" loading="lazy" alt="Spatial-computing and prototyping equipment arranged as a working inventory" />
-        </figure>
-      </header>
-      <ol>
-        <li data-motion-reveal>
+    <section class="pg-section" id="why-2600th" aria-labelledby="why-title">
+      <p class="sg-eyebrow"><span>01</span> Why 2600th</p>
+      <div class="pg-split">
+        <h2 id="why-title">A handle from a documentary. An instinct that stayed.</h2>
+        <ol class="ab-steps">
+          <li>
+            <p class="ab-steps__when">Early on</p>
+            <div><h3>Computers and games first.</h3><p>I was drawn to computers and games from an early age, less for winning than for finding out how they worked underneath.</p></div>
+          </li>
+          <li>
+            <p class="ab-steps__when">2007–2011</p>
+            <div><h3>College, and a documentary on hacking.</h3><p>In college that curiosity turned to hacking and its history. A documentary on the subject walked through the phone phreaks, the Cap’n Crunch whistle and the 2600 Hz trick, Kevin Mitnick’s story and a lot more.</p></div>
+          </li>
+          <li>
+            <p class="ab-steps__when">2600 Hz</p>
+            <div><h3>The tone that meant “idle”.</h3><p>Long-distance trunks in the old phone network used a 2600 Hz tone to signal a free line. A toy whistle from boxes of Cap’n Crunch happened to produce it, and blue boxes went further, playing the network’s own routing tones. Understand the signalling and you could take control of a call.</p></div>
+          </li>
+          <li>
+            <p class="ab-steps__when">Mitnick</p>
+            <div><h3>The system includes its people.</h3><p>Kevin Mitnick started out as a phone phreak and became one of the most wanted hackers in America. Much of his access came from persuading people rather than breaking code. It was the first time I saw clearly that a system includes the people who operate it.</p></div>
+          </li>
+          <li>
+            <p class="ab-steps__when">2600th</p>
+            <div><h3>The handle stuck.</h3><p>I took 2600th as my handle in college and kept it. The instinct behind it stayed too: learn how a system actually works, people included, then make it do something new. Today the systems are rendering engines, design tools and AI models. <a href="/#origin">The homepage tells it with sound.</a></p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="pg-section" aria-labelledby="career-acts-title">
+      <p class="sg-eyebrow"><span>02</span> Call log</p>
+      <h2 id="career-acts-title">How I got here.</h2>
+      <ol class="career-acts" data-operating-atlas>
+        <li>
+          <p class="career-acts__years">2012–14</p>
           <span>Game development</span>
           <h3>Starting with games.</h3>
           <p>I started as a game programmer. Working on mobile games taught me to care about how software feels: the controls, the feedback, and whether it runs well on the device someone actually owns. Later, at Merkur, I worked on cross-platform Unity development.</p>
-          <p><a href="/work/the-brutal-spy/">The Brutal Spy</a> · <a href="/work/alphaman/">Alphaman</a> · <a href="/work/merkur-magie/">Merkur Magie</a></p>
+          <p><a href="/work/the-brutal-spy/">The Brutal Spy</a> <a href="/work/alphaman/">Alphaman</a> <a href="/work/merkur-magie/">Merkur Magie</a></p>
         </li>
-        <li data-motion-reveal>
+        <li>
+          <p class="career-acts__years">2015–21</p>
           <span>Co-founder and CTO</span>
           <h3>Building GreyKernel.</h3>
           <p>I co-founded GreyKernel in 2015 and led its technology work for six years. We built immersive learning systems and games, helped set up JPMorgan Chase’s Mumbai immersive lab, and developed training software for Anglian Water. I also learned how much of a founder’s work happens outside the code.</p>
-          <p><a href="/work/greykernel/">GreyKernel</a> · <a href="/work/enterprise-immersive-systems/">Enterprise XR</a> · <a href="/work/mysticmojo/">MysticMojo + Nazara</a></p>
+          <p><a href="/work/greykernel/">GreyKernel</a> <a href="/work/enterprise-immersive-systems/">Enterprise XR</a> <a href="/work/mysticmojo/">MysticMojo + Nazara</a></p>
         </li>
-        <li data-motion-reveal>
+        <li>
+          <p class="career-acts__years">2021–now</p>
           <span>Product and technology</span>
           <h3>Working on design software.</h3>
           <p>At HomeLane, I worked on SpaceCraft Pro as principal software architect. Today I lead product and technology work on Blocks with our product, engineering and design teams. Designesto focuses on visual exploration and revision, with deeper costing and execution integration still on the roadmap. I also built the initial PropVR AI MVP that PropVR’s team developed into Craft. Outside work, I keep experimenting with browser graphics, games and local AI.</p>
-          <p><a href="/work/homelane-spacecraft-pro/">SpaceCraft Pro</a> · <a href="/work/blocks/">Blocks</a> · <a href="/work/designesto/">Designesto</a> · <a href="/work/propvr-ai-craft/">PropVR AI → Craft</a></p>
+          <p><a href="/work/homelane-spacecraft-pro/">SpaceCraft Pro</a> <a href="/work/blocks/">Blocks</a> <a href="/work/designesto/">Designesto</a> <a href="/work/propvr-ai-craft/">PropVR AI → Craft</a></p>
         </li>
       </ol>
     </section>
 
-    <section class="about-grid" aria-labelledby="contribution-title">
-      <div><h2 id="contribution-title">What I mean by building.</h2></div>
-      <div class="prose">
-        <p>My work moves between product direction, technical architecture, prototypes and implementation. Sometimes I’m building the first version; sometimes I’m helping a team decide how the system should work and carry it into production. Each Work page describes my role and the people who took it forward.</p>
-        <p>My independent projects in the <a href="/lab/">Lab</a> are where I can try an idea, inspect the result and share the code.</p>
-        <p>2600th is an old handle from my college-era interest in hacker and phreaking culture. It stuck.</p>
+    <section class="pg-section" aria-labelledby="contribution-title">
+      <p class="sg-eyebrow"><span>03</span> The work</p>
+      <div class="pg-split">
+        <h2 id="contribution-title">What I mean by building.</h2>
+        <div class="prose">
+          <p>My work moves between product direction, technical architecture, prototypes and implementation. Sometimes I’m building the first version; sometimes I’m helping a team decide how the system should work and carry it into production. Each Work page describes my role and the people who took it forward.</p>
+          <p>My independent projects in the <a href="/lab/">Lab</a> are where I can try an idea, inspect the result and share the code.</p>
+        </div>
       </div>
     </section>
 
-    <section class="about-grid tools-in-use" aria-labelledby="tools-title">
-      <div><h2 id="tools-title">Tools in use.</h2></div>
-      <dl>
-        <div><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
-        <div><dt>Applied AI</dt><dd>OpenAI and Gemini for <a href="/notes/ai-floorplan-parsing/">floorplan interpretation</a>, with ComfyUI for repeatable <a href="/notes/ai-video-control/">image and video experiments</a>.</dd></div>
-        <div><dt>Product prototypes</dt><dd>Next.js, Tailwind CSS, AI SDK and fal.ai formed part of the initial <a href="/work/propvr-ai-craft/">PropVR AI MVP</a> I built for the team to extend.</dd></div>
-      </dl>
-    </section>
-
-    <section class="about-grid" aria-labelledby="patent-title">
-      <div><h2 id="patent-title">Humanoid Robot Control System</h2></div>
-      <div class="prose">
-        <p>At GreyKernel, I co-invented a system for controlling a humanoid robot using tracked human movement. Indian Patent No. 395331 was filed on 14 February 2019 and granted on 25 April 2022.</p>
-        <p>My co-inventors are Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh. GreyKernel Technologies India Pvt Ltd holds the patent.</p>
-        <p><a href="/work/humanoid-robot-control-system/">Read about the robot control system ↗</a></p>
+    <section class="pg-section tools-in-use" aria-labelledby="tools-title">
+      <p class="sg-eyebrow"><span>04</span> Toolchain</p>
+      <div class="pg-split">
+        <h2 id="tools-title">Tools in use.</h2>
+        <dl>
+          <div><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
+          <div><dt>Applied AI</dt><dd>OpenAI and Gemini for <a href="/notes/ai-floorplan-parsing/">floorplan interpretation</a>, with ComfyUI for repeatable <a href="/notes/ai-video-control/">image and video experiments</a>.</dd></div>
+          <div><dt>Product prototypes</dt><dd>Next.js, Tailwind CSS, AI SDK and fal.ai formed part of the initial <a href="/work/propvr-ai-craft/">PropVR AI MVP</a> I built for the team to extend.</dd></div>
+        </dl>
       </div>
     </section>
 
-    <section class="about-grid" aria-labelledby="principles-title">
-      <div><h2 id="principles-title">How I work.</h2></div>
+    <section class="pg-section" aria-labelledby="patent-title">
+      <p class="sg-eyebrow"><span>05</span> Patent</p>
+      <div class="ab-patent">
+        <div>
+          <p class="ab-patent__no" aria-hidden="true">395331</p>
+          <h2 id="patent-title">Humanoid Robot Control System</h2>
+        </div>
+        <div class="prose">
+          <p>At GreyKernel, I co-invented a system for controlling a humanoid robot using tracked human movement. Indian Patent No. 395331 was filed on 14 February 2019 and granted on 25 April 2022.</p>
+          <p>My co-inventors are Abhishek Gupta, Devesh Kumar Singh, and Tej Pratap Singh. GreyKernel Technologies India Pvt Ltd holds the patent.</p>
+          <p><a href="/work/humanoid-robot-control-system/">Read about the robot control system ↗</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pg-section" aria-labelledby="principles-title">
+      <p class="sg-eyebrow"><span>06</span> Operating rules</p>
+      <h2 id="principles-title">How I work.</h2>
       <ol class="principles">
-        <li><span><strong>Try the idea.</strong><br />I often build a small prototype to answer a question. It gives the team something concrete to discuss.</span></li>
-        <li><span><strong>Stay close to implementation.</strong><br />I test tools and read the code before recommending them. Their limits matter as much as their capabilities.</span></li>
-        <li><span><strong>Pay attention when it breaks.</strong><br />Slow responses, memory limits, and confusing controls tell me where more work is needed.</span></li>
-        <li><span><strong>Use AI where it helps.</strong><br />Sometimes a deterministic rule or a database query is the better choice. Some decisions still need a person.</span></li>
+        <li><span><strong>Try the idea.</strong>I often build a small prototype to answer a question. It gives the team something concrete to discuss.</span></li>
+        <li><span><strong>Stay close to implementation.</strong>I test tools and read the code before recommending them. Their limits matter as much as their capabilities.</span></li>
+        <li><span><strong>Pay attention when it breaks.</strong>Slow responses, memory limits, and confusing controls tell me where more work is needed.</span></li>
+        <li><span><strong>Use AI where it helps.</strong>Sometimes a deterministic rule or a database query is the better choice. Some decisions still need a person.</span></li>
       </ol>
     </section>
-
   </div>
-</BaseLayout>
-
-<style>
-  .career-acts { padding-block: clamp(4rem, 9vw, 8rem); border-top: 1px solid var(--line); }
-  .about-opening__copy { position: relative; z-index: 3; max-width: 34rem; }
-  .about-opening__copy p:not(.route-opening__context) { max-width: 34ch; color: var(--warm); font-size: clamp(1rem, 1.5vw, 1.3rem); line-height: 1.45; text-shadow: 0 2px 30px #030405; }
-  .about-opening__diorama { position: absolute; inset: 0; z-index: 0; margin: 0; overflow: hidden; }
-  .about-opening__diorama::after { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(3 4 5 / 0.04) 25%, rgb(3 4 5 / 0.88) 82%), linear-gradient(90deg, rgb(3 4 5 / 0.15), rgb(3 4 5 / 0.6)); content: ''; }
-  .about-opening__diorama img { display: block; width: 100%; height: 108%; object-fit: cover; object-position: 52% center; filter: saturate(0.88) contrast(1.06); }
-  .route-opening--about .route-opening__negative { isolation: isolate; overflow: hidden; }
-
-  .career-acts > header { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(20rem, 0.72fr); align-items: end; gap: clamp(2rem, 6vw, 7rem); margin-bottom: clamp(3rem, 7vw, 6rem); }
-  .career-acts h2 { max-width: 13ch; font-size: clamp(2.8rem, 6vw, 5.5rem); }
-  .career-acts__inventory { position: relative; margin: 0; border: 1px solid var(--line); background: #06080b; overflow: hidden; }
-  .career-acts__inventory::before { position: absolute; inset: 0; z-index: 1; border: 1px solid rgb(49 94 245 / 0.22); content: ''; pointer-events: none; }
-  .career-acts__inventory img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
-  .career-acts ol { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
-  .career-acts li { position: relative; display: grid; padding: clamp(2rem, 5vw, 4rem) 0; grid-template-columns: 0.32fr 0.75fr 1fr; gap: clamp(1.5rem, 4vw, 5rem); border-bottom: 1px solid var(--line); }
-  .career-acts li::before { position: absolute; top: -4px; left: 0; width: 7px; height: 7px; border: 1px solid var(--cobalt-bright); border-radius: 50%; background: var(--velvet); box-shadow: 0 0 18px rgb(49 94 245 / 0.55); content: ''; }
-  .career-acts li > span { color: var(--signal); font-size: 0.72rem; font-weight: 720; }
-  .career-acts h3 { margin: 0; font-size: clamp(1.7rem, 3.5vw, 3.3rem); }
-  .career-acts li p { max-width: 55ch; color: var(--text-muted); font-size: 0.9rem; }
-  .career-acts li p:last-child { grid-column: 3; margin: 0; }
-  .tools-in-use dl { margin: 0; }
-  .tools-in-use dl > div { padding-block: 1.25rem; border-top: 1px solid var(--line); }
-  .tools-in-use dt { margin-bottom: 0.5rem; color: var(--warm); font-weight: 700; }
-  .tools-in-use dd { max-width: 60ch; margin: 0; color: var(--muted); line-height: 1.6; }
-  .tools-in-use a { color: var(--warm); text-underline-offset: 0.2em; }
-  @media (max-width: 64rem) {
-    .about-opening__diorama img { object-position: 52% top; }
-  }
-  @media (max-width: 50rem) {
-    .career-acts > header,
-    .career-acts li { grid-template-columns: 1fr; }
-    .career-acts li p:last-child { grid-column: 1; }
-    .about-opening__diorama img { object-position: 46% top; }
-  }
-
-</style>
+</SiteLayout>

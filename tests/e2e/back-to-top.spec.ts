@@ -29,7 +29,9 @@ test('keyboard return restores navigation focus without JavaScript', async ({ br
     expect(await topLink.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe('solid');
     await page.keyboard.press('Enter');
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
-    await expect(page.getByRole('banner')).toBeFocused();
+    // The return lands on the document start, so the next Tab reaches the skip link, then the header.
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: 'Pranshul Chandhok, home' })).toBeFocused();
   } finally {
@@ -58,8 +60,10 @@ test('arrow appears only past 300px and restores its state after refresh', async
   await expect(topLink).toBeHidden();
   await page.evaluate(() => window.scrollTo(0, 301));
   await expect(topLink).toBeInViewport();
+  // Chrome restores scroll against an anchor element, so reload from clear of the threshold.
+  await page.evaluate(() => window.scrollTo(0, 420));
   await page.reload();
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(301);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
   await expect(topLink).toBeInViewport();
   await page.evaluate(() => window.scrollTo(0, 250));
   await expect(topLink).toBeHidden();
@@ -72,9 +76,9 @@ test('visible floating arrow restores keyboard focus and is excluded from print'
   await page.evaluate(() => window.scrollTo(0, 500));
   await topLink.focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('banner')).toBeFocused();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Pranshul Chandhok, home' })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
   await page.evaluate(() => window.scrollTo(0, 500));
   await expect(topLink).toBeVisible();
   await page.emulateMedia({ media: 'print' });
@@ -97,10 +101,11 @@ for (const width of [320, 878, 1440]) {
     expect(width - arrow!.x - arrow!.width).toBeGreaterThanOrEqual(16);
     expect(912 - arrow!.y - arrow!.height).toBeGreaterThanOrEqual(16);
     expect(912 - arrow!.y - arrow!.height).toBeLessThanOrEqual(24);
-    expect((await page.locator('.site-footer').boundingBox())!.y).toBeGreaterThan(912);
+    expect((await page.locator('.sg-foot').boundingBox())!.y).toBeGreaterThan(912);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await expect.poll(async () => (await topLink.boundingBox())?.y).toBeCloseTo(arrow!.y, 0);
-    const contact = await page.locator('.site-footer__contact').boundingBox();
+    // The footer's own "Hang up" link sits clear of the floating arrow.
+    const contact = await page.locator('.sg-foot .sg-hangup').boundingBox();
     expect(contact!.y + contact!.height).toBeLessThan(arrow!.y);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   });

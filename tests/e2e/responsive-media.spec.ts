@@ -6,6 +6,7 @@ test('image-led archive cards expose full-width modern image candidates', async 
   const card = page.locator('[data-work-item]').filter({ has: page.locator('a[href="/work/designesto/"]') });
   const img = card.locator('img');
   await expect(img).toHaveAttribute('srcset', /320w/);
-  await expect(img).toHaveAttribute('sizes', /calc\(100vw - 2\.5rem\)/);
+  // The mobile gutter is 1rem on each side, so a single-column card is the viewport less 2rem.
+  await expect(img).toHaveAttribute('sizes', /calc\(100vw - 2rem\)/);
   await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.currentSrc)).toMatch(/-(320|640)\.avif$/);
 });

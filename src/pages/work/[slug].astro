@@ -1,16 +1,17 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import Breadcrumbs from '../../components/shared/Breadcrumbs.astro';
+import PathCrumb from '../../components/site/PathCrumb.astro';
 import EvidenceSources from '../../components/work/EvidenceSources.astro';
 import ProjectMedia from '../../components/work/ProjectMedia.astro';
 import CraftEvolution from '../../components/work/CraftEvolution.astro';
 import SpaceCraftBoundary from '../../components/work/SpaceCraftBoundary.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
 import { SITE } from '../../data/site';
 import sharp from 'sharp';
 import { join } from 'node:path';
 import { getNotesForWork, NOTE_TYPES } from '../../data/notes';
-import '../../styles/content-pages.css';
+import { getPrioritizedWork } from '../../data/work-order';
+import '../../styles/signal/pages.css';
 
 export async function getStaticPaths() {
   const work = await getCollection('work');
@@ -27,7 +28,6 @@ const socialImageMetadata = await sharp(join(process.cwd(), 'public', data.seo.s
 const { Content, headings } = await render(entry);
 const relatedWork = (await getCollection('work')).filter((candidate) => (data.relatedWork ?? []).includes(candidate.data.slug));
 const relatedNotes = getNotesForWork(await getCollection('notes'), data.slug);
-const caseVariant = data.slug === 'defense-simulation-systems' ? 'systems-atlas' : undefined;
 const narrativeHeadings = headings.filter((heading) => heading.depth === 2).map((heading) => ({
   label: heading.text,
   id: heading.slug,
@@ -64,9 +64,15 @@ const jsonLd = [{
     { '@type': 'ListItem', position: 3, name: data.title, item: `${SITE.url}/work/${data.slug}/` },
   ],
 }];
+// Previous and next line follow the archive's own order, so every case file leads somewhere.
+const lines = getPrioritizedWork(await getCollection('work'));
+const position = lines.findIndex((candidate) => candidate.data.slug === data.slug);
+const previous = position > 0 ? lines[position - 1] : undefined;
+const next = position >= 0 && position < lines.length - 1 ? lines[position + 1] : undefined;
+const period = `${data.yearStart}${data.yearEnd && data.yearEnd !== data.yearStart ? `–${data.yearEnd}` : ''}`;
 ---
 
-<BaseLayout
+<SiteLayout
   title={data.seo.title}
   description={data.seo.description}
   canonical={`/work/${data.slug}/`}
@@ -77,31 +83,29 @@ const jsonLd = [{
   ogType="article"
   jsonLd={jsonLd}
 >
-  <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: data.title }]} />
+  <div class="pg">
   <header
     class:list={['case-hero route-opening route-opening--case', { 'case-hero--long': data.title.length > 36 }]}
     data-route-opening
     data-project-opening
-    data-case-variant={caseVariant}
-    data-motion-scope={caseVariant ? true : undefined}
   >
     <div class="case-hero__copy" data-project-opening-copy>
+      <PathCrumb items={[{ label: 'work', href: '/work/' }, { label: data.slug }]} />
+      <p class="sg-eyebrow"><span>{period}</span> Case file</p>
       <div class="case-hero__positive" data-polarity="positive">
         <h1>{data.title}</h1>
       </div>
       <div class="case-hero__negative" data-polarity="negative">
-        <p class="case-hero__context">
-          {data.metadataLabel ?? (caseVariant === 'systems-atlas' ? `${data.yearStart}–${data.yearEnd} · GreyKernel` : `${data.yearStart} · ${data.status}`)}
-        </p>
+        <p class="case-hero__context">{data.metadataLabel ?? data.status}</p>
         <p class="case-hero__summary">{data.summary}</p>
-        <dl class="case-hero__meta">
-          <div><dt>My role</dt><dd>{data.role}</dd></div>
-          <div><dt>Period</dt><dd>{data.yearStart}{data.yearEnd ? `–${data.yearEnd}` : ''}</dd></div>
-          <div><dt>Status</dt><dd>{data.status}</dd></div>
-          {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
-        </dl>
-        {data.slug === 'propvr-ai-craft' && <p><a href="https://craft.propvr.ai/" target="_blank" rel="noopener noreferrer">Visit Craft<span class="sr-only"> (external site, opens in a new tab)</span></a></p>}
       </div>
+      <dl class="case-hero__meta pg-readout">
+        <div><dt>My role</dt><dd>{data.role}</dd></div>
+        <div><dt>Period</dt><dd><b>{period}</b></dd></div>
+        <div><dt>Status</dt><dd>{data.status}</dd></div>
+        {data.context && <div><dt>Context</dt><dd>{data.context}</dd></div>}
+      </dl>
+      {data.slug === 'propvr-ai-craft' && <p class="case-hero__visit"><a href="https://craft.propvr.ai/" target="_blank" rel="noopener noreferrer">Visit Craft ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></p>}
     </div>
     {data.heroMedia && <div class="case-hero__media"><ProjectMedia media={data.heroMedia} label={data.heroMedia.label ?? data.heroLabel ?? data.title} priority /></div>}
   </header>
@@ -193,17 +197,10 @@ const jsonLd = [{
   </nav>}
   </div>
   </div>
-</BaseLayout>
+  {(previous || next) && <nav class="case-next" aria-label="More work">
+    {previous ? <a href={`/work/${previous.data.slug}/`} rel="prev" data-sfx="tick"><span>◂ Previous line</span><strong>{previous.data.title}</strong></a> : <span></span>}
+    {next && <a href={`/work/${next.data.slug}/`} rel="next" data-sfx="tick"><span>Next line ▸</span><strong>{next.data.title}</strong></a>}
+  </nav>}
+  </div>
+</SiteLayout>
 
-<style>
-  .related-notes ul { margin: 0; padding: 0; list-style: none; }
-  .related-notes li { display: grid; gap: 0.4rem; padding-block: 1.2rem; border-top: 1px solid var(--line); }
-  .related-notes li span { color: var(--muted); font-size: 1rem; }
-  .related-notes a { width: fit-content; padding-block: 0.4rem; font-size: clamp(1rem, 0.32vw + 0.93rem, 1.16rem); }
-  .work-narrative :global(.prose table) { width: 100%; border-collapse: collapse; margin-block: 2rem; font-size: 0.94rem; }
-  .work-narrative :global(.prose th), .work-narrative :global(.prose td) { padding: 0.85rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
-  .work-narrative :global(.prose th) { background: var(--inverse-surface); color: var(--inverse-text); }
-  .work-narrative nav { margin-top: 3rem; }
-  .work-narrative nav ul { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; padding: 0; list-style: none; }
-  @media (max-width: 40rem) { .work-narrative :global(.prose table) { font-size: 0.8rem; } .work-narrative :global(.prose th), .work-narrative :global(.prose td) { padding: 0.45rem; overflow-wrap: anywhere; } }
-</style>
