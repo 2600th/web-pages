@@ -10,7 +10,38 @@ npm run dev        # http://127.0.0.1:4330/
 
 Open the hub at `/` for the comparison, or go straight to `/signal/`, `/scan/` or `/glyph/`. Every page uses real site copy, the five featured projects and four recent notes, and links out to the live routes.
 
-## Directions
+## Selected: Signal v2
+
+Signal was chosen and rebuilt as the full homepage experience at `/signal/`. What it contains, top to bottom:
+
+| Section | What happens |
+|---|---|
+| Seize the line (hero) | A point-cloud portrait assembles from noise, ripples under the cursor, and tears when the carrier tuner leaves 2600 Hz. **Seize the line** sends the tone. The hero also carries an "Incoming" chip for the newest release. |
+| 2600 Hz (origin) | Scrolling dissolves the figure into oscilloscope traces for three beats: the idle tone (384.6 µs period), the toy whistle, and blue-box MF on two channels (KP = 1100 + 1700 Hz). It opens with the About page's own line about the handle. |
+| Proof | Odometer meters: 14+ years, GreyKernel 2015, Indian patent 395331, DLSS 5 Video Player v0.26.2. |
+| Trunk lines | Six selected projects. Tuning a line switches a CRT monitor channel, with static, a roll bar and a live loop where one exists. On phones the monitor stays pinned and lines tune as they cross the centre. |
+| Call log | Four career eras drawn as square, sine, sawtooth and noise-resolving waveforms. |
+| Side channels | Independent builds led by the DLSS 5 Video Player, then Kinema, Web Ocean 3D, Safed Sagar, the Code with AI starter pack, the Dwarkesh × Jensen companion and Ghost Terminal. |
+| Transmissions | The four latest notes. |
+| Dial in | Contact with copy-to-clipboard, and a working CSS blue box that plays real MF pairs. |
+
+**Easter eggs.** They are tracked as seven achievements, stored per browser:
+
+- The backtick key opens a drop-down console with `help`, `whoami`, `neofetch`, `man 2600`, `dial`, `ping`, `achievements`, `sudo` and more. There is also a button for it in the footer.
+- The Konami code turns on phreak mode.
+- Typing `2600` anywhere seizes the line.
+- Five clicks on the logo blow the whistle.
+- The blue box has secret numbers: `1337`, `42` and `404`.
+- Devtools users get `window.seize()`, `phreak()` and `dial()`.
+- The page source carries a note for anyone who reads it.
+
+**Sound.** Every sound is synthesized with the Web Audio API: the 2600 Hz tone, MF pairs, dial tone, static and UI ticks. Nothing plays until the visitor turns sound on.
+
+**Performance.** About 62 KB of gzipped JS loads up front. The 167 KB Three.js chunk loads after the page is interactive. Phones and devices with 4 GB or less memory get 70k points and no bloom. Render loops pause off-screen, and a wall-clock ticker keeps text effects on schedule when frames drop.
+
+**Media.** `npm run media:signal` builds the page's stills and loops from the site's media and from the DLSS player's public captures, kept in `_media-source/`. The DLSS clip keeps its own "not affiliated with NVIDIA" notice.
+
+## Directions (first round)
 
 | | Concept | 3D technique | Signature interaction |
 |---|---|---|---|
