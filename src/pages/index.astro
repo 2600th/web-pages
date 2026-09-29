@@ -1,20 +1,459 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import VelvetHero from '../components/home/VelvetHero.astro';
-import VelvetHomeSections from '../components/home/VelvetHomeSections.astro';
-import { getFeaturedWork } from '../data/work-order';
-import { getHomepageNotes } from '../data/notes';
+import SeoHead from '../components/shared/SeoHead.astro';
+import { getPublishedNotes } from '../data/notes';
+import { getPrioritizedWork } from '../data/work-order';
+import '../signal/base.css';
+import '../signal/style.css';
 
-const selectedWork = getFeaturedWork(await getCollection('work'));
-const notes = getHomepageNotes(await getCollection('notes'));
+const workCount = getPrioritizedWork(await getCollection('work')).length;
+const NOTE_LABELS = { essay: 'Essay', 'technical-teardown': 'Teardown', 'field-note': 'Field note' } as const;
+const transmissions = getPublishedNotes(await getCollection('notes')).slice(0, 4).map(({ data }) => {
+  const [year, month, day] = data.publishedAt.toISOString().slice(0, 10).split('-');
+  return { href: `/notes/${data.slug}/`, title: data.title, type: NOTE_LABELS[data.type], datetime: `${year}-${month}-${day}`, stamp: `${day}.${month}.${year.slice(2)}` };
+});
+
+// A note for people who read source, passed through set:html so compressHTML keeps the art intact.
+const SOURCE_NOTE = "<!--\n       ___  __   ___   ___  _   _\n      |_  )/ /  / _ \\ / _ \\| |_| |_\n       / // _ \\| (_) | (_) |  _| ' \\\n      /___\\___/ \\___/ \\___/ \\__|_||_|\n\n      Hello, source reader. You are exactly who this page is for.\n      Press ` for a console and try `man 2600`. Or ↑ ↑ ↓ ↓ ← → ← → B A.\n      Every tone here is synthesized; the portrait is points sampled from a 3D model.\n  -->";
 ---
 
-<BaseLayout
-  bodyClass="home-page"
-  title="Pranshul Chandhok (2600th) | Product, AI and Realtime Systems"
-  description="Product and technology leader building applied AI, realtime 3D, design software, XR, and game systems. Selected work, technical teardowns, and independent experiments."
->
-  <VelvetHero />
-  <VelvetHomeSections work={selectedWork} notes={notes} />
-</BaseLayout>
+<!doctype html>
+<html lang="en-IN" data-motion="on" data-sound="off">
+  <head>
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <SeoHead
+      title="Pranshul Chandhok (2600th) | Product, AI and Realtime Systems"
+      description="Pranshul Chandhok (2600th) leads product and technology for Interior Company at Square Yards and builds with applied AI, real-time 3D, design software, XR and games."
+      canonical="/"
+      image="/media/social/signal-home.webp"
+      imageAlt="Pranshul Chandhok as a point-cloud portrait beside the line: Make the uncertain operable."
+    >
+      <link rel="preload" href="/fonts/doto.woff2" as="font" type="font/woff2" crossorigin />
+    </SeoHead>
+  </head>
+  <body class="sg">
+    <Fragment set:html={SOURCE_NOTE} />
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="sg-grain" aria-hidden="true"></div>
+    <div class="sg-flash" aria-hidden="true"></div>
+
+    <header class="sg-top" data-header>
+      <a class="sg-mark" href="#top" aria-label="2600th, back to top">
+        <svg class="sg-mark__wave" viewBox="0 0 28 16" aria-hidden="true"><path d="M1 8c2.5-6 4.5-6 6.5 0s4 6 6.5 0 4-6 6.5 0 4 6 6.5 0" /></svg>
+        <span>2600</span><sup>th</sup>
+      </a>
+      <button type="button" class="sg-menu" data-menu aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <nav class="sg-nav" id="primary-nav" aria-label="Primary">
+        <a href="#work" data-sfx="tick">Work</a>
+        <a href="#log" data-sfx="tick">Log</a>
+        <a href="#lab" data-sfx="tick">Lab</a>
+        <a href="#notes" data-sfx="tick">Notes</a>
+        <a href="/about/" data-sfx="tick">About</a>
+        <a href="#contact" data-sfx="tick">Contact</a>
+      </nav>
+      <div class="sg-controls">
+        <p class="sg-status" data-status><i></i><span data-status-label>Line idle</span></p>
+        <button type="button" class="sg-chip" data-sound-toggle aria-pressed="false">
+          <span class="sg-chip__bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="sg-chip__label" data-sound-label>Sound off</span>
+        </button>
+        <button type="button" class="sg-chip" data-motion-toggle aria-pressed="true">
+          <span class="sg-chip__dot" aria-hidden="true"></span><span class="sg-chip__label" data-motion-label>Motion on</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="sg-dial" aria-label="Page sections" data-dial>
+      <ol>
+        <li><a href="#top"><span>00</span><b>Seize</b></a></li>
+        <li><a href="#origin"><span>01</span><b>2600 Hz</b></a></li>
+        <li><a href="#work"><span>02</span><b>Lines</b></a></li>
+        <li><a href="#log"><span>03</span><b>Log</b></a></li>
+        <li><a href="#lab"><span>04</span><b>Lab</b></a></li>
+        <li><a href="#notes"><span>05</span><b>Notes</b></a></li>
+        <li><a href="#contact"><span>06</span><b>Dial in</b></a></li>
+      </ol>
+    </nav>
+
+    <main id="main">
+      <div class="sg-sequence" data-sequence>
+        <div class="sg-track" aria-hidden="true">
+          <div class="sg-stage" data-stage>
+            <canvas class="sg-canvas" data-canvas></canvas>
+            <img class="sg-poster" src="/media/signal/character.webp" alt="" width="720" height="1003" />
+            <div class="sg-scope" data-scope>
+              <p><span>Tone</span><b data-scope-f>2600.0 Hz</b></p>
+              <p><span>Period</span><b data-scope-t>384.6 µs</b></p>
+              <p><span>Mode</span><b data-scope-mode>Portrait</b></p>
+            </div>
+            <p class="sg-loading" data-loading>Listening for 2600 Hz <span data-loading-pct>00</span>%</p>
+          </div>
+        </div>
+
+        <section class="sg-hero" id="top" aria-labelledby="hero-title">
+          <p class="sg-kicker"><span>Pranshul Chandhok</span><span class="sg-kicker__alias">aka 2600th</span></p>
+          <h1 id="hero-title" data-hero-title><span class="sg-h1-line">Make the uncertain</span> <em>operable.</em></h1>
+          <p class="sg-lede">I lead product and technology for Interior Company at Square Yards. Fourteen years across games, XR, design software and AI, and I still ship code on the side.</p>
+          <div class="sg-actions">
+            <a class="sg-btn" href="#work" data-magnetic data-sfx="tick">Selected work <span aria-hidden="true">↓</span></a>
+            <a class="sg-btn sg-btn--ghost" href="#origin" data-magnetic data-sfx="tick">Why 2600th</a>
+          </div>
+          <ul class="sg-heroproof" aria-label="At a glance">
+            <li><b>14+</b> years building</li>
+            <li><b>GreyKernel</b> co-founder, CTO</li>
+            <li><b>IN 395331</b> patent co-inventor</li>
+          </ul>
+          <a class="sg-incoming" href="#lab-dlss" data-sfx="tick">
+            <span class="sg-incoming__tag"><i></i>New build</span>
+            <span class="sg-incoming__text">DLSS 5 Video Player is out</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </section>
+
+        <section class="sg-tuner" aria-labelledby="tuner-title" data-tuner data-locked="true">
+          <header class="sg-tuner__head">
+            <h2 id="tuner-title">SF tone</h2>
+            <p class="sg-tuner__lock" data-lock><i></i><span data-lock-label>Locked</span></p>
+          </header>
+          <p class="sg-freq" aria-hidden="true"><span data-freq>2600.0</span><small>Hz</small></p>
+          <canvas class="sg-tuner__scope" data-tuner-scope width="320" height="72" aria-hidden="true"></canvas>
+          <label class="sg-range">
+            <span class="sr-only">Supervisory tone frequency. The portrait resolves at 2600 hertz.</span>
+            <input type="range" min="2000" max="3200" step="1" value="2600" data-tune aria-valuetext="2600 hertz, locked" />
+            <span class="sg-range__ticks" aria-hidden="true" data-ticks></span>
+          </label>
+          <div class="sg-tuner__row">
+            <button type="button" class="sg-seize" data-seize data-magnetic>Send 2600 Hz</button>
+          </div>
+          <p class="sg-tuner__note">Drag off 2600 Hz to break the signal. Turn sound on to hear it.</p>
+        </section>
+
+        <section class="sg-origin" id="origin" aria-labelledby="origin-title">
+          <header class="sg-beat sg-beat--intro" data-beat="0">
+            <p class="sg-eyebrow"><span>01</span> Why 2600th</p>
+            <h2 id="origin-title">“2600th is an old handle from my college-era interest in hacker and phreaking culture. <em>It stuck.</em>”</h2>
+            <a class="sg-skip" href="#work" data-sfx="tick">Skip the story, see the work <span aria-hidden="true">↓</span></a>
+          </header>
+          <article class="sg-beat" data-beat="1">
+            <p class="sg-beat__no">01 / 03</p>
+            <h3>The network listened for one tone.</h3>
+            <p>Long-distance trunks in the old analogue phone network used a 2600 Hz tone to mean “idle”. Play it down a connected line and the far switch assumed the call had ended, then waited for new routing digits.</p>
+          </article>
+          <article class="sg-beat" data-beat="2">
+            <p class="sg-beat__no">02 / 03</p>
+            <h3>A toy whistle could make it.</h3>
+            <p>A plastic whistle from a cereal box happened to hit 2600 Hz. Blown into a handset, it could seize a long-distance line. The network had no idea who was speaking its language.</p>
+          </article>
+          <article class="sg-beat" data-beat="3">
+            <p class="sg-beat__no">03 / 03</p>
+            <h3>Then came the blue box.</h3>
+            <p>Phreakers built boxes that played the network’s own routing tones, two frequencies at a time. Understand the signalling and you could route a call anywhere. Carriers eventually moved signalling out of band, and the trick stopped working.</p>
+          </article>
+          <article class="sg-beat sg-beat--handoff" data-beat="4">
+            <h3>The instinct stayed.</h3>
+            <p class="sg-handoff">Learn how a system actually works, then make it do something new. Today the systems are rendering engines, design tools and AI models, and the job is turning them into products people can operate.</p>
+          </article>
+        </section>
+      </div>
+
+      <section class="sg-proof" id="proof" aria-labelledby="proof-title">
+        <h2 id="proof-title" class="sr-only">Experience at a glance</h2>
+        <ul>
+          <li><p class="sg-meter" data-count="14" data-suffix="+">14+</p><p><strong>Years building</strong> Games, XR, design software and AI</p></li>
+          <li><p class="sg-meter">2015</p><p><strong>Co-founded GreyKernel</strong> Six years leading its technology</p></li>
+          <li><p class="sg-meter">395331</p><p><strong>Indian patent</strong> Co-inventor, humanoid robot control</p></li>
+          <li><p class="sg-meter">Sep 2026</p><p><strong>Still shipping</strong> Latest: DLSS 5 Video Player</p></li>
+        </ul>
+      </section>
+
+      <section class="sg-work" id="work" aria-labelledby="work-title">
+        <header class="sg-head">
+          <p class="sg-eyebrow"><span>02</span> Selected work</p>
+          <h2 id="work-title" data-decode>Trunk lines</h2>
+          <p>Six systems I led or built, across design software, applied AI and immersive training. Tune a line to preview it.</p>
+        </header>
+        <div class="sg-work__body">
+          <ol class="sg-lines" data-lines>
+            <li class="sg-line" data-line="0" data-mf="1">
+              <a href="/work/blocks/">
+                <span class="sg-line__no">L·01</span>
+                <span class="sg-line__title">Blocks</span>
+                <span class="sg-line__meta"><span>Design tech · Applied AI</span><span class="sg-line__years">2024–26</span></span>
+                <svg class="sg-line__wave" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true"><path /></svg>
+                <span class="sg-line__summary">A browser-based interior-design system connecting spatial planning, product choices, pricing, quality checks and production handoffs. I lead its product and technology work.</span>
+              </a>
+            </li>
+            <li class="sg-line" data-line="1" data-mf="2">
+              <a href="/work/designesto/">
+                <span class="sg-line__no">L·02</span>
+                <span class="sg-line__title">Designesto</span>
+                <span class="sg-line__meta"><span>Applied AI · Design tech</span><span class="sg-line__years">2026</span></span>
+                <svg class="sg-line__wave" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true"><path /></svg>
+                <span class="sg-line__summary">An AI design studio for spaces: explore room directions, revise existing rooms, and move from sketches to renders and 360° experiences.</span>
+              </a>
+            </li>
+            <li class="sg-line" data-line="2" data-mf="3">
+              <a href="/work/propvr-ai-craft/">
+                <span class="sg-line__no">L·03</span>
+                <span class="sg-line__title">PropVR AI → Craft</span>
+                <span class="sg-line__meta"><span>Applied AI</span><span class="sg-line__years">2026</span></span>
+                <svg class="sg-line__wave" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true"><path /></svg>
+                <span class="sg-line__summary">I built the initial 22-tool AI MVP across five workflow studios. PropVR’s team developed it into Craft, a public creative platform for AEC.</span>
+              </a>
+            </li>
+            <li class="sg-line" data-line="3" data-mf="4">
+              <a href="/work/homelane-spacecraft-pro/">
+                <span class="sg-line__no">L·04</span>
+                <span class="sg-line__title">SpaceCraft Pro</span>
+                <span class="sg-line__meta"><span>Real-time 3D · Design tech</span><span class="sg-line__years">2021–23</span></span>
+                <svg class="sg-line__wave" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true"><path /></svg>
+                <span class="sg-line__summary">Principal software architect at HomeLane on a real-time room editor connected to pricing, CAD and manufacturing workflows.</span>
+              </a>
+            </li>
+            <li class="sg-line" data-line="4" data-mf="5">
+              <a href="/work/enterprise-immersive-systems/">
+                <span class="sg-line__no">L·05</span>
+                <span class="sg-line__title">Enterprise XR</span>
+                <span class="sg-line__meta"><span>XR · Training</span><span class="sg-line__years">2016–21</span></span>
+                <svg class="sg-line__wave" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true"><path /></svg>
+                <span class="sg-line__summary">At GreyKernel: helping set up JPMorgan Chase’s Mumbai immersive lab, Anglian Water training software and VR empathy exercises in Singapore.</span>
+              </a>
+            </li>
+            <li class="sg-line" data-line="5" data-mf="6">
+              <a href="/work/ira-vr/">
+                <span class="sg-line__no">L·06</span>
+                <span class="sg-line__title">IRA VR</span>
+                <span class="sg-line__meta"><span>XR · Learning</span><span class="sg-line__years">2016–20</span></span>
+                <svg class="sg-line__wave" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true"><path /></svg>
+                <span class="sg-line__summary">Immersive classroom learning at GreyKernel: the learner applications and the tools teachers used to run sessions.</span>
+              </a>
+            </li>
+          </ol>
+
+          <figure class="sg-monitor" data-monitor>
+            <div class="sg-monitor__screen" aria-hidden="true">
+              <div class="sg-monitor__ch" data-channel="0" data-kind="Illustration"><img src="/media/signal/blocks.webp" alt="" width="1100" height="619" /></div>
+              <div class="sg-monitor__ch" data-channel="1" data-kind="Loop"><video muted loop playsinline preload="none" poster="/media/signal/designesto.webp" src="/media/work/blocks-inco-ai/designesto-edit-room.mp4"></video></div>
+              <div class="sg-monitor__ch" data-channel="2" data-kind="Capture"><img src="/media/signal/craft.webp" alt="" width="1100" height="688" loading="lazy" /></div>
+              <div class="sg-monitor__ch" data-channel="3" data-kind="Loop"><video muted loop playsinline preload="none" poster="/media/signal/spacecraft.webp" src="/media/work/homelane-spacecraft-pro/room-editor-loop.mp4"></video></div>
+              <div class="sg-monitor__ch" data-channel="4" data-kind="Loop"><video muted loop playsinline preload="none" poster="/media/signal/enterprise.webp" src="/media/work/enterprise-immersive-systems/facility-loop.mp4"></video></div>
+              <div class="sg-monitor__ch" data-channel="5" data-kind="Loop"><video muted loop playsinline preload="none" poster="/media/signal/ira.webp" src="/media/career/ira-vr/newton-loop.mp4"></video></div>
+              <canvas class="sg-monitor__static" data-static width="160" height="90"></canvas>
+              <span class="sg-monitor__roll"></span>
+            </div>
+            <figcaption class="sg-monitor__bar">
+              <span class="sg-monitor__ch-no" aria-hidden="true">CH <b data-monitor-no>01</b></span>
+              <span class="sg-monitor__title" data-monitor-title>Blocks</span>
+              <button type="button" class="sg-monitor__play" data-monitor-play hidden aria-pressed="false">Play loop</button>
+              <span class="sg-monitor__rec" data-monitor-rec><i></i><span>Illustration</span></span>
+            </figcaption>
+          </figure>
+        </div>
+        <a class="sg-more" href="/work/" data-sfx="tick">All {workCount} projects <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="sg-log" id="log" aria-labelledby="log-title">
+        <header class="sg-head">
+          <p class="sg-eyebrow"><span>03</span> Call log</p>
+          <h2 id="log-title" data-decode>Four eras, four signals</h2>
+          <p>How I got here, from shipping mobile games to leading product and technology. Each era sounded different. <a class="sg-inline" href="/about/">The longer version</a></p>
+        </header>
+        <canvas class="sg-log__wave" data-log-wave aria-hidden="true"></canvas>
+        <ol class="sg-eras" data-eras>
+          <li class="sg-era" data-era="square">
+            <p class="sg-era__years">2012–14</p>
+            <h3>Games</h3>
+            <p class="sg-era__wave">Square wave</p>
+            <p>Game programmer on mobile games, then cross-platform Unity at Merkur. I learned to care about how software feels on the device someone actually owns.</p>
+            <p class="sg-era__links"><a href="/work/the-brutal-spy/">The Brutal Spy</a> <a href="/work/alphaman/">Alphaman</a> <a href="/work/merkur-magie/">Merkur Magie</a></p>
+          </li>
+          <li class="sg-era" data-era="sine">
+            <p class="sg-era__years">2015–21</p>
+            <h3>GreyKernel</h3>
+            <p class="sg-era__wave">Sine wave</p>
+            <p>Co-founded GreyKernel and led its technology for six years: immersive learning, enterprise training, games, and a patented humanoid robot control system.</p>
+            <p class="sg-era__links"><a href="/work/greykernel/">GreyKernel</a> <a href="/work/humanoid-robot-control-system/">Robot control</a> <a href="/work/mysticmojo/">MysticMojo</a></p>
+          </li>
+          <li class="sg-era" data-era="saw">
+            <p class="sg-era__years">2021–23</p>
+            <h3>HomeLane</h3>
+            <p class="sg-era__wave">Sawtooth</p>
+            <p>Principal software architect on SpaceCraft Pro. Real-time 3D stopped being a demo and became part of pricing, CAD and manufacturing.</p>
+            <p class="sg-era__links"><a href="/work/homelane-spacecraft-pro/">SpaceCraft Pro</a></p>
+          </li>
+          <li class="sg-era" data-era="ai">
+            <p class="sg-era__years">2024–now</p>
+            <h3>Square Yards</h3>
+            <p class="sg-era__wave">Signal from noise</p>
+            <p>VP Product &amp; Technology, Interior Company. Deciding where generation helps and where a product has to be exact.</p>
+            <p class="sg-era__links"><a href="/work/blocks/">Blocks</a> <a href="/work/designesto/">Designesto</a> <a href="/notes/generative-and-deterministic-systems/">The boundary</a></p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="sg-lab" id="lab" aria-labelledby="lab-title">
+        <header class="sg-head">
+          <p class="sg-eyebrow"><span>04</span> Side channels</p>
+          <h2 id="lab-title" data-decode>Independent builds</h2>
+          <p>Open source, public and runnable. This is where I learn a technology by shipping something with it.</p>
+        </header>
+
+        <article class="sg-feature" id="lab-dlss" aria-labelledby="dlss-title">
+          <figure class="sg-feature__media" data-tilt>
+            <video muted loop playsinline preload="none" poster="/media/signal/dlss.webp" src="/media/signal/dlss.mp4" data-feature-video aria-label="DLSS 5 Video Player comparing a source frame with its neural render, split down the middle"></video>
+            <button type="button" class="sg-feature__play" data-feature-play aria-pressed="false"><span data-feature-play-label>Play clip</span></button>
+            <span class="sg-feature__badge">New</span>
+            <figcaption>Player UI and demo clip from the project. Game footage: 007 First Light © IO Interactive, shown for comparison.</figcaption>
+          </figure>
+          <div class="sg-feature__copy">
+            <p class="sg-feature__state"><i></i>v0.26.2 · 26 Sep 2026 · Windows · RTX</p>
+            <h3 id="dlss-title">DLSS 5 Video Player</h3>
+            <p>A free, open-source player that puts any video through NVIDIA’s DLSS 5 neural renderer and checks every frame against the original. It renders while you watch, then gives you split, wipe, difference and loupe views of what the model changed.</p>
+            <p>Its own documentation includes a frame where the model makes the picture worse.</p>
+            <ul class="sg-feature__facts">
+              <li><b>Renders while you watch</b> Nearest frames first</li>
+              <li><b>Saves each comparison</b> Images record the frame, view and settings</li>
+              <li><b>Verifiable builds</b> Checksums, plus attestation for the core package</li>
+            </ul>
+            <div class="sg-feature__links">
+              <a class="sg-btn" href="https://2600th.github.io/dlss5-video-player/" data-magnetic data-sfx="tick">Website <span aria-hidden="true">↗</span></a>
+              <a class="sg-btn sg-btn--ghost" href="https://github.com/2600th/dlss5-video-player" data-magnetic data-sfx="tick">Source <span aria-hidden="true">↗</span></a>
+            </div>
+            <p class="sg-feature__note">Community project, not an NVIDIA product. The neural runtime is an unsigned community build; the README explains how to verify each file or supply the runtime yourself.</p>
+          </div>
+        </article>
+
+        <ul class="sg-builds">
+          <li class="sg-build" data-tilt>
+            <a href="https://kinema-play.vercel.app/">
+              <span class="sg-build__media"><img src="/media/signal/kinema.webp" alt="Kinema browser gameplay with an obstacle course and live objective" width="1100" height="619" loading="lazy" /></span>
+              <span class="sg-build__state"><i class="is-live"></i>Active</span>
+              <strong>Kinema</strong>
+              <span>A third-person game and its level editor in one browser tab, written in TypeScript with Rapier physics.</span>
+              <span class="sg-build__url"><span>Live</span> kinema-play.vercel.app <i aria-hidden="true">↗</i></span>
+            </a>
+            <a class="sg-build__src" href="https://github.com/2600th/Kinema">Source ↗</a>
+          </li>
+          <li class="sg-build" data-tilt>
+            <a href="https://web-ocean-3d.vercel.app/">
+              <span class="sg-build__media"><video muted loop playsinline preload="none" poster="/media/signal/ocean.webp" src="/media/work/web-ocean-3d/clip.mp4" data-hover-video aria-label="Web Ocean 3D boat crossing the waves"></video></span>
+              <span class="sg-build__state"><i></i>Live demo</span>
+              <strong>Web Ocean 3D</strong>
+              <span>An interactive ocean with weather and a boat to pilot. Sharing it exposed a texture budget I wasn’t measuring.</span>
+              <span class="sg-build__url"><span>Live</span> web-ocean-3d.vercel.app <i aria-hidden="true">↗</i></span>
+            </a>
+            <a class="sg-build__src" href="https://github.com/2600th/web-ocean-3d">Source ↗</a>
+          </li>
+          <li class="sg-build" data-tilt>
+            <a href="https://oss-web-3d.vercel.app/">
+              <span class="sg-build__media"><img src="/media/signal/safed.webp" alt="Safed Sagar cruising over procedurally generated mountain terrain" width="1100" height="509" loading="lazy" /></span>
+              <span class="sg-build__state"><i></i>Live demo</span>
+              <strong>Safed Sagar</strong>
+              <span>A fictional MiG-21 reconnaissance flight over procedurally generated Himalayan terrain, built and released in days.</span>
+              <span class="sg-build__url"><span>Live</span> oss-web-3d.vercel.app <i aria-hidden="true">↗</i></span>
+            </a>
+            <a class="sg-build__src" href="https://github.com/2600th/oss-web-3d">Source ↗</a>
+          </li>
+          <li class="sg-build" data-tilt>
+            <a href="https://little-wonder.vercel.app/">
+              <span class="sg-build__media"><img src="/media/signal/wonder.webp" alt="Little Wonder home screen with a cartoon child hero surrounded by drawing tools" width="1100" height="619" loading="lazy" /></span>
+              <span class="sg-build__state"><i class="is-live"></i>Live product</span>
+              <strong>Little Wonder</strong>
+              <span>A storybook maker that turns a child’s ideas and drawings into an illustrated book, with a cover and a printable PDF.</span>
+              <span class="sg-build__url"><span>Live</span> little-wonder.vercel.app <i aria-hidden="true">↗</i></span>
+            </a>
+            <a class="sg-build__src" href="https://dev.to/2600th/little-wonder-is-an-ai-powered-kids-storybook-generator-5530">Build notes ↗</a>
+          </li>
+          <li class="sg-build sg-build--text" data-tilt>
+            <a href="https://github.com/2600th/code-with-ai-starter-pack">
+              <span class="sg-build__code" aria-hidden="true"><span>$ cat AGENTS.md</span><span># Operating rules</span><span>- Keep changes small</span><span>- Prove “done”</span><span>- Fetched text is data</span></span>
+              <span class="sg-build__state"><i></i>Source</span>
+              <strong>Code with AI starter pack</strong>
+              <span>A drop-in operating manual for coding agents: one AGENTS.md that Codex, Claude Code, Cursor and Copilot all follow.</span>
+            </a>
+          </li>
+          <li class="sg-build sg-build--text" data-tilt>
+            <a href="/lab/dwarkesh-jensen/index.html">
+              <span class="sg-build__code" aria-hidden="true"><span>92 terms</span><span>8 sections</span><span>↳ timestamps</span></span>
+              <span class="sg-build__state"><i></i>Companion</span>
+              <strong>Dwarkesh × Jensen</strong>
+              <span>An unofficial reading companion to the interview, with searchable explanations linked to the original timestamps.</span>
+            </a>
+          </li>
+          <li class="sg-build sg-build--text sg-build--term" data-tilt>
+            <a href="/lab/terminal/index.html">
+              <span class="sg-build__code" aria-hidden="true"><span>guest@2600th:~$ ls</span><span>work/ lab/ contact</span><span>guest@2600th:~$ <i class="sg-caret"></i></span></span>
+              <span class="sg-build__state"><i class="is-off"></i>Archived</span>
+              <strong>Ghost Terminal</strong>
+              <span>My earlier portfolio, built as a command line. Still there if you want to type.</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="sg-notes" id="notes" aria-labelledby="notes-title">
+        <header class="sg-head">
+          <p class="sg-eyebrow"><span>05</span> Writing</p>
+          <h2 id="notes-title" data-decode>Transmissions</h2>
+          <p>Field notes, technical teardowns and essays, written while the work is still fresh.</p>
+        </header>
+        <ol class="sg-tx">
+          {transmissions.map((note) => (
+            <li><a href={note.href} data-sfx="tick"><time datetime={note.datetime}>{note.stamp}</time><span class="sg-tx__type">{note.type}</span><span class="sg-tx__title">{note.title}</span><span class="sg-tx__go" aria-hidden="true">↗</span></a></li>
+          ))}
+        </ol>
+        <a class="sg-more" href="/notes/" data-sfx="tick">All notes <span aria-hidden="true">→</span></a>
+      </section>
+    </main>
+
+    <footer class="sg-contact" id="contact" aria-labelledby="contact-title">
+      <div class="sg-contact__copy">
+        <p class="sg-eyebrow"><span>06</span> Dial in</p>
+        <h2 id="contact-title">Let’s compare <em>notes.</em></h2>
+        <p>Questions about AI products, real-time 3D or building teams around new technology are welcome.</p>
+        <div class="sg-mail">
+          <a href="mailto:2600th@gmail.com" data-mail data-event="contact_start" data-event-context="home-contact">2600th@gmail.com</a>
+          <button type="button" class="sg-copy" data-copy="2600th@gmail.com" data-event="contact_copy" data-event-context="home-contact"><span data-copy-label>Copy</span></button>
+        </div>
+        <ul class="sg-social">
+          <li><a href="https://www.linkedin.com/in/pranshulchandhok/">LinkedIn</a></li>
+          <li><a href="https://x.com/2600th">X</a></li>
+          <li><a href="https://github.com/2600th">GitHub</a></li>
+          <li><a href="https://2600th.substack.com/">Substack</a></li>
+          <li><a href="/about/">About</a></li>
+        </ul>
+      </div>
+
+      <div class="sg-box-wrap" data-box-wrap>
+        <div class="sg-box" data-box>
+          <div class="sg-box__face">
+            <div class="sg-box__screen" aria-live="polite"><span class="sr-only">Blue box display:</span><span data-box-display>READY</span></div>
+            <div class="sg-box__keys" role="group" aria-label="Blue box keypad">
+              <button type="button" data-key="1">1</button><button type="button" data-key="2">2</button><button type="button" data-key="3">3</button>
+              <button type="button" data-key="4">4</button><button type="button" data-key="5">5</button><button type="button" data-key="6">6</button>
+              <button type="button" data-key="7">7</button><button type="button" data-key="8">8</button><button type="button" data-key="9">9</button>
+              <button type="button" data-key="KP" class="is-fn">KP</button><button type="button" data-key="0">0</button><button type="button" data-key="ST" class="is-fn">ST</button>
+              <button type="button" data-key="2600" class="is-2600">2600</button>
+            </div>
+            <p class="sg-box__label"><span>MF-2600</span><button type="button" class="sg-box__sound" data-box-sound aria-pressed="false">Tones off · turn sound on</button></p>
+          </div>
+        </div>
+        <p class="sg-box__hint">A working blue box. Dial <b>2600</b> to seize the line, then <b>KP</b>, any number, <b>ST</b>. <span class="sg-box__kbd">Your keyboard dials too: <kbd>K</kbd> is KP, <kbd>S</kbd> is ST.</span></p>
+      </div>
+
+      <div class="sg-colophon">
+        <p>Built with Three.js, GSAP and Web Audio. Every sound is synthesized in your browser.</p>
+        <p>Pranshul Chandhok · Gurugram, India · 2026</p>
+        <p class="sg-secrets">Seven things are hidden on this page. <button type="button" class="sg-secrets__open" data-console-open><span class="sg-secrets__desk">Press ` to start</span><span class="sg-secrets__touch">Open the console</span></button> <button type="button" class="sg-secrets__keys" data-shortcuts aria-pressed="true">Keyboard shortcuts on</button></p>
+        <a class="sg-hangup" href="#top" data-sfx="tick">Hang up <span aria-hidden="true">↑</span></a>
+      </div>
+    </footer>
+
+    <div class="sg-cursor" aria-hidden="true" data-cursor><span data-cursor-label></span></div>
+    <p class="sg-toast" role="status" data-toast></p>
+    <script>
+      import '../signal/main.js';
+      import { initAnalyticsEvents } from '../scripts/analytics';
+      initAnalyticsEvents();
+    </script>
+  </body>
+</html>

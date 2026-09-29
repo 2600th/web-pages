@@ -6,7 +6,7 @@ test('the single-line name stays contained without JavaScript or the custom font
     await context.route('**/mona-sans-latin.woff2', route => route.abort());
     const page = await context.newPage();
     await page.goto(baseURL!);
-    const layout = await page.locator('[data-case-slug="designesto"] h3').evaluate(element => {
+    const layout = await page.locator('a[href="/work/designesto/"] .sg-line__title').evaluate(element => {
       const range = document.createRange();
       range.selectNodeContents(element);
       const rects = [...range.getClientRects()];
@@ -28,7 +28,7 @@ test('Designesto remains an intact, contained name in homepage headings', async 
     await page.setViewportSize({ width, height: 1000 });
     // Viewport acknowledgement can precede the container-query layout update.
     await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
-    for (const selector of ['[data-case-slug="designesto"] h3']) {
+    for (const selector of ['a[href="/work/designesto/"] .sg-line__title']) {
       const heading = page.locator(selector);
       const layout = await heading.evaluate(element => {
         const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);

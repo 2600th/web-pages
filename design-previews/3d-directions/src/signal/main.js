@@ -161,7 +161,7 @@ function initReveals() {
     ScrollTrigger.batch(sel, {
       start: 'top 92%', once: true,
       // Movement only: reading content is never hidden or dimmed at rest (DESIGN.md).
-      onEnter: (els) => gsap.from(els, { y: 32, duration: 0.9, ease: 'power3.out', stagger: 0.07, overwrite: true }),
+      onEnter: (els) => gsap.from(els, { y: 32, duration: 0.9, ease: 'power3.out', stagger: 0.07, overwrite: 'auto' }),
     });
   });
   $$('.sg-beat h3, .sg-beat p, .sg-beat h2').forEach((el) => {

@@ -11,53 +11,14 @@ for (const domain of ['all', 'unknown']) {
 }
 
 test('primary navigation reaches each section and marks only the current section', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/about/');
   const nav = page.getByRole('navigation', { name: 'Primary navigation' });
   await expect(nav.getByRole('link')).toHaveText(['Home', 'Work', 'Notes', 'Lab', 'About']);
-  await expect(nav.locator('[aria-current="page"]')).toHaveText('Home');
+  await expect(nav.locator('[aria-current="page"]')).toHaveText('About');
   await nav.getByRole('link', { name: 'Notes', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/notes\/$/);
   await expect(nav.locator('[aria-current="page"]')).toHaveText('Notes');
-});
-
-test('home provides two actions and proof links directly after the hero', async ({ page }) => {
-  await page.goto('/');
-  const hero = page.locator('.velvet-hero');
-  await expect(hero.getByRole('link')).toHaveCount(2);
-  await expect(hero.getByRole('link', { name: 'View selected work' })).toHaveAttribute('href', '#selected-work');
-  await expect(hero.getByRole('link', { name: 'Read technical notes' })).toHaveAttribute('href', '/notes/');
-  const proof = page.getByRole('region', { name: 'Experience at a glance' });
-  expect(await page.locator('main > section').evaluateAll(sections => sections.slice(0, 2).map(section => section.className))).toEqual(['velvet-hero', 'home-proof']);
-  await expect(proof.getByRole('listitem')).toHaveCount(4);
-  await expect(proof.getByRole('link', { name: /Patent co-inventor/ })).toHaveAttribute('href', '/work/humanoid-robot-control-system/');
-  await expect(proof.getByRole('link', { name: /Still shipping/ })).toHaveAttribute('href', '/lab/');
-});
-
-test('home selects five distinct projects without attributing invented motion to Craft', async ({ page }) => {
-  await page.goto('/');
-  const cases = page.locator('[data-case-slug]');
-  expect(await cases.evaluateAll(items => items.map(item => item.getAttribute('data-case-slug')))).toEqual([
-    'blocks', 'designesto', 'propvr-ai-craft', 'homelane-spacecraft-pro', 'enterprise-immersive-systems',
-  ]);
-  const craft = page.locator('[data-case-slug="propvr-ai-craft"]');
-  await expect(craft.locator('img')).toBeVisible();
-  await expect(craft.locator('video, [data-signal-motion-toggle]')).toHaveCount(0);
-  await expect(page.locator('a[href="/work/blocks-inco-ai/"]')).toHaveCount(0);
-  const videoCase = page.locator('[data-case-slug="designesto"]');
-  await videoCase.getByRole('button', { name: /Play Designesto/ }).click();
-  await expect(videoCase.getByRole('button', { name: /Pause Designesto/ })).toHaveAttribute('aria-pressed', 'true');
-});
-
-test('home shows one current published item from each Writing type and keeps one thesis and shared contact', async ({ page }) => {
-  await page.goto('/');
-  const writing = page.getByRole('region', { name: 'Writing' });
-  await expect(writing.locator('article')).toHaveCount(3);
-  await expect(writing.locator('time[datetime]')).toHaveCount(3);
-  expect((await writing.locator('.home-notes__meta > span:first-child').allTextContents()).sort()).toEqual(['Essay', 'Field Note', 'Technical Teardown']);
-  await expect(page.getByRole('heading', { name: 'Generation is the demo. The workflow is the product.' })).toHaveCount(1);
-  await expect(page.locator('#contact')).toHaveCount(1);
-  await expect(page.getByRole('link', { name: 'Let’s compare notes', exact: true })).toHaveCount(1);
 });
 
 test('Work excludes compatibility records and supports priority and chronological exploration', async ({ page }) => {
@@ -89,12 +50,13 @@ test('About explains contribution boundaries and connects verified tools to publ
 });
 
 test('home titles, actions and navigation remain contained across narrow and wide viewports', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   for (const width of [320, 390, 768, 1024, 1440, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.evaluate(() => document.fonts.ready);
     const layout = await page.evaluate(() => {
-      const selectors = '.velvet-hero h1, .velvet-hero__identity, .velvet-hero__thesis, .velvet-hero__actions, .velvet-case h3, .site-nav';
+      const selectors = '.sg-hero h1, .sg-kicker, .sg-lede, .sg-actions, .sg-line__title, .sg-build strong, .sg-mark, .sg-nav';
       return {
         width: window.innerWidth,
         scrollWidth: document.documentElement.scrollWidth,

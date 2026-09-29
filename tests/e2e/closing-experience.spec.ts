@@ -2,11 +2,15 @@ import { expect, test } from '@playwright/test';
 
 test('each page has one contact invitation instead of two consecutive closings', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  for (const route of ['/', '/about/', '/work/', '/notes/', '/work/alphaman/', '/lab/']) {
+  for (const route of ['/about/', '/work/', '/notes/', '/work/alphaman/', '/lab/']) {
     await page.goto(route);
     await expect(page.getByRole('link', { name: /compare notes|Email me|Say hello/i }), route).toHaveCount(1);
     await expect(page.locator('#contact'), route).toHaveCount(1);
   }
+  // The homepage closes on its own contact footer with the address itself as the link.
+  await page.goto('/');
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(1);
+  await expect(page.locator('#contact')).toHaveCount(1);
 });
 
 test('the shared contact invitation opens a direct email without a homepage detour', async ({ page }) => {
@@ -17,7 +21,7 @@ test('the shared contact invitation opens a direct email without a homepage deto
 
 test('footer links remain distinct touch targets on a narrow screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/about/');
   const links = page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link');
   for (const link of await links.all()) {
     const box = await link.boundingBox();
@@ -70,18 +74,18 @@ test('career links remain available before scroll-reveal animation runs', async 
   }
 });
 
-test('the floating up arrow does not cover the work archive action', async ({ page }) => {
+test('the section dial does not cover the work archive action', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  const action = page.getByRole('link', { name: 'View all projects' });
+  const action = page.getByRole('link', { name: /^All \d+ projects/ });
   await action.evaluate((element) => {
     const box = element.getBoundingClientRect();
     window.scrollTo(0, window.scrollY + box.bottom - window.innerHeight + 24);
   });
-  const arrow = page.getByRole('link', { name: 'Back to top', exact: true });
-  await expect(arrow).toBeInViewport();
+  const dial = page.getByRole('navigation', { name: 'Page sections' });
+  await expect(dial).toBeInViewport();
   const targetBox = (await action.boundingBox())!;
-  const arrowBox = (await arrow.boundingBox())!;
-  expect(targetBox.x + targetBox.width).toBeLessThanOrEqual(arrowBox.x - 8);
+  const dialBox = (await dial.boundingBox())!;
+  expect(targetBox.x + targetBox.width).toBeLessThanOrEqual(dialBox.x - 8);
 });

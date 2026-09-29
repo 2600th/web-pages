@@ -28,5 +28,16 @@ export default defineConfig({
     build: {
       cssMinify: 'lightningcss',
     },
+    // The homepage engine is imported lazily; pre-bundling its dependencies stops the dev
+    // server from discovering them mid-session and reloading every open page.
+    optimizeDeps: {
+      include: [
+        'gsap', 'gsap/ScrollTrigger', 'gsap/ScrambleTextPlugin', 'three',
+        'three/addons/libs/meshopt_decoder.module.js', 'three/addons/loaders/GLTFLoader.js',
+        'three/addons/math/MeshSurfaceSampler.js', 'three/addons/postprocessing/EffectComposer.js',
+        'three/addons/postprocessing/OutputPass.js', 'three/addons/postprocessing/RenderPass.js',
+        'three/addons/postprocessing/ShaderPass.js', 'three/addons/postprocessing/UnrealBloomPass.js',
+      ],
+    },
   },
 });

@@ -312,19 +312,24 @@ export function initBlueBox(engine) {
   const screen = display.parentElement;
   const soundBtn = $('[data-box-sound]');
   const box = $('[data-box]');
-  let seized = false; let routing = null;
+  // `entry` collects digits dialled outside a KP…ST sequence, like a calculator,
+  // so typing 2 6 0 0 works as well as the 2600 key. `routing` is the KP number.
+  let seized = false; let routing = null; let entry = '';
   const show = (text, state = '') => { display.textContent = text; screen.dataset.state = state; };
+  const keyFor = (key) => box.querySelector(`[data-key="${key}"]`);
+
+  function seize() {
+    seized = true; routing = null; entry = '';
+    show('2600 · SEIZED', 'seized');
+    engine?.seize(); setStatus('seized', 'Line seized');
+    setTimeout(() => unlock('seize'), 1200);
+  }
 
   function press(key, btn) {
     sfx.mf(key);
     if (btn && motionOn()) { btn.classList.add('is-down'); setTimeout(() => btn.classList.remove('is-down'), key === '2600' ? 420 : 140); }
-    if (key === '2600') {
-      seized = true; routing = null; show('2600 · SEIZED', 'seized');
-      engine?.seize(); setStatus('seized', 'Line seized');
-      setTimeout(() => unlock('seize'), 1200);
-      return;
-    }
-    if (key === 'KP') { routing = ''; show(seized ? 'KP_' : 'KP · NO TRUNK'); return; }
+    if (key === '2600') { seize(); return; }
+    if (key === 'KP') { routing = ''; entry = ''; show(seized ? 'KP_' : 'KP · NO TRUNK'); return; }
     if (key === 'ST') {
       const secret = { 1337: ['ELITE · 1337', 'leet'], 2600: ['HELLO, PHREAK'] }[routing];
       if (seized && secret) {
@@ -340,14 +345,34 @@ export function initBlueBox(engine) {
       } else {
         sfx.denied(); show(seized ? 'KP FIRST' : 'SEIZE FIRST · 2600');
       }
-      seized = false; routing = null;
+      seized = false; routing = null; entry = '';
       return;
     }
-    if (routing !== null) { routing = (routing + key).slice(-10); show(`KP ${routing}_`); } else show(key);
+    if (routing !== null) { routing = (routing + key).slice(-10); show(`KP ${routing}_`); return; }
+    entry = (entry + key).slice(-12);
+    if (entry.endsWith('2600')) { seize(); return; }
+    show(entry, seized ? 'seized' : '');
   }
+
+  function erase(all) {
+    if (routing !== null) { routing = all ? '' : routing.slice(0, -1); show(`KP ${routing}_`); return; }
+    entry = all ? '' : entry.slice(0, -1);
+    show(entry || (seized ? '2600 · SEIZED' : 'READY'), seized ? 'seized' : '');
+  }
+
   $$('[data-key]').forEach((btn) => {
     btn.dataset.cursorText = 'Dial';
     btn.addEventListener('click', () => press(btn.dataset.key, btn));
+  });
+
+  // Keyboard dialling while focus is inside the box: digits, K for KP, S or # for ST.
+  box.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    const key = /^[0-9]$/.test(k) ? k : k === 'k' || k === '*' ? 'KP' : k === 's' || k === '#' ? 'ST' : null;
+    if (key) { e.preventDefault(); press(key, keyFor(key)); return; }
+    if (k === 'backspace' || k === 'delete') { e.preventDefault(); erase(false); }
+    else if (k === 'escape') { e.preventDefault(); erase(true); }
   });
 
   const syncSound = (on) => {

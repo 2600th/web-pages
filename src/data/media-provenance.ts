@@ -406,3 +406,26 @@ export const MEDIA_PROVENANCE: Record<string, MediaProvenance> = {
     status: 'public-approved',
   },
 };
+
+// Signal homepage stills are resized derivatives, so each inherits its source's record.
+const SIGNAL_DERIVATIVES: Record<string, string | MediaProvenance> = {
+  blocks: '/media/generated/editorial/blocks-design-production-v2.webp',
+  designesto: '/media/work/blocks-inco-ai/designesto-before-after.webp',
+  craft: '/media/work/propvr-ai-craft/craft-public-home-20260902.webp',
+  spacecraft: '/media/work/homelane-spacecraft-pro/room-editor-poster.webp',
+  enterprise: '/media/work/enterprise-immersive-systems/facility-poster.webp',
+  ira: '/media/career/ira-vr/newton-poster.webp',
+  kinema: '/media/work/kinema/inside.webp',
+  ocean: '/media/work/web-ocean-3d/clip-poster.webp',
+  wonder: '/media/work/little-wonder/hero.webp',
+  character: { sourceUrl: 'generated://openai/imagegen/2600th-velvet-character', status: 'generated-identity', evidenceUse: false },
+  dlss: { sourceUrl: 'https://github.com/2600th/dlss5-video-player', status: 'public-repository' },
+  safed: { sourceUrl: 'https://github.com/2600th/oss-web-3d', status: 'public-repository' },
+};
+for (const [name, source] of Object.entries(SIGNAL_DERIVATIVES)) {
+  const record = typeof source === 'string' ? MEDIA_PROVENANCE[source] : source;
+  if (!record) throw new Error(`Signal still ${name} has no source provenance`);
+  MEDIA_PROVENANCE[`/media/signal/${name}.webp`] = record;
+}
+MEDIA_PROVENANCE['/media/signal/dlss.mp4'] = SIGNAL_DERIVATIVES.dlss as MediaProvenance;
+MEDIA_PROVENANCE['/media/social/signal-home.webp'] = { sourceUrl: 'generated://playwright/signal-home-render', status: 'generated-identity', evidenceUse: false };

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-for (const route of ['/', '/work/', '/work/domain/xr/', '/about/', '/notes/', '/notes/ai-video-control/', '/work/alphaman/', '/lab/', '/404']) {
+for (const route of ['/work/', '/work/domain/xr/', '/about/', '/notes/', '/notes/ai-video-control/', '/work/alphaman/', '/lab/', '/404']) {
   test(`floating arrow returns to the top of ${route} without leaving the page`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(route);
@@ -85,7 +85,7 @@ for (const width of [320, 878, 1440]) {
   test(`arrow stays in the viewport and clears footer content at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 912 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
+    await page.goto('/about/');
     const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
     await page.evaluate(() => window.scrollTo(0, 500));
     await expect(topLink).toBeInViewport();

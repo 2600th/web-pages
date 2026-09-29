@@ -64,6 +64,11 @@ for (const route of htmlRoutes) {
   if (!html.includes('<h1') || !html.includes('rel="canonical"')) {
     throw new Error(`${route} is missing its h1 or canonical metadata.`);
   }
+  if (!/rel="icon" href="\/favicon\.svg"/.test(html)) throw new Error(`${route} is missing its favicon.`);
+  // The Lab companion is deliberately self-contained: no third-party requests, so no analytics.
+  if (route !== 'lab/dwarkesh-jensen/index.html' && (!html.includes('googletagmanager.com/gtag/js?id=G-XR0S4Q293G') || !html.includes('property="og:image"'))) {
+    throw new Error(`${route} is missing its analytics tag or social image.`);
+  }
   if (internalDisclosure.test(html)) {
     throw new Error(`${route} contains internal generated-media disclosure copy.`);
   }
@@ -71,9 +76,10 @@ for (const route of htmlRoutes) {
 
 const home = await readFile(join(output, 'index.html'), 'utf8');
 if (!home.includes('Pranshul Chandhok') || !home.includes('Make the uncertain') || !home.includes('Interior Company at Square Yards')) {
-  throw new Error('The generated homepage is missing its current identity or Velvet thesis.');
+  throw new Error('The generated homepage is missing its current identity or thesis.');
 }
-if ((home.match(/<article\b[^>]*\bdata-signal-case\b/g) ?? []).length !== 5 || home.includes('href="/work/blocks-inco-ai/"')) throw new Error('Homepage featured work is not the approved five-product selection.');
+if ((home.match(/<li\b[^>]*\bclass="sg-line\b/g) ?? []).length !== 6 || home.includes('href="/work/blocks-inco-ai/"')) throw new Error('Homepage selected work is not the approved six-line selection.');
+if (!home.includes('<canvas') || !home.includes('class="sg-poster"') || !home.includes('data-box-display')) throw new Error('The Signal homepage is missing its stage, poster fallback or blue box.');
 
 const archive = await readFile(join(output, 'lab', 'terminal', 'index.html'), 'utf8');
 if (!archive.includes('noindex,follow') || !archive.includes('Return to Pranshul Chandhok')) {

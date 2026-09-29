@@ -1,10 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="200 200 854 854">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <title>2600th</title>
-  <!-- Approved concept A: 26 ligature. Hand-drawn vector, optically enlarged for browser tabs.
-       Warm numerals share a diagonal; a cobalt slash separates the lower-left terminals.
-       Source of truth for the ICO and Apple icon. No font or external asset dependencies. -->
-  <path fill="#030405" d="M200 200h854v854H200z"/>
-  <path fill="#edeae2" d="M281 440v-34c0-69 56-124 125-124h222c70 0 126 55 126 125v53L653 560 404 682q-14 7-14 16L281 804V634q0-18 26-32l317-154q19-9 19-24v-10q0-24-24-24H415q-25 0-25 25v25z"/>
-  <path fill="#edeae2" fill-rule="evenodd" d="M806 460h168v114H835l-68 67h107c56 0 100 42 100 98v130c0 59-44 105-100 105H613c-57 0-100-44-100-101v-24h-99zm-142 285-44 44v69q0 18 18 18h215q18 0 18-18v-95q0-18-18-18z"/>
-  <path fill="#315ef5" d="M399 723h91L384 829h-92z"/>
+  <!-- Signal mark: the site's oscilloscope trace locking onto 2600 Hz. The gold beam spot
+       is the lock. Source of truth for the ICO, Apple and manifest icons. No external assets. -->
+  <rect width="64" height="64" rx="14" fill="#03040a"/>
+  <path d="M8 32h48" stroke="#4d74ff" stroke-opacity=".28" stroke-width="1.5"/>
+  <path d="M1 8c2.5-6 4.5-6 6.5 0s4 6 6.5 0 4-6 6.5 0" transform="translate(6.3 13.6) scale(2.3)" fill="none" stroke="#9db6ff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="53.4" cy="32" r="5" fill="#e8b45a"/>
 </svg>

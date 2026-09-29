@@ -25,6 +25,7 @@ const stills = {
   kinema: `${site}/media/work/kinema/inside.webp`,
   ocean: `${site}/media/work/web-ocean-3d/clip-poster.webp`,
   safed: `${masters}/safed-sagar/04-cruise.jpg`,
+  wonder: `${site}/media/work/little-wonder/hero.webp`,
   character: `${site}/media/generated/identity/2600th-velvet-character.webp`,
 };
 for (const [name, src] of Object.entries(stills)) {

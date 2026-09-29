@@ -66,7 +66,7 @@ describe('portfolio media', () => {
     expect(existsSync(font)).toBe(true);
     expect(statSync(font).size).toBeLessThanOrEqual(200_000);
 
-    const layout = readFileSync(join(process.cwd(), 'src', 'layouts', 'BaseLayout.astro'), 'utf8');
+    const layout = readFileSync(join(process.cwd(), 'src', 'components', 'shared', 'SeoHead.astro'), 'utf8');
     const styles = readFileSync(join(process.cwd(), 'src', 'styles', 'global.css'), 'utf8');
     expect(layout).toContain('/fonts/mona-sans-latin.woff2');
     expect(styles).toContain('/fonts/mona-sans-latin.woff2');

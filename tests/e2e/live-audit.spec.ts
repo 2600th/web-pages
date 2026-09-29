@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('homepage heading preserves word boundaries in text extraction', async ({ page }) => {
   await page.goto('/');
-  expect((await page.locator('#velvet-title').textContent())?.replace(/\s+/g, ' ').trim()).toBe('Make the uncertain operable.');
+  // The headline decodes through glyph noise first; the settled text must keep its word boundaries.
+  await expect.poll(async () => (await page.locator('#hero-title').textContent())?.replace(/\s+/g, ' ').trim(), { timeout: 8000 }).toBe('Make the uncertain operable.');
 });
 
 test('Work labels do not repeat the year and editorial order survives chronological sorting', async ({ page }) => {

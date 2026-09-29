@@ -117,7 +117,6 @@ p, li { text-wrap: pretty; }
   backdrop-filter: blur(18px);
 }
 
-.home-page .site-header { position: absolute; inset: 0 0 auto; border-bottom-color: rgb(237 234 226 / 0.12); background: linear-gradient(180deg, rgb(3 4 5 / 0.7), transparent); backdrop-filter: none; }
 .site-signature { display: inline-flex; width: max-content; min-height: 2.75rem; align-items: center; gap: 0.58rem; color: var(--warm); font-size: 0.75rem; font-weight: 620; letter-spacing: 0.06em; text-decoration: none; text-transform: uppercase; }
 .site-signature strong { font-size: 0.83rem; font-weight: 840; letter-spacing: 0.04em; }
 .site-signature > span:last-child { color: var(--muted); }
