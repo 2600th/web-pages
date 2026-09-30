@@ -272,6 +272,13 @@ test('lab and about expose their operating surfaces', async ({ page }) => {
   await expect(atari.getByRole('link', { name: '“Atari 2600”' })).toHaveAttribute('href', /sketchfab\.com\/3d-models\/atari-2600/);
   await expect(atari.getByRole('link', { name: 'CC BY 4.0' })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
   await expect(atari.locator('[data-cart]')).toHaveCount(3);
+  await expect(atari.getByRole('link', { name: '“Magnavox 19" CRT TV”' })).toHaveAttribute('href', /sketchfab\.com\/3d-models\/magnavox/);
+  // The toolchain workbench: one disk per row of tools, a still, and the PC's credit.
+  const bench = page.locator('[data-workbench]');
+  await expect(bench.locator('[data-disk]')).toHaveCount(4);
+  await expect(bench.locator('dl > div')).toHaveCount(4);
+  await expect(bench.locator('img')).toHaveAttribute('src', '/media/3d/retro-computer-still.webp');
+  await expect(bench.getByRole('link', { name: '“PSX Retro Computer”' })).toHaveAttribute('href', /sketchfab\.com\/3d-models\/psx-retro-computer/);
   // The display carries the homepage character: a real image for no-JS and screen readers,
   // drawn onto a canvas that tunes in and locks once scripts run.
   await expect(page.locator('[data-badge] img')).toHaveAttribute('src', '/media/signal/character.webp');

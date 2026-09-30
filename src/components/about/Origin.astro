@@ -1,8 +1,8 @@
 ---
 /**
  * Why 2600th: two 2600s. The first console in the house was an Atari 2600; the tone came
- * later, in college. The Atari is a 3D model you can load cartridges into (motion on);
- * otherwise a still of it. The steps tell the story in order.
+ * later, in college. The Atari and its TV are 3D models: load a cartridge and the TV comes
+ * on with it (motion on); otherwise a still of the set. The steps tell the story in order.
  */
 const CARTS = ['Pitfall!', 'Space Invaders', 'Super Breakout'];
 ---
@@ -13,7 +13,7 @@ const CARTS = ['Pitfall!', 'Space Invaders', 'Super Breakout'];
   <div class="ab-origin__grid">
     <figure class="ab-atari">
       <div class="ab-atari__stage" data-atari-stage>
-        <img class="ab-atari__still" src="/media/3d/atari-2600-still.webp" width="1280" height="720" alt="An Atari 2600 with its woodgrain front, two joysticks and three cartridges beside it" loading="lazy" decoding="async" />
+        <img class="ab-atari__still" src="/media/3d/atari-2600-still.webp" width="1280" height="720" alt="An Atari 2600 with its woodgrain front, two joysticks and three cartridges, in front of a colour TV" loading="lazy" decoding="async" />
         <canvas class="ab-atari__canvas" data-atari-canvas aria-hidden="true"></canvas>
       </div>
       <div class="ab-atari__deck">
@@ -22,7 +22,7 @@ const CARTS = ['Pitfall!', 'Space Invaders', 'Super Breakout'];
         </div>
         <p class="ab-atari__readout" aria-live="polite"><i aria-hidden="true"></i><span data-atari-readout>Pick a cartridge</span></p>
       </div>
-      <figcaption class="ab-atari__credit">3D model: <a href="https://sketchfab.com/3d-models/atari-2600-2024d933f6214117a399ad4287ede64d">“Atari 2600”</a> by <a href="https://sketchfab.com/dark_igorek">dark_igorek</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, compressed for the web.</figcaption>
+      <figcaption class="ab-atari__credit">3D models: <a href="https://sketchfab.com/3d-models/atari-2600-2024d933f6214117a399ad4287ede64d">“Atari 2600”</a> by <a href="https://sketchfab.com/dark_igorek">dark_igorek</a> and <a href="https://sketchfab.com/3d-models/magnavox-19-crt-tv-rr1938-w122-3aa886ec33294ddb9da3ce7bfe8ed9b6">“Magnavox 19" CRT TV”</a> by <a href="https://sketchfab.com/amhyde">amhyde</a>, both <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, compressed for the web. The TV picture is drawn by this site.</figcaption>
     </figure>
     <ol class="ab-steps">
       <li>
