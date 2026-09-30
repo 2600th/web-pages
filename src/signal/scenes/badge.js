@@ -4,6 +4,7 @@
 import { gsap } from 'gsap';
 import { sfx, tones } from '../audio.js';
 import { motionOn } from './mount.js';
+import { mountScreen } from './badge-screen.js';
 
 export function initBadge() {
   const root = document.querySelector('[data-badge]');
@@ -16,6 +17,9 @@ export function initBadge() {
   const osd = root.querySelector('[data-badge-osd]');
   const board = root.querySelector('.bdg__board');
   root.dataset.ready = 'true';
+  // Prototype: ?screen=holo|dither|lock picks the display treatment.
+  const screenMode = new URLSearchParams(location.search).get('screen') ?? 'lock';
+  const display = mountScreen(root.querySelector('[data-badge-screen]'), screenMode);
   let pinned = -1;
   let shown = -1;
 
@@ -71,6 +75,7 @@ export function initBadge() {
   root.querySelector('[data-badge-key="b"]')?.addEventListener('click', (event) => {
     press(event.currentTarget);
     sfx.mf('2600');
+    display.then((screen) => screen?.retune?.());
     pinned = -1;
     leds.forEach((led) => led.setAttribute('aria-pressed', 'false'));
     show(-1);
@@ -88,6 +93,7 @@ export function initBadge() {
     if (!entry.isIntersecting) return;
     observer.disconnect();
     chase();
+    display.then((screen) => screen?.start?.());
     if (motionOn()) gsap.fromTo(board, { rotationZ: -4 }, { rotationZ: 0, duration: 2.2, ease: 'elastic.out(1, 0.25)', transformOrigin: '50% -10%' });
   }, { threshold: 0.4 }).observe(root);
 

@@ -86,8 +86,10 @@ const data = years.map((y) => ({ ...y, role: ERA[y.era].role, label: ERA[y.era].
       <text class="bdg__silk bdg__silk--tiny" x="262" y="599" text-anchor="end">B · 2600 HZ</text>
     </svg>
 
-    <div class="bdg__screen" style={`left:${pct(60, 360)};top:${pct(66, 620)};width:${pct(240, 360)};height:${pct(314, 620)}`}>
-      <img src="/media/signal/portrait.webp" width="720" height="948" alt="The 2600th character rendered as a point cloud of cobalt light" loading="eager" />
+    <div class="bdg__screen" data-badge-screen style={`left:${pct(60, 360)};top:${pct(66, 620)};width:${pct(240, 360)};height:${pct(314, 620)}`}>
+      <div class="bdg__photo">
+        <img src="/media/signal/character.webp" width="720" height="1003" alt="Pranshul as the 2600th character: glasses, a beard and a long black tech coat with cobalt piping" loading="eager" decoding="async" />
+      </div>
       <div class="bdg__read" aria-hidden="true" data-badge-read>
         <p class="bdg__read-year" data-badge-year></p>
         <p class="bdg__read-role" data-badge-role></p>
