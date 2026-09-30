@@ -44,12 +44,15 @@ export default defineConfig({
     build: {
       cssMinify: 'lightningcss',
     },
-    // The homepage engine is imported lazily; pre-bundling its dependencies stops the dev
-    // server from discovering them mid-session and reloading every open page.
+    // Scenes are imported lazily; pre-bundling their dependencies stops the dev server from
+    // discovering them mid-session and reloading every open page (which breaks e2e runs).
+    // Add any new three/addons import here.
     optimizeDeps: {
       include: [
         'gsap', 'gsap/ScrollTrigger', 'gsap/ScrambleTextPlugin', 'three',
         'three/addons/libs/meshopt_decoder.module.js', 'three/addons/loaders/GLTFLoader.js',
+        // The About and Side B scenes (Atari, workbench, Walkman).
+        'three/addons/environments/RoomEnvironment.js', 'three/addons/geometries/RoundedBoxGeometry.js',
         'three/addons/math/MeshSurfaceSampler.js', 'three/addons/postprocessing/EffectComposer.js',
         'three/addons/postprocessing/OutputPass.js', 'three/addons/postprocessing/RenderPass.js',
         'three/addons/postprocessing/ShaderPass.js', 'three/addons/postprocessing/UnrealBloomPass.js',
