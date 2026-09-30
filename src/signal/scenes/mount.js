@@ -7,6 +7,8 @@
 
 const root = document.documentElement;
 export const motionOn = () => root.dataset.motion === 'on';
+/** Dev only: `window.__timeScale` slows scene clocks so previews can be recorded. */
+export const timeScale = () => (import.meta.env.DEV ? window.__timeScale ?? 1 : 1);
 
 export function mountScene(host, load, { needsMotion = true, rootMargin = '240px' } = {}) {
   if (!host) return;

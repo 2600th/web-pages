@@ -1,0 +1,26 @@
+---
+// PROTOTYPE (placement B): Side B as its own page. About is side A; this is the other side.
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageOpening from '../components/site/PageOpening.astro';
+import SideB from '../components/about/SideB.astro';
+import '../styles/signal/pages.css';
+import '../styles/signal/mixtape.css';
+---
+
+<SiteLayout
+  title="Side B · Pranshul Chandhok"
+  description="The other side of the tape: what I listen to while I build."
+  canonical="/side-b/"
+  status="Side B · tape idle"
+>
+  <div class="pg side-b-page">
+    <PageOpening eyebrow={['B', 'Side B']} path={[{ label: 'about', href: '/about/' }, { label: 'side-b' }]} lede="The other side of the tape: what I listen to while I build. Pick a tape and it drops into the Walkman." wave="sine" compact>
+      <h1 slot="title">Side <em>B.</em></h1>
+    </PageOpening>
+    <SideB page />
+  </div>
+  <script>
+    import { initSideB } from '../signal/scenes/mixtape.js';
+    initSideB();
+  </script>
+</SiteLayout>

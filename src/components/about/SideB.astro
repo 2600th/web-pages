@@ -1,18 +1,21 @@
 ---
 /**
- * PROTOTYPE (placement A): "Side B" on the About page. A 3D cassette player with a fan of
- * tapes; pick a tape, it loads, the reels turn. The J-card lists the tape; rock tapes play
- * through a streaming embed, the last tape plays the site's own line tones.
+ * PROTOTYPE: "Side B", the Walkman and its tapes. Pick a tape: it slides into the Walkman,
+ * the reels turn, and the J-card lists the songs; rock tapes play through a streaming embed,
+ * the last tape plays the site's own line tones. `page` renders it as the body of its own
+ * page (placement B) instead of a section at the end of About (placement A).
  */
 import { TAPES } from '../../data/mixtape';
+interface Props { page?: boolean }
+const { page = false } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<section class="pg-section sideb" id="side-b" aria-labelledby="sideb-title" data-sideb>
-  <p class="sg-eyebrow"><span>06</span> Side B</p>
+<section class:list={['pg-section sideb', { 'sideb--page': page }]} id="side-b" aria-labelledby={page ? undefined : 'sideb-title'} aria-label={page ? 'Tapes and player' : undefined} data-sideb>
+  {!page && <p class="sg-eyebrow"><span>06</span> Side B</p>}
   <div class="sideb__grid">
     <div class="sideb__copy">
-      <h2 id="sideb-title">What’s on the <em>tape.</em></h2>
+      {!page && <h2 id="sideb-title">What’s on the <em>tape.</em></h2>}
       <p class="sideb__lede">Four tapes on the desk. Pick one: it drops into the player, the reels turn, and the songs play.</p>
       <ol class="sideb__tapes" aria-label="Tapes">
         {TAPES.map((tape, i) => (

@@ -1,6 +1,7 @@
 // Site-wide behaviour for every page: header, preferences, cursor, reveals, media
 // and the console. The homepage adds its engine on top through setHooks().
 import { gsap } from 'gsap';
+if (import.meta.env.DEV) window.__gsap = gsap; // lets preview recordings slow every tween
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 import { bindMotionToggle } from './env.js';

@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
 import { loadModel } from './gltf.js';
+import { timeScale } from './mount.js';
 
 const URL = '/media/3d/retro-computer.glb';
 // The monitor's glass, in model units, and the floppy slot on the tower.
@@ -222,7 +223,7 @@ export async function createWorkbench(canvas, { disks, onState = () => {} }) {
 
   const clock = new THREE.Clock();
   const frame = () => {
-    screen.tick(Math.min(clock.getDelta(), 1 / 10));
+    screen.tick(Math.min(clock.getDelta() * timeScale(), 1 / 10));
     camera.position.x += (base.x + state.pointer.x * 0.2 - camera.position.x) * 0.05;
     camera.position.y += (base.y + state.pointer.y * 0.1 - camera.position.y) * 0.05;
     camera.lookAt(LOOK);

@@ -7,6 +7,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
 import { loadModel } from './gltf.js';
+import { timeScale } from './mount.js';
 
 const SILVER = 0xc9cfdf;
 const R_MIN = 0.1;
@@ -484,10 +485,7 @@ export async function createDeck(canvas, { tapes, onState = () => {} }) {
 
   const clock = new THREE.Clock();
   const frame = () => {
-    // PROTOTYPE: __deckTimeScale slows the scene for recording previews.
-    const scale = window.__deckTimeScale ?? 1;
-    if (scale !== 1 && gsap.globalTimeline.timeScale() !== scale) gsap.globalTimeline.timeScale(scale);
-    const dt = Math.min(clock.getDelta() * scale, 1 / 20);
+    const dt = Math.min(clock.getDelta() * timeScale(), 1 / 20);
     if (state.loaded >= 0 && state.speed > 0.001) {
       const c = cassettes[state.loaded];
       c.userData.progress = Math.min(0.995, c.userData.progress + dt * state.speed * 0.004);

@@ -47,3 +47,15 @@
   .sideb__stage { order: -1; }
   .sideb__jcard { transform: none; }
 }
+
+/* Placement B: its own page, the stage gets the room. */
+.sideb--page { padding-top: 0.5rem; }
+.sideb--page .sideb__grid { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 16rem); margin-top: 0; }
+.sideb--page .sideb__stage { aspect-ratio: 16 / 10; }
+
+/* Placement B: the end of About flips the tape over. */
+.ab-flip { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.4rem 1.6rem; border: 1px solid var(--line-strong); border-radius: 10px; background: linear-gradient(100deg, rgb(232 180 90 / 0.08), transparent 55%), var(--panel); text-decoration: none; color: var(--ink); }
+.ab-flip span { font: 600 0.6875rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.ab-flip strong { display: block; margin-top: 0.5rem; font-weight: 740; font-stretch: 108%; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -0.02em; }
+.ab-flip img { width: 9rem; height: auto; transform: rotate(-6deg); filter: drop-shadow(0 12px 20px rgb(0 0 0 / 0.7)); }
+.ab-flip:hover { border-color: var(--gold); }

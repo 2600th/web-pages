@@ -9,6 +9,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
 import { loadModel } from './gltf.js';
 import { buildCrt } from './crt.js';
+import { timeScale } from './mount.js';
 
 const URL = '/media/3d/atari-2600.glb';
 // Top of the cartridge slot, in model units (console is about 3.5 wide).
@@ -154,7 +155,7 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
 
   const clock = new THREE.Clock();
   const frame = () => {
-    tv.tick(Math.min(clock.getDelta() * (window.__deckTimeScale ?? 1), 1 / 10));
+    tv.tick(Math.min(clock.getDelta() * timeScale(), 1 / 10));
     camera.position.x += (base.x + state.pointer.x * 0.9 - camera.position.x) * 0.05;
     camera.position.y += (base.y + state.pointer.y * 0.5 - camera.position.y) * 0.05;
     camera.lookAt(LOOK);
