@@ -1,8 +1,6 @@
-// PROTOTYPE: the cassette player in two placements.
-//   A  initSideB()     a "Side B" section on the About page
-//   B  initTapeDock()  a pocket player in the site header, opened as a drawer on any page
-// Both load the 3D player (walkman.js) only when they are first seen or opened.
-import { sfx, sound } from '../audio.js';
+// Side B on the About page: pick a tape and the Walkman plays it. The 3D scene
+// (walkman.js) loads only when the section comes near and motion is on.
+import { sfx } from '../audio.js';
 import { motionOn } from './mount.js';
 
 const pad = (n) => String(n).padStart(2, '0');
@@ -74,57 +72,10 @@ export function initSideB() {
   const ui = { title: root.querySelector('[data-jcard-title]'), side: root.querySelector('[data-jcard-side]'), list: root.querySelector('[data-jcard-list]') };
   const render = wire(root, () => ensure(), tapes, ui);
   const ensure = () => {
-    loading ??= import('./walkman.js').then(({ createDeck }) => createDeck(canvas, { tapes, layout: 'stage', onState: render })).then((d) => { deck = d; root.dataset.ready = 'true'; return d; });
+    loading ??= import('./walkman.js').then(({ createDeck }) => createDeck(canvas, { tapes, onState: render })).then((d) => { deck = d; root.dataset.ready = 'true'; return d; });
     return loading;
   };
   new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting) { if (motionOn()) ensure(); deck?.resume(); } else deck?.pause();
   }, { rootMargin: '200px' }).observe(root);
-}
-
-/* ---------- B: a pocket player in the header ---------- */
-export function initTapeDock() {
-  const params = new URLSearchParams(location.search);
-  if (!params.has('dock')) return;
-  const controls = document.querySelector('.sg-controls');
-  const tapesJson = document.querySelector('[data-dock-tapes]');
-  if (!controls || !tapesJson) return;
-  const tapes = JSON.parse(tapesJson.textContent);
-  const chip = document.createElement('button');
-  chip.type = 'button';
-  chip.className = 'sg-chip tdock__chip';
-  chip.setAttribute('aria-expanded', 'false');
-  chip.setAttribute('aria-controls', 'tape-dock');
-  chip.innerHTML = '<span class="tdock__reels" aria-hidden="true"><i></i><i></i></span> Tape';
-  (controls.querySelector('[data-sound-toggle]') ?? controls.lastElementChild).before(chip);
-
-  const drawer = document.createElement('section');
-  drawer.id = 'tape-dock';
-  drawer.className = 'tdock';
-  drawer.hidden = true;
-  drawer.setAttribute('aria-label', 'Tape player');
-  drawer.innerHTML = `
-    <header class="tdock__head"><p><span>Now playing</span><b data-jcard-title>No tape</b><i data-jcard-side>Side A</i></p><button type="button" class="tdock__close" aria-label="Close tape player">✕</button></header>
-    <canvas class="tdock__canvas" aria-hidden="true"></canvas>
-    <ol class="tdock__tapes">${tapes.map((t, i) => `<li><button type="button" data-tape="${i}" aria-pressed="false" style="--tape:${t.label};--tape-ink:${t.ink}"><b>${pad(i + 1)}</b>${t.title}</button></li>`).join('')}</ol>
-    <div class="tdock__keys" role="group" aria-label="Player"><button type="button" data-deck="eject" aria-label="Stop and eject">⏏</button><button type="button" data-deck="rew" aria-label="Rewind">◀◀</button><button type="button" data-deck="play" class="is-play" aria-label="Play">▶</button><button type="button" data-deck="ff" aria-label="Fast forward">▶▶</button><button type="button" data-deck="flip">Flip</button></div>
-    <ol class="tdock__list" data-jcard-list></ol>`;
-  document.body.append(drawer);
-  const ui = { title: drawer.querySelector('[data-jcard-title]'), side: drawer.querySelector('[data-jcard-side]'), list: drawer.querySelector('[data-jcard-list]') };
-  let loading = null;
-  const render = wire(drawer, () => ensure(), tapes, ui);
-  const onState = (s) => { render(s); chip.toggleAttribute('data-playing', s.playing); };
-  const ensure = () => {
-    loading ??= import('./walkman.js').then(({ createDeck }) => createDeck(drawer.querySelector('canvas'), { tapes, layout: 'compact', onState }));
-    return loading;
-  };
-  const setOpen = (open) => {
-    drawer.hidden = !open;
-    chip.setAttribute('aria-expanded', String(open));
-    if (open) ensure();
-  };
-  chip.addEventListener('click', () => setOpen(drawer.hidden));
-  drawer.querySelector('.tdock__close').addEventListener('click', () => setOpen(false));
-  if (params.get('dock') === 'open') setOpen(true);
-  void sound;
 }

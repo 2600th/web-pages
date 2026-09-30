@@ -1,21 +1,21 @@
-// A pocket cassette player and its tapes, modelled in code (no model files to download).
-// createDeck() renders it into a canvas; layout 'stage' adds a fan of tapes and headphones,
-// 'compact' is the player alone. Tapes load, play (reels turn at the speed real tape would),
-// stop, eject and flip to side B.
+// Side B: a Sony Walkman on the desk and a fanned pile of tapes. Pick a tape: it slides into
+// the Walkman, shows through its window, and the reels turn at the speed real tape would.
+// Tapes play, stop, wind, eject and flip to side B. The tapes are modelled in code.
+// Model: "Sony Walkman" by julius.j.bib, CC BY 4.0 (optimised for the web).
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
+import { loadModel } from './gltf.js';
 
-const COBALT = 0x2447d8;
-const GOLD = 0xe8b45a;
 const SILVER = 0xc9cfdf;
 const R_MIN = 0.1;
 const R_MAX = 0.2;
 const REEL_X = 0.21;
 const REEL_Y = 0.035;
-const DESK = -0.5;
-const LOOK = new THREE.Vector3(0.2, -0.3, 0);
+const DESK = -0.6;
+const LOOK = new THREE.Vector3(0.05, -0.05, 0);
+const TAPE_SCALE = 0.667; // a cassette is two thirds the height of the Walkman's body
 
 function canvasTexture(w, h, draw) {
   const canvas = document.createElement('canvas');
@@ -175,111 +175,117 @@ function setReels(cassette) {
   return radii;
 }
 
-/* ---------- The player ---------- */
-function nameplateTexture() {
-  return canvasTexture(1024, 96, (ctx, W, H) => {
-    ctx.fillStyle = '#0b0e1a';
-    ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#c9cfdf';
-    ctx.font = '800 44px "JetBrains Mono", monospace';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('2600th', 36, H / 2 + 2);
-    ctx.font = '600 26px "JetBrains Mono", monospace';
-    ctx.fillStyle = '#9db6ff';
-    ctx.textAlign = 'right';
-    ctx.fillText('TAPE-26  ·  STEREO CASSETTE PLAYER', W - 36, H / 2 + 2);
-  });
+
+/* ---------- The Walkman ---------- */
+// Measurements of the model, in its own units (metres).
+const BODY = { x: 0.041, z: 0.012, height: 0.15 };
+const WIN = { x: 0.027, y: 0.063, z: 0.0296, w: 0.029, h: 0.072 };
+
+/** What shows through the Walkman's window: the loaded tape, its reels turning. */
+function windowView() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128;
+  canvas.height = 320;
+  const ctx = canvas.getContext('2d');
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const reel = (x, y, r, angle) => {
+    ctx.fillStyle = '#2a1a12';
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f2f0ea';
+    ctx.beginPath(); ctx.arc(x, y, 15, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#1a1c24';
+    ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f2f0ea';
+    for (let i = 0; i < 6; i++) {
+      const a = angle + (i / 6) * Math.PI * 2;
+      ctx.fillRect(x + Math.cos(a) * 6 - 2, y + Math.sin(a) * 6 - 2, 4, 4);
+    }
+  };
+  const draw = (tape, side, progress, angle) => {
+    ctx.fillStyle = '#07080d';
+    ctx.fillRect(0, 0, 128, 320);
+    if (tape) {
+      ctx.fillStyle = tape.shell;
+      ctx.fillRect(4, 0, 120, 320);
+      ctx.fillStyle = tape.label;
+      ctx.fillRect(12, 10, 104, 300);
+      tape.stripes.forEach((colour, i) => { ctx.fillStyle = colour; ctx.fillRect(18 + i * 9, 10, 5, 300); });
+      ctx.save();
+      ctx.translate(100, 160);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillStyle = tape.ink;
+      ctx.font = '800 15px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${tape.title.toUpperCase()} · ${side}`, 0, 5);
+      ctx.restore();
+      // The tape window, with a pack of tape on each hub.
+      ctx.fillStyle = '#120c09';
+      ctx.fillRect(42, 64, 44, 192);
+      const area = 42 ** 2 - 17 ** 2;
+      reel(64, 108, Math.sqrt(17 ** 2 + (1 - progress) * area), angle);
+      reel(64, 212, Math.sqrt(17 ** 2 + progress * area), angle * 1.3);
+    }
+    // Glass: a sheen and a darker edge.
+    const g = ctx.createLinearGradient(0, 0, 128, 320);
+    g.addColorStop(0, 'rgba(255,255,255,0.16)');
+    g.addColorStop(0.35, 'rgba(255,255,255,0)');
+    g.addColorStop(1, 'rgba(0,0,0,0.25)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 320);
+    texture.needsUpdate = true;
+  };
+  return { texture, draw };
 }
 
-function keyTexture(glyph, fill) {
-  return canvasTexture(128, 64, (ctx, W, H) => {
-    ctx.fillStyle = fill;
-    ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#10131f';
-    ctx.font = '800 34px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(glyph, W / 2, H / 2 + 2);
+async function buildWalkman() {
+  const gltf = await loadModel('/media/3d/walkman.glb');
+  const model = gltf.scene;
+  const scale = 1 / BODY.height;
+  model.scale.setScalar(scale);
+  model.position.set(-BODY.x * scale, 0, -BODY.z * scale);
+  let buttons = null;
+  let lamp = null;
+  model.traverse((o) => {
+    if (!o.isMesh) return;
+    // The model ships one blended material for everything; only the window needs it.
+    o.material = o.material.clone();
+    o.material.transparent = false;
+    o.material.depthWrite = true;
+    o.material.alphaTest = 0.5;
+    if (o.name.startsWith('Window')) o.visible = false;
+    if (o.name.startsWith('Buttons')) buttons = o;
+    if (o.name.startsWith('Light')) { lamp = o; o.material.emissive = new THREE.Color(0xff3b1f); o.material.emissiveIntensity = 0; }
   });
-}
-
-function buildPlayer(shared) {
-  const player = new THREE.Group();
-  const body = new THREE.MeshStandardMaterial({ color: COBALT, metalness: 0.55, roughness: 0.32 });
-  const back = new THREE.Mesh(new RoundedBoxGeometry(1.16, 0.86, 0.2, 4, 0.05), body);
-  back.position.z = -0.06;
-  player.add(back);
-  // The well the cassette sits in, framed by the body.
-  const bar = (w, h, x, y) => { const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, 0.16, 2, 0.02), body); m.position.set(x, y, 0.06); player.add(m); };
-  bar(1.16, 0.1, 0, 0.38);
-  bar(1.16, 0.1, 0, -0.38);
-  bar(0.07, 0.7, -0.545, 0);
-  bar(0.07, 0.7, 0.545, 0);
-  // Dark interior behind the cassette, so an empty well reads as a well.
-  const well = new THREE.Mesh(new THREE.PlaneGeometry(1.04, 0.68), new THREE.MeshStandardMaterial({ color: 0x07080d, roughness: 0.9 }));
-  well.position.set(0, 0, 0.041);
-  player.add(well);
-  const plate = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.06), new THREE.MeshStandardMaterial({ map: nameplateTexture(), roughness: 0.4, metalness: 0.3 }));
-  plate.position.set(0, -0.38, 0.141);
-  player.add(plate);
-  // Door on a bottom hinge: smoked glass in a silver frame.
-  const hinge = new THREE.Group();
-  hinge.position.set(0, -0.33, 0.14);
-  const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.02, 0.66), new THREE.MeshPhysicalMaterial({ color: 0x0b1030, roughness: 0.06, metalness: 0, transparent: true, opacity: 0.26, clearcoat: 1, envMapIntensity: 1.4, depthWrite: false }));
-  glass.position.set(0, 0.33, 0);
-  hinge.add(glass);
-  const rim = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.012), shared.silver); m.position.set(x, y, 0.004); hinge.add(m); };
-  rim(1.02, 0.018, 0, 0.66);
-  rim(1.02, 0.018, 0, 0);
-  rim(0.018, 0.66, -0.51, 0.33);
-  rim(0.018, 0.66, 0.51, 0.33);
-  player.add(hinge);
-  // Piano keys along the top edge.
-  const keys = {};
-  [['eject', '⏏', -0.33, SILVER], ['rew', '◀◀', -0.11, SILVER], ['play', '▶', 0.11, GOLD], ['ff', '▶▶', 0.33, SILVER]].forEach(([id, glyph, x, colour]) => {
-    const key = new THREE.Group();
-    const cap = new THREE.Mesh(new RoundedBoxGeometry(0.19, 0.08, 0.15, 2, 0.02), new THREE.MeshStandardMaterial({ color: colour, metalness: 0.7, roughness: 0.3 }));
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.06), new THREE.MeshStandardMaterial({ map: keyTexture(glyph, `#${new THREE.Color(colour).getHexString()}`), metalness: 0.4, roughness: 0.4 }));
-    face.position.z = 0.0755;
-    key.add(cap, face);
-    key.position.set(x, 0.46, 0.0);
-    key.userData.rest = 0.46;
-    player.add(key);
-    keys[id] = key;
-  });
-  // Volume wheel, headphone jack, and a status lamp.
-  const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.05, 32), new THREE.MeshStandardMaterial({ color: SILVER, metalness: 0.8, roughness: 0.35 }));
-  wheel.rotation.z = Math.PI / 2;
-  wheel.position.set(0.595, 0.12, -0.02);
-  player.add(wheel);
-  const jack = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.05, 20), shared.silver);
-  jack.position.set(0.47, 0.44, -0.1);
-  player.add(jack);
-  const lamp = new THREE.Mesh(new THREE.CircleGeometry(0.018, 20), new THREE.MeshStandardMaterial({ color: 0x331a08, emissive: GOLD, emissiveIntensity: 0 }));
-  lamp.position.set(-0.47, 0.38, 0.141);
-  player.add(lamp);
-  const slot = new THREE.Object3D();
-  slot.position.set(0, 0.0, 0.07);
-  player.add(slot);
-  return { player, hinge, keys, lamp, slot, jackWorld: jack };
-}
-
-function buildHeadphones(shared) {
-  const group = new THREE.Group();
-  const band = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.014, 10, 64, Math.PI), shared.silver);
-  group.add(band);
-  const foam = new THREE.MeshStandardMaterial({ color: GOLD, roughness: 1, metalness: 0 });
-  for (const x of [-0.42, 0.42]) {
-    const pad = new THREE.Mesh(new THREE.SphereGeometry(0.12, 24, 16), foam);
-    pad.scale.set(1, 1, 0.5);
-    pad.position.set(x, -0.02, 0);
-    group.add(pad);
+  const view = windowView();
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(WIN.w, WIN.h), new THREE.MeshStandardMaterial({ map: view.texture, roughness: 0.25, metalness: 0 }));
+  glass.position.set(WIN.x, WIN.y, WIN.z);
+  model.add(glass);
+  // Poses a tape passes through on its way in: in front of the window, then inside.
+  const mouth = new THREE.Object3D();
+  mouth.position.set(WIN.x, WIN.y, WIN.z + 0.06);
+  mouth.rotation.z = Math.PI / 2;
+  const inside = mouth.clone();
+  inside.position.z = BODY.z;
+  model.add(mouth, inside);
+  const walkman = new THREE.Group();
+  walkman.add(model);
+  // Buttons press straight down in world space.
+  model.updateMatrixWorld(true);
+  let press = () => {};
+  if (buttons) {
+    const rest = buttons.position.clone();
+    const down = new THREE.Vector3(0, -1, 0).transformDirection(new THREE.Matrix4().copy(buttons.parent.matrixWorld).invert());
+    const depth = 0.002 / buttons.parent.getWorldScale(new THREE.Vector3()).x * scale;
+    press = () => gsap.timeline()
+      .to(buttons.position, { x: rest.x + down.x * depth, y: rest.y + down.y * depth, z: rest.z + down.z * depth, duration: 0.07 })
+      .to(buttons.position, { x: rest.x, y: rest.y, z: rest.z, duration: 0.2, ease: 'back.out(3)' });
   }
-  return group;
+  return { walkman, view, mouth, inside, lamp, press };
 }
 
 /* ---------- The scene ---------- */
-export async function createDeck(canvas, { tapes, layout = 'stage', onState = () => {} }) {
+export async function createDeck(canvas, { tapes, onState = () => {} }) {
   await document.fonts?.ready;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
@@ -289,14 +295,14 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.55;
-  const camera = new THREE.PerspectiveCamera(layout === 'stage' ? 30 : 26, 1, 0.1, 30);
-  const key = new THREE.DirectionalLight(0xffffff, 1.6);
+  scene.environmentIntensity = 0.6;
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 30);
+  const key = new THREE.DirectionalLight(0xffffff, 1.8);
   key.position.set(-2, 3, 4);
   const rim = new THREE.PointLight(0x4d74ff, 9, 8);
-  rim.position.set(2.2, 1.2, -1.5);
-  const fill = new THREE.PointLight(GOLD, 2.2, 6);
-  fill.position.set(-2.4, -1, 2);
+  rim.position.set(2.2, 1.4, -1.5);
+  const fill = new THREE.PointLight(0xe8b45a, 2.2, 6);
+  fill.position.set(-2.4, -0.6, 2);
   scene.add(key, rim, fill);
 
   const shared = {
@@ -310,51 +316,29 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
     screwGeo: new THREE.CircleGeometry(0.014, 12),
   };
 
-  const deck = buildPlayer(shared);
   const root = new THREE.Group();
   scene.add(root);
-  root.add(deck.player);
-  const cassettes = tapes.map((tape) => buildCassette(tape, shared));
-  cassettes.forEach(setReels);
+  const deck = await buildWalkman();
+  deck.walkman.position.set(0.42, DESK, -0.2);
+  deck.walkman.rotation.y = -0.32;
+  root.add(deck.walkman);
 
-  // Rack poses: a fan of tapes to the left of the player (stage), or offstage (compact).
+  const cassettes = tapes.map((tape) => buildCassette(tape, shared));
+  cassettes.forEach((c) => { c.scale.setScalar(TAPE_SCALE); setReels(c); });
+  // A fanned pile of tapes lying face up on the desk, left of the Walkman.
   const rack = cassettes.map((_, i) => {
     const o = new THREE.Object3D();
-    if (layout === 'stage') {
-      // A fanned pile lying face up on the desk, in front of the player.
-      o.position.set(-1.05 + i * 0.2, DESK + 0.05 + i * 0.1, 0.25 + i * 0.16);
-      o.rotation.set(-Math.PI / 2, 0, 0.62 - i * 0.3);
-    } else {
-      o.position.set(0, -2.4, 0.4);
-    }
+    o.position.set(-0.78 + i * 0.13, DESK + 0.034 + i * 0.067, 0.3 + i * 0.1);
+    o.rotation.set(-Math.PI / 2, 0, 0.6 - i * 0.3);
     return o;
   });
   cassettes.forEach((c, i) => { c.position.copy(rack[i].position); c.rotation.copy(rack[i].rotation); root.add(c); });
 
-  if (layout === 'stage') {
-    deck.player.position.set(0.5, DESK + 0.43, -0.25);
-    deck.player.rotation.set(0, -0.38, 0);
-    const phones = buildHeadphones(shared);
-    phones.position.set(1.28, DESK + 0.06, 0.6);
-    phones.rotation.set(-Math.PI / 2, 0, 0.35);
-    root.add(phones);
-    // Cable from the jack, over the back of the player, down to the headphones.
-    deck.player.updateMatrixWorld(true);
-    const from = deck.jackWorld.getWorldPosition(new THREE.Vector3());
-    const curve = new THREE.CatmullRomCurve3([from, from.clone().add(new THREE.Vector3(0.12, 0.3, -0.15)), new THREE.Vector3(1.3, 0.2, -0.5), new THREE.Vector3(1.6, DESK + 0.02, -0.05), new THREE.Vector3(1.45, DESK + 0.02, 0.45)]);
-    root.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 90, 0.008, 6), shared.dark));
-    camera.position.set(0.1, 1.65, 4.05);
-    camera.lookAt(LOOK);
-  } else {
-    deck.player.rotation.set(-0.08, -0.28, 0.02);
-    camera.position.set(0, 0.2, 3.2);
-    camera.lookAt(0, 0, 0);
-  }
+  camera.position.set(0.05, 0.75, 3.6);
+  camera.lookAt(LOOK);
   const base = camera.position.clone();
-  const look = layout === 'stage' ? LOOK : new THREE.Vector3(0, 0, 0);
 
-  // Soft contact shadow under everything.
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(5, 2.2), new THREE.MeshBasicMaterial({ map: canvasTexture(256, 128, (ctx, W, H) => {
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(4, 2), new THREE.MeshBasicMaterial({ map: canvasTexture(256, 128, (ctx, W, H) => {
     const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W / 2);
     g.addColorStop(0, 'rgba(0,0,0,0.55)');
     g.addColorStop(1, 'rgba(0,0,0,0)');
@@ -362,59 +346,75 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
     ctx.fillRect(0, 0, W, H);
   }), transparent: true, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2;
-  shadow.position.set(layout === 'stage' ? 0.2 : 0, layout === 'stage' ? DESK + 0.001 : -0.55, 0.1);
-  if (layout !== 'stage') shadow.scale.set(0.45, 0.45, 1);
+  shadow.position.set(0, DESK + 0.001, 0.05);
   root.add(shadow);
 
   /* ---------- State ---------- */
-  const state = { loaded: -1, playing: false, busy: false, side: 'A', speed: 0, pointer: { x: 0, y: 0 } };
+  const state = { loaded: -1, playing: false, busy: false, side: 'A', speed: 0, angle: 0, pointer: { x: 0, y: 0 } };
   const emit = () => onState({ loaded: state.loaded, playing: state.playing, side: state.side, busy: state.busy });
-
-  const press = (id) => {
-    const k = deck.keys[id];
-    gsap.timeline().to(k.position, { y: k.userData.rest - 0.035, duration: 0.07 }).to(k.position, { y: k.userData.rest, duration: 0.18, ease: 'back.out(3)' });
+  const paintWindow = () => {
+    const c = cassettes[state.loaded];
+    deck.view.draw(c?.userData.tape, state.side, c?.userData.progress ?? 0, state.angle);
   };
-  const door = (open) => gsap.to(deck.hinge.rotation, { x: open ? 0.62 : 0, duration: 0.42, ease: open ? 'back.out(1.6)' : 'power3.in' });
+  paintWindow();
 
-  // Move a cassette between two world poses along a lifted path.
-  const travel = (cassette, to, duration = 0.9) => {
+  const worldPose = (object) => {
+    object.updateMatrixWorld(true);
+    const position = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    object.matrixWorld.decompose(position, quaternion, new THREE.Vector3());
+    root.worldToLocal(position);
+    return { position, quaternion };
+  };
+
+  // Move a cassette between poses; lifted on an arc unless it is sliding in or out.
+  const travel = (cassette, target, { duration = 0.9, lift = 0.35 } = {}) => {
     const fromPos = cassette.position.clone();
     const fromQ = cassette.quaternion.clone();
-    const toPos = new THREE.Vector3();
-    const toQ = new THREE.Quaternion();
-    to.updateMatrixWorld(true);
-    to.matrixWorld.decompose(toPos, toQ, new THREE.Vector3());
-    root.worldToLocal(toPos);
-    const lift = new THREE.Vector3(0, 0.25, 0.7);
+    const to = target.isObject3D ? worldPose(target) : target;
     const p = { t: 0 };
     return gsap.to(p, {
       t: 1, duration, ease: 'power2.inOut',
       onUpdate: () => {
-        const t = p.t;
-        cassette.position.lerpVectors(fromPos, toPos, t).addScaledVector(lift, Math.sin(Math.PI * t));
-        cassette.quaternion.slerpQuaternions(fromQ, toQ, t);
+        cassette.position.lerpVectors(fromPos, to.position, p.t);
+        cassette.position.y += lift * Math.sin(Math.PI * p.t);
+        cassette.quaternion.slerpQuaternions(fromQ, to.quaternion, p.t);
       },
     });
   };
 
   const stop = () => {
     if (!state.playing) return;
-    press('eject');
+    deck.press();
     state.playing = false;
     gsap.to(state, { speed: 0, duration: 0.5, ease: 'power2.out' });
-    gsap.to(deck.lamp.material, { emissiveIntensity: 0, duration: 0.3 });
+    if (deck.lamp) gsap.to(deck.lamp.material, { emissiveIntensity: 0, duration: 0.3 });
     emit();
+  };
+
+  const takeOut = async () => {
+    const cassette = cassettes[state.loaded];
+    const pose = worldPose(deck.inside);
+    cassette.position.copy(pose.position);
+    cassette.quaternion.copy(pose.quaternion);
+    cassette.visible = true;
+    const was = state.loaded;
+    state.loaded = -1;
+    paintWindow();
+    await travel(cassette, deck.mouth, { duration: 0.35, lift: 0 });
+    return { cassette, index: was };
+  };
+
+  const putIn = async (cassette) => {
+    await travel(cassette, deck.inside, { duration: 0.35, lift: 0 });
+    cassette.visible = false;
   };
 
   const eject = async () => {
     if (state.loaded < 0) return;
     stop();
-    const cassette = cassettes[state.loaded];
-    await door(true);
-    root.attach(cassette);
-    await travel(cassette, rack[state.loaded], 0.8);
-    state.loaded = -1;
-    door(false);
+    const { cassette, index } = await takeOut();
+    await travel(cassette, rack[index], { duration: 0.8, lift: 0.45 });
   };
 
   const load = async (index) => {
@@ -424,24 +424,21 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
     await eject();
     const cassette = cassettes[index];
     cassette.userData.side = 'A';
-    await door(true);
-    await travel(cassette, deck.slot, 1);
-    deck.slot.attach(cassette);
-    cassette.position.set(0, 0, 0);
-    cassette.quaternion.identity();
-    await door(false);
+    await travel(cassette, deck.mouth, { duration: 0.95, lift: 0.45 });
+    await putIn(cassette);
     state.loaded = index;
     state.side = 'A';
+    paintWindow();
     state.busy = false;
     emit();
   };
 
   const play = () => {
     if (state.loaded < 0 || state.busy) return;
-    press('play');
+    deck.press();
     state.playing = true;
     gsap.to(state, { speed: 1, duration: 0.35, ease: 'power2.out' });
-    gsap.to(deck.lamp.material, { emissiveIntensity: 3, duration: 0.2 });
+    if (deck.lamp) gsap.to(deck.lamp.material, { emissiveIntensity: 4, duration: 0.2 });
     emit();
   };
 
@@ -450,24 +447,28 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
     state.busy = true;
     stop();
     emit();
-    const cassette = cassettes[state.loaded];
-    await door(true);
-    const lifted = cassette.position.z + 0.55;
-    await gsap.to(cassette.position, { z: lifted, duration: 0.35, ease: 'power2.out' });
-    await gsap.to(cassette.rotation, { y: cassette.rotation.y + Math.PI, duration: 0.55, ease: 'power2.inOut' });
-    await gsap.to(cassette.position, { z: 0, duration: 0.35, ease: 'power2.in' });
-    await door(false);
-    state.side = state.side === 'A' ? 'B' : 'A';
+    const { cassette, index } = await takeOut();
+    // Turn it over about its long side, then back in.
+    const axis = new THREE.Vector3(0, 1, 0);
+    const turn = { a: 0 };
+    let last = 0;
+    await gsap.to(turn, { a: Math.PI, duration: 0.55, ease: 'power2.inOut', onUpdate: () => { cassette.rotateOnWorldAxis(axis, turn.a - last); last = turn.a; } });
+    await travel(cassette, deck.inside, { duration: 0.35, lift: 0 });
+    cassette.visible = false;
     cassette.userData.progress = 1 - cassette.userData.progress;
+    state.loaded = index;
+    state.side = state.side === 'A' ? 'B' : 'A';
+    paintWindow();
     state.busy = false;
     emit();
   };
 
   const wind = (dir) => {
     if (state.loaded < 0 || state.busy) return;
-    press(dir > 0 ? 'ff' : 'rew');
+    deck.press();
     const c = cassettes[state.loaded];
-    gsap.to(c.userData, { progress: Math.min(0.98, Math.max(0.02, c.userData.progress + dir * 0.18)), duration: 0.8, ease: 'power1.inOut' });
+    gsap.to(c.userData, { progress: Math.min(0.98, Math.max(0.02, c.userData.progress + dir * 0.18)), duration: 0.8, ease: 'power1.inOut', onUpdate: paintWindow });
+    gsap.to(state, { angle: state.angle + dir * 40, duration: 0.8, ease: 'power1.inOut' });
   };
 
   /* ---------- Loop ---------- */
@@ -487,18 +488,15 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
     const scale = window.__deckTimeScale ?? 1;
     if (scale !== 1 && gsap.globalTimeline.timeScale() !== scale) gsap.globalTimeline.timeScale(scale);
     const dt = Math.min(clock.getDelta() * scale, 1 / 20);
-    const t = clock.elapsedTime * scale;
-    // Reels: constant tape speed, so the emptier reel spins faster.
-    cassettes.forEach((c, i) => {
-      if (i === state.loaded && state.speed > 0) c.userData.progress = Math.min(0.995, c.userData.progress + dt * state.speed * 0.004);
-      const radii = setReels(c);
-      const w = i === state.loaded ? state.speed * 0.19 : 0;
-      c.userData.reels.forEach((reel, k) => reel.hubs.forEach((hub) => { hub.rotation.z -= (w / radii[k]) * dt; }));
-    });
-    if (layout !== 'stage') deck.player.position.y = Math.sin(t * 0.9) * 0.012;
-    camera.position.x += (base.x + state.pointer.x * 0.35 - camera.position.x) * 0.05;
-    camera.position.y += (base.y + state.pointer.y * 0.2 - camera.position.y) * 0.05;
-    camera.lookAt(look);
+    if (state.loaded >= 0 && state.speed > 0.001) {
+      const c = cassettes[state.loaded];
+      c.userData.progress = Math.min(0.995, c.userData.progress + dt * state.speed * 0.004);
+      state.angle -= dt * state.speed * 5;
+      paintWindow();
+    }
+    camera.position.x += (base.x + state.pointer.x * 0.3 - camera.position.x) * 0.05;
+    camera.position.y += (base.y + state.pointer.y * 0.18 - camera.position.y) * 0.05;
+    camera.lookAt(LOOK);
     renderer.render(scene, camera);
   };
   renderer.setAnimationLoop(frame);
@@ -510,17 +508,17 @@ export async function createDeck(canvas, { tapes, layout = 'stage', onState = ()
   });
   canvas.addEventListener('pointerleave', () => { state.pointer.x = 0; state.pointer.y = 0; });
 
-  // Pick a tape in the rack by clicking it in the scene.
+  // Pick a tape in the pile by clicking it in the scene.
   const ray = new THREE.Raycaster();
   canvas.addEventListener('click', (event) => {
     const rect = canvas.getBoundingClientRect();
     ray.setFromCamera(new THREE.Vector2(((event.clientX - rect.left) / rect.width) * 2 - 1, -(((event.clientY - rect.top) / rect.height) * 2 - 1)), camera);
-    const hit = ray.intersectObjects(cassettes, true)[0];
+    const hit = ray.intersectObjects(cassettes.filter((c) => c.visible), true)[0];
     if (!hit) return;
     let o = hit.object;
     while (o && !cassettes.includes(o)) o = o.parent;
     const index = cassettes.indexOf(o);
-    if (index >= 0 && index !== state.loaded) load(index);
+    if (index >= 0 && index !== state.loaded) load(index).then(play);
   });
 
   return {
