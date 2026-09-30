@@ -4,13 +4,11 @@ import PageOpening from '../components/site/PageOpening.astro';
 import ConBadge from '../components/about/ConBadge.astro';
 import Origin from '../components/about/Origin.astro';
 import Toolchain from '../components/about/Toolchain.astro';
-import SideB from '../components/about/SideB.astro';
 import { getCollection } from 'astro:content';
 import { getPrioritizedWork } from '../data/work-order';
 import { PERSON } from '../data/site';
 import '../styles/signal/pages.css';
 import '../styles/signal/about.css';
-import '../styles/signal/mixtape.css';
 
 const work = getPrioritizedWork(await getCollection('work'));
 ---
@@ -101,17 +99,24 @@ const work = getPrioritizedWork(await getCollection('work'));
       </ol>
       </div>
     </section>
-    <SideB />
+    <section class="pg-section" aria-label="Side B">
+      <a class="ab-flip" href="/side-b/" data-sfx="tick">
+        <div>
+          <span>Side B</span>
+          <strong>Flip the tape →</strong>
+          <p>Side A was the work. Side B is the music: two tapes of Linkin Park, one of rock classics, and the line’s own tones, in a Walkman.</p>
+        </div>
+        <img src="/media/3d/walkman-still.webp" width="1280" height="800" alt="" loading="lazy" decoding="async" />
+      </a>
+    </section>
   </div>
 
   <script>
     import { initBadge } from '../signal/scenes/badge.js';
     import { initAtari } from '../signal/scenes/atari-ui.js';
     import { initWorkbench } from '../signal/scenes/workbench-ui.js';
-    import { initSideB } from '../signal/scenes/mixtape.js';
     initBadge();
     initAtari();
     initWorkbench();
-    initSideB();
   </script>
 </SiteLayout>

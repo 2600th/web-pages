@@ -1,6 +1,7 @@
 // Side B: a Sony Walkman on the desk and a fanned pile of tapes. Pick a tape: it slides into
-// the Walkman, shows through its window, and the reels turn at the speed real tape would.
-// Tapes play, stop, wind, eject and flip to side B. The tapes are modelled in code.
+// the Walkman and shows through its window; while its music plays the reels turn, the way
+// real tape would, and track the position through the side. Tapes eject and flip to side B.
+// The tapes are modelled in code; the page (mixtape.js) owns the music.
 // Model: "Sony Walkman" by julius.j.bib, CC BY 4.0 (optimised for the web).
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -286,7 +287,7 @@ async function buildWalkman() {
 }
 
 /* ---------- The scene ---------- */
-export async function createDeck(canvas, { tapes, onState = () => {} }) {
+export async function createDeck(canvas, { tapes, onState = () => {}, onPick = () => {} }) {
   await document.fonts?.ready;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
@@ -516,11 +517,23 @@ export async function createDeck(canvas, { tapes, onState = () => {} }) {
     let o = hit.object;
     while (o && !cassettes.includes(o)) o = o.parent;
     const index = cassettes.indexOf(o);
-    if (index >= 0 && index !== state.loaded) load(index).then(play);
+    if (index >= 0 && index !== state.loaded) onPick(index);
   });
 
+  /** The reels follow the music: turning while it plays, still while it does not. */
+  const run = (on) => {
+    state.playing = on;
+    gsap.to(state, { speed: on ? 1 : 0, duration: on ? 0.35 : 0.5, ease: 'power2.out' });
+    if (deck.lamp) gsap.to(deck.lamp.material, { emissiveIntensity: on ? 4 : 0, duration: 0.25 });
+  };
+  /** Where the loaded tape is through its side, 0 to 1. */
+  const setProgress = (p) => {
+    const c = cassettes[state.loaded];
+    if (c) gsap.to(c.userData, { progress: Math.min(0.995, Math.max(0.005, p)), duration: 0.5, overwrite: true, onUpdate: paintWindow });
+  };
+
   return {
-    load, play, stop, eject, flip, wind,
+    load, play, stop, eject, flip, wind, run, setProgress, press: deck.press,
     get state() { return { ...state }; },
     pause() { renderer.setAnimationLoop(null); },
     resume() { clock.getDelta(); renderer.setAnimationLoop(frame); },

@@ -1,5 +1,5 @@
 ---
-// PROTOTYPE (placement B): Side B as its own page. About is side A; this is the other side.
+// Side B: the other side of the tape. About is side A (the work); this is the music.
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageOpening from '../components/site/PageOpening.astro';
 import SideB from '../components/about/SideB.astro';
@@ -8,16 +8,16 @@ import '../styles/signal/mixtape.css';
 ---
 
 <SiteLayout
-  title="Side B · Pranshul Chandhok"
-  description="The other side of the tape: what I listen to while I build."
+  title="Side B: music by Pranshul Chandhok"
+  description="Side A is the work, Side B is the music: two tapes of Linkin Park, one of rock classics and one of the 2600 Hz line's own tones, played in a Walkman."
   canonical="/side-b/"
   status="Side B · tape idle"
 >
   <div class="pg side-b-page">
-    <PageOpening eyebrow={['B', 'Side B']} path={[{ label: 'about', href: '/about/' }, { label: 'side-b' }]} lede="The other side of the tape: what I listen to while I build. Pick a tape and it drops into the Walkman." wave="sine" compact>
+    <PageOpening eyebrow={['B', 'Side B']} path={[{ label: 'about', href: '/about/' }, { label: 'side-b' }]} lede="Side A was the work. Side B is the music: two tapes of Linkin Park, one of rock classics, and one of the line’s own tones. Pick a tape and it drops into the Walkman." wave="sine" compact>
       <h1 slot="title">Side <em>B.</em></h1>
     </PageOpening>
-    <SideB page />
+    <SideB />
   </div>
   <script>
     import { initSideB } from '../signal/scenes/mixtape.js';

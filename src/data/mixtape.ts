@@ -1,59 +1,79 @@
 /**
- * Tapes for the cassette player. PROTOTYPE: the rock tracklists are samples to show the
- * layout; the owner supplies the real ones. Rock tapes play through a streaming embed;
- * the last tape is the site's own synthesized line tones.
+ * The tapes on Side B. Songs stream from their official YouTube uploads (verified video ids);
+ * nothing is hosted here. The last tape is the site's own synthesized line tones.
  */
+export type Track = { title: string; artist: string; id?: string };
 export type Tape = {
   id: string;
   title: string;
+  /** Shown under the title on the J-card. */
+  note: string;
   /** Label paper, ink, printed stripes and shell colour. */
   label: string;
   ink: string;
   stripes: string[];
   shell: string;
-  side: { a: string[]; b: string[] };
-  source: 'stream' | 'tones';
+  side: { a: Track[]; b: Track[] };
+  source: 'youtube' | 'tones';
 };
+
+const lp = (title: string, id: string): Track => ({ title, artist: 'Linkin Park', id });
 
 export const TAPES: Tape[] = [
   {
-    id: 'build',
-    title: 'Build nights',
-    label: '#e8b45a', ink: '#1a1206', stripes: ['#1a1206', '#2447d8'], shell: '#15161c',
+    id: 'hybrid',
+    title: 'Hybrid nights',
+    note: 'Linkin Park · 2000–2003',
+    label: '#e8b45a', ink: '#1a1206', stripes: ['#1a1206', '#c8331f'], shell: '#15161c',
     side: {
-      a: ['Back in Black · AC/DC', 'Enter Sandman · Metallica', 'Smells Like Teen Spirit · Nirvana', 'Killing in the Name · Rage Against the Machine', 'The Pretender · Foo Fighters'],
-      b: ['Seven Nation Army · The White Stripes', 'Paranoid · Black Sabbath', 'Kickstart My Heart · Mötley Crüe', 'Everlong · Foo Fighters'],
+      a: [lp('One Step Closer', '4qlCC1GOwFw'), lp('Papercut', 'vjVkXlxsO8Q'), lp('In the End', 'eVTXPUF4Oz4'), lp('Crawling', 'Gd9OhYroLN0')],
+      b: [lp('Faint', 'LYU-8IFcDPw'), lp('Numb', 'kXYiU_JCYtU'), lp('Somewhere I Belong', 'zsCD5XCu6CM'), lp('Breaking the Habit', 'v2H4l9RpkwM')],
     },
-    source: 'stream',
+    source: 'youtube',
   },
   {
-    id: 'ship',
-    title: 'Ship it',
+    id: 'midnight',
+    title: 'Midnight builds',
+    note: 'Linkin Park · 2007–2024',
     label: '#f1ede2', ink: '#10131f', stripes: ['#2447d8', '#e8b45a', '#2447d8'], shell: '#e6e2d6',
     side: {
-      a: ['Thunderstruck · AC/DC', 'Welcome to the Jungle · Guns N’ Roses', 'Livin’ on a Prayer · Bon Jovi', 'Master of Puppets · Metallica'],
-      b: ['Highway Star · Deep Purple', 'Barracuda · Heart', 'Bohemian Rhapsody · Queen', 'Crazy Train · Ozzy Osbourne'],
+      a: [lp('What I’ve Done', '8sgycukafqQ'), lp('Bleed It Out', 'OnuuYcqhzCE'), lp('Shadow of the Day', 'n1PCW0C1aiM'), lp('New Divide', 'ysSxxIqKNN0')],
+      b: [lp('Waiting for the End', '5qF_qbaWt3Q'), lp('Burn It Down', 'dxytyRy-O1k'), lp('Castle of Glass', 'ScNNfyq3d_w'), lp('The Emptiness Machine', 'SRXH9AbT280')],
     },
-    source: 'stream',
+    source: 'youtube',
   },
   {
     id: 'drive',
     title: 'Long drive',
+    note: 'Rock classics',
     label: '#9db6ff', ink: '#0b1238', stripes: ['#0b1238', '#f1ede2'], shell: '#1d2a6b',
     side: {
-      a: ['Hotel California · Eagles', 'Comfortably Numb · Pink Floyd', 'Sweet Child O’ Mine · Guns N’ Roses', 'Dream On · Aerosmith'],
-      b: ['Stairway to Heaven · Led Zeppelin', 'Wish You Were Here · Pink Floyd', 'Black · Pearl Jam', 'Under the Bridge · Red Hot Chili Peppers'],
+      a: [
+        { title: 'Back in Black', artist: 'AC/DC', id: 'pAgnJDJN4VA' },
+        { title: 'Enter Sandman', artist: 'Metallica', id: 'CD-E-LDc384' },
+        { title: 'Smells Like Teen Spirit', artist: 'Nirvana', id: 'hTWKbfoikeg' },
+        { title: 'Sweet Child O’ Mine', artist: 'Guns N’ Roses', id: '1w7OgIMMRc4' },
+      ],
+      b: [
+        { title: 'Bohemian Rhapsody', artist: 'Queen', id: 'fJ9rUzIMcZQ' },
+        { title: 'Seven Nation Army', artist: 'The White Stripes', id: '0J2QdDbelmY' },
+        { title: 'Everlong', artist: 'Foo Fighters', id: 'eBG7P-K-r1Y' },
+        { title: 'Paranoid', artist: 'Black Sabbath', id: '0qanF-91aJo' },
+      ],
     },
-    source: 'stream',
+    source: 'youtube',
   },
   {
     id: 'line',
     title: 'Line idle',
+    note: 'The site’s own tones',
     label: '#0b0e1a', ink: '#9db6ff', stripes: ['#2447d8', '#4d74ff', '#9db6ff'], shell: '#0a0a0f',
     side: {
-      a: ['KP · 2 · 6 · 0 · 0 · ST', 'Seize: 2600 Hz', 'Dial tone: 350 + 440 Hz'],
-      b: ['MF digits 0 to 9', 'Busy signal: 480 + 620 Hz', 'Line idle'],
+      a: [{ title: 'KP · 2 · 6 · 0 · 0 · ST', artist: 'MF tones' }, { title: 'Seize: 2600 Hz', artist: 'Supervisory tone' }],
+      b: [{ title: 'MF digits 1 to 0', artist: 'MF tones' }],
     },
     source: 'tones',
   },
 ];
+
+export const watchUrl = (id: string) => `https://www.youtube.com/watch?v=${id}`;

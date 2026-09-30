@@ -43,6 +43,7 @@ const routeCases = [
   ['/notes/ai-video-control/', 'AI video got good. Directing a sequence is still hard.'],
   ['/about/', 'I learn by building.'],
   ['/lab/', 'Things I’m trying.'],
+  ['/side-b/', 'Side B.'],
 ] as const;
 
 for (const [path, heading] of routeCases) {
@@ -291,6 +292,29 @@ test('lab and about expose their operating surfaces', async ({ page }) => {
   await expect(leds.first()).toHaveAccessibleName(/^2012, Game development: .*The Brutal Spy/);
   await leds.nth(4).focus();
   await expect(page.locator('[data-badge-year]')).toHaveText('2016');
+});
+
+test('Side B plays tapes from YouTube only after a tape is picked', async ({ page }) => {
+  const youtube: string[] = [];
+  page.on('request', (request) => { if (/youtube(-nocookie)?\.com/.test(request.url())) youtube.push(request.url()); });
+  await page.goto('/about/');
+  await expect(page.locator('a.ab-flip')).toHaveAttribute('href', '/side-b/');
+  await page.goto('/side-b/');
+  const sideB = page.locator('[data-sideb]');
+  await expect(sideB.locator('[data-tape]')).toHaveCount(4);
+  // Every streamed song links to its YouTube upload, in the tracklists anyone can read.
+  const lists = sideB.locator('.sideb__lists');
+  await lists.locator('summary').click();
+  await expect(lists.locator('a[href^="https://www.youtube.com/watch?v="]')).toHaveCount(24);
+  await expect(lists).toContainText('Linkin Park');
+  await expect(lists.getByRole('link', { name: 'In the End' })).toHaveAttribute('href', 'https://www.youtube.com/watch?v=eVTXPUF4Oz4');
+  await expect(sideB.getByRole('link', { name: '“Sony Walkman”' })).toHaveAttribute('href', /sketchfab\.com\/3d-models\/sony-walkman/);
+  await page.waitForTimeout(500);
+  expect(youtube, 'YouTube is not contacted before a tape is played').toEqual([]);
+  await sideB.locator('[data-tape="0"]').click();
+  await expect(sideB.locator('[data-jcard-title]')).toHaveText('Hybrid nights');
+  await expect(sideB.locator('[data-jcard-list] li')).toHaveCount(4);
+  await expect(sideB).toHaveAttribute('data-video', /loading|ready|failed/);
 });
 
 test('visitor-facing routes omit internal generated-media disclaimers', async ({ page }) => {
