@@ -166,9 +166,15 @@ export function initArcade() {
   screen?.addEventListener('click', toggleClip);
   document.addEventListener('signal:motion', (event) => { if (!event.detail.on) feeds.forEach((feed) => feed.querySelector('video')?.pause()); });
 
+  // Design prototypes (dev only): ?cab=upright or ?cab=candy puts the cartridges in a 3D
+  // cabinet; ?cab=flat is the refined flat cabinet.
+  const cabStyle = import.meta.env.DEV ? new URLSearchParams(location.search).get('cab') : null;
+  const threeD = cabStyle === 'upright' || cabStyle === 'candy';
+  if (cabStyle) root.dataset.cab = cabStyle;
+
   // The cabinet leans toward the pointer, just enough to feel physical.
   const cab = root.querySelector('.arcade__cab');
-  if (cab && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  if (cab && !threeD && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const rx = gsap.quickTo(cab, 'rotationX', { duration: 0.6, ease: 'power3' });
     const ry = gsap.quickTo(cab, 'rotationY', { duration: 0.6, ease: 'power3' });
     cab.addEventListener('pointermove', (event) => {
@@ -180,5 +186,6 @@ export function initArcade() {
     cab.addEventListener('pointerleave', () => { rx(0); ry(0); });
   }
 
-  mountScene(screen, () => import('./arcade.js'));
+  if (threeD) mountScene(cab, () => import('./cabinet.js').then((module) => ({ mount: (host) => module.mount(host, { style: cabStyle }) })));
+  else mountScene(screen, () => import('./arcade.js'));
 }

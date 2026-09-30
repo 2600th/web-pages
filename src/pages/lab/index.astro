@@ -47,6 +47,7 @@ const tag = (tone: string) => ({ new: 'New', live: 'Live', idle: 'Demo', off: 'A
             ))}
           </div>
           <canvas class="arcade__gl" aria-hidden="true" data-arcade-gl></canvas>
+          <p class="arcade__print" aria-hidden="true"><span>Cart 01–{String(all.length).padStart(2, '0')}</span><span>2600th · Lab system</span><span>1 or 2 players · insert coin</span></p>
           <p class="arcade__attract" aria-hidden="true"><b>Press start</b><span>Demo loop · pick a cartridge to play</span></p>
           <div class="arcade__hud" aria-hidden="true">
             <span>1UP <b>2600</b></span>

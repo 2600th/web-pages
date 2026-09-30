@@ -36,7 +36,7 @@ html[data-motion='on'] .arcade__marquee span { animation: arcade-neon 5s steps(1
 .arcade__screen[data-gl='on'] .arcade__gl { opacity: 1; }
 .arcade__screen[data-gl='on'] .arcade__feeds { opacity: 0; }
 /* Glass: a scanline film and the tube's inner shadow over whichever picture is showing. */
-.arcade__screen::after { content: ''; pointer-events: none; background: repeating-linear-gradient(rgb(255 255 255 / 0.035) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 30% 20%, rgb(255 255 255 / 0.07), transparent 45%); box-shadow: inset 0 0 50px rgb(0 0 0 / 0.85), inset 0 0 2px rgb(157 182 255 / 0.4); }
+.arcade__screen::after { content: ''; pointer-events: none; background: repeating-linear-gradient(rgb(255 255 255 / 0.035) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 30% 20%, rgb(255 255 255 / 0.07), transparent 45%); box-shadow: inset 0 0 26px rgb(0 0 0 / 0.55), inset 0 0 2px rgb(157 182 255 / 0.4); }
 .arcade__hud { position: absolute; top: 1rem; left: 1rem; right: 1rem; z-index: 2; padding: 0.7rem 1.2rem 1.6rem; border-radius: 22px 22px 0 0 / 28px 28px 0 0; background: linear-gradient(rgb(2 3 8 / 0.82), rgb(2 3 8 / 0.45) 55%, transparent); display: flex; align-items: center; justify-content: space-between; gap: 1rem; font: 700 0.6875rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-shadow: 0 0 6px var(--cobalt), 0 1px 0 #000; pointer-events: none; }
 /* The clip control sits on the deck, beside the coin slot. */
 .arcade__play { margin-left: auto; display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.25rem; padding: 0 0.75rem; background: rgb(3 4 10 / 0.72); border: 1px solid rgb(157 182 255 / 0.4); border-radius: 3px; font: 700 0.625rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--phosphor); cursor: pointer; transition: border-color 200ms, color 200ms; }
@@ -138,3 +138,85 @@ html:not(.js) .arcade__cab { position: static; }
 }
 /* Key hints only where there is a keyboard to press them. */
 @media (hover: none) { .arcade__hint { display: none; } }
+
+/* ---------- Prototype: the 3D cabinet (?cab=upright | candy) ---------- */
+.arcade__3d { display: block; width: 100%; aspect-ratio: 5 / 6; max-height: calc(100vh - 7rem); cursor: default; }
+.arcade__cab[data-cab3d] { transform: none; }
+.arcade__cab[data-cab3d] > .arcade__marquee { display: none; }
+.arcade__cab[data-cab3d] > .arcade__screen { position: absolute; width: 2px; height: 2px; padding: 0; overflow: hidden; opacity: 0.01; pointer-events: none; }
+.arcade__cab[data-cab3d] .arcade__deck { position: absolute; right: 0.8rem; bottom: 0.8rem; padding: 0; background: none; border: 0; box-shadow: none; }
+.arcade__cab[data-cab3d] .arcade__stick, .arcade__cab[data-cab3d] .arcade__btn, .arcade__cab[data-cab3d] .arcade__coin { display: none; }
+
+/* ---------- Prototype: the refined flat cabinet (?cab=flat) ---------- */
+.arcade__print { display: none; }
+.arcade[data-cab='flat'] .arcade__cab {
+  padding-inline: 13px; border-radius: 16px 16px 0 0;
+  background:
+    linear-gradient(90deg, #13208a, #5b7fff 35%, #2447d8 65%, #0c155c) left / 13px 100% no-repeat,
+    linear-gradient(90deg, #0c155c, #2447d8 35%, #5b7fff 65%, #13208a) right / 13px 100% no-repeat,
+    #080b1c;
+  box-shadow: 0 50px 90px -40px rgb(77 116 255 / 0.45);
+}
+.arcade[data-cab='flat'] .arcade__cab::after { content: ''; display: block; height: 3.2rem; margin-inline: -13px; background: linear-gradient(180deg, #080b1c, transparent), linear-gradient(90deg, #13208a 0 13px, transparent 13px calc(100% - 13px), #13208a calc(100% - 13px)); -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+.arcade[data-cab='flat'] .arcade__marquee {
+  position: relative; justify-content: center; gap: 1.1rem; padding: 1.05rem 1rem 2.3rem; border: 0; border-radius: 10px 10px 0 0;
+  background:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201000%20100%22%20preserveAspectRatio%3D%22none%22%3E%3Cg%20stroke%3D%22%234d74ff%22%20stroke-opacity%3D%22.55%22%20stroke-width%3D%221.2%22%20vector-effect%3D%22non-scaling-stroke%22%3E%3Cline%20x1%3D%22332%22%20y1%3D%220%22%20x2%3D%22-940%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22346%22%20y1%3D%220%22%20x2%3D%22-820%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22360%22%20y1%3D%220%22%20x2%3D%22-700%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22374%22%20y1%3D%220%22%20x2%3D%22-580%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22388%22%20y1%3D%220%22%20x2%3D%22-460%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22402%22%20y1%3D%220%22%20x2%3D%22-340%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22416%22%20y1%3D%220%22%20x2%3D%22-220%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22430%22%20y1%3D%220%22%20x2%3D%22-100%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22444%22%20y1%3D%220%22%20x2%3D%2220%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22458%22%20y1%3D%220%22%20x2%3D%22140%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22472%22%20y1%3D%220%22%20x2%3D%22260%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22486%22%20y1%3D%220%22%20x2%3D%22380%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22500%22%20y1%3D%220%22%20x2%3D%22500%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22514%22%20y1%3D%220%22%20x2%3D%22620%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22528%22%20y1%3D%220%22%20x2%3D%22740%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22542%22%20y1%3D%220%22%20x2%3D%22860%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22556%22%20y1%3D%220%22%20x2%3D%22980%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22570%22%20y1%3D%220%22%20x2%3D%221100%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22584%22%20y1%3D%220%22%20x2%3D%221220%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22598%22%20y1%3D%220%22%20x2%3D%221340%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22612%22%20y1%3D%220%22%20x2%3D%221460%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22626%22%20y1%3D%220%22%20x2%3D%221580%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22640%22%20y1%3D%220%22%20x2%3D%221700%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22654%22%20y1%3D%220%22%20x2%3D%221820%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%22668%22%20y1%3D%220%22%20x2%3D%221940%22%20y2%3D%22100%22/%3E%3Cline%20x1%3D%220%22%20y1%3D%223.0%22%20x2%3D%221000%22%20y2%3D%223.0%22/%3E%3Cline%20x1%3D%220%22%20y1%3D%2210.5%22%20x2%3D%221000%22%20y2%3D%2210.5%22/%3E%3Cline%20x1%3D%220%22%20y1%3D%2221.8%22%20x2%3D%221000%22%20y2%3D%2221.8%22/%3E%3Cline%20x1%3D%220%22%20y1%3D%2236.5%22%20x2%3D%221000%22%20y2%3D%2236.5%22/%3E%3Cline%20x1%3D%220%22%20y1%3D%2254.6%22%20x2%3D%221000%22%20y2%3D%2254.6%22/%3E%3Cline%20x1%3D%220%22%20y1%3D%2275.8%22%20x2%3D%221000%22%20y2%3D%2275.8%22/%3E%3C/g%3E%3C/svg%3E") bottom / 100% 36% no-repeat,
+    radial-gradient(1px 1px at 12% 22%, #cbd6ff, transparent), radial-gradient(1px 1px at 28% 12%, #cbd6ff, transparent), radial-gradient(1px 1px at 71% 18%, #cbd6ff, transparent), radial-gradient(1px 1px at 88% 30%, #cbd6ff, transparent), radial-gradient(1px 1px at 55% 8%, #cbd6ff, transparent),
+    linear-gradient(180deg, transparent 58%, rgb(232 180 90 / 0.3) 63%, transparent 66%),
+    linear-gradient(180deg, #0d1850, #040818);
+  box-shadow: inset 0 3px 0 var(--gold), inset 0 -3px 0 var(--gold), inset 0 0 50px rgb(77 116 255 / 0.3), 0 10px 40px -10px rgb(77 116 255 / 0.55);
+}
+.arcade[data-cab='flat'] .arcade__marquee b { font-size: 2.3rem; }
+.arcade[data-cab='flat'] .arcade__marquee i { display: none; }
+.arcade[data-cab='flat'] .arcade__screen {
+  aspect-ratio: 16 / 11.2; padding: 0; border: 0;
+  background: radial-gradient(ellipse at 50% 45%, rgb(36 71 216 / 0.16), transparent 70%), #05060c;
+  box-shadow: inset 0 8px 18px rgb(0 0 0 / 0.7);
+}
+.arcade[data-cab='flat'] .arcade__feeds, .arcade[data-cab='flat'] .arcade__gl, .arcade[data-cab='flat'] .arcade__screen::after { inset: 2.3rem 2.2rem 2.5rem; border-radius: 20px / 24px; }
+.arcade[data-cab='flat'] .arcade__gl { width: calc(100% - 4.4rem); height: calc(100% - 4.8rem); }
+.arcade[data-cab='flat'] .arcade__hud { top: 2.3rem; left: 2.2rem; right: 2.2rem; border-radius: 20px 20px 0 0 / 24px 24px 0 0; }
+.arcade[data-cab='flat'] .arcade__attract { bottom: 3.6rem; }
+/* The bezel: printed frames and small print on black glass, with a sheen across it. */
+.arcade[data-cab='flat'] .arcade__screen::before { content: ''; position: absolute; inset: 1.72rem 1.62rem 1.92rem; z-index: 1; border: 1.5px solid rgb(77 116 255 / 0.9); border-radius: 26px / 30px; outline: 1px solid rgb(232 180 90 / 0.5); outline-offset: 7px; pointer-events: none; }
+.arcade[data-cab='flat'] .arcade__print { display: block; position: absolute; inset: 0; z-index: 1; margin: 0; pointer-events: none; font: 600 0.5rem/1 var(--mono); letter-spacing: 0.22em; text-transform: uppercase; }
+.arcade[data-cab='flat'] .arcade__print span { position: absolute; }
+.arcade[data-cab='flat'] .arcade__print span:nth-child(1) { top: 0.5rem; left: 1.7rem; color: rgb(232 180 90 / 0.85); }
+.arcade[data-cab='flat'] .arcade__print span:nth-child(2) { top: 0.5rem; right: 1.7rem; color: rgb(157 182 255 / 0.65); }
+.arcade[data-cab='flat'] .arcade__print span:nth-child(3) { bottom: 0.45rem; left: 0; right: 0; text-align: center; color: rgb(157 182 255 / 0.8); }
+.arcade[data-cab='flat'] .arcade__print::after { content: ''; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 20%, rgb(255 255 255 / 0.05) 30%, transparent 38%, transparent 70%, rgb(255 255 255 / 0.025) 76%, transparent 82%); }
+/* The control panel juts out towards you: wider than the cabinet, lit from the screen. */
+.arcade[data-cab='flat'] .arcade__deck {
+  position: relative; margin-inline: -24px; padding: 1.3rem 2.4rem 1.7rem; gap: 1.4rem; border: 0; border-radius: 0;
+  clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(180deg, transparent calc(100% - 0.95rem), var(--gold) calc(100% - 0.95rem) calc(100% - 0.8rem), transparent calc(100% - 0.8rem) calc(100% - 0.62rem), var(--cobalt) calc(100% - 0.62rem) calc(100% - 0.45rem), transparent calc(100% - 0.45rem)),
+    radial-gradient(ellipse at 50% -20%, rgb(157 182 255 / 0.22), transparent 60%),
+    repeating-linear-gradient(135deg, rgb(77 116 255 / 0.05) 0 1px, transparent 1px 12px),
+    linear-gradient(180deg, #0c1230, #070a1a);
+  box-shadow: none;
+}
+.arcade[data-cab='flat'] .arcade__deck::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 0.3rem; background: linear-gradient(90deg, #13208a, #4d74ff 20%, #2447d8 80%, #13208a); }
+.arcade[data-cab='flat'] .arcade__stick { width: 3.6rem; height: 3.6rem; background: radial-gradient(circle, #05060a 0 30%, #1a1f3a 32% 58%, #0a0e22 60%); box-shadow: 0 0 0 1px rgb(157 182 255 / 0.3), inset 0 2px 6px rgb(0 0 0 / 0.8); }
+.arcade[data-cab='flat'] .arcade__stick::before { content: ''; position: absolute; left: 50%; top: 50%; width: 0.4rem; height: 1.4rem; margin: -1.25rem 0 0 -0.2rem; border-radius: 0.2rem; background: linear-gradient(90deg, #6b7285, #e3e7f2 45%, #6b7285); }
+.arcade[data-cab='flat'] .arcade__stick i { width: 1.6rem; height: 1.6rem; margin: -1.9rem 0 0 -0.8rem; background: radial-gradient(circle at 35% 30%, #fff 0 6%, #ff8a8a 12%, #c21f3a 55%, #5a0a18); box-shadow: 0 7px 10px -2px rgb(0 0 0 / 0.7), 0 0 16px rgb(194 31 58 / 0.45); }
+.arcade[data-cab='flat'] .arcade__btn { width: 2.6rem; height: 2.6rem; position: relative; font-size: 0; }
+.arcade[data-cab='flat'] .arcade__btn--a { background: radial-gradient(circle at 50% 38%, #9fb3ff 0 12%, #4d74ff 45%, #2138b8 72%); box-shadow: 0 0 0 5px #05060a, 0 0 0 6px rgb(157 182 255 / 0.25), 0 5px 0 5px #0c1650, 0 0 22px rgb(77 116 255 / 0.5); }
+.arcade[data-cab='flat'] .arcade__btn--b { background: radial-gradient(circle at 50% 38%, #fff1cf 0 12%, #e8b45a 45%, #a36f1e 72%); box-shadow: 0 0 0 5px #05060a, 0 0 0 6px rgb(232 180 90 / 0.3), 0 5px 0 5px #4a3008, 0 0 22px rgb(232 180 90 / 0.4); }
+.arcade[data-cab='flat'] .arcade__btn::after { position: absolute; top: calc(100% + 0.7rem); left: 50%; transform: translateX(-50%); font: 700 0.5rem/1 var(--mono); letter-spacing: 0.2em; }
+.arcade[data-cab='flat'] .arcade__btn--a::after { content: 'Start'; color: var(--phosphor); text-transform: uppercase; }
+.arcade[data-cab='flat'] .arcade__btn--b::after { content: 'Next'; color: var(--gold); text-transform: uppercase; }
+.arcade[data-cab='flat'] .arcade__btn[data-down] { transform: translateY(3px) scale(0.97); }
+.arcade[data-cab='flat'] .arcade__coin { padding: 0.55rem 0.7rem; border: 0; border-radius: 4px; background: linear-gradient(180deg, #ff5a5a, #b3122c); box-shadow: 0 0 0 3px #1a1d29, 0 0 0 4px rgb(255 255 255 / 0.15), 0 0 20px rgb(255 70 70 / 0.5); color: #fff4f0; text-shadow: 0 0 6px rgb(255 255 255 / 0.6); }
+@media (max-width: 46rem) {
+  .arcade[data-cab='flat'] .arcade__feeds, .arcade[data-cab='flat'] .arcade__gl, .arcade[data-cab='flat'] .arcade__screen::after { inset: 1.5rem 1.1rem 1.7rem; border-radius: 14px / 18px; }
+  .arcade[data-cab='flat'] .arcade__gl { width: calc(100% - 2.2rem); height: calc(100% - 3.2rem); }
+  .arcade[data-cab='flat'] .arcade__hud { top: 1.5rem; left: 1.1rem; right: 1.1rem; border-radius: 14px 14px 0 0 / 18px 18px 0 0; }
+  .arcade[data-cab='flat'] .arcade__screen::before { inset: 1.05rem 0.65rem 1.25rem; border-radius: 18px / 22px; outline-offset: 4px; }
+  .arcade[data-cab='flat'] .arcade__print span:nth-child(-n + 2) { display: none; }
+  .arcade[data-cab='flat'] .arcade__print span:nth-child(3) { bottom: 0.3rem; font-size: 0.4375rem; }
+  .arcade[data-cab='flat'] .arcade__marquee b { font-size: 1.6rem; }
+  .arcade[data-cab='flat'] .arcade__deck { margin-inline: -18px; padding: 1rem 1.4rem 1.4rem; gap: 1rem; }
+  .arcade[data-cab='flat'] .arcade__coin { display: none; }
+}

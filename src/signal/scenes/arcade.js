@@ -3,6 +3,7 @@
 // cartridge rolls the picture through static. Raw WebGL2: one quad, one texture.
 import { gsap } from 'gsap';
 import { sceneLoop } from './mount.js';
+import { CRT_GLSL, collectSources } from './crt-picture.js';
 
 const VERT = `#version 300 es
 in vec2 aPos;
@@ -13,46 +14,11 @@ const FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D uTex;
 uniform vec2 uRes, uTexSize;
-uniform float uTime, uSwitch, uStart;
+uniform float uTime, uSwitch, uStart, uCurve;
 in vec2 vUv;
 out vec4 outColor;
-float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-vec2 curve(vec2 uv) {
-  uv = uv * 2.0 - 1.0;
-  vec2 off = abs(uv.yx) / vec2(5.5, 4.5);
-  uv += uv * off * off;
-  return uv * 0.5 + 0.5;
-}
-vec2 cover(vec2 uv) {
-  float sa = uRes.x / uRes.y, ta = uTexSize.x / max(uTexSize.y, 1.0);
-  vec2 s = sa > ta ? vec2(1.0, ta / sa) : vec2(sa / ta, 1.0);
-  return (uv - 0.5) * s + 0.5;
-}
-void main() {
-  vec2 uv = curve(vUv);
-  if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) { outColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
-  float sw = uSwitch;
-  // Changing channel: the picture tears sideways and rolls.
-  float row = floor(uv.y * 160.0);
-  uv.x += (hash(vec2(row, floor(uTime * 45.0))) - 0.5) * 0.12 * sw;
-  uv.y = fract(uv.y + sw * sw * 0.35);
-  // Pressing start: the picture collapses to a bright line.
-  uv.y = (uv.y - 0.5) / max(1.0 - uStart * 0.985, 0.015) + 0.5;
-  vec2 t = cover(uv);
-  float ca = 0.0016 + 0.012 * sw;
-  vec3 col = vec3(texture(uTex, t + vec2(ca, 0.0)).r, texture(uTex, t).g, texture(uTex, t - vec2(ca, 0.0)).b);
-  if (uv.y < 0.0 || uv.y > 1.0) col = vec3(0.0);
-  float n = hash(vUv * uRes + fract(uTime) * 91.0);
-  col = mix(col, vec3(n) * vec3(0.7, 0.8, 1.0), clamp(sw * 1.3, 0.0, 0.92));
-  col += vec3(0.8, 0.9, 1.0) * uStart * uStart * 1.4;
-  // Phosphor: scanlines, a slow bright band, a cobalt cast and the tube's vignette.
-  col *= 0.86 + 0.14 * sin(vUv.y * uRes.y * 1.6);
-  col *= 1.0 + 0.06 * smoothstep(0.08, 0.0, abs(fract(vUv.y - uTime * 0.12) - 0.5));
-  col = col * vec3(0.95, 0.98, 1.06) + vec3(0.01, 0.015, 0.04);
-  col *= smoothstep(1.28, 0.38, length((vUv - 0.5) * vec2(1.12, 1.0)));
-  col += (hash(vUv * uRes * 0.5 + uTime) - 0.5) * 0.035;
-  outColor = vec4(col, 1.0);
-}`;
+${CRT_GLSL}
+void main() { outColor = crt(vUv); }`;
 
 function compile(gl, type, source) {
   const shader = gl.createShader(type);
@@ -60,52 +26,6 @@ function compile(gl, type, source) {
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader));
   return shader;
-}
-
-/** A cartridge without a picture types its lines onto a terminal. */
-function terminal(lines) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 1024;
-  canvas.height = 640;
-  const ctx = canvas.getContext('2d');
-  const text = lines.map((line) => line.replace('▌', ''));
-  const total = text.reduce((sum, line) => sum + line.length, 0);
-  // Typing runs on the clock (about 45 characters a second), not on frame count, so a
-  // slow GPU shows the same text at the same moment.
-  let typed = 0;
-  let started = null;
-  return {
-    canvas,
-    size: [canvas.width, canvas.height],
-    reset() { typed = 0; started = null; },
-    draw(time) {
-      if (started === null) started = time;
-      typed = Math.min(total, Math.floor((time - started) * 45));
-      const blink = Math.floor(time * 2.2) % 2 === 0;
-      ctx.fillStyle = '#02050a';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = '500 40px "JetBrains Mono", monospace';
-      ctx.textBaseline = 'top';
-      let left = typed;
-      let y = 90;
-      let caretX = 80;
-      let caretY = 90;
-      for (const line of text) {
-        const shown = line.slice(0, Math.max(0, left));
-        left -= line.length;
-        ctx.fillStyle = line.startsWith('$') || line.startsWith('guest') ? '#7cf0b0' : '#9db6ff';
-        ctx.shadowColor = ctx.fillStyle;
-        ctx.shadowBlur = 14;
-        ctx.fillText(shown, 80, y);
-        if (shown.length) { caretX = 80 + ctx.measureText(shown).width + 6; caretY = y; }
-        if (left <= 0) break;
-        y += 64;
-      }
-      ctx.shadowBlur = 0;
-      if (blink) { ctx.fillStyle = '#e8b45a'; ctx.fillRect(caretX, caretY + 4, 22, 40); }
-      return typed < total || true;
-    },
-  };
 }
 
 export function mount(screen) {
@@ -126,7 +46,7 @@ export function mount(screen) {
   const aPos = gl.getAttribLocation(program, 'aPos');
   gl.enableVertexAttribArray(aPos);
   gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-  const u = Object.fromEntries(['uTex', 'uRes', 'uTexSize', 'uTime', 'uSwitch', 'uStart'].map((name) => [name, gl.getUniformLocation(program, name)]));
+  const u = Object.fromEntries(['uTex', 'uRes', 'uTexSize', 'uTime', 'uSwitch', 'uStart', 'uCurve'].map((name) => [name, gl.getUniformLocation(program, name)]));
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -135,20 +55,10 @@ export function mount(screen) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.uniform1i(u.uTex, 0);
+  gl.uniform1f(u.uCurve, 1);
 
   // Every cartridge's picture source: an image, a clip (poster until it plays) or a terminal.
-  const sources = new Map();
-  screen.querySelectorAll('[data-feed]').forEach((feed) => {
-    const video = feed.querySelector('video');
-    const img = feed.querySelector('img');
-    const code = feed.querySelector('pre');
-    if (video) {
-      const poster = new Image();
-      poster.src = video.getAttribute('poster');
-      sources.set(feed.dataset.feed, { kind: 'video', video, poster });
-    } else if (img) sources.set(feed.dataset.feed, { kind: 'img', img });
-    else if (code) sources.set(feed.dataset.feed, { kind: 'term', term: terminal(code.textContent.split('\n')) });
-  });
+  const sources = collectSources(screen);
 
   let currentId = screen.querySelector('[data-feed][data-on]')?.dataset.feed;
   const state = { sw: 0, start: 0 };
