@@ -462,7 +462,11 @@ export function mount(host) {
   canvas.setAttribute('aria-hidden', 'true');
   host.prepend(canvas);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  // Only on a real GPU: a software renderer (no acceleration, or a blocklisted driver) throws
+  // here, and the page keeps the flat cabinet with its lighter CRT.
+  // (Dev only: ?softgl renders it anyway, for previews on machines without a GPU.)
+  const softOk = import.meta.env.DEV && new URLSearchParams(location.search).has('softgl');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: !softOk });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -780,6 +784,7 @@ void main() { gl_FragColor = crt(vUv); }`,
 
   /* ---------- Frame ---------- */
   const frame = (now) => {
+    if (!compiled) return;
     const time = now * timeScale();
     const entry = textureFor(currentId);
     if (entry) {
@@ -812,8 +817,12 @@ void main() { gl_FragColor = crt(vUv); }`,
     if (!ready) { ready = true; host.dataset.cab3d = 'on'; }
   };
   let ready = false;
+  // Shaders compile off the main thread where the browser can, before the first frame, so the
+  // page doesn't stall while the cabinet appears.
+  let compiled = false;
   const loop = sceneLoop(canvas, frame);
-  loop.wake();
+  place3(0);
+  renderer.compileAsync(scene, camera).catch(() => {}).finally(() => { compiled = true; loop.wake(); });
 
   return {
     // Motion off hands back to the flat cabinet (its picture is the page's own still).

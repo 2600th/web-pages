@@ -206,17 +206,22 @@ test('the lab feature keeps a still poster and an explicit play control on mobil
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
-test('the lab cabinet is flat for everyone, with a 3D upright over it while motion is on', async ({ page }) => {
+test('the lab cabinet is flat for everyone, with a 3D upright over it on a GPU while motion is on', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/lab/');
   const cab = page.locator('[data-arcade] .arcade__cab');
   // The flat cabinet (printed bezel, controls) is in the page for everyone.
   await expect(cab.locator('.arcade__print')).toContainText('insert coin');
   await expect(cab.getByRole('button', { name: /play clip/i })).toBeVisible();
-  const webgl = await page.evaluate(() => Boolean(document.createElement('canvas').getContext('webgl2')));
-  test.skip(!webgl, 'No WebGL2 in this browser: the flat cabinet stays.');
-
+  // The 3D cabinet needs a real GPU. On a software renderer (as in CI) the flat cabinet's own
+  // CRT runs instead.
+  const gpu = await page.evaluate(() => Boolean(document.createElement('canvas').getContext('webgl2', { failIfMajorPerformanceCaveat: true })));
   await cab.scrollIntoViewIfNeeded();
+  if (!gpu) {
+    await expect(cab.locator('[data-arcade-screen]')).toHaveAttribute('data-gl', 'on', { timeout: 20_000 });
+    await expect(cab.locator('canvas.arcade__3d')).toHaveCount(0);
+    return;
+  }
   await expect(cab).toHaveAttribute('data-cab3d', 'on', { timeout: 20_000 });
   await expect(cab.locator('canvas.arcade__3d')).toHaveCount(1);
   // The clip control stays usable over it, and the roster still drives the card.
