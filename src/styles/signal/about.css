@@ -124,3 +124,33 @@ html[data-motion='off'] .ab-atari__deck, html:not(.js) .ab-atari__deck { display
 @media (max-width: 64rem) {
   .ab-origin__grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------- Toolchain: the workbench ---------- */
+.tools-in-use h2 { font-weight: 740; font-stretch: 108%; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.02; letter-spacing: -0.035em; }
+.ab-bench { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 5vw, 5rem); align-items: start; margin-top: 1.8rem; }
+.ab-bench__rig { margin: 0; display: grid; gap: 0.9rem; }
+@media (min-width: 64.01rem) { .ab-bench__rig { position: sticky; top: 6rem; } }
+.ab-bench__stage { position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: radial-gradient(60% 60% at 45% 45%, rgb(124 240 176 / 0.08), transparent 70%), linear-gradient(180deg, #0a0e20, #05070f); }
+.ab-bench__still, .ab-bench__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ab-bench__still { object-fit: cover; transition: opacity 400ms; }
+.ab-bench__canvas { opacity: 0; transition: opacity 500ms; }
+[data-workbench][data-ready] .ab-bench__canvas { opacity: 1; }
+[data-workbench][data-ready] .ab-bench__still { opacity: 0; }
+.ab-bench__disks { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ab-bench__disks button {
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.5rem; padding: 0 0.8rem; border: 1px solid var(--line-strong); border-radius: 3px;
+  background: var(--panel); font: 700 0.6875rem/1 var(--mono); letter-spacing: 0.08em; color: var(--ink); cursor: pointer; transition: border-color 200ms, color 200ms;
+}
+.ab-bench__disks button i { width: 0.8rem; height: 0.8rem; border-radius: 1px; background: linear-gradient(var(--disk) 0 0) 0 0 / 100% 100%; box-shadow: inset 0 2px 0 0 #c9cfdf; }
+.ab-bench__disks button:hover { border-color: var(--term); }
+.ab-bench__disks button[aria-pressed='true'] { border-color: var(--term); color: var(--term); box-shadow: 0 0 0 1px rgb(124 240 176 / 0.25); }
+.tools-in-use .ab-bench dl { margin: 0; }
+.tools-in-use .ab-bench dl > div { padding-inline: 0.9rem 0; }
+.tools-in-use dl > div { transition: background 250ms, box-shadow 250ms; }
+.tools-in-use dl > div[data-on] { background: linear-gradient(90deg, rgb(124 240 176 / 0.08), transparent 70%); box-shadow: inset 2px 0 0 var(--term); }
+.tools-in-use dl > div[data-on] dt { color: var(--term); }
+html[data-motion='off'] .ab-bench__disks, html:not(.js) .ab-bench__disks { display: none; }
+@media (max-width: 64rem) {
+  .ab-bench { grid-template-columns: minmax(0, 1fr); }
+  .tools-in-use .ab-bench dl > div { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+}

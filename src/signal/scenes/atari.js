@@ -1,17 +1,20 @@
 // The Atari 2600 on the About page: the console, its joysticks and three cartridges from
-// the model. Pick a cartridge and it lifts off the pile and seats in the slot with a clunk;
-// pick another and the first goes back. The camera leans with the pointer.
+// the model, in front of a colour TV (crt.js). Pick a cartridge and it
+// lifts off the pile and seats in the slot with a clunk, and the TV warms up on channel 3
+// with a title card; pick another and the TV retunes; take it out and the TV switches off.
+// The camera leans with the pointer.
 // Model: "Atari 2600" by dark_igorek, CC BY 4.0 (optimised for the web).
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
 import { loadModel } from './gltf.js';
+import { buildCrt } from './crt.js';
 
 const URL = '/media/3d/atari-2600.glb';
 // Top of the cartridge slot, in model units (console is about 3.5 wide).
 const SLOT = new THREE.Vector3(0, 0.9, -0.39);
 const SEAT = 0.4; // how far a cartridge sinks into the slot
-const LOOK = new THREE.Vector3(-0.3, 0.35, -0.3);
+const LOOK = new THREE.Vector3(-0.3, 1.55, -1.7);
 const CARTS = [
   { node: 'pitfall_0', title: 'Pitfall!' },
   { node: 'space_invaders_1', title: 'Space Invaders' },
@@ -19,6 +22,7 @@ const CARTS = [
 ];
 
 export async function createAtari(canvas, { onState = () => {} } = {}) {
+  await document.fonts?.ready;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -40,6 +44,9 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
   const root = gltf.scene;
   scene.add(root);
   root.updateMatrixWorld(true);
+  const tv = await buildCrt({ width: 3.9, stand: 0.75 });
+  tv.group.position.set(-0.25, 0, -4.1);
+  scene.add(tv.group);
 
   // Soft shadow under the set.
   const shadowTex = (() => {
@@ -55,9 +62,9 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
     t.colorSpace = THREE.SRGBColorSpace;
     return t;
   })();
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(11, 6), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(13, 11), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2;
-  shadow.position.set(-0.4, 0.002, -0.6);
+  shadow.position.set(-0.4, 0.002, -1.9);
   scene.add(shadow);
 
   // Cartridges: lift each out of the hierarchy so it can move freely, and remember its pose.
@@ -77,7 +84,7 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
   };
 
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
-  const base = new THREE.Vector3(-0.3, 4.4, 9.9);
+  const base = new THREE.Vector3(-0.3, 4.2, 12.9);
   camera.position.copy(base);
   camera.lookAt(LOOK);
 
@@ -106,6 +113,7 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
     emit();
     if (state.loaded >= 0) {
       const out = carts[state.loaded];
+      tv.off();
       await gsap.to(out.mesh.position, { y: out.mesh.position.y + SEAT * out.mesh.scale.y * 1.2, duration: 0.25, ease: 'power2.out' });
       await move(out, out.home, 0.8);
     }
@@ -114,8 +122,9 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
     const above = { position: seat.position.clone().add(new THREE.Vector3(0, 0.7, 0)), quaternion: seat.quaternion };
     await move(cart, above, 0.95);
     await gsap.to(cart.mesh.position, { y: seat.position.y, duration: 0.22, ease: 'power3.in' });
-    // The console takes the weight.
+    // The console takes the weight, and the TV comes on with the game.
     gsap.fromTo(root.position, { y: -0.03 }, { y: 0, duration: 0.35, ease: 'elastic.out(1, 0.4)' });
+    tv.show(index, cart.title);
     state.loaded = index;
     state.busy = false;
     emit();
@@ -125,6 +134,7 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
     if (state.busy || state.loaded < 0) return;
     state.busy = true;
     const out = carts[state.loaded];
+    tv.off();
     await gsap.to(out.mesh.position, { y: out.mesh.position.y + SEAT * out.mesh.scale.y * 1.2, duration: 0.25, ease: 'power2.out' });
     await move(out, out.home, 0.8);
     state.loaded = -1;
@@ -142,7 +152,9 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
   new ResizeObserver(resize).observe(canvas);
   resize();
 
+  const clock = new THREE.Clock();
   const frame = () => {
+    tv.tick(Math.min(clock.getDelta() * (window.__deckTimeScale ?? 1), 1 / 10));
     camera.position.x += (base.x + state.pointer.x * 0.9 - camera.position.x) * 0.05;
     camera.position.y += (base.y + state.pointer.y * 0.5 - camera.position.y) * 0.05;
     camera.lookAt(LOOK);
@@ -177,6 +189,6 @@ export async function createAtari(canvas, { onState = () => {} } = {}) {
     titles: carts.map((c) => c.title),
     get state() { return { ...state }; },
     pause() { renderer.setAnimationLoop(null); },
-    resume() { renderer.setAnimationLoop(frame); },
+    resume() { clock.getDelta(); renderer.setAnimationLoop(frame); },
   };
 }

@@ -3,6 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import PageOpening from '../components/site/PageOpening.astro';
 import ConBadge from '../components/about/ConBadge.astro';
 import Origin from '../components/about/Origin.astro';
+import Toolchain from '../components/about/Toolchain.astro';
 import { getCollection } from 'astro:content';
 import { getPrioritizedWork } from '../data/work-order';
 import { PERSON } from '../data/site';
@@ -64,18 +65,7 @@ const work = getPrioritizedWork(await getCollection('work'));
       </ol>
     </section>
 
-    <section class="pg-section tools-in-use" aria-labelledby="tools-title">
-      <p class="sg-eyebrow"><span>03</span> Toolchain</p>
-      <div class="pg-split">
-        <h2 id="tools-title">Tools in use.</h2>
-        <dl>
-          <div><dt>Game engines</dt><dd>Unity for cross-platform games at <a href="/work/merkur-magie/">Merkur</a> and for the <a href="/work/enterprise-immersive-systems/">enterprise XR</a> training and simulation work at GreyKernel.</dd></div>
-          <div><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>, with <a href="/notes/ocean-reliability/">KTX2 textures</a> keeping its download in budget. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
-          <div><dt>Applied AI</dt><dd>OpenAI and Gemini for <a href="/notes/ai-floorplan-parsing/">floorplan interpretation</a>, with ComfyUI for repeatable <a href="/notes/ai-video-control/">image and video experiments</a>.</dd></div>
-          <div><dt>Product prototypes</dt><dd>Next.js, Tailwind CSS, AI SDK and fal.ai formed part of the initial <a href="/work/propvr-ai-craft/">PropVR AI MVP</a> I built for the team to extend.</dd></div>
-        </dl>
-      </div>
-    </section>
+    <Toolchain />
 
     <section class="pg-section" aria-labelledby="patent-title">
       <p class="sg-eyebrow"><span>04</span> Patent</p>
@@ -114,7 +104,9 @@ const work = getPrioritizedWork(await getCollection('work'));
   <script>
     import { initBadge } from '../signal/scenes/badge.js';
     import { initAtari } from '../signal/scenes/atari-ui.js';
+    import { initWorkbench } from '../signal/scenes/workbench-ui.js';
     initBadge();
     initAtari();
+    initWorkbench();
   </script>
 </SiteLayout>

@@ -1,0 +1,37 @@
+---
+/**
+ * Toolchain as a workbench: a 90s PC and four floppy disks, one per row of tools. Load a
+ * disk and the monitor lists what is on it (motion on); the rows below say the same in
+ * full, with links, for everyone.
+ */
+const DISKS = [
+  { label: 'ENGINES.DSK', colour: '#1b1d24', row: 'Game engines', tools: ['Unity'], work: ['Merkur Magie', 'Enterprise XR at GreyKernel'] },
+  { label: 'WEBGFX.DSK', colour: '#2447d8', row: 'Browser graphics', tools: ['TypeScript', 'Three.js', 'WebGPU', 'KTX2', 'Rapier'], work: ['Web Ocean 3D', 'Kinema'] },
+  { label: 'AI.DSK', colour: '#2e8b57', row: 'Applied AI', tools: ['OpenAI', 'Gemini', 'ComfyUI'], work: ['Floorplan parsing', 'AI video control'] },
+  { label: 'PROTO.DSK', colour: '#c8331f', row: 'Product prototypes', tools: ['Next.js', 'Tailwind CSS', 'AI SDK', 'fal.ai'], work: ['PropVR AI MVP'] },
+];
+---
+
+<section class="pg-section tools-in-use" aria-labelledby="tools-title" data-workbench>
+  <p class="sg-eyebrow"><span>03</span> Toolchain</p>
+  <h2 id="tools-title">Tools in use.</h2>
+  <div class="ab-bench">
+    <figure class="ab-bench__rig">
+      <div class="ab-bench__stage" data-bench-stage>
+        <img class="ab-bench__still" src="/media/3d/retro-computer-still.webp" width="1280" height="800" alt="A beige 1990s desktop computer with a monitor, keyboard, mouse and four floppy disks" loading="lazy" decoding="async" />
+        <canvas class="ab-bench__canvas" data-bench-canvas aria-hidden="true"></canvas>
+      </div>
+      <div class="ab-bench__disks" role="group" aria-label="Load a disk">
+        {DISKS.map((disk, i) => <button type="button" data-disk={i} aria-pressed="false" style={`--disk:${disk.colour}`}><i aria-hidden="true"></i>{disk.label}</button>)}
+      </div>
+      <figcaption class="ab-atari__credit">3D model: <a href="https://sketchfab.com/3d-models/psx-retro-computer-7e7f8a9dfa1f4b34abde94bb02b9f46c">“PSX Retro Computer”</a> by <a href="https://sketchfab.com/designrobco">Tomitos</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, compressed for the web. The screen is drawn by this site.</figcaption>
+    </figure>
+    <dl>
+      <div data-row="0"><dt>Game engines</dt><dd>Unity for cross-platform games at <a href="/work/merkur-magie/">Merkur</a> and for the <a href="/work/enterprise-immersive-systems/">enterprise XR</a> training and simulation work at GreyKernel.</dd></div>
+      <div data-row="1"><dt>Browser graphics</dt><dd>TypeScript, Three.js and WebGPU in <a href="/work/web-ocean-3d/">Web Ocean 3D</a>, with <a href="/notes/ocean-reliability/">KTX2 textures</a> keeping its download in budget. Rapier supports physics in <a href="/work/kinema/">Kinema</a>.</dd></div>
+      <div data-row="2"><dt>Applied AI</dt><dd>OpenAI and Gemini for <a href="/notes/ai-floorplan-parsing/">floorplan interpretation</a>, with ComfyUI for repeatable <a href="/notes/ai-video-control/">image and video experiments</a>.</dd></div>
+      <div data-row="3"><dt>Product prototypes</dt><dd>Next.js, Tailwind CSS, AI SDK and fal.ai formed part of the initial <a href="/work/propvr-ai-craft/">PropVR AI MVP</a> I built for the team to extend.</dd></div>
+    </dl>
+  </div>
+  <script type="application/json" data-bench-disks set:html={JSON.stringify(DISKS)} />
+</section>

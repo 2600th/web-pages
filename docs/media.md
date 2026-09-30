@@ -65,6 +65,10 @@ Third-party models live in `public/media/3d/` as web derivatives, with the downl
 | File | Model | Author | Licence | Used on |
 | --- | --- | --- | --- | --- |
 | `atari-2600.glb` | [Atari 2600](https://sketchfab.com/3d-models/atari-2600-2024d933f6214117a399ad4287ede64d) | [dark_igorek](https://sketchfab.com/dark_igorek) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | About, why 2600th |
+| `crt-tv.glb` | [Magnavox 19" CRT TV - RR1938 W122](https://sketchfab.com/3d-models/magnavox-19-crt-tv-rr1938-w122-3aa886ec33294ddb9da3ce7bfe8ed9b6) | [amhyde](https://sketchfab.com/amhyde) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | About, why 2600th (the TV behind the Atari) |
+| `retro-computer.glb` | [PSX Retro Computer](https://sketchfab.com/3d-models/psx-retro-computer-7e7f8a9dfa1f4b34abde94bb02b9f46c) | [Tomitos](https://sketchfab.com/designrobco) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | About, toolchain |
+
+Use only models whose licence allows them to be served on the web: CC BY 4.0 or CC0, credited. Sketchfab's Standard licence forbids making the asset available as a stand-alone file, which a web page's `.glb` is, so it is not usable here. The screens (TV picture, PC monitor) are canvases drawn by the site; the models' own screen textures are replaced.
 
 The derivatives are compressed with glTF-Transform: meshopt geometry and WebP textures capped at 1024 px, keeping node names so scenes can find parts such as cartridges. Rebuild one from its original with:
 
@@ -72,7 +76,7 @@ The derivatives are compressed with glTF-Transform: meshopt geometry and WebP te
 npx @gltf-transform/cli optimize _media-source/3d/atari-2600-sketchfab.glb public/media/3d/atari-2600.glb --compress meshopt --texture-compress webp --texture-size 1024 --flatten false --join false --instance false --palette false --simplify false
 ```
 
-`atari-2600-still.webp` is a render of the About scene, shown before the 3D scene loads, with motion off and without JavaScript.
+`atari-2600-still.webp` and `retro-computer-still.webp` are renders of the About scenes, shown before the 3D scenes load, with motion off and without JavaScript. Re-render them after changing a scene.
 
 ## Review gate
 
