@@ -206,6 +206,29 @@ test('the lab feature keeps a still poster and an explicit play control on mobil
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
+test('the lab cabinet is flat for everyone, with a 3D upright over it while motion is on', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/lab/');
+  const cab = page.locator('[data-arcade] .arcade__cab');
+  // The flat cabinet (printed bezel, controls) is in the page for everyone.
+  await expect(cab.locator('.arcade__print')).toContainText('insert coin');
+  await expect(cab.getByRole('button', { name: /play clip/i })).toBeVisible();
+  const webgl = await page.evaluate(() => Boolean(document.createElement('canvas').getContext('webgl2')));
+  test.skip(!webgl, 'No WebGL2 in this browser: the flat cabinet stays.');
+
+  await cab.scrollIntoViewIfNeeded();
+  await expect(cab).toHaveAttribute('data-cab3d', 'on', { timeout: 20_000 });
+  await expect(cab.locator('canvas.arcade__3d')).toHaveCount(1);
+  // The clip control stays usable over it, and the roster still drives the card.
+  await expect(cab.getByRole('button', { name: /play clip/i })).toBeVisible();
+  await page.locator('[data-pick="kinema"]').click();
+  await expect(page.locator('[data-build="kinema"]')).toHaveAttribute('data-on', '');
+  // Motion off hands back to the flat cabinet.
+  await page.locator('.sg-top [data-motion-toggle]').click();
+  await expect(cab).toHaveAttribute('data-cab3d', 'off');
+  await expect(cab.locator('.arcade__screen')).toHaveCSS('opacity', '1');
+});
+
 test('mobile work filters expose every domain without a hidden horizontal rail', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/work/');

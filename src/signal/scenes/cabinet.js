@@ -1,83 +1,54 @@
-// Lab: the 2600th arcade as a cabinet you could stand at. Modelled here in three.js from a
-// side profile (a classic upright, or a Japanese sit-down "candy" cab): side panels with
-// T-molding and side art, a backlit marquee, a glass bezel, a control panel with a stick and
-// buttons, and a coin door. The screen is the arcade's CRT shader playing the loaded
-// cartridge, with the HUD drawn on the tube. The page's controls drive it; clicking the
-// screen, A or B does what the deck does.
+// Lab: the 2600th arcade as an upright cabinet you could stand at, modelled here in three.js
+// from its side profile: side panels with T-molding and side art, a backlit marquee, a glass
+// bezel, a control panel with a stick and buttons, and a coin door. The screen is the arcade's
+// CRT shader playing the loaded cartridge, with the HUD drawn on the tube. The page's controls
+// drive it, and clicking the screen, A or B does what the deck does. It draws over the flat
+// cabinet in the page, which comes back when motion is off.
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
 import { sceneLoop, timeScale } from './mount.js';
 import { CRT_GLSL, collectSources } from './crt-picture.js';
 
-const C = { cobalt: '#4d74ff', deep: '#2447d8', phosphor: '#9db6ff', gold: '#e8b45a', ink: '#eae8e1', term: '#7cf0b0', red: '#c21f3a' };
+const C = { cobalt: '#4d74ff', deep: '#2447d8', phosphor: '#9db6ff', gold: '#e8b45a' };
 
-/* ---------- The two cabinets ---------- */
-// A profile is a start point and segments, in metres: z towards the player, y up. A segment
-// can bend through `via`. Each segment is one surface of the cabinet's front, named by id.
-const STYLES = {
-  upright: {
-    width: 0.68, side: 0.022, bevel: 0.007,
-    start: [0, 0],
-    segs: [
-      { id: 'base', to: [0.64, 0] },
-      { id: 'door', to: [0.64, 0.84] },
-      { id: 'under', to: [0.88, 0.92] },
-      { id: 'lip', to: [0.88, 0.99] },
-      { id: 'cp', to: [0.6, 1.06] },
-      { id: 'screen', to: [0.48, 1.52] },
-      { id: 'speaker', to: [0.6, 1.56] },
-      { id: 'marquee', to: [0.62, 1.82] },
-      { id: 'cap', to: [0.58, 1.86] },
-      { id: 'top', to: [0, 1.86] },
-      { id: 'back', to: [0, 0] },
-    ],
-    opening: [0.5, 0.3125],
-    body: '#0b0f24', shell: null, trim: '#2447d8',
-    // Camera: where it looks, and how far round, up and away it stands (hero, then close).
-    hero: { target: [0, 1.36, 0.52], az: -0.28, el: 0.1, dist: 3.0 },
-    close: { target: [0, 1.36, 0.54], az: -0.12, el: 0.08, dist: 2.45 },
-    stick: [0.25, 0.58], buttons: [[0.56, 0.56], [0.7, 0.46]], starts: [[0.43, 0.22], [0.52, 0.22]],
-  },
-  candy: {
-    width: 0.66, side: 0.03, bevel: 0.014,
-    start: [0, 0],
-    segs: [
-      { id: 'base', to: [0.7, 0] },
-      { id: 'door', to: [0.7, 0.62] },
-      { id: 'under', to: [0.95, 0.74], via: [0.84, 0.63] },
-      { id: 'lip', to: [0.96, 0.81], via: [0.985, 0.77] },
-      { id: 'cp', to: [0.74, 0.89] },
-      { id: 'screen', to: [0.57, 1.31] },
-      { id: 'marquee', to: [0.53, 1.43], via: [0.575, 1.4] },
-      { id: 'top', to: [0.12, 1.5], via: [0.4, 1.535] },
-      { id: 'back', to: [0, 1.28], via: [0.005, 1.48] },
-      { id: 'back2', to: [0, 0] },
-    ],
-    opening: [0.52, 0.325],
-    body: '#101320', shell: '#e9e5da', trim: '#e9e5da',
-    hero: { target: [0, 1.14, 0.66], az: -0.3, el: 0.14, dist: 2.6 },
-    close: { target: [0, 1.14, 0.64], az: -0.12, el: 0.12, dist: 2.1 },
-    stick: [0.25, 0.56], buttons: [[0.55, 0.56], [0.69, 0.47]], starts: [[0.44, 0.2], [0.53, 0.2]],
-  },
+/* ---------- The cabinet ---------- */
+// Its side profile, in metres: z towards the player, y up. Each segment is one surface of the
+// front, named by id.
+const SPEC = {
+  width: 0.68, side: 0.022, bevel: 0.007,
+  start: [0, 0],
+  segs: [
+    { id: 'base', to: [0.64, 0] },
+    { id: 'door', to: [0.64, 0.84] },
+    { id: 'under', to: [0.88, 0.92] },
+    { id: 'lip', to: [0.88, 0.99] },
+    { id: 'cp', to: [0.6, 1.06] },
+    { id: 'screen', to: [0.48, 1.52] },
+    { id: 'speaker', to: [0.6, 1.56] },
+    { id: 'marquee', to: [0.62, 1.82] },
+    { id: 'cap', to: [0.58, 1.86] },
+    { id: 'top', to: [0, 1.86] },
+    { id: 'back', to: [0, 0] },
+  ],
+  opening: [0.5, 0.3125], // the bezel's window, 16:10 like the builds' pictures
+  body: '#0b0f24', trim: '#2447d8',
+  // Camera: where it looks, and how far round, up and away it stands. At rest it shows the
+  // cabinet; pointed at (or on a phone) it leans in to the screen.
+  hero: { target: [0, 1.36, 0.52], az: -0.28, el: 0.1, dist: 3.0 },
+  close: { target: [0, 1.36, 0.54], az: -0.12, el: 0.08, dist: 2.45 },
+  // Where the controls sit on the panel, as fractions across and back-to-front.
+  stick: [0.25, 0.58], buttons: [[0.56, 0.56], [0.7, 0.46]], starts: [[0.43, 0.22], [0.52, 0.22]],
 };
 
 /* ---------- Geometry helpers ---------- */
-const quad = (a, via, b, n) => Array.from({ length: n + 1 }, (_, i) => {
-  const t = i / n;
-  const u = 1 - t;
-  return [u * u * a[0] + 2 * u * t * via[0] + t * t * b[0], u * u * a[1] + 2 * u * t * via[1] + t * t * b[1]];
-});
-
 /** Each segment as a polyline, with its length. */
-function segments(style) {
-  let at = style.start;
-  return style.segs.map((seg) => {
-    const points = seg.via ? quad(at, seg.via, seg.to, 14) : [at, seg.to];
+function segments(spec) {
+  let at = spec.start;
+  return spec.segs.map((seg) => {
+    const points = [at, seg.to];
     at = seg.to;
-    let length = 0;
-    for (let i = 1; i < points.length; i++) length += Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]);
-    return { ...seg, points, length };
+    return { ...seg, points, length: Math.hypot(points[1][0] - points[0][0], points[1][1] - points[0][1]) };
   });
 }
 
@@ -152,7 +123,7 @@ function glowText(ctx, text, x, y, colour, glow, blur) {
   ctx.shadowBlur = 0;
 }
 
-function marqueeArt(ctx, w, h, style) {
+function marqueeArt(ctx, w, h) {
   const g = ctx.createLinearGradient(0, 0, 0, h);
   g.addColorStop(0, '#0d1850');
   g.addColorStop(1, '#040818');
@@ -185,7 +156,7 @@ function marqueeArt(ctx, w, h, style) {
   ctx.fillStyle = hg;
   ctx.fillRect(0, horizon - 30, w, 36);
   // The name.
-  const size = h * (style === 'candy' ? 0.5 : 0.44);
+  const size = h * 0.44;
   ctx.textBaseline = 'alphabetic';
   ctx.font = `900 ${size}px Doto, "JetBrains Mono", monospace`;
   const name = '2600';
@@ -286,11 +257,11 @@ function panelArt(ctx, w, h, spec) {
 function doorArt(ctx, w, h, height, spec, glowOnly = false) {
   const m = (metres) => h - (metres / height) * h; // canvas y for a height on the door
   if (!glowOnly) {
-    ctx.fillStyle = spec.shell ?? spec.body;
+    ctx.fillStyle = spec.body;
     ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#05060a';
     ctx.fillRect(0, m(0.1), w, h - m(0.1));
-    ctx.fillStyle = spec.shell ? C.cobalt : 'rgba(77,116,255,0.8)';
+    ctx.fillStyle = 'rgba(77,116,255,0.8)';
     ctx.fillRect(0, m(0.1) - 4, w, 4);
   } else {
     ctx.fillStyle = '#000';
@@ -342,7 +313,7 @@ function doorArt(ctx, w, h, height, spec, glowOnly = false) {
   ctx.font = `600 ${w * 0.018}px "JetBrains Mono", monospace`;
   if ('letterSpacing' in ctx) ctx.letterSpacing = `${w * 0.006}px`;
   ctx.textAlign = 'center';
-  ctx.fillStyle = spec.shell ? 'rgba(16,19,31,0.55)' : 'rgba(157,182,255,0.45)';
+  ctx.fillStyle = 'rgba(157,182,255,0.45)';
   ctx.fillText('2600TH ARCADE · BUILT IN THE LAB', w / 2, m(0.2));
   ctx.textAlign = 'left';
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
@@ -363,35 +334,6 @@ function sideArt(ctx, w, h, spec, box) {
   // Canvas x is depth (z, 0 at the back), y is height (top of canvas is the top of the box).
   const X = (z) => (z / box[0]) * w;
   const Y = (y) => h - (y / box[1]) * h;
-  if (spec.shell) {
-    ctx.fillStyle = spec.shell;
-    ctx.fillRect(0, 0, w, h);
-    const g = ctx.createLinearGradient(0, 0, w, 0);
-    g.addColorStop(0, 'rgba(0,0,0,0.06)');
-    g.addColorStop(1, 'rgba(255,255,255,0.04)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-    // A cobalt sweep low on the shell, a gold pinstripe, and the name.
-    ctx.fillStyle = C.cobalt;
-    ctx.beginPath();
-    ctx.moveTo(0, Y(0.26)); ctx.bezierCurveTo(X(0.35), Y(0.26), X(0.55), Y(0.5), X(1), Y(0.66));
-    ctx.lineTo(X(1), Y(0.6)); ctx.bezierCurveTo(X(0.55), Y(0.44), X(0.35), Y(0.2), 0, Y(0.2));
-    ctx.fill();
-    ctx.strokeStyle = C.gold;
-    ctx.lineWidth = 6;
-    ctx.beginPath(); ctx.moveTo(0, Y(0.16)); ctx.bezierCurveTo(X(0.35), Y(0.16), X(0.55), Y(0.4), X(1), Y(0.56)); ctx.stroke();
-    ctx.save();
-    ctx.translate(X(0.12), Y(0.62));
-    ctx.rotate(-Math.PI / 2);
-    ctx.font = `900 ${w * 0.16}px Doto, "JetBrains Mono", monospace`;
-    ctx.fillStyle = '#10131f';
-    ctx.fillText('2600', 0, 0);
-    ctx.font = `700 ${w * 0.05}px "JetBrains Mono", monospace`;
-    ctx.fillStyle = C.cobalt;
-    ctx.fillText('th', ctx.measureText('2600').width + w * 0.39, -w * 0.08);
-    ctx.restore();
-    return;
-  }
   ctx.fillStyle = spec.body;
   ctx.fillRect(0, 0, w, h);
   // Speed stripes rising from the back of the cabinet to the control panel.
@@ -511,8 +453,8 @@ function buttonPart(colour, r, mats) {
 }
 
 /* ---------- The scene ---------- */
-export function mount(host, { style: name = 'upright' } = {}) {
-  const spec = STYLES[name] ?? STYLES.upright;
+export function mount(host) {
+  const spec = SPEC;
   const root = host.closest('[data-arcade]');
   const screenEl = root.querySelector('[data-arcade-screen]');
   const canvas = document.createElement('canvas');
@@ -548,28 +490,24 @@ export function mount(host, { style: name = 'upright' } = {}) {
   const box = [Math.max(...segs.flatMap((s) => s.points.map((p) => p[0]))) + 0.02, Math.max(...segs.flatMap((s) => s.points.map((p) => p[1]))) + 0.02];
 
   const mats = {
-    body: new THREE.MeshStandardMaterial({ color: spec.shell ?? spec.body, roughness: spec.shell ? 0.32 : 0.6, envMapIntensity: spec.shell ? 0.35 : 0.06 }),
-    front: new THREE.MeshStandardMaterial({ color: spec.body, roughness: 0.6, envMapIntensity: 0.05 }),
+    body: new THREE.MeshStandardMaterial({ color: spec.body, roughness: 0.6, envMapIntensity: 0.05 }),
     black: new THREE.MeshStandardMaterial({ color: 0x05060a, roughness: 0.5, envMapIntensity: 0.05 }),
     dark: new THREE.MeshStandardMaterial({ color: 0x1a1d29, roughness: 0.4, metalness: 0.3, envMapIntensity: 0.3 }),
     metal: new THREE.MeshStandardMaterial({ color: 0xb8bfd0, roughness: 0.25, metalness: 1, envMapIntensity: 0.9 }),
     red: new THREE.MeshPhysicalMaterial({ color: 0xc21f3a, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 0.45 }),
-    trim: new THREE.MeshPhysicalMaterial({ color: spec.trim, roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.12, envMapIntensity: spec.shell ? 0.35 : 0.22 }),
+    trim: new THREE.MeshPhysicalMaterial({ color: spec.trim, roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.12, envMapIntensity: 0.22 }),
   };
 
   /* Side panels, with their T-molding. */
   const shape = new THREE.Shape();
   shape.moveTo(...spec.start);
-  spec.segs.forEach((seg) => {
-    if (seg.via) shape.quadraticCurveTo(seg.via[0], seg.via[1], seg.to[0], seg.to[1]);
-    else shape.lineTo(seg.to[0], seg.to[1]);
-  });
-  const sideGeometry = new THREE.ExtrudeGeometry(shape, { depth: spec.side - spec.bevel * 2, bevelEnabled: true, bevelThickness: spec.bevel, bevelSize: spec.bevel, bevelSegments: 4, curveSegments: 24 });
+  spec.segs.forEach((seg) => shape.lineTo(seg.to[0], seg.to[1]));
+  const sideGeometry = new THREE.ExtrudeGeometry(shape, { depth: spec.side - spec.bevel * 2, bevelEnabled: true, bevelThickness: spec.bevel, bevelSize: spec.bevel, bevelSegments: 4 });
   sideGeometry.translate(0, 0, spec.bevel);
   sideGeometry.rotateY(-Math.PI / 2);
   const art = paint(1024, 2048, (ctx, w, h) => sideArt(ctx, w, h, spec, box));
   art.repeat.set(1 / box[0], 1 / box[1]);
-  const sideMat = new THREE.MeshPhysicalMaterial({ map: art, roughness: spec.shell ? 0.3 : 0.5, clearcoat: spec.shell ? 0.8 : 0.35, clearcoatRoughness: 0.25, envMapIntensity: spec.shell ? 0.3 : 0.08 });
+  const sideMat = new THREE.MeshPhysicalMaterial({ map: art, roughness: 0.5, clearcoat: 0.35, clearcoatRoughness: 0.25, envMapIntensity: 0.08 });
   const left = new THREE.Mesh(sideGeometry, [sideMat, mats.trim]);
   left.position.x = -inner;
   const right = new THREE.Mesh(sideGeometry, [sideMat, mats.trim]);
@@ -583,15 +521,12 @@ export function mount(host, { style: name = 'upright' } = {}) {
     return mesh;
   };
   const tex = (seg, draw, px = 1024) => paint(px, (px * seg.length) / (inner * 2), draw);
-  const plain = new Set(['base', 'top', 'back', 'back2', 'cap', 'under']);
-  segs.forEach((seg) => {
-    if (plain.has(seg.id)) surface(seg, spec.shell && seg.id !== 'base' ? mats.body : mats.front);
-  });
+  ['base', 'top', 'back', 'cap', 'under'].forEach((id) => surface(byId[id], mats.body));
   surface(byId.lip, mats.trim);
-  if (byId.speaker) surface(byId.speaker, new THREE.MeshStandardMaterial({ map: tex(byId.speaker, speakerArt), roughness: 0.7, envMapIntensity: 0.03 }));
+  surface(byId.speaker, new THREE.MeshStandardMaterial({ map: tex(byId.speaker, speakerArt), roughness: 0.7, envMapIntensity: 0.03 }));
 
   // Marquee: a lightbox.
-  const marqueeTex = tex(byId.marquee, (ctx, w, h) => marqueeArt(ctx, w, h, name));
+  const marqueeTex = tex(byId.marquee, marqueeArt);
   const marqueeMat = new THREE.MeshBasicMaterial({ map: marqueeTex, toneMapped: false });
   surface(byId.marquee, marqueeMat);
   const marqueeLight = new THREE.PointLight(0x7f9bff, 0.7, 1.2, 1.8);
@@ -744,7 +679,7 @@ void main() { gl_FragColor = crt(vUv); }`,
     return textures.get(id);
   };
   let currentId = screenEl.querySelector('[data-feed][data-on]')?.dataset.feed;
-  const state = { sw: 0, start: 0, frame: 0, pointer: { x: 0, y: 0 } };
+  const state = { sw: 0, start: 0, pointer: { x: 0, y: 0 } };
 
   const hudTitle = root.querySelector('[data-arcade-hud]');
   const hudCh = root.querySelector('[data-arcade-ch]');
@@ -752,7 +687,12 @@ void main() { gl_FragColor = crt(vUv); }`,
   /* ---------- Camera ---------- */
   const camera = new THREE.PerspectiveCamera(24, 1, 0.05, 30);
   const look = new THREE.Vector3();
-  const view = { f: 0 };
+  // With a mouse the cabinet stands back until you point at it. On touch, or in a narrow
+  // column, it stays leaned in so the screen stays big enough to read.
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const rest = () => (!fine || canvas.clientWidth < 520 ? 1 : 0);
+  const view = { f: rest() };
+  let inside = false;
   const place3 = (time) => {
     const a = spec.hero;
     const b = spec.close;
@@ -772,9 +712,10 @@ void main() { gl_FragColor = crt(vUv); }`,
     if (!rect.width || !rect.height) return;
     renderer.setSize(rect.width, rect.height, false);
     camera.aspect = rect.width / rect.height;
-    // Narrow boxes stand further back so the cabinet still fits.
-    camera.fov = camera.aspect < 0.8 ? 30 : 24;
+    // Narrow boxes widen the lens so the marquee still fits.
+    camera.fov = camera.aspect < 0.9 ? 28 : 24;
     camera.updateProjectionMatrix();
+    if (!inside && !gsap.isTweening(view)) view.f = rest();
   };
   new ResizeObserver(resize).observe(canvas);
   resize();
@@ -795,11 +736,12 @@ void main() { gl_FragColor = crt(vUv); }`,
     state.pointer.y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
     canvas.style.cursor = hit(event) ? 'pointer' : '';
   });
-  canvas.addEventListener('pointerenter', () => gsap.to(view, { f: 1, duration: 1.1, ease: 'power3.inOut', overwrite: true }));
+  canvas.addEventListener('pointerenter', () => { inside = true; if (fine) gsap.to(view, { f: 1, duration: 1.1, ease: 'power3.inOut', overwrite: true }); });
   canvas.addEventListener('pointerleave', () => {
+    inside = false;
     state.pointer.x = 0;
     state.pointer.y = 0;
-    gsap.to(view, { f: 0, duration: 1.3, ease: 'power3.inOut', overwrite: true });
+    gsap.to(view, { f: rest(), duration: 1.3, ease: 'power3.inOut', overwrite: true });
   });
   canvas.addEventListener('click', (event) => {
     const object = hit(event);
@@ -866,14 +808,19 @@ void main() { gl_FragColor = crt(vUv); }`,
     place3(time);
     halo.quaternion.copy(camera.quaternion);
     renderer.render(scene, camera);
+    // The first picture is up: the 3D cabinet takes over from the flat one.
+    if (!ready) { ready = true; host.dataset.cab3d = 'on'; }
   };
+  let ready = false;
   const loop = sceneLoop(canvas, frame);
-  if (import.meta.env.DEV) window.__cab = { uniforms, textures, sources, view, renderer, scene, camera, spec, lights: { key, fill, rim, rim2, marqueeLight, screenLight }, mats };
-  host.dataset.cab3d = 'on';
   loop.wake();
 
   return {
-    setMotion(on) { if (on) loop.wake(); },
+    // Motion off hands back to the flat cabinet (its picture is the page's own still).
+    setMotion(on) {
+      if (ready) host.dataset.cab3d = on ? 'on' : 'off';
+      if (on) loop.wake();
+    },
     destroy() { loop.stop(); tilt.disconnect(); press.disconnect(); starting.disconnect(); renderer.dispose(); },
   };
 }

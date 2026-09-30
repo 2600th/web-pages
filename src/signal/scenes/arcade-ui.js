@@ -1,7 +1,8 @@
 // The Lab cabinet: pick a cartridge from the roster (click, ↑ ↓, or its number key),
 // its card and screen follow, and Enter on the chosen cartridge presses start: the
 // build's first link. S opens its source. Until someone plays, the cabinet runs its
-// attract mode and cycles the cartridges. The CRT screen itself is a lazy WebGL scene.
+// attract mode and cycles the cartridges. With motion on, a 3D upright cabinet (cabinet.js)
+// draws over the flat one; if it can't start, the flat cabinet's own CRT (arcade.js) runs.
 import { gsap } from 'gsap';
 import { sfx, tones } from '../audio.js';
 import { mountScene, motionOn } from './mount.js';
@@ -166,19 +167,14 @@ export function initArcade() {
   screen?.addEventListener('click', toggleClip);
   document.addEventListener('signal:motion', (event) => { if (!event.detail.on) feeds.forEach((feed) => feed.querySelector('video')?.pause()); });
 
-  // Design prototypes (dev only): ?cab=upright or ?cab=candy puts the cartridges in a 3D
-  // cabinet; ?cab=flat is the refined flat cabinet.
-  const cabStyle = import.meta.env.DEV ? new URLSearchParams(location.search).get('cab') : null;
-  const threeD = cabStyle === 'upright' || cabStyle === 'candy';
-  if (cabStyle) root.dataset.cab = cabStyle;
-
-  // The cabinet leans toward the pointer, just enough to feel physical.
+  // The flat cabinet leans toward the pointer, just enough to feel physical. (The 3D one
+  // turns its own camera.)
   const cab = root.querySelector('.arcade__cab');
-  if (cab && !threeD && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  if (cab && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const rx = gsap.quickTo(cab, 'rotationX', { duration: 0.6, ease: 'power3' });
     const ry = gsap.quickTo(cab, 'rotationY', { duration: 0.6, ease: 'power3' });
     cab.addEventListener('pointermove', (event) => {
-      if (!motionOn()) return;
+      if (!motionOn() || cab.dataset.cab3d === 'on') { rx(0); ry(0); return; }
       const rect = cab.getBoundingClientRect();
       ry(((event.clientX - rect.left) / rect.width - 0.5) * 5);
       rx(-((event.clientY - rect.top) / rect.height - 0.5) * 4);
@@ -186,6 +182,21 @@ export function initArcade() {
     cab.addEventListener('pointerleave', () => { rx(0); ry(0); });
   }
 
-  if (threeD) mountScene(cab, () => import('./cabinet.js').then((module) => ({ mount: (host) => module.mount(host, { style: cabStyle }) })));
-  else mountScene(screen, () => import('./arcade.js'));
+  // The 3D cabinet, or the flat one's CRT if it can't start (no WebGL2, a driver refusing it).
+  const flatCrt = () => {
+    let scene = {};
+    import('./arcade.js').then((module) => { scene = module.mount(screen) ?? {}; }).catch(() => {});
+    return { setMotion: (on) => scene.setMotion?.(on) };
+  };
+  mountScene(cab, () => import('./cabinet.js').then((module) => ({
+    mount(host) {
+      try {
+        return module.mount(host);
+      } catch (error) {
+        console.warn('[2600th] 3D cabinet failed; using the flat CRT', error);
+        host.querySelector('.arcade__3d')?.remove();
+        return flatCrt();
+      }
+    },
+  })));
 }
