@@ -2,6 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageOpening from '../components/site/PageOpening.astro';
 import ConBadge from '../components/about/ConBadge.astro';
+import SideB from '../components/about/SideB.astro';
 import { getCollection } from 'astro:content';
 import { getPrioritizedWork } from '../data/work-order';
 import { PERSON } from '../data/site';
@@ -127,10 +128,13 @@ const work = getPrioritizedWork(await getCollection('work'));
       </ol>
       </div>
     </section>
+    <SideB />
   </div>
 
   <script>
     import { initBadge } from '../signal/scenes/badge.js';
+    import { initSideB } from '../signal/scenes/mixtape.js';
     initBadge();
+    initSideB();
   </script>
 </SiteLayout>

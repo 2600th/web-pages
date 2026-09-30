@@ -1,0 +1,46 @@
+---
+/**
+ * PROTOTYPE (placement A): "Side B" on the About page. A 3D cassette player with a fan of
+ * tapes; pick a tape, it loads, the reels turn. The J-card lists the tape; rock tapes play
+ * through a streaming embed, the last tape plays the site's own line tones.
+ */
+import { TAPES } from '../../data/mixtape';
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<section class="pg-section sideb" id="side-b" aria-labelledby="sideb-title" data-sideb>
+  <p class="sg-eyebrow"><span>06</span> Side B</p>
+  <div class="sideb__grid">
+    <div class="sideb__copy">
+      <h2 id="sideb-title">What’s on the <em>tape.</em></h2>
+      <p class="sideb__lede">Four tapes on the desk. Pick one: it drops into the player, the reels turn, and the songs play.</p>
+      <ol class="sideb__tapes" aria-label="Tapes">
+        {TAPES.map((tape, i) => (
+          <li>
+            <button type="button" data-tape={i} aria-pressed="false" style={`--tape:${tape.label};--tape-ink:${tape.ink}`}>
+              <b>{pad(i + 1)}</b><span>{tape.title}</span><i>{tape.source === 'tones' ? 'Tones' : 'C-60'}</i>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <div class="sideb__keys" role="group" aria-label="Player">
+        <button type="button" data-deck="eject" aria-label="Stop and eject">⏏</button>
+        <button type="button" data-deck="rew" aria-label="Rewind">◀◀</button>
+        <button type="button" data-deck="play" aria-label="Play" class="is-play">▶</button>
+        <button type="button" data-deck="ff" aria-label="Fast forward">▶▶</button>
+        <button type="button" data-deck="flip" class="is-flip">Flip</button>
+      </div>
+    </div>
+    <div class="sideb__stage">
+      <canvas class="sideb__canvas" data-deck-canvas aria-hidden="true"></canvas>
+      <p class="sideb__hint" aria-hidden="true">Click a tape to load it</p>
+    </div>
+    <aside class="sideb__jcard" aria-live="polite" data-jcard>
+      <p class="sideb__jcard-head"><span data-jcard-side>Side A</span><b data-jcard-title>No tape</b></p>
+      <ol data-jcard-list><li>Pick a tape to see what’s on it.</li></ol>
+      <div class="sideb__embed" data-embed><span>Streaming player</span><small>Spotify embed loads here once a rock tape plays</small></div>
+      <p class="sideb__note">Sample tracklists, to be replaced with the real ones.</p>
+    </aside>
+  </div>
+  <script type="application/json" data-tapes set:html={JSON.stringify(TAPES)} />
+</section>

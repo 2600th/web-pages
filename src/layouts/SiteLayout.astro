@@ -5,6 +5,8 @@ import SiteFooter from '../components/site/SiteFooter.astro';
 import BackToTop from '../components/shared/BackToTop.astro';
 import '../styles/signal/tokens.css';
 import '../styles/signal/chrome.css';
+import '../styles/signal/mixtape.css';
+import { TAPES } from '../data/mixtape';
 
 /** `status` is what the header's line light says on this page, e.g. "CH 07/20 · Games". */
 type Props = SeoProps & { variant?: 'home' | 'page'; bodyClass?: string; status?: string };
@@ -46,11 +48,14 @@ const { variant = 'page', bodyClass = '', status, ...seo } = Astro.props;
     {variant === 'page' && <BackToTop />}
     <div class="sg-cursor" aria-hidden="true" data-cursor><span data-cursor-label></span></div>
     <p class="sg-toast" role="status" data-toast></p>
+    <script type="application/json" data-dock-tapes set:html={JSON.stringify(TAPES)} />
     <script>
       import { initChrome } from '../signal/chrome.js';
       import { initAnalyticsEvents } from '../scripts/analytics';
+      import { initTapeDock } from '../signal/scenes/mixtape.js';
       initChrome();
       initAnalyticsEvents();
+      initTapeDock();
     </script>
   </body>
 </html>
