@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-for (const route of ['/work/', '/work/domain/xr/', '/about/', '/notes/', '/notes/ai-video-control/', '/work/alphaman/', '/lab/', '/404']) {
-  test(`floating arrow returns to the top of ${route} without leaving the page`, async ({ page }) => {
+for (const route of ['/', '/work/', '/work/domain/xr/', '/about/', '/notes/', '/notes/ai-video-control/', '/work/alphaman/', '/lab/', '/404']) {
+  test(`the line key returns to the top of ${route} without leaving the page`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(route);
-    const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
+    const topLink = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
     await expect(topLink).toBeHidden();
     await page.evaluate(() => window.scrollTo(0, 301));
     await expect(topLink).toBeInViewport();
@@ -21,7 +21,7 @@ test('keyboard return restores navigation focus without JavaScript', async ({ br
   const page = await context.newPage();
   try {
     await page.goto(`${baseURL}/work/`);
-    const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
+    const topLink = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
     await page.evaluate(() => window.scrollTo(0, 500));
     await expect(topLink).toBeInViewport();
     await topLink.focus();
@@ -43,7 +43,7 @@ test('normal return scrolls smoothly and reduced motion returns instantly', asyn
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/work/');
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('smooth');
-  const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
+  const topLink = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
   await page.evaluate(() => window.scrollTo({ top: 500, behavior: 'instant' }));
   await expect(topLink).toBeInViewport();
   await topLink.click();
@@ -52,10 +52,10 @@ test('normal return scrolls smoothly and reduced motion returns instantly', asyn
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
 });
 
-test('arrow appears only past 300px and restores its state after refresh', async ({ page }) => {
+test('the line key appears only past 300px and restores its state after refresh', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/work/');
-  const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
+  const topLink = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
   await page.evaluate(() => window.scrollTo(0, 300));
   await expect(topLink).toBeHidden();
   await page.evaluate(() => window.scrollTo(0, 301));
@@ -69,10 +69,10 @@ test('arrow appears only past 300px and restores its state after refresh', async
   await expect(topLink).toBeHidden();
 });
 
-test('visible floating arrow restores keyboard focus and is excluded from print', async ({ page }) => {
+test('the visible line key restores keyboard focus and is excluded from print', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/work/');
-  const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
+  const topLink = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
   await page.evaluate(() => window.scrollTo(0, 500));
   await topLink.focus();
   await page.keyboard.press('Enter');
@@ -86,11 +86,11 @@ test('visible floating arrow restores keyboard focus and is excluded from print'
 });
 
 for (const width of [320, 878, 1440]) {
-  test(`arrow stays in the viewport and clears footer content at ${width}px`, async ({ page }) => {
+  test(`the line key stays in the viewport and clears footer content at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 912 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/about/');
-    const topLink = page.getByRole('link', { name: 'Back to top', exact: true });
+    const topLink = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
     await page.evaluate(() => window.scrollTo(0, 500));
     await expect(topLink).toBeInViewport();
     const arrow = await topLink.boundingBox();
@@ -102,35 +102,52 @@ for (const width of [320, 878, 1440]) {
     expect(912 - arrow!.y - arrow!.height).toBeGreaterThanOrEqual(16);
     expect(912 - arrow!.y - arrow!.height).toBeLessThanOrEqual(24);
     expect((await page.locator('.sg-foot').boundingBox())!.y).toBeGreaterThan(912);
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    // Scroll to the true bottom (late layout can grow the page after the first jump).
+    await expect.poll(() => page.evaluate(() => {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1;
+    })).toBe(true);
     await expect.poll(async () => (await topLink.boundingBox())?.y).toBeCloseTo(arrow!.y, 0);
-    // The footer's own "Hang up" link sits clear of the floating arrow.
-    const contact = await page.locator('.sg-foot .sg-hangup').boundingBox();
-    expect(contact!.y + contact!.height).toBeLessThan(arrow!.y);
+    // No control in the footer's bottom bar sits under the key.
+    const controls = page.locator('.sg-foot__bar a:visible, .sg-foot__bar button:visible');
+    expect(await controls.count()).toBeGreaterThan(4);
+    for (const box of await controls.evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().toJSON()))) {
+      expect(box.bottom <= arrow!.y || box.right <= arrow!.x, JSON.stringify(box)).toBe(true);
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   });
 }
 
-test('Hang up switches the picture off, returns to the top, and skips the effect without motion', async ({ page }) => {
+test('the line key hangs up from far down the page, and is a plain return near the top or without motion', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
+  const key = page.getByRole('link', { name: 'Hang up, back to top', exact: true });
+  const scrolled = () => page.evaluate(() => window.scrollY);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/about/');
-  const hangup = page.locator('.sg-foot .sg-hangup');
-  await hangup.scrollIntoViewIfNeeded();
-  await hangup.click();
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await expect(key).toBeInViewport();
+  await key.click();
   const fx = page.locator('.sg-hang');
   await expect(fx).toHaveAttribute('aria-hidden', 'true');
   await expect.poll(() => fx.evaluate(element => getComputedStyle(element).visibility)).toBe('visible');
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await expect.poll(scrolled).toBe(0);
   await expect.poll(() => fx.evaluate(element => getComputedStyle(element).visibility)).toBe('hidden');
   await expect(fx).toHaveCSS('pointer-events', 'none');
   expect(new URL(page.url()).pathname).toBe('/about/');
 
+  // Less than two screens down it just returns.
+  await page.goto('/work/');
+  await page.evaluate(() => window.scrollTo({ top: 500, behavior: 'instant' }));
+  await key.click();
+  await expect.poll(scrolled).toBe(0);
+  await expect(page.locator('.sg-hang')).toHaveCount(0);
+
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/work/');
-  await page.locator('.sg-foot .sg-hangup').click();
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await key.click();
+  await expect.poll(scrolled).toBe(0);
   await expect(page.locator('.sg-hang')).toHaveCount(0);
   expect(errors).toEqual([]);
 });

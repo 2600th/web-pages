@@ -195,11 +195,12 @@ function initReveals() {
 
 let started = false;
 /** Idempotent: the layout and the homepage both call it. */
-/* Hang up: the picture switches off like a CRT into the idle 2600 Hz trace, the trace
-   flattens to a dot, the page returns to the top underneath, and the line comes back.
-   Without motion (or JavaScript) the link is an ordinary jump to the top. */
+/* Hang up, from the line key (back to top): the handset goes down, the picture switches off
+   like a CRT into the idle 2600 Hz trace, the trace flattens to a dot, the page returns to the
+   top underneath, and the line comes back. It only plays from more than two screens down;
+   nearer the top, and without motion (or JavaScript), the key is an ordinary jump to the top. */
 function initHangup() {
-  const links = $$('.sg-hangup');
+  const links = $$('[data-hangup]');
   if (!links.length) return;
   let fx = null;
   let busy = false;
@@ -273,11 +274,16 @@ function initHangup() {
   links.forEach((link) => link.addEventListener('click', (e) => {
     if (passthrough) return;
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    sfx.hangup();
-    if (!motionOn() || busy) return;
+    if (!motionOn() || busy || scrollY < innerHeight * 2) return;
     e.preventDefault();
     busy = true;
-    play(link).then(() => { busy = false; });
+    sfx.hangup();
+    // Touch has no hover: show the handset, put it down, then hang up.
+    link.classList.add('is-hanging', 'is-down');
+    setTimeout(() => {
+      link.classList.remove('is-down');
+      play(link).then(() => { busy = false; link.classList.remove('is-hanging'); });
+    }, 180);
   }));
 }
 

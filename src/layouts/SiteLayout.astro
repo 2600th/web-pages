@@ -43,7 +43,7 @@ const { variant = 'page', bodyClass = '', status, ...seo } = Astro.props;
       <slot />
     </main>
     <SiteFooter variant={variant}><slot name="footer" /></SiteFooter>
-    {variant === 'page' && <BackToTop />}
+    <BackToTop />
     <div class="sg-cursor" aria-hidden="true" data-cursor><span data-cursor-label></span></div>
     <p class="sg-toast" role="status" data-toast></p>
     <script>

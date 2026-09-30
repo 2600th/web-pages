@@ -177,14 +177,14 @@ html:not(.js) .sg-copy { display: none; }
 .sg-social a:hover { color: var(--ink); }
 
 .sg-foot__bar {
-  display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 1rem 2rem;
-  margin-top: clamp(4rem, 10vh, 6rem); padding: 1.4rem 0 calc(1.2rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 1rem 2rem;
+  /* The bottom is kept clear for the line key, which rests in the corner on every page. */
+  margin-top: clamp(4rem, 10vh, 6rem); padding: 1.4rem 0 calc(5rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line);
   font: 500 0.75rem/1.4 var(--mono); color: var(--dim);
 }
-.sg-foot--page .sg-foot__bar { padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)); }
 .sg-foot__id { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; }
 .sg-foot__id .sg-mark { min-height: 2.25rem; font-size: 1.05rem; color: var(--ink); }
-.sg-foot__nav { display: flex; flex-wrap: wrap; gap: 0 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.sg-foot__nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .sg-foot__nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; color: var(--muted); text-decoration: none; }
 .sg-foot__nav a:hover, .sg-foot__nav a[aria-current='page'] { color: var(--ink); }
 .sg-foot__keys { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
@@ -192,20 +192,36 @@ html:not(.js) .sg-copy { display: none; }
 .sg-foot__keys button:hover { color: var(--ink); border-color: var(--line-strong); }
 .sg-foot__keys [data-console-open] { border-style: dashed; color: var(--phosphor); }
 .sg-foot__keys kbd { font: inherit; color: var(--gold); }
-.sg-hangup { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--line-strong); color: var(--ink); text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; }
-.sg-hangup:hover { border-color: var(--gold); color: var(--gold); }
 @media (hover: none) { .sg-foot__keys [data-shortcuts] { display: none; } }
 @media (max-width: 46rem) { .sg-foot__secret { flex-basis: 100%; } }
 
-/* ---------- Back to top: a small channel key after 300px ---------- */
+/* ---------- The line key: back to the top, and hang up on the way ---------- */
+/* After 300px it rests in the corner of every page. Its border fills with the line as you read;
+   pointed at, focused or pressed, the arrow gives way to the hang-up handset and the line
+   completes in gold. */
 .back-to-top {
   position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 50;
-  display: grid; place-items: center; width: 3rem; height: 3rem; border: 1px solid var(--line-strong); background: rgb(10 13 24 / 0.9); color: var(--ink);
-  box-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.8); transition: border-color 200ms, color 200ms;
+  display: block; width: 3rem; height: 3rem; overflow: hidden; color: var(--ink);
+  background: rgb(6 8 16 / 0.82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.9);
 }
 .back-to-top[hidden] { display: none; }
-.back-to-top:hover, .back-to-top:focus-visible { border-color: var(--gold); color: var(--gold); }
-.back-to-top svg { width: 1.25rem; height: 1.25rem; }
+.back-to-top__line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.back-to-top__line rect { fill: none; vector-effect: non-scaling-stroke; }
+.back-to-top__track { stroke: var(--line-strong); stroke-width: 1; }
+.back-to-top__fill { stroke: var(--cobalt); stroke-width: 2; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p, 0) * 100); filter: drop-shadow(0 0 4px var(--cobalt)); transition: stroke-dashoffset 400ms var(--ease), stroke 200ms; }
+.back-to-top__icon { position: absolute; left: 50%; top: 50%; width: 1.3rem; height: 1.3rem; margin: -0.65rem 0 0 -0.65rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform 380ms var(--ease), opacity 220ms; }
+.back-to-top__handset { color: #ff6b6b; opacity: 0; transform: translateY(1.2rem); }
+.back-to-top:focus-visible .back-to-top__fill, .back-to-top.is-hanging .back-to-top__fill { stroke: var(--gold); stroke-dashoffset: 0; filter: drop-shadow(0 0 4px var(--gold)); }
+.back-to-top:focus-visible .back-to-top__arrow, .back-to-top.is-hanging .back-to-top__arrow { opacity: 0; transform: translateY(-1.2rem); }
+.back-to-top:focus-visible .back-to-top__handset, .back-to-top.is-hanging .back-to-top__handset { opacity: 1; transform: none; }
+@media (hover: hover) {
+  .back-to-top:hover .back-to-top__fill { stroke: var(--gold); stroke-dashoffset: 0; filter: drop-shadow(0 0 4px var(--gold)); }
+  .back-to-top:hover .back-to-top__arrow { opacity: 0; transform: translateY(-1.2rem); }
+  .back-to-top:hover .back-to-top__handset { opacity: 1; transform: none; }
+}
+/* Pressed: the handset goes down onto the cradle. */
+.back-to-top.is-down .back-to-top__handset { transform: translateY(0.18rem) scale(0.92); }
+.back-to-top:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 @media print { .back-to-top { display: none !important; } }
 
 /* ---------- Hang up: the picture switches off into the idle tone ---------- */
@@ -281,10 +297,8 @@ html:not(.js) .sg-copy { display: none; }
   .sg-foot__main, .sg-foot--page .sg-foot__copy { grid-template-columns: minmax(0, 1fr); }
   .sg-foot--page .sg-foot__copy .sg-mail, .sg-foot--page .sg-foot__copy .sg-social { grid-column: 1; grid-row: auto; }
   .sg-foot--page .sg-foot__copy .sg-mail { margin-top: 2rem; }
-  .sg-foot__bar { grid-template-columns: minmax(0, 1fr) auto; }
-  .sg-foot__nav { grid-column: 1 / -1; grid-row: 2; }
-  .sg-foot__keys { grid-column: 1; grid-row: 3; }
-  .sg-hangup { grid-column: 2; grid-row: 1; }
+  .sg-foot__bar { grid-template-columns: minmax(0, 1fr); }
+  .sg-foot__nav { justify-content: flex-start; }
 }
 @media (max-width: 46rem) {
   .sg-top { grid-template-columns: auto 1fr auto; }

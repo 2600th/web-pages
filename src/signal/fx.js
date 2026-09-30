@@ -23,7 +23,8 @@ export function initCursor() {
   const y = gsap.quickTo(ring, 'y', { duration: 0.35, ease: 'power3' });
   addEventListener('pointermove', (e) => {
     if (e.pointerType !== 'mouse') return;
-    const on = document.documentElement.dataset.motion === 'on';
+    // Controls with their own hover state (the line key) keep the ring out of the way.
+    const on = document.documentElement.dataset.motion === 'on' && !e.target.closest?.('[data-cursor-quiet]');
     ring.dataset.on = String(on);
     x(e.clientX); y(e.clientY);
     const target = e.target.closest?.('a, button, input, [data-cursor-text]');

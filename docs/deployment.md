@@ -32,7 +32,7 @@ Verify the deployed release separately from the local build:
 
 - The homepage shows the Signal story (the point-cloud portrait, or its static poster with reduced motion), six selected systems, the Lab, the latest notes, the blue box and a working email contact path.
 - `/work/`, representative case pages such as `/work/dlss5-video-player/` and `/work/homelane-spacecraft-pro/`, and `/work/domain/xr/` resolve in the Signal design with images, endpoint rows where they apply, and source links.
-- `/notes/`, a note detail page, `/about/`, `/lab/` and a missing URL (404) resolve in the Signal design. Check Back to top, Hang up, the backtick console and the mobile Menu on a long page.
+- `/notes/`, a note detail page, `/about/`, `/lab/` and a missing URL (404) resolve in the Signal design. Check the line key (back to top, and Hang up from far down), the backtick console and the mobile Menu on a long page.
 - Shared links show the Signal social card (`/media/social/2600th.webp` by default).
 - Video remains poster-first until Play; keyboard navigation and reduced-motion presentation remain usable.
 - `/lab/terminal/index.html` opens the preserved console, retains `noindex,follow`, and its return link works.

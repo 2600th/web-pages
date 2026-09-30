@@ -12,7 +12,7 @@ The whole site uses one design system, **Signal** (see [DESIGN.md](DESIGN.md)), 
 - **Notes**: nine articles typed as Field Note, Technical Teardown or Essay, tuned on a receiver. Each note's waveform signature is drawn from its sections and doubles as its contents.
 - **About**: a conference badge whose display tunes in on the homepage character and whose LEDs, one per year since 2012, read out each year's work. Then why 2600th, told as two 2600s: the Atari 2600 (a 3D model you load cartridges into, with a TV that plays them) and the 2600 Hz tone. Then the career in three acts, the toolchain as a workbench (a 90s PC whose floppy disks load each row of tools onto its screen), the patent and how I work. It ends by flipping the tape to **Side B** (`/side-b/`): a Walkman with two tapes of Linkin Park, one of rock classics and one of the line's tones, streamed from official YouTube uploads.
 
-Every page shares the header, the dial-in footer, the backtick console and the Hang up return to the top. Sound is synthesized with Web Audio and off by default. The 3D engine loads lazily and only with motion on; reduced motion, no WebGL and no JavaScript all get a static portrait and the full content. One motion preference (`2600th-ambient-motion`) covers every page. Easter eggs (the console, the Konami code, dialling 2600) are keyboard-gated per WCAG 2.1.4 and can be switched off. Native links work without JavaScript.
+Every page shares the header, the dial-in footer, the backtick console and the line key: back to the top, hanging up on the way from far down the page. Sound is synthesized with Web Audio and off by default. The 3D engine loads lazily and only with motion on; reduced motion, no WebGL and no JavaScript all get a static portrait and the full content. One motion preference (`2600th-ambient-motion`) covers every page. Easter eggs (the console, the Konami code, dialling 2600) are keyboard-gated per WCAG 2.1.4 and can be switched off. Native links work without JavaScript.
 
 ## Local development
 
@@ -27,7 +27,7 @@ npm run dev
 
 | Path | What it holds |
 | --- | --- |
-| `src/layouts/SiteLayout.astro` | The one page layout: head, header, footer, back to top, cursor and toast |
+| `src/layouts/SiteLayout.astro` | The one page layout: head, header, footer, the line key (back to top), cursor and toast |
 | `src/components/site/` | Signal components: header, footer, openings, path, trace, signatures, notes log, endpoints, build cards, transmissions |
 | `src/components/work/`, `src/components/about/`, `src/components/shared/` | Switchboard, gallery, case media, sources, the About badge, responsive images, SEO head |
 | `src/styles/signal/` | `tokens.css`, `chrome.css` (shared chrome), `pages.css` (interior pages) and one sheet per section signature |

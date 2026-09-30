@@ -1,7 +1,19 @@
-<a class="back-to-top" href="#page-top" aria-label="Back to top" title="Back to top">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
-    <path d="M12 20V4M5 11l7-7 7 7" />
+---
+/**
+ * The line key: back to the top, on every page. Its border fills with the line as you read;
+ * pointed at (or focused, or tapped) the arrow gives way to a handset, and pressing it hangs
+ * up: the picture switches off and comes back at the top (chrome.js, motion on, from more than
+ * two screens down). Without JavaScript it is a plain link to the top.
+ */
+const HANDSET = 'M3.2 15.6v-2c0-3.1 4.1-5.2 8.8-5.2s8.8 2.1 8.8 5.2v2a1 1 0 0 1-1 1h-3.4a1 1 0 0 1-1-1v-1.7c-1.1-.5-2.2-.7-3.4-.7s-2.3.2-3.4.7v1.7a1 1 0 0 1-1 1H4.2a1 1 0 0 1-1-1z';
+---
+<a class="back-to-top" href="#page-top" aria-label="Hang up, back to top" title="Hang up · back to top" data-hangup data-cursor-quiet>
+  <svg class="back-to-top__line" viewBox="0 0 48 48" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <rect class="back-to-top__track" x="0.5" y="0.5" width="47" height="47" pathLength="100" />
+    <rect class="back-to-top__fill" x="0.5" y="0.5" width="47" height="47" pathLength="100" />
   </svg>
+  <svg class="back-to-top__icon back-to-top__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+  <svg class="back-to-top__icon back-to-top__handset" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d={HANDSET} /></svg>
 </a>
 <script is:inline data-astro-rerun>
   // Initialize before first paint; without JavaScript the native link stays available.
@@ -9,18 +21,24 @@
     const link = document.currentScript.previousElementSibling;
     if (!(link instanceof HTMLAnchorElement)) return;
 
+    let frame = 0;
     const update = () => {
+      frame = 0;
       const hidden = window.scrollY <= 300;
       if (link.hidden !== hidden) link.hidden = hidden;
+      // How far down the page the reader is: the key's border fills to match.
+      const room = document.documentElement.scrollHeight - window.innerHeight;
+      link.style.setProperty('--p', room > 0 ? Math.min(1, window.scrollY / room).toFixed(3) : '0');
     };
+    const queue = () => { frame ||= requestAnimationFrame(update); };
 
     update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
     window.addEventListener('pageshow', update);
     document.addEventListener('astro:before-swap', () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', queue);
+      window.removeEventListener('resize', queue);
       window.removeEventListener('pageshow', update);
     }, { once: true });
   })();
