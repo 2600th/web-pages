@@ -1,6 +1,7 @@
 // The About badge: point at a year LED and its trace carries the signal to the display,
-// which reads out that year. A steps through the years, B plays 2600 Hz. The board leans
-// toward the pointer and swings a little on its lanyard.
+// which reads out that year. The display tunes in on arrival (badge-screen.js). A steps
+// through the years, B plays 2600 Hz and retunes. The board leans toward the pointer and
+// swings a little on its lanyard.
 import { gsap } from 'gsap';
 import { sfx, tones } from '../audio.js';
 import { motionOn } from './mount.js';
@@ -17,9 +18,7 @@ export function initBadge() {
   const osd = root.querySelector('[data-badge-osd]');
   const board = root.querySelector('.bdg__board');
   root.dataset.ready = 'true';
-  // Prototype: ?screen=holo|dither|lock picks the display treatment.
-  const screenMode = new URLSearchParams(location.search).get('screen') ?? 'lock';
-  const display = mountScreen(root.querySelector('[data-badge-screen]'), screenMode);
+  const display = mountScreen(root.querySelector('[data-badge-screen]'));
   let pinned = -1;
   let shown = -1;
 

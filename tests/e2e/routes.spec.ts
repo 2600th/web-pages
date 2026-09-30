@@ -266,8 +266,12 @@ test('lab and about expose their operating surfaces', async ({ page }) => {
   await expect(page.locator('[data-operating-dossier] .career-acts li')).toHaveCount(3);
   await expect(page.locator('[data-operating-atlas]')).toHaveCount(1);
   await expect(page.locator('#why-2600th .ab-steps > li')).toHaveCount(3);
-  await expect(page.locator('[data-badge] img')).toHaveAttribute('src', '/media/signal/portrait.webp');
-  await expect(page.locator('[data-badge] img')).toHaveAttribute('alt', /.+/);
+  // The display carries the homepage character: a real image for no-JS and screen readers,
+  // drawn onto a canvas that tunes in and locks once scripts run.
+  await expect(page.locator('[data-badge] img')).toHaveAttribute('src', '/media/signal/character.webp');
+  await expect(page.locator('[data-badge] img')).toHaveAttribute('alt', /2600th character/);
+  await expect(page.locator('[data-badge-screen]')).toHaveAttribute('data-canvas', 'on');
+  await expect(page.locator('[data-badge-screen] canvas')).toHaveCount(1);
   // One LED per year since 2012, each naming what was running that year.
   const leds = page.locator('[data-badge] [data-led]');
   await expect(leds).toHaveCount(new Date().getFullYear() - 2011);
