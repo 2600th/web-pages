@@ -467,6 +467,15 @@ export function mount(host) {
   // (Dev only: ?softgl renders it anyway, for previews on machines without a GPU.)
   const softOk = import.meta.env.DEV && new URLSearchParams(location.search).has('softgl');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: !softOk });
+  // Not every software renderer carries the caveat (Mesa's llvmpipe doesn't), so check its name.
+  const gl = renderer.getContext();
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const gpu = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
+  if (!softOk && /swiftshader|llvmpipe|softpipe|lavapipe|software|basic render/i.test(gpu)) {
+    renderer.dispose();
+    renderer.forceContextLoss();
+    throw new Error(`software renderer: ${gpu}`);
+  }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;

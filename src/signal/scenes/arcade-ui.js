@@ -193,7 +193,7 @@ export function initArcade() {
       try {
         return module.mount(host);
       } catch (error) {
-        console.warn('[2600th] 3D cabinet failed; using the flat CRT', error);
+        console.info('[2600th] 3D cabinet not started; using the flat CRT:', error.message);
         host.querySelector('.arcade__3d')?.remove();
         return flatCrt();
       }

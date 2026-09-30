@@ -214,15 +214,15 @@ test('the lab cabinet is flat for everyone, with a 3D upright over it on a GPU w
   await expect(cab.locator('.arcade__print')).toContainText('insert coin');
   await expect(cab.getByRole('button', { name: /play clip/i })).toBeVisible();
   // The 3D cabinet needs a real GPU. On a software renderer (as in CI) the flat cabinet's own
-  // CRT runs instead.
-  const gpu = await page.evaluate(() => Boolean(document.createElement('canvas').getContext('webgl2', { failIfMajorPerformanceCaveat: true })));
+  // CRT runs instead. Either way one of them starts.
+  const screen = cab.locator('[data-arcade-screen]');
   await cab.scrollIntoViewIfNeeded();
-  if (!gpu) {
-    await expect(cab.locator('[data-arcade-screen]')).toHaveAttribute('data-gl', 'on', { timeout: 20_000 });
+  await expect.poll(async () => (await cab.getAttribute('data-cab3d')) ?? (await screen.getAttribute('data-gl')), { timeout: 20_000 }).toBe('on');
+  if ((await cab.getAttribute('data-cab3d')) !== 'on') {
+    await expect(screen).toHaveAttribute('data-gl', 'on');
     await expect(cab.locator('canvas.arcade__3d')).toHaveCount(0);
     return;
   }
-  await expect(cab).toHaveAttribute('data-cab3d', 'on', { timeout: 20_000 });
   await expect(cab.locator('canvas.arcade__3d')).toHaveCount(1);
   // The clip control stays usable over it, and the roster still drives the card.
   await expect(cab.getByRole('button', { name: /play clip/i })).toBeVisible();
