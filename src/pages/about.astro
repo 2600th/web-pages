@@ -2,6 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageOpening from '../components/site/PageOpening.astro';
 import ConBadge from '../components/about/ConBadge.astro';
+import Origin from '../components/about/Origin.astro';
 import SideB from '../components/about/SideB.astro';
 import { getCollection } from 'astro:content';
 import { getPrioritizedWork } from '../data/work-order';
@@ -34,26 +35,7 @@ const work = getPrioritizedWork(await getCollection('work'));
       <ConBadge slot="aside" work={work} />
     </PageOpening>
 
-    <section class="pg-section" id="why-2600th" aria-labelledby="why-title">
-      <p class="sg-eyebrow"><span>01</span> Why 2600th</p>
-      <div class="pg-split">
-        <h2 id="why-title">A handle from a documentary. An instinct that stayed.</h2>
-        <ol class="ab-steps">
-          <li>
-            <p class="ab-steps__when">Early on</p>
-            <div><h3>Computers and games first.</h3><p>I was into computers and gaming from an early age.</p></div>
-          </li>
-          <li>
-            <p class="ab-steps__when">2007–2011</p>
-            <div><h3>College, and a documentary on hacking.</h3><p>In college I got interested in hacking and its history. A documentary walked through the phone phreaks: the Cap’n Crunch whistle that happened to play 2600 Hz, the tone long-distance trunks used to mean “line idle”, the blue boxes that spoke the network’s own routing tones, and Kevin Mitnick, who got much of his access by persuading people rather than breaking code.</p></div>
-          </li>
-          <li>
-            <p class="ab-steps__when">The handle</p>
-            <div><h3>The handle stuck.</h3><p>I took 2600th as my handle in college and kept it. The instinct behind it stayed too: learn how a system actually works, people included, then make it do something new. Today the systems are rendering engines, design tools and AI models. <a href="/#origin">The homepage tells it with sound.</a></p></div>
-          </li>
-        </ol>
-      </div>
-    </section>
+    <Origin />
 
     <section class="pg-section" aria-labelledby="career-acts-title">
       <p class="sg-eyebrow"><span>02</span> Call log</p>
@@ -133,8 +115,10 @@ const work = getPrioritizedWork(await getCollection('work'));
 
   <script>
     import { initBadge } from '../signal/scenes/badge.js';
+    import { initAtari } from '../signal/scenes/atari-ui.js';
     import { initSideB } from '../signal/scenes/mixtape.js';
     initBadge();
+    initAtari();
     initSideB();
   </script>
 </SiteLayout>

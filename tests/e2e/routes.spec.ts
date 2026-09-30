@@ -266,6 +266,12 @@ test('lab and about expose their operating surfaces', async ({ page }) => {
   await expect(page.locator('[data-operating-dossier] .career-acts li')).toHaveCount(3);
   await expect(page.locator('[data-operating-atlas]')).toHaveCount(1);
   await expect(page.locator('#why-2600th .ab-steps > li')).toHaveCount(3);
+  // The Atari 2600: a still for everyone, a 3D console with motion on, and the model's CC BY credit.
+  const atari = page.locator('[data-atari]');
+  await expect(atari.locator('img')).toHaveAttribute('src', '/media/3d/atari-2600-still.webp');
+  await expect(atari.getByRole('link', { name: '“Atari 2600”' })).toHaveAttribute('href', /sketchfab\.com\/3d-models\/atari-2600/);
+  await expect(atari.getByRole('link', { name: 'CC BY 4.0' })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
+  await expect(atari.locator('[data-cart]')).toHaveCount(3);
   // The display carries the homepage character: a real image for no-JS and screen readers,
   // drawn onto a canvas that tunes in and locks once scripts run.
   await expect(page.locator('[data-badge] img')).toHaveAttribute('src', '/media/signal/character.webp');

@@ -58,6 +58,22 @@ technical captures with generated interpretations merely to improve appearance.
 
 `public/favicon.svg` is the canonical, manually reconstructed vector for the approved concept A 26 ligature. `npm run media:icons:build` runs `scripts/create-icons.mjs` to derive `public/favicon.ico` (32px) and `public/apple-touch-icon.png` (180px) deterministically from it; no image generation is used for these derivatives. The Apple PNG carries an auxiliary origin note. Regeneration strips that metadata, so restore it when retaining embedded provenance; the SVG source comment remains the durable origin record. Keep the shared layout links and manifest sizes aligned with the outputs. The historical console's separate icon remains unchanged.
 
+### 3D models
+
+Third-party models live in `public/media/3d/` as web derivatives, with the downloaded originals kept in the gitignored `_media-source/3d/`. Each is credited next to where it appears, as its licence requires.
+
+| File | Model | Author | Licence | Used on |
+| --- | --- | --- | --- | --- |
+| `atari-2600.glb` | [Atari 2600](https://sketchfab.com/3d-models/atari-2600-2024d933f6214117a399ad4287ede64d) | [dark_igorek](https://sketchfab.com/dark_igorek) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | About, why 2600th |
+
+The derivatives are compressed with glTF-Transform: meshopt geometry and WebP textures capped at 1024 px, keeping node names so scenes can find parts such as cartridges. Rebuild one from its original with:
+
+```powershell
+npx @gltf-transform/cli optimize _media-source/3d/atari-2600-sketchfab.glb public/media/3d/atari-2600.glb --compress meshopt --texture-compress webp --texture-size 1024 --flatten false --join false --instance false --palette false --simplify false
+```
+
+`atari-2600-still.webp` is a render of the About scene, shown before the 3D scene loads, with motion off and without JavaScript.
+
 ## Review gate
 
 1. Establish the supported public claim and publication suitability independently. Confirm any required release approval.

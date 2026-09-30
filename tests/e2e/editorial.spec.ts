@@ -41,7 +41,8 @@ test('Work excludes compatibility records and supports priority and chronologica
 
 test('About explains contribution boundaries and connects verified tools to public work', async ({ page }) => {
   await page.goto('/about/');
-  const why = page.getByRole('region', { name: 'A handle from a documentary. An instinct that stayed.' });
+  const why = page.getByRole('region', { name: 'Two 2600s. One handle.' });
+  await expect(why).toContainText('Atari 2600');
   await expect(why).toContainText('2007–2011');
   await expect(why).toContainText('2600 Hz');
   await expect(why).toContainText('Kevin Mitnick');
